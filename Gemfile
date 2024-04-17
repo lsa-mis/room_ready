@@ -45,6 +45,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 gem "devise", "~> 4.9"
+gem "skylight"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
@@ -58,6 +59,10 @@ group :development, :test do
   gem 'webdrivers', '= 5.3.0'
   gem 'faker'
   gem 'pry'
+end
+
+group :development, :staging do
+  gem "letter_opener_web"
 end
 
 group :development do
