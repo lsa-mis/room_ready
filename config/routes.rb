@@ -7,4 +7,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  root 'static_pages#home'
+
+  get 'static_pages/home'
+
+  # Place this at the very end of the file to catch all undefined routes
+  get '*path', to: 'application#render_404', via: :all
+
 end

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>RoomReady</title>
+    <title>Room Ready</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,15 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= render partial: "shared/navbar" %>
+    <main>
+      <div id="flash">
+        <%= render "layouts/flash" %>
+      </div>
+      <div>
+      <%= yield %>
+      </div>
+    </main>
+    <%= render partial: "shared/footer" %>
   </body>
 </html>
