@@ -11,7 +11,7 @@
 
       <!-- Button -->
       <div class="d-grid w-25 ms-6 mt-6 mb-8">
-        <%= button_to "Login to Room Ready", user_saml_omniauth_authorize_path, class: "btn btn-warning btn-sm mb-4" %>
+        <%= button_to "Login to Room Ready", user_saml_omniauth_authorize_path, class: "btn btn-warning btn-sm mb-4", data: {turbo: "false"} %>
       </div>
 
     </div>
