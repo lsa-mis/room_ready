@@ -10,19 +10,19 @@
     <% end %>
 
     <div class="">
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center bg-um-blue">
         <% if user_signed_in? %>
           <div>
-            <div class="body-sm-text pb-1">Welcome <%= current_user.display_name.split[0] %></div>
-            <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"} do %>
-              <span class="sign_button body-md-text">Log Out</span>
+            <div class="text-white body-sm-text pb-1">Welcome <%= current_user.display_name.split[0] %></div>
+            <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+              <span>Log Out</span>
             <% end %>
           </div>
         <% else %> 
           <div>
             <div class="body-sm-text pb-1">&nbsp;</div>
-            <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
-              <div class="sign_button body-md-text">Sign In</div>
+            <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign" do %>
+              <span>Sign In</span>
             <% end %>
           </div>
         <% end %>
