@@ -21,6 +21,9 @@
 #
 FactoryBot.define do
   factory :user do
-    
+    uniqname { Faker::Alphanumeric.alpha(number: 8) }
+    email { Faker::Internet.email }
+    password { Faker::Internet.password(min_length: 10) }
+    display_name { Faker::Name.name }
   end
 end
