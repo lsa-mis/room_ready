@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @floor %>
+
+<div>
+  <%= link_to "Edit this floor", edit_floor_path(@floor) %> |
+  <%= link_to "Back to floors", floors_path %>
+
+  <%= button_to "Destroy this floor", @floor, method: :delete %>
+</div>
