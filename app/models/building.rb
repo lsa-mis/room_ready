@@ -15,4 +15,5 @@
 #  updated_at   :datetime         not null
 #
 class Building < ApplicationRecord
+  has_many :floors
 end
