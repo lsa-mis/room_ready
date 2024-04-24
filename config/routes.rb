@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :resources
+  resources :rooms
+  resources :floors
+  resources :buildings
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
