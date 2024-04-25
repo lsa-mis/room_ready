@@ -65,7 +65,10 @@ task add_rooms: :environment do
   end
   puts "facility_ids are added to rooms"
 
-  # rooms without facility_id were deleted
+  # delete rooms without facility_id
+  # 
+  Room.where(facility_id: nil).delete_all
+
   # delete floors and buildings if there are any empty
   # 
   Floor.where.missing(:rooms).delete_all
