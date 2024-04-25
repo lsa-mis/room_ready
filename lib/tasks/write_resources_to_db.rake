@@ -1,6 +1,6 @@
 desc "This will write rooms_to_update rmrecnbr to a rooms_to_update.txt file"
 task write_resources_to_db: :environment do
-  require 'pry'
+  # require 'pry'
   # types of resourses to add to the database
   type_names = ['Wireless Bodypack Transmitter', 
                 "Instructional PC Desktop",

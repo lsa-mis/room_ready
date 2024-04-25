@@ -17,7 +17,6 @@ try {
 const location_oids = locations.split(" ")
 
 let promises = [];
-let resources = [];
 
 const createResourcesFile = function(oid) {
   axios.request({
