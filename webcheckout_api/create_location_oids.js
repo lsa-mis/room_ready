@@ -10,15 +10,11 @@ var rooms = ""
 
 try {
   rooms = fs.readFileSync('files/room_rmrecnbr.txt', 'utf8');
-  // console.log(rooms);
 } catch (err) {
   console.error(err);
 }
 
 const r = rooms.split(" ")
-// console.log (r)
-
-var location_oids = []
 
 axios.request({
   method: "POST",
@@ -69,5 +65,3 @@ axios.request({
   }).catch(error => {
     console.error(error);
 });
-
-// console.log(location_oids)
