@@ -36,6 +36,11 @@ class ApplicationPolicy
     false
   end
 
+  def user_in_admin_group?
+    @admin_group = ['lsa-roomready-admins']
+    @user.membership && (@user.membership & @admin_group).any?
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user

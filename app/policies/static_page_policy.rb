@@ -5,9 +5,7 @@ class StaticPagePolicy < ApplicationPolicy
   end
 
   def home?
-    false
-    
-    # user_in_admin_group?
+    user_in_admin_group?
   end
 
 end

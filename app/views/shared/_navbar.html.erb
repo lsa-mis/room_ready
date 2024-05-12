@@ -8,7 +8,7 @@
         </span>
       </div>
     <% end %>
-    <% if user_signed_in? %>
+    <% if user_signed_in? && policy(:static_page).home? %>
       <%= link_to "Home", home_path %>
     <% end %>
 
