@@ -1,6 +1,14 @@
 class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from Exception, with: :render_500
+  # rescue_from Exception, with: :render_500
+  include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  before_action :set_membership
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to(root_path)
+  end
 
   def render_404
     respond_to do |format|
@@ -16,4 +24,15 @@ class ApplicationController < ActionController::Base
       format.json { render json: { error: 'Internal Server Error' }, status: :internal_server_error }
     end
   end
+
+  private
+
+    def set_membership
+      if user_signed_in?
+        current_user.membership = session[:user_memberships]
+        # current_user.admin = session[:user_admin]
+      else
+        new_user_session_path
+      end
+    end
 end

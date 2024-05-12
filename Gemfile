@@ -48,6 +48,8 @@ gem "devise", "~> 4.9"
 gem "skylight"
 gem "omniauth-saml", "~> 2.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "ldap_lookup"
+gem "pundit"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"

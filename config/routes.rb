@@ -15,13 +15,15 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'static_pages#home'
+  root 'static_pages#about'
 
-  get 'static_pages/home'
+  get 'static_pages/about'
+
+  get 'home', to: 'static_pages#home', as: :home
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
   # Place this at the very end of the file to catch all undefined routes
-  get '*path', to: 'application#render_404', via: :all
+  # get '*path', to: 'application#render_404', via: :all
 
 end

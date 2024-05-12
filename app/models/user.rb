@@ -25,4 +25,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:saml]
+
+  attr_accessor :membership, :admin
 end

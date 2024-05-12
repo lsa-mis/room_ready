@@ -8,6 +8,9 @@
         </span>
       </div>
     <% end %>
+    <% if user_signed_in? && policy(:static_page).home? %>
+      <%= link_to "Home", home_path %>
+    <% end %>
 
     <div class="">
       <div class="d-flex align-items-center bg-um-blue">
