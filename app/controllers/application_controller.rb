@@ -1,6 +1,13 @@
 class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Exception, with: :render_500
+  include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to(root_path)
+  end
 
   def render_404
     respond_to do |format|

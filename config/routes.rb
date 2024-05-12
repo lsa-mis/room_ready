@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   get 'static_pages/about'
 
-  get 'static_pages/home', to: 'static_pages#home', as: :home
+  get 'home', to: 'static_pages#home', as: :home
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
