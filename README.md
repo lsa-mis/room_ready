@@ -1,4 +1,4 @@
-# LSA RideShare
+# LSA Room Ready
 ![](https://img.shields.io/badge/Ruby%20Version-3.3.0-red) ![](https://img.shields.io/badge/Rails%20Version-7.1.3-red) ![](https://img.shields.io/badge/Postgresql%20Version-14.10-red)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -12,7 +12,7 @@ The scope of this application is to support and simplify LSA departments busines
 
 To get a local copy up and running clone the repo, navigate to the local instance and start the application
 ```
-git clone git@github.com:lsa-mis/lsa_ride_share.git
+git clone git@github.com:lsa-mis/room_ready.git
 cd lsa_ride_share
 bundle
 bin/rails db:create
