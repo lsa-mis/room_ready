@@ -15,4 +15,5 @@ class Room < ApplicationRecord
   belongs_to :floor
   has_many :resources
   has_many :room_tickets
+  has_many :specific_attributes
 end
