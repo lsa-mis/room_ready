@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :common_attributes
   resources :room_states
   resources :room_tickets
   resources :rovers

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_14_151521) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_152850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_151521) do
     t.datetime "updated_at", null: false
     t.bigint "zone_id"
     t.index ["zone_id"], name: "index_buildings_on_zone_id"
+  end
+
+  create_table "common_attributes", force: :cascade do |t|
+    t.string "description"
+    t.boolean "need_checkbox"
+    t.boolean "need_quantity_box"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "floors", force: :cascade do |t|
