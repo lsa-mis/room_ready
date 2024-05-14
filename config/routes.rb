@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :app_preferences
   resources :announcements
   resources :resource_states
   resources :specific_attribute_states

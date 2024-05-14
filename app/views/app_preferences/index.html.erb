@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>App preferences</h1>
+
+<div id="app_preferences">
+  <% @app_preferences.each do |app_preference| %>
+    <%= render app_preference %>
+    <p>
+      <%= link_to "Show this app preference", app_preference %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New app preference", new_app_preference_path %>
