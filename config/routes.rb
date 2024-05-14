@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :room_tickets
   resources :rovers
   resources :zones
   resources :resources
