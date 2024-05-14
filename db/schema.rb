@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_181256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,15 +52,50 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "announcements", force: :cascade do |t|
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "app_preferences", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "pref_type"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "buildings", force: :cascade do |t|
     t.string "bldrecnbr"
     t.string "name"
     t.string "nick_name"
-    t.string "abbreviation"
     t.string "address"
     t.string "city"
     t.string "state"
     t.string "zip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "zone_id"
+    t.index ["zone_id"], name: "index_buildings_on_zone_id"
+  end
+
+  create_table "common_attribute_states", force: :cascade do |t|
+    t.boolean "checkbox_value"
+    t.integer "quantity_box_value"
+    t.bigint "room_state_id", null: false
+    t.bigint "common_attribute_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["common_attribute_id"], name: "index_common_attribute_states_on_common_attribute_id"
+    t.index ["room_state_id"], name: "index_common_attribute_states_on_room_state_id"
+  end
+
+  create_table "common_attributes", force: :cascade do |t|
+    t.string "description"
+    t.boolean "need_checkbox"
+    t.boolean "need_quantity_box"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -73,6 +108,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.index ["building_id"], name: "index_floors_on_building_id"
   end
 
+  create_table "resource_states", force: :cascade do |t|
+    t.string "status"
+    t.boolean "is_checked"
+    t.bigint "room_state_id", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resource_id"], name: "index_resource_states_on_resource_id"
+    t.index ["room_state_id"], name: "index_resource_states_on_room_state_id"
+  end
+
   create_table "resources", force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -81,6 +127,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_resources_on_room_id"
+  end
+
+  create_table "room_states", force: :cascade do |t|
+    t.string "checked_by"
+    t.boolean "is_accessed"
+    t.boolean "report_to_supervisor"
+    t.bigint "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_room_states_on_room_id"
+  end
+
+  create_table "room_tickets", force: :cascade do |t|
+    t.string "description"
+    t.string "submitted_by"
+    t.datetime "submitted_at"
+    t.bigint "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_room_tickets_on_room_id"
   end
 
   create_table "room_update_logs", force: :cascade do |t|
@@ -94,11 +160,40 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.string "rmrecnbr"
     t.string "room_number"
     t.string "room_type"
-    t.string "facility_id"
     t.bigint "floor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_time_checked"
     t.index ["floor_id"], name: "index_rooms_on_floor_id"
+  end
+
+  create_table "rovers", force: :cascade do |t|
+    t.string "uniqname"
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "specific_attribute_states", force: :cascade do |t|
+    t.boolean "checkbox_value"
+    t.integer "quantity_box_value"
+    t.bigint "room_state_id", null: false
+    t.bigint "specific_attribute_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_state_id"], name: "index_specific_attribute_states_on_room_state_id"
+    t.index ["specific_attribute_id"], name: "index_specific_attribute_states_on_specific_attribute_id"
+  end
+
+  create_table "specific_attributes", force: :cascade do |t|
+    t.string "description"
+    t.boolean "need_checkbox"
+    t.boolean "need_quantity_box"
+    t.bigint "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_specific_attributes_on_room_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -120,9 +215,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "zones", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "buildings", "zones"
+  add_foreign_key "common_attribute_states", "common_attributes"
+  add_foreign_key "common_attribute_states", "room_states"
   add_foreign_key "floors", "buildings"
+  add_foreign_key "resource_states", "resources"
+  add_foreign_key "resource_states", "room_states"
   add_foreign_key "resources", "rooms"
+  add_foreign_key "room_states", "rooms"
+  add_foreign_key "room_tickets", "rooms"
   add_foreign_key "rooms", "floors"
+  add_foreign_key "specific_attribute_states", "room_states"
+  add_foreign_key "specific_attribute_states", "specific_attributes"
+  add_foreign_key "specific_attributes", "rooms"
 end

@@ -1,0 +1,32 @@
+<%= form_with(model: common_attribute) do |form| %>
+  <% if common_attribute.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(common_attribute.errors.count, "error") %> prohibited this common_attribute from being saved:</h2>
+
+      <ul>
+        <% common_attribute.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div>
+    <%= form.label :need_checkbox, style: "display: block" %>
+    <%= form.check_box :need_checkbox %>
+  </div>
+
+  <div>
+    <%= form.label :need_quantity_box, style: "display: block" %>
+    <%= form.check_box :need_quantity_box %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

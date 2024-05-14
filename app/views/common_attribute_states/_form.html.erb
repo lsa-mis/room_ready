@@ -1,0 +1,37 @@
+<%= form_with(model: common_attribute_state) do |form| %>
+  <% if common_attribute_state.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(common_attribute_state.errors.count, "error") %> prohibited this common_attribute_state from being saved:</h2>
+
+      <ul>
+        <% common_attribute_state.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :checkbox_value, style: "display: block" %>
+    <%= form.check_box :checkbox_value %>
+  </div>
+
+  <div>
+    <%= form.label :quantity_box_value, style: "display: block" %>
+    <%= form.number_field :quantity_box_value %>
+  </div>
+
+  <div>
+    <%= form.label :room_state_id, style: "display: block" %>
+    <%= form.text_field :room_state_id %>
+  </div>
+
+  <div>
+    <%= form.label :common_attribute_id, style: "display: block" %>
+    <%= form.text_field :common_attribute_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @app_preference %>
+
+<div>
+  <%= link_to "Edit this app preference", edit_app_preference_path(@app_preference) %> |
+  <%= link_to "Back to app preferences", app_preferences_path %>
+
+  <%= button_to "Destroy this app preference", @app_preference, method: :delete %>
+</div>

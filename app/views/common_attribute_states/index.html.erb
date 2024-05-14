@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Common attribute states</h1>
+
+<div id="common_attribute_states">
+  <% @common_attribute_states.each do |common_attribute_state| %>
+    <%= render common_attribute_state %>
+    <p>
+      <%= link_to "Show this common attribute state", common_attribute_state %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New common attribute state", new_common_attribute_state_path %>
