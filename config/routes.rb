@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :rovers
   resources :zones
   resources :resources
   resources :rooms
