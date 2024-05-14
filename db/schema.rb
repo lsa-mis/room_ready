@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_14_150805) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_151521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_150805) do
     t.index ["room_id"], name: "index_resources_on_room_id"
   end
 
+  create_table "room_states", force: :cascade do |t|
+    t.string "checked_by"
+    t.boolean "is_accessed"
+    t.boolean "report_to_supervisor"
+    t.bigint "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_room_states_on_room_id"
+  end
+
   create_table "room_tickets", force: :cascade do |t|
     t.string "description"
     t.string "submitted_by"
@@ -150,6 +160,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_150805) do
   add_foreign_key "buildings", "zones"
   add_foreign_key "floors", "buildings"
   add_foreign_key "resources", "rooms"
+  add_foreign_key "room_states", "rooms"
   add_foreign_key "room_tickets", "rooms"
   add_foreign_key "rooms", "floors"
 end
