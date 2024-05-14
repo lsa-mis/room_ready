@@ -12,4 +12,5 @@
 #
 class RoomState < ApplicationRecord
   belongs_to :room
+  has_many :common_attribute_states
 end

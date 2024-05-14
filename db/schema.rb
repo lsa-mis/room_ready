@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_14_153807) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_170811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_153807) do
     t.datetime "updated_at", null: false
     t.bigint "zone_id"
     t.index ["zone_id"], name: "index_buildings_on_zone_id"
+  end
+
+  create_table "common_attribute_states", force: :cascade do |t|
+    t.boolean "checkbox_value"
+    t.integer "quantity_box_value"
+    t.bigint "room_state_id", null: false
+    t.bigint "common_attribute_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["common_attribute_id"], name: "index_common_attribute_states_on_common_attribute_id"
+    t.index ["room_state_id"], name: "index_common_attribute_states_on_room_state_id"
   end
 
   create_table "common_attributes", force: :cascade do |t|
@@ -176,6 +187,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_153807) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "buildings", "zones"
+  add_foreign_key "common_attribute_states", "common_attributes"
+  add_foreign_key "common_attribute_states", "room_states"
   add_foreign_key "floors", "buildings"
   add_foreign_key "resources", "rooms"
   add_foreign_key "room_states", "rooms"

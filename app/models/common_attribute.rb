@@ -10,4 +10,5 @@
 #  updated_at        :datetime         not null
 #
 class CommonAttribute < ApplicationRecord
+  has_many :common_attribute_states
 end

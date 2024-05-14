@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @common_attribute_state %>
+
+<div>
+  <%= link_to "Edit this common attribute state", edit_common_attribute_state_path(@common_attribute_state) %> |
+  <%= link_to "Back to common attribute states", common_attribute_states_path %>
+
+  <%= button_to "Destroy this common attribute state", @common_attribute_state, method: :delete %>
+</div>
