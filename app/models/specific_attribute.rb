@@ -12,4 +12,5 @@
 #
 class SpecificAttribute < ApplicationRecord
   belongs_to :room
+  has_many :specific_attribute_states
 end

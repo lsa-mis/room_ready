@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Specific attribute states</h1>
+
+<div id="specific_attribute_states">
+  <% @specific_attribute_states.each do |specific_attribute_state| %>
+    <%= render specific_attribute_state %>
+    <p>
+      <%= link_to "Show this specific attribute state", specific_attribute_state %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New specific attribute state", new_specific_attribute_state_path %>
