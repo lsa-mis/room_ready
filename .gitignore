@@ -39,3 +39,6 @@
 
 /node_modules
 **/.DS_Store
+
+# files created from js scripts
+webcheckout_api/files
