@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_14_171228) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_175333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_171228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["building_id"], name: "index_floors_on_building_id"
+  end
+
+  create_table "resource_states", force: :cascade do |t|
+    t.string "status"
+    t.boolean "is_checked"
+    t.bigint "room_state_id", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resource_id"], name: "index_resource_states_on_resource_id"
+    t.index ["room_state_id"], name: "index_resource_states_on_room_state_id"
   end
 
   create_table "resources", force: :cascade do |t|
@@ -201,6 +212,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_171228) do
   add_foreign_key "common_attribute_states", "common_attributes"
   add_foreign_key "common_attribute_states", "room_states"
   add_foreign_key "floors", "buildings"
+  add_foreign_key "resource_states", "resources"
+  add_foreign_key "resource_states", "room_states"
   add_foreign_key "resources", "rooms"
   add_foreign_key "room_states", "rooms"
   add_foreign_key "room_tickets", "rooms"

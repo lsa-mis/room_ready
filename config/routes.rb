@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :resource_states
   resources :specific_attribute_states
   resources :common_attribute_states
   resources :specific_attributes
