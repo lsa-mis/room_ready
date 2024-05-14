@@ -13,6 +13,7 @@
 #  zip          :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  zone_id      :bigint
 #
 require 'rails_helper'
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_142652) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,6 +63,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "zone_id"
+    t.index ["zone_id"], name: "index_buildings_on_zone_id"
   end
 
   create_table "floors", force: :cascade do |t|
@@ -120,8 +122,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_220654) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "zones", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "buildings", "zones"
   add_foreign_key "floors", "buildings"
   add_foreign_key "resources", "rooms"
   add_foreign_key "rooms", "floors"
