@@ -11,27 +11,30 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3 row">
+    <%= form.label :name, class: "col-sm-2 col-form-label", style: "display: block" %>
+    <div class="col-sm-10">
+      <%= form.text_field :name, required: true  %>
+      </div>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
+  <div class="mb-3 row">
+    <%= form.label :description, class: "col-sm-2 col-form-label", style: "display: block" %>
+    <div class="col-sm-10">
+      <%= form.text_field :description, required: true  %>
+      </div>
   </div>
 
-  <div>
-    <%= form.label :pref_type, style: "display: block" %>
-    <%= form.number_field :pref_type %>
+  <div class="mb-3 row">
+    <%= form.label :pref_type, class: "col-sm-2 col-form-label", style: "display: block" %>
+    <div class="col-sm-10">
+      <%= form.select :pref_type,  @pref_types, { include_blank: "Select ...", required: true }, { class: "input_text_field" } %>
+      
   </div>
 
-  <div>
-    <%= form.label :value, style: "display: block" %>
-    <%= form.text_field :value %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="mb-3 row">
+    <div class="col-sm-10 offset-sm-2">
+      <%= form.submit "Submit", class: "btn btn-primary btn-lg" %>
+    </div>
   </div>
 <% end %>

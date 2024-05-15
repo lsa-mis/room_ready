@@ -6,5 +6,8 @@
   <%= link_to "Edit this app preference", edit_app_preference_path(@app_preference) %> |
   <%= link_to "Back to app preferences", app_preferences_path %>
 
-  <%= button_to "Destroy this app preference", @app_preference, method: :delete %>
+  <div class="col-sm-10">
+      <%= button_to "Destroy this app preference", @app_preference, method: :delete, class: "btn btn-primary btn-lg" %>
+  </div>
+
 </div>

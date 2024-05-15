@@ -13,6 +13,7 @@ class AppPreferencesController < ApplicationController
   # GET /app_preferences/new
   def new
     @app_preference = AppPreference.new
+    @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
   end
 
   # GET /app_preferences/1/edit
@@ -26,10 +27,10 @@ class AppPreferencesController < ApplicationController
     respond_to do |format|
       if @app_preference.save
         format.html { redirect_to app_preference_url(@app_preference), notice: "App preference was successfully created." }
-        format.json { render :show, status: :created, location: @app_preference }
+
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @app_preference.errors, status: :unprocessable_entity }
+        @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
       end
     end
   end

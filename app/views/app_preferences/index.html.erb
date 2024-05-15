@@ -1,14 +1,34 @@
+<div class="w-100">
+
+
 <p style="color: green"><%= notice %></p>
 
 <h1>App preferences</h1>
 
 <div id="app_preferences">
-  <% @app_preferences.each do |app_preference| %>
-    <%= render app_preference %>
-    <p>
-      <%= link_to "Show this app preference", app_preference %>
-    </p>
-  <% end %>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Type</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @app_preferences.each do |app_preference| %>
+      <tr>
+        <td><%= app_preference.name %></td>
+        <td><%= app_preference.description %></td>
+        <td><%= app_preference.pref_type %></td>
+        <td>
+          <%= button_to 'Delete', app_preference, method: :delete, class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 </div>
 
 <%= link_to "New app preference", new_app_preference_path %>
+</div>
