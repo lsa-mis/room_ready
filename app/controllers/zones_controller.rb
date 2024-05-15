@@ -25,7 +25,7 @@ class ZonesController < ApplicationController
 
     respond_to do |format|
       if @zone.save
-        format.html { redirect_to zone_url(@zone), notice: "Zone was successfully created." }
+        format.html { redirect_to zones_path, notice: "Zone was successfully created." }
         format.json { render :show, status: :created, location: @zone }
       else
         format.html { render :new, status: :unprocessable_entity }

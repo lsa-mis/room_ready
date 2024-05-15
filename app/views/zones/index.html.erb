@@ -1,18 +1,19 @@
 <div class="p-3">
   <p style="color: green"><%= notice %></p>
 
-  <h1>Zones</h1>
-
-  <div id="zones">
-    <% @zones.each do |zone| %>
-      <div class="card mt-2" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title"><%= render zone %></h5>
-          <%= link_to "Zone Options", zone, class: "card-link" %>
+  <h1>All Zones</h1>
+  <div class="container-fluid" id="zones">
+    <div class="row">
+      <% @zones.each do |zone| %>
+        <div class="card m-2" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"><%= render zone %></h5>
+            <%= link_to "Zone Details", zone, class: "card-link" %>
+          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 
-  <%= link_to "Add new zone", new_zone_path, class: "btn btn-primary mt-3" %>
+  <%= link_to "Add new zone", new_zone_path, class: "btn btn-success mt-3" %>
 </div>

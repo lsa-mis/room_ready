@@ -1,10 +1,15 @@
-<p style="color: green"><%= notice %></p>
+<div class="p-3">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @zone %>
+  
+  <h1 class="text-decoration-underline"><%= @zone.name %></h1>
 
-<div>
-  <%= link_to "Edit this zone", edit_zone_path(@zone) %> |
-  <%= link_to "Back to zones", zones_path %>
+  <div>
+    <%= link_to "Back", zones_path, class: "btn btn-primary mt-3" %> 
+    <%= link_to "Edit this zone", edit_zone_path(@zone), class: "btn btn-warning mt-3" %>
+    
+    <h2 class="mt-2 text-decoration-underline">Rooms in <%= @zone.name %></h2>
 
-  <%= button_to "Destroy this zone", @zone, method: :delete %>
+    <%= button_to "Destroy this zone", @zone, method: :delete, data: { turbo_confirm: 'This will delete all data associated with this zone. Are you sure?' }, class: "btn btn-danger mt-5" %>
+  </div>
 </div>
