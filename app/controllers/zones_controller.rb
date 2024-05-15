@@ -15,7 +15,7 @@ class ZonesController < ApplicationController
     @zone = Zone.new
   end
 
-  # GET /zones/1/edit
+  # GET /zones/{id}/edit
   def edit
   end
 

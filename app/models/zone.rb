@@ -8,5 +8,6 @@
 #  updated_at :datetime         not null
 #
 class Zone < ApplicationRecord
+  validates :name, uniqueness: true
   has_many :buildings
 end
