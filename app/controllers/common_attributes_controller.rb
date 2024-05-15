@@ -1,5 +1,5 @@
 class CommonAttributesController < ApplicationController
-  before_action :set_common_attribute, only: %i[ show edit update destroy ]
+  before_action :set_common_attribute, only: %i[edit update destroy ]
 
   # GET /common_attributes or /common_attributes.json
   def index
