@@ -25,7 +25,7 @@ class CommonAttributesController < ApplicationController
 
     respond_to do |format|
       if @common_attribute.save
-        format.html { redirect_to common_attribute_url(@common_attribute), notice: "Common attribute was successfully created." }
+        format.html { redirect_to common_attributes_path, notice: "Common attribute was successfully created." }
         format.json { render :show, status: :created, location: @common_attribute }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class CommonAttributesController < ApplicationController
   def update
     respond_to do |format|
       if @common_attribute.update(common_attribute_params)
-        format.html { redirect_to common_attribute_url(@common_attribute), notice: "Common attribute was successfully updated." }
+        format.html { redirect_to common_attributes_path, notice: "Common attribute was successfully updated." }
         format.json { render :show, status: :ok, location: @common_attribute }
       else
         format.html { render :edit, status: :unprocessable_entity }

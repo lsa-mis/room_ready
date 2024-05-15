@@ -1,4 +1,4 @@
-<%= form_with(model: common_attribute, html: { class: 'd-flex flex-column align-items-center' }) do |form| %>
+<%= form_with(model: common_attribute, html: { class: 'mb-3' }) do |form| %>
   <% if common_attribute.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(common_attribute.errors.count, "error") %> prohibited this common_attribute from being saved:</h2>
@@ -11,22 +11,22 @@
     </div>
   <% end %>
 
-  <div class="mb-3 w-75">
+  <div class="mb-3">
     <%= form.label :description, class: "form-label" %>
     <%= form.text_field :description, class: "form-control form-control-sm", placeholder: ""  %>
   </div>
 
-  <div class="form-check mb-3  w-75">
+  <div class="form-check mb-3">
     <%= form.check_box :need_checkbox, class: "form-check-input" %>
     <%= form.label :need_checkbox, class: "form-check-label" %>
   </div>
 
-  <div class="form-check mb-3  w-75">
+  <div class="form-check mb-3">
     <%= form.check_box :need_quantity_box, class: "form-check-input" %>
     <%= form.label :need_quantity_box, class: "form-check-label" %>
   </div>
 
-  <div class="w-75 d-flex flex-row justify-content-start align-items-center gap-3">
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit class: "btn btn-primary" %>
 
     <%= link_to "Cancel", common_attributes_path, class: "text-primary" %>
