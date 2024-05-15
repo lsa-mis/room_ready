@@ -3,10 +3,6 @@ class CommonAttributePolicy < ApplicationPolicy
     user_in_admin_group?
   end
 
-  def show?
-    user_in_admin_group?
-  end
-
   def new?
     user_in_admin_group?
   end

@@ -7,10 +7,6 @@ class CommonAttributesController < ApplicationController
     authorize @common_attributes
   end
 
-  # GET /common_attributes/1 or /common_attributes/1.json
-  def show
-  end
-
   # GET /common_attributes/new
   def new
     @common_attribute = CommonAttribute.new
