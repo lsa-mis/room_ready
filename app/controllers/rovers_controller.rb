@@ -19,18 +19,28 @@ class RoversController < ApplicationController
   def edit
   end
 
-  # POST /rovers or /rovers.json
+  # POST /rovers
   def create
+    uniqname = rover_params[:uniqname]
+    result = get_rover_info(uniqname)
     @rover = Rover.new(rover_params)
-
-    respond_to do |format|
-      if @rover.save
-        format.html { redirect_to rover_url(@rover), notice: "Rover was successfully created." }
-        format.json { render :show, status: :created, location: @rover }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @rover.errors, status: :unprocessable_entity }
-      end
+    authorize @rover #not sure if we need this for rover
+    if result['valid'] 
+      @rover.first_name = result['first_name']
+      @rover.last_name = result['last_name']
+      # respond_to do |format|
+        if @rover.save 
+          flash.now[:notice] = result['note'] + "Rover was successfully created."
+          redirect_to rover_url(@rover), notice: "Rover was successfully created."
+          # format.html { redirect_to rover_url(@rover), notice: "Rover was successfully created." }
+        else
+          render :new, status: :unprocessable_entity
+          # format.html { render :new, status: :unprocessable_entity }
+        end
+      # end
+    else
+      flash.now[:alert] = result['note']
+      # return #why do we need it here?
     end
   end
 
@@ -55,6 +65,25 @@ class RoversController < ApplicationController
       format.html { redirect_to rovers_url, notice: "Rover was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def get_rover_info(uniqname)
+    result = {'valid' => false, 'note' => '', 'last_name' => '', 'first_name' => ''}
+    valid = LdapLookup.uid_exist?(uniqname)
+    if valid
+      name = LdapLookup.get_simple_name(uniqname)
+        result['valid'] =  true
+        if name.include?("No displayname")
+          result['note'] = " Mcommunity returns no name for '#{uniqname}' uniqname. Please add first and last names manually."
+        else
+          result['first_name'] = name.split(" ").first
+          result['last_name'] = name.split(" ").last
+          result['note'] = "Uniqname is valid"
+        end
+    else
+      result['note'] = "The '#{uniqname}' uniqname is not valid."
+    end
+    return result
   end
 
   private

@@ -2,6 +2,15 @@
 
 <h1>Rovers</h1>
 
+
+<div id="search bar">
+  <%= form_with url: rovers_path, method: :get, local: true do |form| %>
+    <%= form.label :search, "Search by Name:" %>
+    <%= form.text_field :search, value: params[:search] %>
+    <%= form.submit "Search" %>
+  <% end %>
+</div>
+
 <div id="rovers">
   <% @rovers.each do |rover| %>
     <%= render rover %>
