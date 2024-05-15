@@ -4,6 +4,7 @@ class CommonAttributesController < ApplicationController
   # GET /common_attributes or /common_attributes.json
   def index
     @common_attributes = CommonAttribute.all
+    authorize @common_attributes
   end
 
   # GET /common_attributes/1 or /common_attributes/1.json
@@ -13,6 +14,7 @@ class CommonAttributesController < ApplicationController
   # GET /common_attributes/new
   def new
     @common_attribute = CommonAttribute.new
+    authorize @common_attribute
   end
 
   # GET /common_attributes/1/edit
@@ -22,6 +24,7 @@ class CommonAttributesController < ApplicationController
   # POST /common_attributes or /common_attributes.json
   def create
     @common_attribute = CommonAttribute.new(common_attribute_params)
+    authorize @common_attribute
 
     respond_to do |format|
       if @common_attribute.save
@@ -61,6 +64,7 @@ class CommonAttributesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_common_attribute
       @common_attribute = CommonAttribute.find(params[:id])
+      authorize @common_attribute
     end
 
     # Only allow a list of trusted parameters through.
