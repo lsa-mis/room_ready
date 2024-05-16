@@ -18,6 +18,7 @@ class AppPreferencesController < ApplicationController
 
   # GET /app_preferences/1/edit
   def edit
+    @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
   end
 
   # POST /app_preferences or /app_preferences.json

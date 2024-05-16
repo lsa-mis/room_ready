@@ -1,8 +1,8 @@
 <div class="w-100">
 
-
 <p style="color: green"><%= notice %></p>
 
+<!--This displays the table of all preferences currently stored in the app-->
 <h1>App preferences</h1>
 
 <div id="app_preferences">
@@ -13,6 +13,7 @@
       <th scope="col">Description</th>
       <th scope="col">Type</th>
       <th scope="col">Actions</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -22,8 +23,12 @@
         <td><%= app_preference.description %></td>
         <td><%= app_preference.pref_type %></td>
         <td>
+          <%= link_to 'Edit', edit_app_preference_path(app_preference), method: :edit, class: "btn btn-info btn-sm" %>
+        </td>
+        <td>
           <%= button_to 'Delete', app_preference, method: :delete, class: "btn btn-danger btn-sm" %>
         </td>
+        
       </tr>
     <% end %>
   </tbody>
