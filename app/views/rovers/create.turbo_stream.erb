@@ -3,3 +3,7 @@
 <%= turbo_stream.update "new_rover" do %>
   <%= render "form", rover: @rover %>
 <% end %>
+
+<%= turbo_stream.update "rovers" do %>
+  <%= render "listing" %>
+<% end %>

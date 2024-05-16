@@ -3,6 +3,7 @@ class RoversController < ApplicationController
 
   # GET /rovers or /rovers.json
   def index
+    @rover = Rover.new
     @rovers = Rover.all
   end
 
@@ -28,19 +29,16 @@ class RoversController < ApplicationController
     if result['valid'] 
       @rover.first_name = result['first_name']
       @rover.last_name = result['last_name']
-      # respond_to do |format|
-        if @rover.save 
-          flash.now[:notice] = result['note'] + "Rover was successfully created."
-          redirect_to rover_url(@rover), notice: "Rover was successfully created."
-          # format.html { redirect_to rover_url(@rover), notice: "Rover was successfully created." }
-        else
-          render :new, status: :unprocessable_entity
-          # format.html { render :new, status: :unprocessable_entity }
-        end
-      # end
+      if @rover.save 
+        flash.now[:notice] = "Rover was successfully created."
+        @rover = Rover.new
+        @rovers = Rover.all
+      else
+        render :new, status: :unprocessable_entity
+      end
     else
       flash.now[:alert] = result['note']
-      # return #why do we need it here?
+      @rovers = Rover.all
     end
   end
 
