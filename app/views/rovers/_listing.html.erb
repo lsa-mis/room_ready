@@ -1,0 +1,10 @@
+<%= turbo_frame_tag 'rovers' do %>  
+  <div id="rovers">
+    <% @rovers.each do |rover| %>
+      <%= render rover %>
+      <p>
+        <%= link_to "Show this rover", rover %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

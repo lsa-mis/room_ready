@@ -11,13 +11,6 @@
   <% end %>
 </div>
 
-<div id="rovers">
-  <% @rovers.each do |rover| %>
-    <%= render rover %>
-    <p>
-      <%= link_to "Show this rover", rover %>
-    </p>
-  <% end %>
-</div>
+<%= render "form", rover: @rover %>
 
-<%= link_to "New rover", new_rover_path %>
+<%= render "listing" %>
