@@ -1,32 +1,21 @@
-<%= form_with(model: rover) do |form| %>
-  <% if rover.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(rover.errors.count, "error") %> prohibited this rover from being saved:</h2>
+<%= turbo_frame_tag 'new_rover' do %>  
+  <%= form_with(model: rover) do |form| %>
+    <% if rover.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(rover.errors.count, "error") %> prohibited this rover from being saved:</h2>
 
-      <ul>
-        <% rover.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% rover.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :uniqname, "Create Rover by Uniqname:", style: "display: block" %>
+      <%= form.text_field :uniqname %>
+      <%= form.submit %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :uniqname, style: "display: block" %>
-    <%= form.text_field :uniqname %>
-  </div>
-
-  <div>
-    <%= form.label :first_name, style: "display: block" %>
-    <%= form.text_field :first_name %>
-  </div>
-
-  <div>
-    <%= form.label :last_name, style: "display: block" %>
-    <%= form.text_field :last_name %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>
