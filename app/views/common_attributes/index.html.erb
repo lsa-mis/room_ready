@@ -1,14 +1,32 @@
-<p style="color: green"><%= notice %></p>
+<div class="px-5 py-3">
+  <h1>Common Attributes</h1>
 
-<h1>Common attributes</h1>
+  <div class="d-flex flex-column align-items-end">
+    <%= link_to new_common_attribute_path, class: "btn btn-primary mb-3 gap-3" do %>
+      <i class="bi bi-plus-lg"></i>
+      Common Attribute
+    <% end %>
+  </div>
 
-<div id="common_attributes">
-  <% @common_attributes.each do |common_attribute| %>
-    <%= render common_attribute %>
-    <p>
-      <%= link_to "Show this common attribute", common_attribute %>
-    </p>
-  <% end %>
+  <table class="table text-center">
+    <thead class="table-group-divider">
+    <tr>
+      <th scope="col" class="text-start">Description</th>
+      <th scope="col">Needs Checkbox?</th>
+      <th scope="col">Needs Quantity Box?</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider">
+    <div id="common_attributes">
+      <% @common_attributes.each do |common_attribute| %>
+        <%= render common_attribute %>
+      <% end %>
+    </div>
+    </tbody>
+  </table>
 </div>
 
-<%= link_to "New common attribute", new_common_attribute_path %>
+
+
