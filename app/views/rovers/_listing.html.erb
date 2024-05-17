@@ -34,7 +34,6 @@
             </td>
             <td class="rover_tbody_td">
               <%= button_to "Delete this rover", rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' } %>
-              <%# <%= link_to "Remove", program_student_path(@student_program, student), data: { turbo_confirm: 'Are you sure?', turbo_method: :delete }, class: "link_to" unless student.registered %>
             </td>
           </tr>
         <% end %>

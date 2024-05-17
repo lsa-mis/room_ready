@@ -1,4 +1,5 @@
 class AnnouncementsController < ApplicationController
+  before_action :auth_user
   before_action :set_announcement, only: %i[ show edit update destroy ]
 
   # GET /announcements or /announcements.json

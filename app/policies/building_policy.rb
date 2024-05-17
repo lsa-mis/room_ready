@@ -1,5 +1,4 @@
-class RoverPolicy < ApplicationPolicy
-  
+class BuildingPolicy < ApplicationPolicy
   def index?
     user_in_admin_group?
   end
@@ -23,5 +22,8 @@ class RoverPolicy < ApplicationPolicy
   def edit?
     update?
   end
-  
+
+  def destroy?
+    user_in_admin_group?
+  end
 end

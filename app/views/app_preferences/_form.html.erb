@@ -3,7 +3,7 @@
 <%= form_with(model: app_preference) do |form| %>
   <% if app_preference.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(app_preference.errors.count, "error") %> prohibited this app_preference from being saved:</h2>
+      <h2><%= pluralize(app_preference.errors.count, "error") %></h2>
 
       <ul>
         <% app_preference.errors.each do |error| %>

@@ -1,4 +1,5 @@
 class RoversController < ApplicationController
+  before_action :auth_user
   before_action :set_rover, only: %i[ show edit update destroy ]
 
   # GET /rovers or /rovers.json

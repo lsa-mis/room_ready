@@ -1,7 +1,7 @@
 <%= form_with(model: resource) do |form| %>
   <% if resource.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(resource.errors.count, "error") %> prohibited this resource from being saved:</h2>
+      <h2><%= pluralize(resource.errors.count, "error") %></h2>
 
       <ul>
         <% resource.errors.each do |error| %>

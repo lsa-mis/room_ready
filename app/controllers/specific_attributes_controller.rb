@@ -1,4 +1,5 @@
 class SpecificAttributesController < ApplicationController
+  before_action :auth_user
   before_action :set_specific_attribute, only: %i[ show edit update destroy ]
 
   # GET /specific_attributes or /specific_attributes.json

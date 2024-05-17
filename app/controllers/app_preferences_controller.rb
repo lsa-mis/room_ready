@@ -1,9 +1,11 @@
 class AppPreferencesController < ApplicationController
+  before_action :auth_user
   before_action :set_app_preference, only: %i[ show edit update destroy ]
 
   # GET /app_preferences or /app_preferences.json
   def index
     @app_preferences = AppPreference.all
+    authorize @app_preferences
   end
 
   # GET /app_preferences/1 or /app_preferences/1.json
@@ -13,6 +15,7 @@ class AppPreferencesController < ApplicationController
   # GET /app_preferences/new
   def new
     @app_preference = AppPreference.new
+    authorize @app_preference
     @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
   end
 
@@ -24,7 +27,7 @@ class AppPreferencesController < ApplicationController
   # POST /app_preferences or /app_preferences.json
   def create
     @app_preference = AppPreference.new(app_preference_params)
-
+    authorize @app_preference
     respond_to do |format|
       if @app_preference.save
         format.html { redirect_to app_preference_url(@app_preference), notice: "App preference was successfully created." }
@@ -63,6 +66,7 @@ class AppPreferencesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_app_preference
       @app_preference = AppPreference.find(params[:id])
+      authorize @app_preference
     end
 
     # Only allow a list of trusted parameters through.

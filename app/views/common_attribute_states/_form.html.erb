@@ -1,7 +1,7 @@
 <%= form_with(model: common_attribute_state) do |form| %>
   <% if common_attribute_state.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(common_attribute_state.errors.count, "error") %> prohibited this common_attribute_state from being saved:</h2>
+      <h2><%= pluralize(common_attribute_state.errors.count, "error") %></h2>
 
       <ul>
         <% common_attribute_state.errors.each do |error| %>

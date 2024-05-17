@@ -1,9 +1,11 @@
 class ZonesController < ApplicationController
+  before_action :auth_user
   before_action :set_zone, only: %i[ show edit update destroy ]
 
   # GET /zones or /zones.json
   def index
     @zones = Zone.all
+    authorize @zones
   end
 
   # GET /zones/1 or /zones/1.json
@@ -13,6 +15,7 @@ class ZonesController < ApplicationController
   # GET /zones/new
   def new
     @zone = Zone.new
+    authorize @zone
   end
 
   # GET /zones/{id}/edit
@@ -22,7 +25,7 @@ class ZonesController < ApplicationController
   # POST /zones or /zones.json
   def create
     @zone = Zone.new(zone_params)
-
+    authorize @zone
     respond_to do |format|
       if @zone.save
         format.html { redirect_to zones_path, notice: "Zone was successfully created." }
@@ -61,6 +64,7 @@ class ZonesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_zone
       @zone = Zone.find(params[:id])
+      authorize @zone
     end
 
     # Only allow a list of trusted parameters through.

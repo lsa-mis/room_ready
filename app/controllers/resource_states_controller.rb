@@ -1,4 +1,5 @@
 class ResourceStatesController < ApplicationController
+  before_action :auth_user
   before_action :set_resource_state, only: %i[ show edit update destroy ]
 
   # GET /resource_states or /resource_states.json

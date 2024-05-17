@@ -1,7 +1,7 @@
 <%= form_with(model: specific_attribute) do |form| %>
   <% if specific_attribute.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(specific_attribute.errors.count, "error") %> prohibited this specific_attribute from being saved:</h2>
+      <h2><%= pluralize(specific_attribute.errors.count, "error") %></h2>
 
       <ul>
         <% specific_attribute.errors.each do |error| %>

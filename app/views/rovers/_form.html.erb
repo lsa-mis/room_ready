@@ -2,8 +2,7 @@
   <%= form_with(model: rover) do |form| %>
     <% if rover.errors.any? %>
       <div style="color: red">
-        <h2><%= pluralize(rover.errors.count, "error") %> prohibited this rover from being saved:</h2>
-
+        <h2><%= pluralize(rover.errors.count, "error") %></h2>
         <ul>
           <% rover.errors.each do |error| %>
             <li><%= error.full_message %></li>
@@ -11,7 +10,6 @@
         </ul>
       </div>
     <% end %>
-
     <div>
       <%= form.label :uniqname, "Create Rover by Uniqname:", style: "display: block" %>
       <%= form.text_field :uniqname %>

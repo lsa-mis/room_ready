@@ -1,4 +1,5 @@
 class CommonAttributeStatesController < ApplicationController
+  before_action :auth_user
   before_action :set_common_attribute_state, only: %i[ show edit update destroy ]
 
   # GET /common_attribute_states or /common_attribute_states.json
