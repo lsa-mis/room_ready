@@ -6,5 +6,5 @@
   <%= link_to "Edit this rover", edit_rover_path(@rover) %> |
   <%= link_to "Back to rovers", rovers_path %>
 
-  <%= button_to "Destroy this rover", @rover, method: :delete %>
+  <%= button_to "Delete this rover", @rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' } %>
 </div>

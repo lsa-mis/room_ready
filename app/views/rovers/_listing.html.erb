@@ -1,10 +1,45 @@
 <%= turbo_frame_tag 'rovers' do %>  
   <div id="rovers">
-    <% @rovers.each do |rover| %>
-      <%= render rover %>
-      <p>
-        <%= link_to "Show this rover", rover %>
-      </p>
-    <% end %>
+  <% if @rovers.empty? %>
+    No Rovers found
+  <% else %>
+    <table class="rover_table">
+      <thead class="rover_thead">
+        <tr>
+          <td></td>
+          <td></td>
+          <th class="header_th">Uniqname</th>
+          <th class="header_th">First name</th>
+          <th class="header_th">Last name</th>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @rovers.each do |rover| %>
+          <tr class="rover_tbody_tr">
+            <td class="rover_tbody_td">
+              <%= link_to "View", rover, data: { turbo_frame: "_top" } %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to "Edit", edit_rover_path(rover), data: { turbo_frame: "_top" } %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= rover.uniqname %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= rover.first_name %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= rover.last_name %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= button_to "Delete this rover", rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' } %>
+              <%# <%= link_to "Remove", program_student_path(@student_program, student), data: { turbo_confirm: 'Are you sure?', turbo_method: :delete }, class: "link_to" unless student.registered %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <%end%>
   </div>
 <% end %>

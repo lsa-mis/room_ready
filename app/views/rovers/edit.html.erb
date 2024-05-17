@@ -1,6 +1,32 @@
 <h1>Editing rover</h1>
 
-<%= render "form", rover: @rover %>
+<%= form_with(model: rover=@rover) do |form| %>
+  <% if rover.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(rover.errors.count, "error") %> prohibited this rover from being saved:</h2>
+
+      <ul>
+        <% rover.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <div>Rover Uniqname:</div>
+    <div><%= rover.uniqname %></div>
+  </div>
+  <div>
+    <%= form.label :first_name, "Update Rover First Name:", style: "display: block" %>
+    <%= form.text_field :first_name %>
+    <%= form.submit %>
+  </div>
+  <div>
+    <%= form.label :last_name, "Update Rover Last Name:", style: "display: block" %>
+    <%= form.text_field :last_name %>
+    <%= form.submit %>
+  </div>
+<% end %>
 
 <br>
 

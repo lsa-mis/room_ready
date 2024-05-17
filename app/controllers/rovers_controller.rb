@@ -4,7 +4,11 @@ class RoversController < ApplicationController
   # GET /rovers or /rovers.json
   def index
     @rover = Rover.new
-    @rovers = Rover.all
+    if params[:search].present?
+      @rovers = Rover.where("uniqname ILIKE :search OR (first_name || ' ' || last_name) ILIKE :search", search: "%#{params[:search]}%")
+    else
+      @rovers = Rover.all
+    end
   end
 
   # GET /rovers/1 or /rovers/1.json
@@ -60,13 +64,13 @@ class RoversController < ApplicationController
     @rover.destroy!
 
     respond_to do |format|
-      format.html { redirect_to rovers_url, notice: "Rover was successfully destroyed." }
+      format.html { redirect_to rovers_url, notice: "Rover was successfully deleted." }
       format.json { head :no_content }
     end
   end
 
   def get_rover_info(uniqname)
-    result = {'valid' => false, 'note' => '', 'last_name' => '', 'first_name' => ''}
+    result = {'valid' => false, 'note' => '', 'last_name' => '', 'first_name' => '', 'name' => ''}
     valid = LdapLookup.uid_exist?(uniqname)
     if valid
       name = LdapLookup.get_simple_name(uniqname)
@@ -74,6 +78,7 @@ class RoversController < ApplicationController
         if name.include?("No displayname")
           result['note'] = " Mcommunity returns no name for '#{uniqname}' uniqname. Please add first and last names manually."
         else
+          result['name'] = name
           result['first_name'] = name.split(" ").first
           result['last_name'] = name.split(" ").last
           result['note'] = "Uniqname is valid"
