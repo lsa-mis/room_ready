@@ -17,13 +17,14 @@
     <div><%= rover.uniqname %></div>
   </div>
   <div>
-    <%= form.label :first_name, "Update Rover First Name:", style: "display: block" %>
+    <%= form.label :first_name, "First Name:", style: "display: block"%>
     <%= form.text_field :first_name %>
-    <%= form.submit %>
   </div>
   <div>
-    <%= form.label :last_name, "Update Rover Last Name:", style: "display: block" %>
+    <%= form.label :last_name, "Last Name:", style: "display: block"%>
     <%= form.text_field :last_name %>
+  </div>
+  <div>
     <%= form.submit %>
   </div>
 <% end %>
@@ -31,6 +32,5 @@
 <br>
 
 <div>
-  <%= link_to "Show this rover", @rover %> |
   <%= link_to "Back to rovers", rovers_path %>
 </div>

@@ -6,8 +6,10 @@ class RoversController < ApplicationController
     @rover = Rover.new
     if params[:search].present?
       @rovers = Rover.where("uniqname ILIKE :search OR (first_name || ' ' || last_name) ILIKE :search", search: "%#{params[:search]}%")
+      authorize @rovers
     else
       @rovers = Rover.all
+      authorize @rovers
     end
   end
 

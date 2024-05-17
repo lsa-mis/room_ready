@@ -1,11 +1,15 @@
 class RoverPolicy < ApplicationPolicy
-
-    def create?
-      true
-    end
   
-    def new?
-      true
-    end
-  
+  def index?
+    user_in_admin_group?
   end
+
+  def create?
+    true
+  end
+
+  def new?
+    true
+  end
+  
+end
