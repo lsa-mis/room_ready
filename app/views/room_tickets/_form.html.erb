@@ -1,7 +1,7 @@
 <%= form_with(model: room_ticket) do |form| %>
   <% if room_ticket.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(room_ticket.errors.count, "error") %> prohibited this room_ticket from being saved:</h2>
+      <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
 
       <ul>
         <% room_ticket.errors.each do |error| %>
