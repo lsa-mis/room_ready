@@ -10,6 +10,7 @@
     <% end %>
     <% if user_signed_in? && policy(:static_page).home? %>
       <%= link_to "Home", home_path %>
+      <%= link_to "Rovers", rovers_path%>
     <% end %>
 
     <div class="">
