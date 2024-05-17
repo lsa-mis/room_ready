@@ -1,14 +1,16 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Rovers</h1>
+<h1>Rover List</h1>
 
-<div id="rovers">
-  <% @rovers.each do |rover| %>
-    <%= render rover %>
-    <p>
-      <%= link_to "Show this rover", rover %>
-    </p>
+
+<div id="search bar">
+  <%= form_with url: rovers_path, method: :get, local: true do |form| %>
+    <%= form.label :search, "Search Rovers by Name or Uniqname:", style: "display: block" %>
+    <%= form.text_field :search, value: params[:search] %>
+    <%= form.submit "Search" %>
   <% end %>
 </div>
 
-<%= link_to "New rover", new_rover_path %>
+<%= render "form", rover: @rover %>
+
+<%= render "listing" %>
