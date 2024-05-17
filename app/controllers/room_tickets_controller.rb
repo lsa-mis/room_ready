@@ -1,4 +1,5 @@
 class RoomTicketsController < ApplicationController
+  before_action :auth_user
   before_action :set_room_ticket, only: %i[ show edit update destroy ]
 
   # GET /room_tickets or /room_tickets.json

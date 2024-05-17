@@ -1,5 +1,9 @@
-class CommonAttributePolicy < ApplicationPolicy
+class ZonePolicy < ApplicationPolicy
   def index?
+    user_in_admin_group?
+  end
+
+  def show?
     user_in_admin_group?
   end
 
@@ -14,7 +18,7 @@ class CommonAttributePolicy < ApplicationPolicy
   def update?
     user_in_admin_group?
   end
-  
+
   def edit?
     update?
   end

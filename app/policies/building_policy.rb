@@ -1,5 +1,9 @@
-class CommonAttributePolicy < ApplicationPolicy
+class BuildingPolicy < ApplicationPolicy
   def index?
+    user_in_admin_group?
+  end
+
+  def show?
     user_in_admin_group?
   end
 

@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  before_action :authenticate_user!, only: %i[ home ]
+  before_action :auth_user, only: %i[ home ]
 
   def home
     authorize :static_page

@@ -1,4 +1,5 @@
 class RoomStatesController < ApplicationController
+  before_action :auth_user
   before_action :set_room_state, only: %i[ show edit update destroy ]
 
   # GET /room_states or /room_states.json

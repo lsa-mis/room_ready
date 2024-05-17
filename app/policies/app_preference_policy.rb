@@ -1,5 +1,17 @@
-class CommonAttributePolicy < ApplicationPolicy
+class AppPreferencePolicy < ApplicationPolicy
   def index?
+    user_in_admin_group?
+  end
+
+  def show?
+    user_in_admin_group?
+  end
+
+  def new?
+    user_in_admin_group?
+  end
+
+  def edit?
     user_in_admin_group?
   end
 
@@ -7,16 +19,8 @@ class CommonAttributePolicy < ApplicationPolicy
     user_in_admin_group?
   end
 
-  def new?
-    create?
-  end
-
   def update?
     user_in_admin_group?
-  end
-  
-  def edit?
-    update?
   end
 
   def destroy?

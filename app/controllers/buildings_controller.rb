@@ -1,9 +1,11 @@
 class BuildingsController < ApplicationController
+  before_action :auth_user
   before_action :set_building, only: %i[ show edit update destroy ]
 
   # GET /buildings or /buildings.json
   def index
     @buildings = Building.all
+    authorize @buildings
   end
 
   # GET /buildings/1 or /buildings/1.json
@@ -13,6 +15,7 @@ class BuildingsController < ApplicationController
   # GET /buildings/new
   def new
     @building = Building.new
+    authorize @building
   end
 
   # GET /buildings/1/edit
@@ -22,7 +25,7 @@ class BuildingsController < ApplicationController
   # POST /buildings or /buildings.json
   def create
     @building = Building.new(building_params)
-
+    authorize @building
     respond_to do |format|
       if @building.save
         format.html { redirect_to building_url(@building), notice: "Building was successfully created." }
@@ -61,6 +64,7 @@ class BuildingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
+      authorize @building
     end
 
     # Only allow a list of trusted parameters through.
