@@ -12,7 +12,7 @@
 class CommonAttribute < ApplicationRecord
   has_many :common_attribute_states
 
-  validates :description, presence: true
+  validates :description, presence: true, uniqueness: true
   validate :needs_either_checkbox_or_quantity_box
 
   private
