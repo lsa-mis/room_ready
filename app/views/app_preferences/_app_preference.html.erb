@@ -1,22 +1,18 @@
-<div id="<%= dom_id app_preference %>">
-  <p>
-    <strong>Name:</strong>
-    <%= app_preference.name %>
-  </p>
+<!-- This is a card for newly created preference that pops up right after submitting -->
 
-  <p>
-    <strong>Description:</strong>
-    <%= app_preference.description %>
-  </p>
-
-  <p>
-    <strong>Pref type:</strong>
-    <%= app_preference.pref_type %>
-  </p>
-
-  <p>
-    <strong>Value:</strong>
-    <%= app_preference.value %>
-  </p>
-
+<div id="<%= dom_id(app_preference) %>" class="card">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>Name:</strong> <%= app_preference.name %>
+    </li>
+    <li class="list-group-item">
+      <strong>Description:</strong> <%= app_preference.description %>
+    </li>
+    <li class="list-group-item">
+      <strong>Preference type:</strong> <%= app_preference.pref_type %>
+    </li>
+    <li class="list-group-item">
+      <strong>Value:</strong> <%= app_preference.value %>
+    </li>
+  </ul>
 </div>

@@ -1,14 +1,19 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Zones</h1>
-
-<div id="zones">
-  <% @zones.each do |zone| %>
-    <%= render zone %>
-    <p>
-      <%= link_to "Show this zone", zone %>
-    </p>
-  <% end %>
+<div class="p-5 m-5">
+  <p style="color: green"><%= notice %></p>
+  <div class="container-fluid" id="zones">
+    <div class="d-flex justify-content-between">
+      <h1>All Zones</h1>
+      <%= link_to "Add New Zone", new_zone_path, class: "btn btn-success h-50 mt-auto mb-auto" %>
+    </div>
+    <div class="row">
+      <% @zones.each do |zone| %>
+        <div class="card m-2" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"><%= render zone %></h5>
+            <%= link_to "Zone Details", zone, class: "card-link" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
-
-<%= link_to "New zone", new_zone_path %>

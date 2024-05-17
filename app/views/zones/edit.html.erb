@@ -1,10 +1,11 @@
-<h1>Editing zone</h1>
+<div class="p-3">
+  <h1>Editing <%= @zone.name %></h1>
 
-<%= render "form", zone: @zone %>
+  <%= render "form", zone: @zone %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Show this zone", @zone %> |
-  <%= link_to "Back to zones", zones_path %>
+  <div>
+    <%= link_to "Back", zone_path(@zone)%>
+  </div>
 </div>

@@ -1,9 +1,10 @@
-<h1>New zone</h1>
+<div class="p-3">
 
-<%= render "form", zone: @zone %>
+  <h1>Add new zone</h1>
 
-<br>
+  <%= render "form", zone: @zone %>
 
-<div>
-  <%= link_to "Back to zones", zones_path %>
+  <br>
+
+  <%= link_to "Back", zones_path, class: "btn btn-primary mt-3" %> 
 </div>

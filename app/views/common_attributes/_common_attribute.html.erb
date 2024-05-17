@@ -1,17 +1,25 @@
 <div id="<%= dom_id common_attribute %>">
-  <p>
-    <strong>Description:</strong>
-    <%= common_attribute.description %>
-  </p>
-
-  <p>
-    <strong>Need checkbox:</strong>
-    <%= common_attribute.need_checkbox %>
-  </p>
-
-  <p>
-    <strong>Need quantity box:</strong>
-    <%= common_attribute.need_quantity_box %>
-  </p>
-
+  <tr>
+    <td class="text-start"><%= common_attribute.description %></td>
+    <td>
+      <% if common_attribute.need_checkbox %>
+        <i class="bi bi-check-circle-fill text-primary"></i>
+      <% end %>
+    </td>
+    <td>
+      <% if common_attribute.need_quantity_box %>
+        <i class="bi bi-check-circle-fill text-primary"></i>
+      <% end %>
+    </td>
+    <td>
+      <%= link_to edit_common_attribute_path(common_attribute) do %>
+        <i class="bi bi-pencil-square text-primary"></i>
+      <% end %>
+    </td>
+    <td>
+      <%= link_to common_attribute_path(common_attribute), data: { turbo_confirm: "Are you sure you want to Delete this Common Attribute?" , turbo_method: :delete } do %>
+        <i class="bi bi-trash-fill text-danger"></i>
+      <% end %>
+    </td>
+  </tr>
 </div>

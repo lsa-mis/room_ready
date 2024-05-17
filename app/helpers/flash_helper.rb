@@ -2,9 +2,9 @@ module FlashHelper
   def css_class_for_flash(type)
     case type.to_sym
     when :alert
-      "flash_alert"
+      "alert-danger"
     else
-      "flash_notice"
+      "alert-success"
     end
   end
 end

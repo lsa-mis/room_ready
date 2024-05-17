@@ -5,11 +5,12 @@ Rails.application.routes.draw do
   resources :specific_attribute_states
   resources :common_attribute_states
   resources :specific_attributes
-  resources :common_attributes
+  resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets
   resources :rovers
   resources :zones
+
   resources :resources
   resources :rooms
   resources :floors

@@ -11,6 +11,14 @@
     <% if user_signed_in? && policy(:static_page).home? %>
       <%= link_to "Home", home_path %>
       <%= link_to "Rovers", rovers_path%>
+      <%= link_to "Zones", zones_path %>
+    <% end %>
+    <% if user_signed_in? && policy(CommonAttribute).index? %>
+      <%= link_to "Common Attributes", common_attributes_path %>
+    <% end %>
+
+    <% if user_signed_in? && policy(:static_page).home? %>
+      <%= link_to "App Preferences", app_preferences_path %>
     <% end %>
 
     <div class="">
