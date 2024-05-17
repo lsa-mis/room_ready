@@ -4,12 +4,24 @@ class RoverPolicy < ApplicationPolicy
     user_in_admin_group?
   end
 
+  def show?
+    user_in_admin_group?
+  end
+
   def create?
-    true
+    user_in_admin_group?
   end
 
   def new?
-    true
+    create?
+  end
+
+  def update?
+    user_in_admin_group?
+  end
+  
+  def edit?
+    update?
   end
   
 end
