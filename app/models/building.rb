@@ -17,4 +17,7 @@
 class Building < ApplicationRecord
   has_many :floors
   belongs_to :zone
+
+  validates :bldrecnbr, :name, :address, :city, :state, :zip, presence: true
+  validates :bldrecnbr, :name, uniqueness: true
 end
