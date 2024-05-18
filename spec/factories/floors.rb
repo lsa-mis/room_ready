@@ -10,7 +10,7 @@
 #
 FactoryBot.define do
   factory :floor do
-    name { "MyString" }
-    building { nil }
+    name { Faker::Alphanumeric.alphanumeric(number: 1) }
+    association :building
   end
 end
