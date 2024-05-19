@@ -71,4 +71,22 @@ RSpec.describe Building, type: :model do
     end
   end
 
+  context "create building with a duplicated bldrecnbr" do
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Bldrecnbr has already been taken"' do
+      building = FactoryBot.create(:building)
+      building1 = FactoryBot.build(:building, bldrecnbr: building.bldrecnbr)
+      expect(building1.valid?).to be_falsy
+      expect(building1.errors.full_messages_for(:bldrecnbr)).to include "Bldrecnbr has already been taken"
+    end
+  end
+
+  context "create building with a duplicated name" do
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Name has already been taken"' do
+      building = FactoryBot.create(:building)
+      building1 = FactoryBot.build(:building, name: building.name)
+      expect(building1.valid?).to be_falsy
+      expect(building1.errors.full_messages_for(:name)).to include "Name has already been taken"
+    end
+  end
+
 end
