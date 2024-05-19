@@ -13,10 +13,9 @@
 #
 FactoryBot.define do
   factory :room do
-    rmrecnbr { "MyString" }
-    room_number { "MyString" }
-    room_type { "MyString" }
-    facility_id { "MyString" }
-    floor { nil }
+    rmrecnbr { Faker::Number.number(digits: 7).to_s }
+    room_number { Faker::Number.number(digits: 4).to_s }
+    room_type { "Classroom" }
+    association :floor
   end
 end

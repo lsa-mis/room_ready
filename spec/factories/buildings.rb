@@ -16,13 +16,13 @@
 #
 FactoryBot.define do
   factory :building do
-    bldrecnbr { "MyString" }
-    name { "MyString" }
-    nick_name { "MyString" }
-    abbreviation { "MyString" }
-    address { "MyString" }
-    city { "MyString" }
-    state { "MyString" }
-    zip { "MyString" }
+    bldrecnbr { Faker::Number.number(digits: 7).to_s }
+    name { Faker::Company.department }
+    nick_name { Faker::Alphanumeric.alphanumeric(number: 3)}
+    address { Faker::Address.full_address }
+    city { Faker::Address.city }
+    state { Faker::Address.state  }
+    zip { Faker::Address.postcode }
+    association :zone
   end
 end
