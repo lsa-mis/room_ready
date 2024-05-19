@@ -23,5 +23,9 @@ class RoverPolicy < ApplicationPolicy
   def edit?
     update?
   end
+
+  def destroy?
+    user_in_admin_group?
+  end
   
 end
