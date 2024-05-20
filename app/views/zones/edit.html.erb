@@ -2,10 +2,5 @@
   <h1>Editing <%= @zone.name %></h1>
 
   <%= render "form", zone: @zone %>
-
-  <br>
-
-  <div>
-    <%= link_to "Back", zone_path(@zone)%>
-  </div>
+  <%= link_to "Cancel", zone_path(@zone)%>
 </div>
