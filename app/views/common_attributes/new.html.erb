@@ -3,9 +3,7 @@
     <h1>New Common Attribute</h1>
   </div>
 
-  <%= render "form", common_attribute: @common_attribute %>
+  <%= turbo_frame_tag 'new_common_attribute_form' do %>
+    <%= render "form", common_attribute: @common_attribute %>
+  <% end %>
 </div>
-
-
-
-

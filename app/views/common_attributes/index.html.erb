@@ -1,14 +1,11 @@
 <div class="px-5 py-3">
-  <h1>Common Attributes</h1>
+  <h1 class="mb-3">Common Attributes</h1>
 
-  <div class="d-flex flex-column align-items-end">
-    <%= link_to new_common_attribute_path, class: "btn btn-primary mb-3 gap-3" do %>
-      <i class="bi bi-plus-lg"></i>
-      Common Attribute
-    <% end %>
-  </div>
+  <%= turbo_frame_tag 'new_common_attribute_form' do %>
+    <%= render 'form', common_attribute: @new_common_attribute %>
+  <% end %>
 
-  <table class="table text-center">
+  <table class="table text-center mt-4">
     <thead class="table-group-divider">
     <tr>
       <th scope="col" class="text-start">Description</th>
@@ -18,15 +15,10 @@
       <th scope="col">Delete</th>
     </tr>
     </thead>
-    <tbody class="table-group-divider">
-    <div id="common_attributes">
+    <tbody class="table-group-divider" id="common_attributes">
       <% @common_attributes.each do |common_attribute| %>
         <%= render common_attribute %>
       <% end %>
-    </div>
     </tbody>
   </table>
 </div>
-
-
-
