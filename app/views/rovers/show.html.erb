@@ -3,8 +3,9 @@
 <%= render "rover", rover: @rover %>
 
 <div>
-  <%= link_to "Edit this rover", edit_rover_path(@rover) %> |
-  <%= link_to "Back to rovers", rovers_path %>
-
-  <%= button_to "Delete this rover", @rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' } %>
+  <%= link_to "Edit This Rover", edit_rover_path(@rover), class: "btn btn-primary btn-sm"%> |
+  <%= link_to "Back to Rovers", rovers_path, class: "btn btn-primary btn-sm"%>
+  <br>
+  <br>
+  <%= button_to "Delete This Rover", @rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' }, class: "btn btn-danger btn-sm"%>
 </div>

@@ -3,26 +3,20 @@
   <% if @rovers.empty? %>
     No Rovers found
   <% else %>
-    <table class="rover_table">
-      <thead class="rover_thead">
+    <table class="table text-center">
+      <thead class="table-group-divider">
         <tr>
-          <td></td>
-          <td></td>
-          <th class="header_th">Uniqname</th>
-          <th class="header_th">First name</th>
-          <th class="header_th">Last name</th>
-          <td></td>
+          <th>Uniqname</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <td>View</td>
+          <td>Edit</td>
+          <td>Delete</td>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="table-group-divider">
         <% @rovers.each do |rover| %>
           <tr class="rover_tbody_tr">
-            <td class="rover_tbody_td">
-              <%= link_to "View", rover, data: { turbo_frame: "_top" } %>
-            </td>
-            <td class="rover_tbody_td">
-              <%= link_to "Edit", edit_rover_path(rover), data: { turbo_frame: "_top" } %>
-            </td>
             <td class="rover_tbody_td">
               <%= rover.uniqname %>
             </td>
@@ -33,7 +27,19 @@
               <%= rover.last_name %>
             </td>
             <td class="rover_tbody_td">
-              <%= button_to "Delete this rover", rover, method: :delete, data: { turbo_confirm: 'Are you sure to delete this rover?' } %>
+              <%= link_to rover_path(rover), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-eye-fill text-primary"></i>
+              <%end%>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to edit_rover_path(rover), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-pencil-square text-primary"></i>
+              <%end%>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to rover_path(rover), data: { turbo_confirm: 'Are you sure you want to delete this rover?', turbo_method: :delete} do %>
+              <i class="bi bi-trash-fill text-danger"></i>
+              <%end%>
             </td>
           </tr>
         <% end %>

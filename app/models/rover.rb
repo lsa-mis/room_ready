@@ -10,6 +10,5 @@
 #  updated_at :datetime         not null
 #
 class Rover < ApplicationRecord
-  validates_presence_of :uniqname
-  validates :uniqname, uniqueness: true
+  validates :uniqname, presence: true, uniqueness: true
 end
