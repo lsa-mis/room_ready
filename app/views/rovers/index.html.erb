@@ -1,4 +1,4 @@
-<p style="color: green"><%= notice %></p>
+<p></p>
 <h1>Rover List</h1>
 <div id="search bar">
   <%= form_with url: rovers_path, method: :get, local: true do |form| %>
@@ -9,5 +9,5 @@
 </div>
 
 <%= render "form", rover: @rover %>
-
+<br>
 <%= render "listing" %>
