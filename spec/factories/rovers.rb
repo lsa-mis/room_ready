@@ -11,8 +11,8 @@
 #
 FactoryBot.define do
   factory :rover do
-    uniqname { "MyString" }
-    first_name { "MyString" }
-    last_name { "MyString" }
+    uniqname { Faker::Alphanumeric.alpha(number: 8) }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
   end
 end

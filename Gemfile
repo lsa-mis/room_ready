@@ -65,6 +65,7 @@ group :development, :test do
   gem 'webdrivers', '= 5.3.0'
   gem 'faker'
   gem 'pry'
+  gem 'pundit-matchers', '~> 3.1', '>= 3.1.2'
 end
 
 group :development, :staging do
