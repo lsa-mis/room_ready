@@ -29,6 +29,8 @@
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit common_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
-    <%= link_to "Cancel", common_attributes_path, class: "text-primary" %>
+    <% if common_attribute.persisted? %>
+      <%= link_to "Cancel", common_attributes_path, class: "text-primary" %>
+    <% end %>
   </div>
 <% end %>

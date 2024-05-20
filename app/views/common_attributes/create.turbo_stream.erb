@@ -1,0 +1,5 @@
+<%= turbo_stream.update 'new_common_attribute_form' do %>
+  <%= render 'form', common_attribute: @new_common_attribute %>
+<% end %>
+<%= turbo_stream.append "common_attributes", @common_attribute %>
+<%= turbo_stream.update "flash", partial: 'layouts/flash' %>

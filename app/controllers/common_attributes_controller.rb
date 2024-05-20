@@ -5,6 +5,7 @@ class CommonAttributesController < ApplicationController
   # GET /common_attributes or /common_attributes.json
   def index
     @common_attributes = CommonAttribute.all
+    @new_common_attribute = CommonAttribute.new
     authorize @common_attributes
   end
 
@@ -25,11 +26,14 @@ class CommonAttributesController < ApplicationController
 
     respond_to do |format|
       if @common_attribute.save
-        format.html { redirect_to common_attributes_path, notice: "Common attribute was successfully created." }
-        format.json { render :show, status: :created, location: @common_attribute }
+        notice = "Common attribute was successfully created."
+        format.turbo_stream do
+          @new_common_attribute = CommonAttribute.new
+          flash.now[:notice] = notice
+        end
+        format.html { redirect_to common_attributes_path, notice: notice }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @common_attribute.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,8 +56,11 @@ class CommonAttributesController < ApplicationController
     @common_attribute.destroy!
 
     respond_to do |format|
-      format.html { redirect_to common_attributes_url, notice: "Common attribute was successfully destroyed." }
-      format.json { head :no_content }
+      notice = "Common attribute was successfully destroyed."
+      format.turbo_stream do
+        flash.now[:notice] = notice
+      end
+      format.html { redirect_to common_attributes_url, notice: notice }
     end
   end
 
