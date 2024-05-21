@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   resources :resource_states
   resources :specific_attribute_states
   resources :common_attribute_states
-  resources :specific_attributes
   resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets
@@ -12,7 +11,9 @@ Rails.application.routes.draw do
   resources :zones
 
   resources :resources
-  resources :rooms
+  resources :rooms do
+    resources :specific_attributes, module: :rooms
+  end
   resources :floors
   resources :buildings
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
