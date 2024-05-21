@@ -3,6 +3,8 @@
 <%= render @zone %>
 
 <div>
+  <%= link_to "View Buildings", zone_buildings_path(@zone.id) %>
+  <br />
   <%= link_to "Edit this zone", edit_zone_path(@zone) %> |
   <%= link_to "Back to zones", zones_path %>
 

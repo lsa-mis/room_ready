@@ -29,3 +29,16 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: $michigan_summer_blue;
 }
+
+.read-only-field {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+// Apply to header containing partial rendering
+// Ex. <h5 class="card-title handle-text-overflow"><%= render building %></h5>
+.handle-text-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+}

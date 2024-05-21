@@ -9,7 +9,10 @@ Rails.application.routes.draw do
   resources :room_states
   resources :room_tickets
   resources :rovers
-  resources :zones
+  
+  resources :zones do
+    resources :buildings
+  end
 
   resources :resources
   resources :rooms

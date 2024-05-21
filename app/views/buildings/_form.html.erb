@@ -47,6 +47,11 @@
   </div>
 
   <div>
+    <%= form.label "Zone ID", style: "display: block" %>
+    <%= form.text_field :zone_id, value: @zone_id, readonly: true, class: "read-only-field" %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>
