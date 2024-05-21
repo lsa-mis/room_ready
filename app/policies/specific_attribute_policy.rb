@@ -3,10 +3,6 @@ class SpecificAttributePolicy < ApplicationPolicy
     user_in_admin_group?
   end
 
-  def show?
-    user_in_admin_group?
-  end
-
   def create?
     user_in_admin_group?
   end
