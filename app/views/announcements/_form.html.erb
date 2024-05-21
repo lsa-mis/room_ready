@@ -1,22 +1,23 @@
-<%= form_with(model: announcement) do |form| %>
-  <% if announcement.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(announcement.errors.count, "error") %></h2>
+<%= turbo_frame_tag 'new_announcement' do %>  
+  <%= form_with(model: announcement) do |form| %>
+    <% if announcement.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(announcement.errors.count, "error") %></h2>
 
-      <ul>
-        <% announcement.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% announcement.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :location, "Location *"%>
+      <%= form.text_field :location, required: true %>
+      <%= form.label :content, "Content"%>
+      <%= form.rich_text_area :content%>
+      <%= form.submit %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>

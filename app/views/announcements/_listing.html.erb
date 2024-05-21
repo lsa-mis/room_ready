@@ -1,0 +1,54 @@
+<%= turbo_frame_tag 'announcements' do %>  
+  <div id="announcements">
+  <% if @announcements.empty? %>
+    No announcements found
+  <% else %>
+    <table class="table text-center">
+      <thead class="table-group-divider">
+        <tr>
+          <th>Content</th>
+          <th>Location</th>
+          <th>Time Created</th>
+          <th>Last Updated</th>
+          <th>View</td>
+          <th>Edit</td>
+          <th>Delete</td>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% @announcements.each do |announcement| %>
+          <tr class="announcement_tbody_tr">
+            <td class="announcement_tbody_td">
+              <%= announcement.content %>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= announcement.location %>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= announcement.created_at %>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= announcement.updated_at %>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= link_to announcement_path(announcement), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-eye-fill text-primary"></i>
+              <%end%>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= link_to edit_announcement_path(announcement), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-pencil-square text-primary"></i>
+              <%end%>
+            </td>
+            <td class="announcement_tbody_td">
+              <%= link_to announcement_path(announcement), data: { turbo_confirm: 'Are you sure you want to delete this announcement?', turbo_method: :delete} do %>
+              <i class="bi bi-trash-fill text-danger"></i>
+              <%end%>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <%end%>
+  </div>
+<% end %>

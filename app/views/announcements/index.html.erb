@@ -1,14 +1,13 @@
-<p style="color: green"><%= notice %></p>
+<p></p>
 
 <h1>Announcements</h1>
+<h2>New announcement</h2>
 
+<%= render "form", announcement: @announcement %>
+
+<br>
+
+<h2>Announcement List</h2>
 <div id="announcements">
-  <% @announcements.each do |announcement| %>
-    <%= render announcement %>
-    <p>
-      <%= link_to "Show this announcement", announcement %>
-    </p>
-  <% end %>
+  <%= render 'listing' %>
 </div>
-
-<%= link_to "New announcement", new_announcement_path %>

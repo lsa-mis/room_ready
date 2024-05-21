@@ -4,7 +4,9 @@ class AnnouncementsController < ApplicationController
 
   # GET /announcements or /announcements.json
   def index
+    @announcement = Announcement.new
     @announcements = Announcement.all
+    authorize @announcements
   end
 
   # GET /announcements/1 or /announcements/1.json
@@ -14,6 +16,7 @@ class AnnouncementsController < ApplicationController
   # GET /announcements/new
   def new
     @announcement = Announcement.new
+    authorize @announcement
   end
 
   # GET /announcements/1/edit
@@ -23,15 +26,13 @@ class AnnouncementsController < ApplicationController
   # POST /announcements or /announcements.json
   def create
     @announcement = Announcement.new(announcement_params)
-
-    respond_to do |format|
-      if @announcement.save
-        format.html { redirect_to announcement_url(@announcement), notice: "Announcement was successfully created." }
-        format.json { render :show, status: :created, location: @announcement }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @announcement.errors, status: :unprocessable_entity }
-      end
+    authorize @announcement
+    if @announcement.save
+      flash.now[:notice] = "Announcement was successfully created."
+      @announcement = Announcement.new
+      @announcements = Announcement.all
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -62,10 +63,11 @@ class AnnouncementsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_announcement
       @announcement = Announcement.find(params[:id])
+      authorize @announcement
     end
 
     # Only allow a list of trusted parameters through.
     def announcement_params
-      params.require(:announcement).permit(:location)
+      params.require(:announcement).permit(:location, :content)
     end
 end
