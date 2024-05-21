@@ -1,17 +1,13 @@
 class Rooms::SpecificAttributesController < ApplicationController
   before_action :auth_user
   before_action :set_room
-  before_action :set_specific_attribute, only: %i[ show edit update destroy ]
+  before_action :set_specific_attribute, only: %i[edit update destroy ]
 
   # GET /specific_attributes or /specific_attributes.json
   def index
     @specific_attributes = SpecificAttribute.all
     @new_specific_attribute = SpecificAttribute.new
     authorize @specific_attributes
-  end
-
-  # GET /specific_attributes/1 or /specific_attributes/1.json
-  def show
   end
 
   # GET /specific_attributes/new

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :resources
   resources :rooms do
-    resources :specific_attributes, module: :rooms
+    resources :specific_attributes, module: :rooms, except: [:show]
   end
   resources :floors
   resources :buildings
