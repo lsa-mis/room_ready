@@ -1,5 +1,8 @@
-<div class="px-5 py-3">
-  <h1 class="mb-3">Specific Attributes</h1>
+<div class="py-3">
+  <div class="mb-3 d-flex flex-row align-items-center justify-content-between">
+    <h1>Specific Attributes <%= @room.rmrecnbr? ? "for #{@room.rmrecnbr}" : '' %></h1>
+    <%= link_to "Back to Room", room_path(@room), class: "text-primary" %>
+  </div>
 
   <%= turbo_frame_tag 'new_specific_attribute_form' do %>
     <%= render 'form', specific_attribute: @new_specific_attribute %>
