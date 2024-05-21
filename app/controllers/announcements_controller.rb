@@ -53,7 +53,7 @@ class AnnouncementsController < ApplicationController
     @announcement.destroy!
 
     respond_to do |format|
-      format.html { redirect_to announcements_url, notice: "Announcement was successfully destroyed." }
+      format.html { redirect_to announcements_url, notice: "Announcement was successfully deleted." }
       format.json { head :no_content }
     end
   end

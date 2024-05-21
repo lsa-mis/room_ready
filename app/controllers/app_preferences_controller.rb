@@ -30,7 +30,7 @@ class AppPreferencesController < ApplicationController
     authorize @app_preference
     respond_to do |format|
       if @app_preference.save
-        format.html { redirect_to app_preference_url(@app_preference), notice: "App preference was successfully created." }
+        format.html { redirect_to app_preferences_url, notice: "App preference was successfully created." }
 
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -43,7 +43,7 @@ class AppPreferencesController < ApplicationController
   def update
     respond_to do |format|
       if @app_preference.update(app_preference_params)
-        format.html { redirect_to app_preference_url(@app_preference), notice: "App preference was successfully updated." }
+        format.html { redirect_to app_preferences_url, notice: "App preference was successfully updated." }
         format.json { render :show, status: :ok, location: @app_preference }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -57,7 +57,7 @@ class AppPreferencesController < ApplicationController
     @app_preference.destroy!
 
     respond_to do |format|
-      format.html { redirect_to app_preferences_url, notice: "App preference was successfully destroyed." }
+      format.html { redirect_to app_preferences_url, notice: "App preference was successfully deleted." }
       format.json { head :no_content }
     end
   end
