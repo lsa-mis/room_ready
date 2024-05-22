@@ -1,18 +1,41 @@
-<%= render @room %>
-
-<div>
-  <%= link_to "Edit this room", edit_room_path(@room) %> |
-  <%= link_to "Back to rooms", rooms_path %>
-
-  <%= button_to "Destroy this room", @room, method: :delete %>
-</div>
-
-<div class="py-3 w-50">
-  <div class="mb-3 d-flex flex-row align-items-center justify-content-between">
-    <h2>Specific Attributes</h2>
-    <%= link_to room_specific_attributes_path(@room), class: 'text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover' do %>
-      Edit Specific Attributes <i class="bi bi-pencil-square text-primary"></i>
-    <% end %>
+<div class="py-3">
+  <div class="d-flex flex-row justify-content-between align-items-center mb-3">
+    <h1>Room: </h1>
+    <div class="d-flex flex-column gap-1">
+      <%= link_to 'Edit Room', edit_room_path(@room), class: 'btn btn-primary' %>
+      <%= link_to room_path(@room), class: 'btn btn-danger',
+                  data: { turbo_confirm: "Are you sure you want to Archive this Room?" , turbo_method: :delete } do %>
+        Archive <i class="bi bi-archive-fill"></i>
+      <% end %>
+    </div>
   </div>
-  <%= render 'specific_attributes_list', specific_attributes: @room.specific_attributes %>
+
+  <%= render @room %>
+
+  <div class="py-3 w-50">
+    <div class="d-flex flex-row align-items-center justify-content-between">
+      <h2>Common Attributes</h2>
+      <%= link_to common_attributes_path, class: 'text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover' do %>
+        Edit Common Attributes <i class="bi bi-pencil-square text-primary"></i>
+      <% end %>
+    </div>
+    <%= render 'attributes_list', attributes: @common_attributes %>
+  </div>
+
+  <div class="py-3 w-50">
+    <div class="d-flex flex-row align-items-center justify-content-between">
+      <h2>Specific Attributes</h2>
+      <%= link_to room_specific_attributes_path(@room), class: 'text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover' do %>
+        Edit Specific Attributes <i class="bi bi-pencil-square text-primary"></i>
+      <% end %>
+    </div>
+    <%= render 'attributes_list', attributes: @room.specific_attributes %>
+  </div>
+
+  <div class="py-3 w-50">
+    <div class="d-flex flex-row align-items-center justify-content-between">
+      <h2>Resources</h2>
+    </div>
+    <%= render 'resources_list', resources: @room.resources %>
+  </div>
 </div>
