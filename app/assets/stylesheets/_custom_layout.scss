@@ -195,3 +195,7 @@ svg.wh6 {
   width: 24px;
   height: 24px;
 }
+
+.nav-item.dropdown:hover > .dropdown-menu {
+  display: block;
+}

@@ -1,14 +1,10 @@
 <div class="w-100">
 
-<!--
-<p style="color: green"><%= notice %></p>-->
-
-<!--This displays the table of all preferences currently stored in the app-->
 <h1>App Preferences</h1>
 
 <div id="app_preferences">
 <table class="table">
-  <thead>
+  <thead class="table-group-divider">
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Description</th>
@@ -17,7 +13,8 @@
       <th scope="col">Delete</th>
     </tr>
   </thead>
-  <tbody>
+  
+  <tbody class="table-group-divider">
     <% @app_preferences.each do |app_preference| %>
       <tr>
         <td><%= app_preference.name %></td>

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
+
+  get 'app_preferences/configure_prefs', to: 'app_preferences#configure_prefs', as: :configure_prefs
+
+  
   resources :app_preferences
+
+
   resources :announcements
   resources :resource_states
   resources :specific_attribute_states

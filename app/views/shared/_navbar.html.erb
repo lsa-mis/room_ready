@@ -18,7 +18,16 @@
     <% end %>
 
     <% if user_signed_in? && policy(:static_page).home? %>
-      <%= link_to "App Preferences", app_preferences_path %>
+
+      <li class="nav-item dropdown" style="list-style: none; border: none; outline: none;">
+        <a class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown"  style="color: white; ">
+          App Preferences
+        </a>
+        <ul class="dropdown-menu" >
+          <li><%= link_to "Preferences List", app_preferences_path, class: 'dropdown-item' %></li>
+          <li><%= link_to "Preferences Instances", configure_prefs_path, class: 'dropdown-item' %></li>
+        </ul>
+      </li>
     <% end %>
 
     <div class="">

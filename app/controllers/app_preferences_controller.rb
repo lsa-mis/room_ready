@@ -62,6 +62,12 @@ class AppPreferencesController < ApplicationController
     end
   end
 
+  # GET /app_preferences/configure_prefs
+  def configure_prefs
+    @configure_prefs = AppPreference.order(:pref_type, :description, :value)
+    authorize @configure_prefs
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_app_preference
