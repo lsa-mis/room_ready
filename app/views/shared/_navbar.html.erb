@@ -1,25 +1,53 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-um-blue">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <%= link_to root_path, class: "a-nav" do %>
-      <div id="LSAlogo">
-        <div class="navbar-brand"><%= image_tag 'LSA_Logo.svg', alt: 'LSA Logo' %></div>
-        <span class="nav-title">
+  <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+    <div class="d-flex flex-row align-items-center gap-4 h-100">
+      <%= link_to root_path, class: "a-nav" do %>
+        <div id="LSAlogo">
+          <div class="navbar-brand"><%= image_tag 'LSA_Logo.svg', alt: 'LSA Logo' %></div>
+          <span class="nav-title">
           Room Ready
         </span>
-      </div>
-    <% end %>
-    <% if user_signed_in? && policy(:static_page).home? %>
-      <%= link_to "Home", home_path %>
-      <%= link_to "Rovers", rovers_path%>
-      <%= link_to "Zones", zones_path %>
-    <% end %>
-    <% if user_signed_in? && policy(CommonAttribute).index? %>
-      <%= link_to "Common Attributes", common_attributes_path %>
-    <% end %>
+        </div>
+      <% end %>
 
-    <% if user_signed_in? && policy(:static_page).home? %>
-      <%= link_to "App Preferences", app_preferences_path %>
-    <% end %>
+      <% if user_signed_in? && policy(:static_page).home? %>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+          <a class="nav-link h-100 d-flex align-items-center fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Base
+          </a>
+          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+            <li>
+              <%= link_to "Home", home_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+            <li>
+              <%= link_to "Zones", zones_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+            <li>
+              <%= link_to "Rooms", rooms_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+          </ul>
+        </div>
+      <% end %>
+
+      <% if user_signed_in? && policy(:static_page).home? %>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+          <a class="nav-link h-100 d-flex align-items-center fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Admin
+          </a>
+          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+            <li>
+              <%= link_to "Common Attributes", common_attributes_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+            <li>
+              <%= link_to "App Preferences", app_preferences_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+            <li>
+              <%= link_to "Rovers", rovers_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
 
     <div class="">
       <div class="d-flex align-items-center bg-um-blue">

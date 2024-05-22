@@ -195,3 +195,12 @@ svg.wh6 {
   width: 24px;
   height: 24px;
 }
+
+.navbar_dropdown_item {
+  color: white;
+}
+
+.navbar_dropdown_item:hover {
+  background-color: $um_blue;
+  color: $um_maize;
+}
