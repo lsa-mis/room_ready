@@ -6,7 +6,7 @@ class BuildingsController < ApplicationController
   def index
     @zone_id = zone_id_params
     @buildings = Building.where(zone_id: @zone_id)
-    # @zone_name = Zone.where(id: @zone_id)
+    @zone_name = Zone.find(@zone_id).name
     authorize @buildings
   end
 
@@ -61,11 +61,16 @@ class BuildingsController < ApplicationController
   # DELETE /buildings/1 or /buildings/1.json
   def destroy
     @zone_id = @building[:zone_id]
-    @building.destroy!
+    @zone = Zone.find(@zone_id)
 
     respond_to do |format|
-      format.html { redirect_to zone_buildings_path(@zone_id), notice: "Building was successfully destroyed." }
-      format.json { head :no_content }
+      if @zone.buildings.delete(@building)
+        format.html { redirect_to zone_buildings_path(@zone_id), notice: "Building was successfully removed." }
+        format.json { render :show, status: :ok, location: @building }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @building.errors, status: :unprocessable_entity }
+      end
     end
   end
 

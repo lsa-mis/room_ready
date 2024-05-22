@@ -1,11 +1,10 @@
-<p style="color: green"><%= notice %></p>
-
-
-
 <div class="container-fluid" id="buildings">
   <div class="d-flex justify-content-between">
-      <h1>Zone <%= @zone_id %> Buildings</h1>
-      <%= link_to "Add Building", new_zone_building_path(@zone_id), class: "btn btn-primary h-50 mt-auto mb-auto" %>
+      <h1><%= @zone_name %> Buildings</h1>
+      <div class="mb-auto mt-auto">
+        <%= link_to "Back to Zone", zone_path(@zone_id), class: "btn btn-secondary" %>
+        <%= link_to "Add Building", new_zone_building_path(@zone_id), class: "btn btn-primary" %>
+      </div>
     </div>
   <div class="row">
     <% @buildings.each do |building| %>

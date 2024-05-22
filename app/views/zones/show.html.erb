@@ -1,12 +1,12 @@
-<p style="color: green"><%= notice %></p>
+<h1><%= @zone.name %></h1>
 
+<h2>Zone Info</h2>
 <%= render @zone %>
 
-<div>
-  <%= link_to "View Buildings", zone_buildings_path(@zone.id) %>
-  <br />
-  <%= link_to "Edit this zone", edit_zone_path(@zone) %> |
-  <%= link_to "Back to zones", zones_path %>
-
-  <%= button_to "Destroy this zone", @zone, method: :delete %>
+<h2>Zone Options</h2>
+<div class="d-flex gap-2">
+  <%= link_to "Back to zones", zones_path, class: "btn btn-primary h-50 mt-auto mb-auto" %>
+  <%= link_to "View Buildings", zone_buildings_path(@zone.id), class: "btn btn-success h-50 mt-auto mb-auto" %>
+  <%= link_to "Edit this zone", edit_zone_path(@zone), class: "btn btn-warning h-50 mt-auto mb-auto" %>
+  <%= button_to "Destroy this zone", @zone, method: :delete, form: { data: { turbo_confirm: 'Really?' } }, class: "btn btn-danger mt-auto mb-auto" %>
 </div>
