@@ -1,23 +1,24 @@
-<%= turbo_frame_tag 'new_announcement' do %>  
+<p></p>
+<div data-controller='autosubmit'>
   <%= form_with(model: announcement) do |form| %>
-    <% if announcement.errors.any? %>
-      <div style="color: red">
-        <h2><%= pluralize(announcement.errors.count, "error") %></h2>
+    <div>
+      <div>
+        <div>
+          <span><%= "Location: #{@announcement.location.gsub('_', ' ').upcase}" %></span>
+        </div>
 
-        <ul>
-          <% announcement.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+        <div>
+          <%= form.label :content %>
+          <%= form.rich_text_area :content %>
+        </div>
       </div>
-    <% end %>
+    </div>
 
     <div>
-      <%= form.label :location, "Location *"%>
-      <%= form.text_field :location, required: true %>
-      <%= form.label :content, "Content"%>
-      <%= form.rich_text_area :content%>
-      <%= form.submit %>
+      <div>
+        <%= form.submit 'Submit', style: "display: block"%>
+        <%= link_to "Cancel", announcements_path, method: :post, class: "btn btn-primary btn-sm" %>
+      </div>
     </div>
   <% end %>
-<% end %>
+</div>

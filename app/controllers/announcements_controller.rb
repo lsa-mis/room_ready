@@ -1,11 +1,10 @@
 class AnnouncementsController < ApplicationController
   before_action :auth_user
   before_action :set_announcement, only: %i[ show edit update destroy ]
-
+  
   # GET /announcements or /announcements.json
   def index
-    @announcement = Announcement.new
-    @announcements = Announcement.all
+    @announcements = Announcement.all.with_rich_text_content.order(:id)
     authorize @announcements
   end
 
@@ -14,33 +13,36 @@ class AnnouncementsController < ApplicationController
   end
 
   # GET /announcements/new
-  def new
-    @announcement = Announcement.new
-    authorize @announcement
-  end
+  # do not add new, only edit
+  # def new
+
+  #   @announcement = Announcement.new
+  #   authorize @announcement
+  # end
 
   # GET /announcements/1/edit
   def edit
   end
 
   # POST /announcements or /announcements.json
-  def create
-    @announcement = Announcement.new(announcement_params)
-    authorize @announcement
-    if @announcement.save
-      flash.now[:notice] = "Announcement was successfully created."
-      @announcement = Announcement.new
-      @announcements = Announcement.all
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
+  # No need to create
+  # def create
+  #   @announcement = Announcement.new(announcement_params)
+  #   authorize @announcement
+  #   if @announcement.save
+  #     flash.now[:notice] = "Announcement was successfully created."
+  #     @announcement = Announcement.new
+  #     @announcements = Announcement.all
+  #   else
+  #     render :new, status: :unprocessable_entity
+  #   end
+  # end
 
   # PATCH/PUT /announcements/1 or /announcements/1.json
   def update
     respond_to do |format|
       if @announcement.update(announcement_params)
-        format.html { redirect_to announcement_url(@announcement), notice: "Announcement was successfully updated." }
+        format.html { redirect_to announcements_url, notice: "Announcement was successfully updated." }
         format.json { render :show, status: :ok, location: @announcement }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -50,6 +52,7 @@ class AnnouncementsController < ApplicationController
   end
 
   # DELETE /announcements/1 or /announcements/1.json
+  # no need to destroy
   def destroy
     @announcement.destroy!
 
