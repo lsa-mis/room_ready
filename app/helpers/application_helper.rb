@@ -59,4 +59,10 @@ module ApplicationHelper
       ['Wyoming', 'WY']
     ]
   end
+
+  def choose_buildings_for_zone(zone)
+    Building.where(zone_id: nil)
+  end
+
+  
 end

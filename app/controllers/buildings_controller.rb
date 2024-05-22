@@ -12,6 +12,11 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1 or /buildings/1.json
   def show
+    building = Building.find(params[:id])
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: building }
+    end
   end
 
   # GET /buildings/new

@@ -1,57 +1,64 @@
-<%= form_with(model: building) do |form| %>
-  <% if building.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(building.errors.count, "error") %></h2>
+<%= turbo_frame_tag 'new_site' do %>
+  <%= form_with model: building, data: { controller: "building", building_target: "form"} do |form| %>
+    <% if building.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(building.errors.count, "error") %></h2>
 
-      <ul>
-        <% building.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% building.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label "Add From Existing" %>
+      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateFields" %>
+    </div>
+
+    <div>
+      <%= form.label :bldrecnbr, style: "display: block" %>
+      <%= form.text_field :bldrecnbr %>
+    </div>
+
+    <div>
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name %>
+    </div>
+
+    <div>
+      <%= form.label :nick_name, style: "display: block" %>
+      <%= form.text_field :nick_name %>
+    </div>
+
+    <div>
+      <%= form.label :address, style: "display: block" %>
+      <%= form.text_field :address %>
+    </div>
+
+    <div>
+      <%= form.label :city, style: "display: block" %>
+      <%= form.text_field :city %>
+    </div>
+
+    <div>
+    <%= form.label :state, style: "display: block" %>
+    <%= form.select(:state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field" }) %>
+    </div>
+
+    <div>
+      <%= form.label :zip, style: "display: block" %>
+      <%= form.text_field :zip %>
+    </div>
+
+    <div>
+      <%= form.label "Zone ID", style: "display: block" %>
+      <%= form.text_field :zone_id, value: @zone_id, readonly: true, class: "read-only-field" %>
+    </div>
+
+    <div>
+      <%= form.submit %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :bldrecnbr, style: "display: block" %>
-    <%= form.text_field :bldrecnbr %>
-  </div>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div>
-    <%= form.label :nick_name, style: "display: block" %>
-    <%= form.text_field :nick_name %>
-  </div>
-
-  <div>
-    <%= form.label :address, style: "display: block" %>
-    <%= form.text_field :address %>
-  </div>
-
-  <div>
-    <%= form.label :city, style: "display: block" %>
-    <%= form.text_field :city %>
-  </div>
-
-  <div>
-   <%= form.label :state, style: "display: block" %>
-   <%= form.select(:state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field" }) %>
-  </div>
-
-  <div>
-    <%= form.label :zip, style: "display: block" %>
-    <%= form.text_field :zip %>
-  </div>
-
-  <div>
-    <%= form.label "Zone ID", style: "display: block" %>
-    <%= form.text_field :zone_id, value: @zone_id, readonly: true, class: "read-only-field" %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>
