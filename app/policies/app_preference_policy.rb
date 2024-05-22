@@ -30,4 +30,9 @@ class AppPreferencePolicy < ApplicationPolicy
   def configure_prefs?
     user_in_admin_group?
   end
+
+  def save_configured_prefs?
+    user_in_admin_group?
+  end
+
 end

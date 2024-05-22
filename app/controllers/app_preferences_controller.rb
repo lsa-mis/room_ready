@@ -68,6 +68,14 @@ class AppPreferencesController < ApplicationController
     authorize @configure_prefs
   end
 
+  def save_configured_prefs
+    @configure_prefs = AppPreference.all
+    authorize @configure_prefs
+
+
+    redirect_to configure_prefs_path, notice: "Preferences are updated."
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_app_preference
