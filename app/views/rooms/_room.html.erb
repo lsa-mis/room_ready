@@ -1,21 +1,26 @@
 <div id="<%= dom_id room %>" class="ms-3">
-  <div class="py-1 d-flex flex-row align-items-center gap-2">
+  <div class="py-1 d-flex flex-row align-items-center gap-3">
     <div class="fs-5 fw-bold">Rmrecnbr: </div>
     <div class="fs-5"><%= room.rmrecnbr %></div>
   </div>
 
-  <div class="py-1 d-flex flex-row align-items-center gap-2">
+  <div class="py-1 d-flex flex-row align-items-center gap-3">
+    <div class="fs-5 fw-bold">Building:</div>
+    <div class="fs-5"><%= room.floor.building.name %></div>
+  </div>
+
+  <div class="py-1 d-flex flex-row align-items-center gap-3">
+    <div class="fs-5 fw-bold">Floor:</div>
+    <div class="fs-5"><%= room.floor.name %></div>
+  </div>
+
+  <div class="py-1 d-flex flex-row align-items-center gap-3">
     <div class="fs-5 fw-bold">Room number: </div>
     <div class="fs-5"><%= room.room_number %></div>
   </div>
 
-  <div class="py-1 d-flex flex-row align-items-center gap-2">
+  <div class="py-1 d-flex flex-row align-items-center gap-3">
     <div class="fs-5 fw-bold">Room type:</div>
     <div class="fs-5"><%= room.room_type %></div>
-  </div>
-
-  <div class="py-1 d-flex flex-row align-items-center gap-2">
-    <div class="fs-5 fw-bold">Floor:</div>
-    <div class="fs-5"><%= room.floor.name %></div>
   </div>
 </div>

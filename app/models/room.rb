@@ -18,4 +18,8 @@ class Room < ApplicationRecord
   has_many :specific_attributes
 
   accepts_nested_attributes_for :specific_attributes
+
+  def full_name
+    [floor.building.nick_name, room_number].join(' ')
+  end
 end
