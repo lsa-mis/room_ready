@@ -1,5 +1,5 @@
-<%= turbo_frame_tag 'new_site' do %>
-  <%= form_with model: building, data: { controller: "building", building_target: "form"} do |form| %>
+<%= turbo_frame_tag dom_id(building) do %>
+  <%= form_with model: building, data: { controller: "hello" } do |form| %>
     <% if building.errors.any? %>
       <div style="color: red">
         <h2><%= pluralize(building.errors.count, "error") %></h2>
@@ -13,47 +13,47 @@
     <% end %>
 
     <div>
-      <%= form.label "Add From Existing" %>
-      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateFields" %>
+      <p>Add From Existing</p>
+      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->hello#populateForm" %>
     </div>
 
     <div>
       <%= form.label :bldrecnbr, style: "display: block" %>
-      <%= form.text_field :bldrecnbr %>
+      <%= form.text_field :bldrecnbr, data: { hello_target: "bldrecnbr" } %>
     </div>
 
     <div>
       <%= form.label :name, style: "display: block" %>
-      <%= form.text_field :name %>
+      <%= form.text_field :name, data: { hello_target: "name" } %>
     </div>
 
     <div>
       <%= form.label :nick_name, style: "display: block" %>
-      <%= form.text_field :nick_name %>
+      <%= form.text_field :nick_name, data: { hello_target: "nickName" } %>
     </div>
 
     <div>
       <%= form.label :address, style: "display: block" %>
-      <%= form.text_field :address %>
+      <%= form.text_field :address, data: { hello_target: "address" } %>
     </div>
 
     <div>
       <%= form.label :city, style: "display: block" %>
-      <%= form.text_field :city %>
+      <%= form.text_field :city, data: { hello_target: "city" } %>
     </div>
 
     <div>
     <%= form.label :state, style: "display: block" %>
-    <%= form.select(:state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field" }) %>
+    <%= form.select :state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field", data: { hello_target: "state" } } %>  
     </div>
 
     <div>
       <%= form.label :zip, style: "display: block" %>
-      <%= form.text_field :zip %>
+      <%= form.text_field :zip, data: { hello_target: "zip" } %>
     </div>
 
     <div>
-      <%= form.label "Zone ID", style: "display: block" %>
+      <%= form.label :zone_id, style: "display: block" %>
       <%= form.text_field :zone_id, value: @zone_id, readonly: true, class: "read-only-field" %>
     </div>
 

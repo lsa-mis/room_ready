@@ -1,19 +1,17 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["form", "bldrecnbr", "name", "nickName", "address", "city", "state", "zip"];
+  static targets = ["bldrecnbr", "name", "nickName", "address", "city", "state", "zip"];
 
   connect() {
-    console.log("connect building");
+    console.log("Hello World!");
   }
 
-  populateFields(event) {
+  populateForm(event){
     const selectedBuildingId = event.target.value;
-
     fetch(`/buildings/${selectedBuildingId}.json`)
       .then(response => response.json())
-      .then(data => {
-        
+      .then(data => { 
         this.bldrecnbrTarget.value = data.bldrecnbr || '';
         this.nameTarget.value = data.name || '';
         this.nickNameTarget.value = data.nick_name || '';
