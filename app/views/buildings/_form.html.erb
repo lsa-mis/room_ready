@@ -37,8 +37,8 @@
   </div>
 
   <div>
-    <%= form.label :state, style: "display: block" %>
-    <%= form.text_field :state %>
+   <%= form.label :state, style: "display: block" %>
+   <%= form.select(:state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field" }) %>
   </div>
 
   <div>
