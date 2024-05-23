@@ -35,15 +35,34 @@ class BuildingsController < ApplicationController
   def create
     @building_params = building_params
     @zone_id = @building_params[:zone_id]
-    @building = Building.new(@building_params)
-    authorize @building
-    respond_to do |format|
-      if @building.save
-        format.html { redirect_to zone_building_path(@zone_id, @building), notice: "Building was successfully created." }
-        format.json { render :show, status: :created, location: @building }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
+  
+    # Check if a building with the bldrecnbr already exists
+    @building = Building.find_by(bldrecnbr: @building_params[:bldrecnbr])
+  
+    if @building
+      # If the building exists, update the existing building's attributes
+      authorize @building
+      respond_to do |format|
+        if @building.update(@building_params)
+          format.html { redirect_to zone_building_path(@zone_id, @building), notice: "Building was successfully added." }
+          format.json { render :show, status: :ok, location: @building }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @building.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      # If the building does not exist, create a new one
+      @building = Building.new(@building_params)
+      authorize @building
+      respond_to do |format|
+        if @building.save
+          format.html { redirect_to zone_building_path(@zone_id, @building), notice: "Building was successfully added." }
+          format.json { render :show, status: :ok, location: @building }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @building.errors, status: :unprocessable_entity }
+        end
       end
     end
   end

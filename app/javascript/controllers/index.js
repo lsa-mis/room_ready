@@ -9,3 +9,6 @@ application.register("hello", HelloController)
 
 import FlashController from "./flash_controller"
 application.register("flash", FlashController)
+
+import BuildingController from "./building_controller"
+application.register("building", BuildingController)
