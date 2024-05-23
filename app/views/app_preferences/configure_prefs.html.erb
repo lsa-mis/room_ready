@@ -7,14 +7,15 @@
       <% @configure_prefs.each do |pref| %>
         <%= fields_for 'configure_prefs[]' do %>
           <div>
+            
             <% if pref.pref_type == "boolean" %>
-              
-              <%= hidden_field_tag "configure_pref[#{pref.name}]", 0 %>
-              
-              <%= check_box_tag "configure_pref[#{pref.name}]", 1, pref.value == 't', class: "check_box" %>
+              <div class="my-3 py-3">
+                <%= hidden_field_tag "configure_pref[#{pref.name}]", 0 %>
+                
+                <%= check_box_tag "configure_pref[#{pref.name}]", 1, pref.value == 't', class: "check_box" %>
 
-              <span class="check_box_text"><%= pref.description %></span>
-              <br>
+                <span class="check_box_text"><%= pref.description %></span>
+              </div>
 
             <% elsif pref.pref_type == "string" %>
               <!--we dont have fancy label here yet-->
