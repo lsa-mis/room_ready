@@ -9,8 +9,9 @@
           <div>
             <% if pref.pref_type == "boolean" %>
               
-              <label for=<%= "configure_pref#{pref.name}" %> class="hidden"></label>
-              <%= check_box_tag "configure_pref[#{pref.name}]", 1, class: "check_box" %>
+              <%= hidden_field_tag "configure_pref[#{pref.name}]", 0 %>
+              
+              <%= check_box_tag "configure_pref[#{pref.name}]", 1, pref.value == 't', class: "check_box" %>
 
               <span class="check_box_text"><%= pref.description %></span>
               <br>
