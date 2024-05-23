@@ -73,7 +73,6 @@ class AppPreferencesController < ApplicationController
     authorize @configure_prefs
     
     params[:configure_pref]&.each do |name, value|
-
       pref = AppPreference.find_by(name: name)
       next unless pref
       if pref.pref_type == 'boolean'
@@ -82,8 +81,6 @@ class AppPreferencesController < ApplicationController
         pref.update(value: value)
       end
     end
-
-
     redirect_to configure_prefs_path, notice: "Preferences are updated."
   end
 
