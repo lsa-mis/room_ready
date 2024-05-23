@@ -196,11 +196,11 @@ svg.wh6 {
   height: 24px;
 }
 
-.nav-item.dropdown:hover > .dropdown-menu {
-  display: block;
+.navbar_dropdown_item {
+  color: white;
 }
 
-.check_box {
-  width: 20px;
-  height: 20px;
+.navbar_dropdown_item:hover {
+  background-color: $um_blue;
+  color: $um_maize;
 }

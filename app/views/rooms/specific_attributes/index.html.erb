@@ -1,0 +1,27 @@
+<div class="py-3">
+  <div class="mb-3 d-flex flex-row align-items-center justify-content-between">
+    <h1>Specific Attributes <%= @room.rmrecnbr? ? "for #{@room.rmrecnbr}" : '' %></h1>
+    <%= link_to "Back to Room", room_path(@room), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" %>
+  </div>
+
+  <%= turbo_frame_tag 'new_specific_attribute_form' do %>
+    <%= render 'form', specific_attribute: @new_specific_attribute %>
+  <% end %>
+
+  <table class="table text-center mt-4">
+    <thead class="table-group-divider">
+    <tr>
+      <th scope="col" class="text-start">Description</th>
+      <th scope="col">Needs Checkbox?</th>
+      <th scope="col">Needs Quantity Box?</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider" id="specific_attributes">
+    <% @specific_attributes.each do |specific_attribute| %>
+      <%= render specific_attribute %>
+    <% end %>
+    </tbody>
+  </table>
+</div>
