@@ -355,7 +355,7 @@ PLATFORMS
 DEPENDENCIES
   annotate (~> 3.2)
   bootsnap
-  capybara
+  capybara (~> 3.40)
   cssbundling-rails
   debug
   devise (~> 4.9)
