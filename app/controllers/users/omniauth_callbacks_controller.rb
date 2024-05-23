@@ -43,7 +43,7 @@ def set_user
     session[:user_email] = @user.email
 
     membership = []
-    access_groups = ['lsa-roomready-admins']
+    access_groups = ['lsa-roomready-admins', 'lsa-roomready-developers']
     access_groups.each do |group|
       if  LdapLookup.is_member_of_group?(@user.uniqname, group)
         membership.append(group)
