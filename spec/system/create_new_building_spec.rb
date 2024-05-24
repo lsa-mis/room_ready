@@ -20,11 +20,11 @@ RSpec.describe Building, type: :system do
       user = FactoryBot.create(:user)
 		mock_login(user)
     user.membership = ['lsa-roomready-admins']
-    binding.pry
+    # binding.pry
       puts current_path
       visit new_building_path
       puts current_path
-      binding.pry
+      # binding.pry
       sleep 2
 			fill_in "Bldrecnbr", with: "1234567"
 			fill_in "Name", with: "Chemistry"
