@@ -1,28 +1,28 @@
 <p></p>
 
 <h1>Announcements</h1>
-<ul role="list">
+<div class="row row-cols-1 row-cols-md-3">
     <% @announcements.each do |announcement| %>
-      <li>
-        <div>
-          <%= announcement.location.titleize %> Announcement
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <%= announcement.location.titleize %> Announcement
+          </div>
+          <div class="card-body">
+              <div class="card-text mb-4">
+              <%= announcement.content %>
+              </div>
+              <div>
+                <%= link_to 'Edit', edit_announcement_path(announcement), class:"btn btn-primary" %>
+                <%= link_to 'Preview', rooms_path, class:"btn btn-primary" if announcement.location == "rooms_page"%>
+                <%= link_to 'Preview', app_preferences_path, class:"btn btn-primary" if announcement.location == "preference_page"%>
+                <%= link_to 'Preview', static_pages_about_path, class:"btn btn-primary" if announcement.location == "about_page"%>
+              </div>
+          </div>
+          <div class="card-footer text-body-secondary">
+            Last Time Updated: <%= announcement.updated_at %>
+          </div>
         </div>
-        <div>
-          Last Time Updated: <%= announcement.updated_at %>
-        </div>
-        <div>
-            <%= announcement.content %>
-        </div>
-        <div>
-            <div>
-              <%= link_to 'Edit', edit_announcement_path(announcement), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-            </div>
-            <div class="-ml-px w-0 flex-1 flex m-2">
-              <%= link_to 'Preview', rooms_path if announcement.location == "rooms_page" %>
-              <%= link_to 'Preview', app_preferences_path if announcement.location == "preference_page" %>
-              <%= link_to 'Preview', static_pages_about_path if announcement.location == "about_page" %>
-            </div>
-        </div>
-      </li>
+      </div>
       <% end %>
-  </ul>
+  </div>

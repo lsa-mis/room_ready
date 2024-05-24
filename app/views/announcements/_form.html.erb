@@ -8,16 +8,16 @@
         </div>
 
         <div>
-          <%= form.label :content %>
+          <%= form.label :content, "Content:"%>
           <%= form.rich_text_area :content %>
         </div>
       </div>
     </div>
-
+    <br>
     <div>
       <div>
-        <%= form.submit 'Submit', style: "display: block"%>
-        <%= link_to "Cancel", announcements_path, method: :post, class: "btn btn-primary btn-sm" %>
+        <%= form.submit 'Submit'%>
+        <%= link_to "Cancel", announcements_path, method: :post, class: "text-primary cancel-button" %>
       </div>
     </div>
   <% end %>
