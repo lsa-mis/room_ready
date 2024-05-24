@@ -1,21 +1,15 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ show edit update destroy ]
-  before_action :set_zone_id, only: %i[index new edit]
 
   # GET /buildings or /buildings.json
   def index
-    @buildings = Building.where(zone_id: @zone_id)
-    @zone_name = Zone.find(@zone_id).name
+    @building = Building.new()
     authorize @buildings
   end
 
   # GET /buildings/1 or /buildings/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @building }
-    end
   end
 
   # GET /buildings/new
@@ -26,35 +20,48 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1/edit
   def edit
+    @zones = Zone.all.pluck(:name, :id)
   end
 
   # POST /buildings or /buildings.json
   def create
-    @building_params = building_params
-    @zone_id = @building_params[:zone_id]
-    @building = Building.find_or_initialize_by(bldrecnbr: @building_params[:bldrecnbr])
-    authorize @building
-    
-    success = @building.new_record? ? @building.save : @building.update(building_params)
-    respond_with_notice(success, zone_building_path(@zone_id, @building), "Building was successfully added")
+    @building = Building.new(building_params)
+
+    respond_to do |format|
+      if @building.save
+        format.html { redirect_to building_url(@building), notice: "building was successfully created." }
+        format.json { render :show, status: :created, location: @building }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @building.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PATCH/PUT /buildings/1 or /buildings/1.json
   def update
-    @building_params = building_params
-    @zone_id = @building_params[:zone_id]
-
-    success = @building.update(building_params)
-    respond_with_notice(success, zone_building_path(@zone_id, @building), "Building was successfully updated")
+    @zone = Zone.find(params[:zone_id])
+    respond_to do |format|
+      if @building.update(building_params)
+        fail
+        format.html { redirect_to zone_buildings_path(@zone,@building), notice: "building was successfully updated." }
+        format.json { render :show, status: :ok, location: @building }
+      else
+        fail
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @building.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /buildings/1 or /buildings/1.json
   def destroy
-    @zone_id = @building[:zone_id]
-    @zone = Zone.find(@zone_id)
+    @building.destroy!
 
-    success = @zone.buildings.delete(@building)
-    respond_with_notice(success, zone_buildings_path(@zone_id), "Building was successfully removed")
+    respond_to do |format|
+      format.html { redirect_to buildings_url, notice: "building was successfully destroyed." }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -81,7 +88,4 @@ class BuildingsController < ApplicationController
       authorize @building
     end
 
-    def set_zone_id
-      @zone_id = params.require(:zone_id)
-    end
 end

@@ -55,7 +55,7 @@
 
   <div>
     <%= form.label :zone_id, style: "display: block" %>
-    <%= form.text_field :zone_id, value: @zone_id, readonly: true, class: "read-only-field" %>
+    <%= form.select(:zone_id, options_for_select(@zones, building.zone.name), { include_blank: "Select ..." } ) %>
   </div>
 
   <div>

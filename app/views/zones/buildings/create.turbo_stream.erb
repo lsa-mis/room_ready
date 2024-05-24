@@ -1,0 +1,11 @@
+<%= render_flash_stream %>
+
+<%= turbo_stream.update "all_buildings" do %>
+  <%= render "listing" %>
+<% end %>
+
+<%= turbo_stream.update "add_building" do %>
+  <%= render "drop_down_list", building: @building %>
+<% end %>
+
+hello

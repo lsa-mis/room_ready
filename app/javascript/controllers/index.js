@@ -12,3 +12,6 @@ application.register("flash", FlashController)
 
 import BuildingController from "./building_controller"
 application.register("building", BuildingController)
+
+import AutosubmitController from "./autosubmit_controller"
+application.register("autosubmit", AutosubmitController)
