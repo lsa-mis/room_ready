@@ -12,10 +12,11 @@
 require 'rails_helper'
 
 RSpec.describe CommonAttribute, type: :model do
-  # check when descripton is nil
-  # check when there is duplicate description
-  # check when both need_checkbox and need_quantity_box are false
-  # check when one of need_checkbox or need_quantity_box is true
+  context "the Factory" do
+    it 'is valid' do
+      expect(build(:common_attribute)).to be_valid
+    end
+  end
 
   context "create common_attribute with all required fields present" do
     it 'is valid' do
