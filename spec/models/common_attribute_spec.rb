@@ -12,5 +12,37 @@
 require 'rails_helper'
 
 RSpec.describe CommonAttribute, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  # check when descripton is nil
+  # check when there is duplicate description
+  # check when both need_checkbox and need_quantity_box are false
+  # check when one of need_checkbox or need_quantity_box is true
+
+  context "create common_attribute with all required fields present" do
+    it 'is valid' do
+      expect(build(:common_attribute)).to be_valid
+    end
+  end
+
+  context "create common_attribute without a description" do
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Description can\'t be blank"' do
+      expect { FactoryBot.create(:common_attribute, description: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Description can't be blank")
+    end
+  end
+
+  context "create common_attribute with a duplicated description" do
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Description has already been taken"' do
+      common_attribute = FactoryBot.create(:common_attribute)
+      common_attribute1 = FactoryBot.build(:common_attribute, description: common_attribute.description)
+      expect(common_attribute1.valid?).to be_falsy
+      expect(common_attribute1.errors.full_messages_for(:description)).to include "Description has already been taken"
+    end
+  end
+
+  context "create common_attribute without need_checkbox and need_quantity_box selected" do
+    it 'raises an error: Needs to have either a checkbox or a quantity box, or both.' do
+      common_attribute =  FactoryBot.build(:common_attribute, need_checkbox: false, need_quantity_box: false)
+      expect(common_attribute.valid?).to be_falsy
+      expect(common_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, or both."
+    end
+  end
 end
