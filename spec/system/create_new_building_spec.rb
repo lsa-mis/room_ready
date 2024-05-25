@@ -2,29 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Building, type: :system do
 
-	# before do
-	# 	user = FactoryBot.create(:user)
-	# 	mock_login(user)
-  #   user.membership = ['lsa-roomready-admins']
-	# end
-
-  # context "GET 'index'" do
-  #   it "returns http success" do
-  #     get 'buildings/index'
-  #     response.should be_success
-  #   end
-  # end
+  before do
+		user = FactoryBot.create(:user)
+		mock_login(user)
+    allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
+	end
 
 	context 'create a new building' do
     it 'fills out the form and submit it' do
-      user = FactoryBot.create(:user)
-		mock_login(user)
-    user.membership = ['lsa-roomready-admins']
-    # binding.pry
-      puts current_path
       visit new_building_path
-      puts current_path
-      # binding.pry
       sleep 2
 			fill_in "Bldrecnbr", with: "1234567"
 			fill_in "Name", with: "Chemistry"
@@ -34,7 +20,7 @@ RSpec.describe Building, type: :system do
 			fill_in "State", with: "MI"
 			fill_in "Zip", with: "48109"
       sleep 5
-			click_on "Create Builging"
+			click_on "Create Building"
       sleep 5
       expect(page).to have_content("A new building was added.")
     end
