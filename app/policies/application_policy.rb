@@ -43,6 +43,11 @@ class ApplicationPolicy
     @user.membership && @user.membership.include?('lsa-roomready-admins')
   end
 
+  def user_in_dev_group?
+    admin_group = ['lsa-roomready-developers']
+    user.membership && (user.membership & admin_group).any?
+  end
+
   def is_rover?
     Rover.all.pluck(:uniqname).include?(user.uniqname)
   end

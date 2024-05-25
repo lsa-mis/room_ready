@@ -11,8 +11,8 @@
 #
 FactoryBot.define do
   factory :common_attribute do
-    description { "MyString" }
-    need_checkbox { false }
+    description { Faker::Lorem.question }
+    need_checkbox { true }
     need_quantity_box { false }
   end
 end

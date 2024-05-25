@@ -1,4 +1,4 @@
-<table class="table text-center mt-3">
+<table class="table text-center ms-3">
   <thead>
   <tr>
     <th scope="col" class="text-start">Description</th>
@@ -7,16 +7,16 @@
   </tr>
   </thead>
   <tbody>
-  <% specific_attributes.each do |specific_attribute| %>
+  <% attributes.each do |attribute| %>
     <tr>
-      <td class="text-start"><%= specific_attribute.description %></td>
+      <td class="text-start"><%= attribute.description %></td>
       <td>
-        <% if specific_attribute.need_checkbox %>
+        <% if attribute.need_checkbox %>
           <i class="bi bi-check-circle-fill text-primary"></i>
         <% end %>
       </td>
       <td>
-        <% if specific_attribute.need_quantity_box %>
+        <% if attribute.need_quantity_box %>
           <i class="bi bi-check-circle-fill text-primary"></i>
         <% end %>
       </td>
