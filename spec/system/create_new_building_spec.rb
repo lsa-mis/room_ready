@@ -22,7 +22,7 @@ RSpec.describe Building, type: :system do
       sleep 5
 			click_on "Create Building"
       sleep 5
-      expect(page).to have_content("A new building was added.")
+      expect(page).to have_content("Building was successfully created.")
     end
   end
 
