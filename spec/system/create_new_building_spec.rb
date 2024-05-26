@@ -10,19 +10,21 @@ RSpec.describe Building, type: :system do
 
 	context 'create a new building' do
     it 'fills out the form and submit it' do
-      visit new_building_path
-      sleep 2
-			fill_in "Bldrecnbr", with: "1234567"
-			fill_in "Name", with: "Chemistry"
-			fill_in "Nick name", with: "Chem"
-			fill_in "Address", with: "123 N.University St."
-			fill_in "City", with: "Ann Arbor"
-			fill_in "State", with: "MI"
-			fill_in "Zip", with: "48109"
-      sleep 5
-			click_on "Create Building"
-      sleep 5
-      expect(page).to have_content("Building was successfully created.")
+      VCR.use_cassette "LdapLookup.is_member_of_group?" do
+        visit new_building_path
+        sleep 2
+        fill_in "Bldrecnbr", with: "1234567"
+        fill_in "Name", with: "Chemistry"
+        fill_in "Nick name", with: "Chem"
+        fill_in "Address", with: "123 N.University St."
+        fill_in "City", with: "Ann Arbor"
+        fill_in "State", with: "MI"
+        fill_in "Zip", with: "48109"
+        sleep 5
+        click_on "Create Building"
+        sleep 5
+        expect(page).to have_content("Building was successfully created.")
+      end
     end
   end
 
