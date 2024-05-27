@@ -9,7 +9,7 @@ RSpec.describe BuildingPolicy do
     let(:rover) { FactoryBot.create(:rover) }
     let(:user) { FactoryBot.create(:user, uniqname: rover.uniqname) }
 
-    it { is_expected.to permit_only_actions(%i[index show is_rover]) }
+    it { is_expected.to permit_only_actions(%i[index show]) }
   end
 
   context 'with admins' do
