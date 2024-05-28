@@ -45,6 +45,9 @@
               <%= link_to "App Preferences", configure_prefs_path, class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).configure_prefs? %>
             </li>
             <li>
+              <%= link_to "Announcements", announcements_path, class: 'dropdown-item navbar_dropdown_item' if policy(Announcement).update? %>
+            </li>
+            <li>
               <%= link_to "Rovers", rovers_path, class: 'dropdown-item navbar_dropdown_item'if policy(Rover).index? %>
             </li>
           </ul>

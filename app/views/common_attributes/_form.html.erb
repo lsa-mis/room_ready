@@ -30,7 +30,7 @@
     <%= form.submit common_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
     <% if common_attribute.persisted? %>
-      <%= link_to "Cancel", common_attributes_path, class: 'text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover' %>
+      <%= link_to "Cancel", common_attributes_path, class: "text-primary cancel-button" %>
     <% end %>
   </div>
 <% end %>
