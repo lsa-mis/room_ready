@@ -7,21 +7,36 @@ class Zones::BuildingsController < ApplicationController
   def index
     @building = Building.new
     @buildings = Building.where(zone: @zone)
-    # @zone_name = Zone.find(@zone_id).name
     @idle_buildings = Building.where(zone: nil)
     authorize @buildings
   end
 
+  def new
+    @zone_name = Zone.find(@zone_id).name
+    @building = Building.new
+    @zones = Zone.all.map { |z| [z.name, z.id] }
+    authorize @building
+  end
+
   def create
-    if params[:building_id].present?
-      @building = Building.find(params[:building_id])
-      authorize([@zone, @building]) 
-      if @zone.buildings << @building
-        @building = Building.new
-        @buildings = Building.where(zone: @zone)
-        flash.now[:notice] = "The building was added."
-      end
+    @building = Building.new(bldrecnbr: building_params[:bldrecnbr], zone_id: params[:zone_id])
+    authorize([@zone, @building]) 
+    if @building.save
+      format.html { redirect_to zone_buildings_path, notice: "Building was added" }
+      format.json { render :show, status: :ok, location: @building }
+    else
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @building.errors, status: status }
     end
+    # if @zone.buildings << @building
+    #   fail
+    #   @building = Building.new
+    #   @buildings = Building.where(zone: @zone)
+    #   flash.now[:notice] = "The building was added."
+    # else
+    #   fail
+    # end
+    
   end
 
   # PATCH/PUT /buildings/1 or /buildings/1.json
@@ -67,6 +82,7 @@ class Zones::BuildingsController < ApplicationController
     end
 
     def set_zone
+      @zone_id = params[:zone_id]
       @zone = Zone.find(params[:zone_id])
     end
 end
