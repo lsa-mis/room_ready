@@ -5,6 +5,7 @@ class AppPreferencesController < ApplicationController
   # GET /app_preferences or /app_preferences.json
   def index
     @app_preferences = AppPreference.all
+    @preference_page_announcement = Announcement.find_by(location: "preference_page")
     authorize @app_preferences
   end
 
