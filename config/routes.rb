@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :resources
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
+    resources :room_states, module: :rooms
   end
   resources :floors
   resources :buildings

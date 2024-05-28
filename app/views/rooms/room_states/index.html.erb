@@ -1,0 +1,17 @@
+<p></p>
+
+<div>
+<h1>Room States <%= @room.rmrecnbr? ? "for #{@room.rmrecnbr}" : '' %></h1>
+<%= link_to "Back to Room", room_path(@room), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" %>
+</div>
+
+<div id="room_states">
+  <% @room_states.each do |room_state| %>
+    <%= render room_state %>
+    <p>
+      <%= link_to "Show this room state", room_state %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New room state", new_room_room_state_path %>

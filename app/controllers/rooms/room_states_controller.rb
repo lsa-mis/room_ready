@@ -1,10 +1,12 @@
-class RoomStatesController < ApplicationController
+class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
+  before_action :set_room
   before_action :set_room_state, only: %i[ show edit update destroy ]
 
   # GET /room_states or /room_states.json
   def index
     @room_states = RoomState.all
+    authorize @room_states
   end
 
   # GET /room_states/1 or /room_states/1.json
@@ -14,6 +16,8 @@ class RoomStatesController < ApplicationController
   # GET /room_states/new
   def new
     @room_state = RoomState.new
+    authorize @room_state
+    @user = current_user
   end
 
   # GET /room_states/1/edit
@@ -59,6 +63,9 @@ class RoomStatesController < ApplicationController
   end
 
   private
+    def set_room
+      @room = Room.find(params[:room_id])
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state
       @room_state = RoomState.find(params[:id])

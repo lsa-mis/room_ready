@@ -37,4 +37,8 @@
     </div>
     <%= render 'resources_list', resources: @room.resources %>
   </div>
+
+  <div>
+    <%= link_to 'Show Room State', room_room_states_path(@room), class: 'btn btn-secondary' %>
+  </div>
 </div>
