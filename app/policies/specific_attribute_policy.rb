@@ -1,10 +1,5 @@
-class RoverPolicy < ApplicationPolicy
-  
+class SpecificAttributePolicy < ApplicationPolicy
   def index?
-    user_in_admin_group?
-  end
-
-  def show?
     user_in_admin_group?
   end
 
@@ -19,7 +14,7 @@ class RoverPolicy < ApplicationPolicy
   def update?
     user_in_admin_group?
   end
-  
+
   def edit?
     update?
   end
@@ -27,5 +22,4 @@ class RoverPolicy < ApplicationPolicy
   def destroy?
     user_in_admin_group?
   end
-  
 end

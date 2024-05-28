@@ -1,22 +1,24 @@
-<%= form_with(model: announcement) do |form| %>
-  <% if announcement.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(announcement.errors.count, "error") %></h2>
+<p></p>
+<div data-controller='autosubmit'>
+  <%= form_with(model: announcement) do |form| %>
+    <div>
+      <div>
+        <div>
+          <span><%= "Location: #{@announcement.location.gsub('_', ' ').upcase}" %></span>
+        </div>
 
-      <ul>
-        <% announcement.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <div>
+          <%= form.label :content, "Content:"%>
+          <%= form.rich_text_area :content %>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div>
+      <div>
+        <%= form.submit 'Submit'%>
+        <%= link_to "Cancel", announcements_path, method: :post, class: "text-primary cancel-button" %>
+      </div>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

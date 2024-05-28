@@ -13,4 +13,13 @@
 class SpecificAttribute < ApplicationRecord
   belongs_to :room
   has_many :specific_attribute_states
+
+  validates :description, presence: true, uniqueness: true
+  validate :needs_either_checkbox_or_quantity_box
+
+  private
+
+  def needs_either_checkbox_or_quantity_box
+    errors.add(:base, 'Needs to have either a checkbox or a quantity box, or both.') unless need_checkbox || need_quantity_box
+  end
 end

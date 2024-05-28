@@ -61,11 +61,13 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
-  gem 'capybara'
+  gem 'capybara', '~> 3.40'
   gem 'webdrivers', '= 5.3.0'
   gem 'faker'
   gem 'pry'
   gem 'pundit-matchers', '~> 3.1', '>= 3.1.2'
+  gem "webmock"
+  gem 'vcr'
 end
 
 group :development, :staging do
