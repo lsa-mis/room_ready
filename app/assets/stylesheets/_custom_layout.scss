@@ -203,3 +203,12 @@ svg.wh6 {
 .cancel-button:hover {
   text-decoration: underline; /* Adds underline on hover */
 }
+
+.navbar_dropdown_item {
+  color: white;
+}
+
+.navbar_dropdown_item:hover {
+  background-color: $um_blue;
+  color: $um_maize;
+}

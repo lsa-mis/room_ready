@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+
+  get 'app_preferences/configure_prefs', to: 'app_preferences#configure_prefs', as: :configure_prefs
+  post 'app_preferences/save_configured_prefs', to: 'app_preferences#save_configured_prefs', as: 'save_configured_prefs'
+  
   resources :app_preferences
+
+
   resources :announcements
   resources :resource_states
   resources :specific_attribute_states
   resources :common_attribute_states
-  resources :specific_attributes
   resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets
@@ -12,7 +17,9 @@ Rails.application.routes.draw do
   resources :zones
 
   resources :resources
-  resources :rooms
+  resources :rooms do
+    resources :specific_attributes, module: :rooms, except: [:show]
+  end
   resources :floors
   resources :buildings
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do

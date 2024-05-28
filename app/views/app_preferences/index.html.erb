@@ -1,9 +1,5 @@
 <div class="w-100">
 
-<!--
-<p style="color: green"><%= notice %></p>-->
-
-<!--This displays the table of all preferences currently stored in the app-->
 <h1>App Preferences</h1>
 
 <div>
@@ -13,21 +9,28 @@
 </div>
 <div id="app_preferences">
 <table class="table">
-  <thead>
+  <thead class="table-group-divider">
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Description</th>
       <th scope="col">Type</th>
+      <th scope="col">View</th>
       <th scope="col">Edit</th>
       <th scope="col">Delete</th>
     </tr>
   </thead>
-  <tbody>
+  
+  <tbody class="table-group-divider">
     <% @app_preferences.each do |app_preference| %>
       <tr>
         <td><%= app_preference.name %></td>
         <td><%= app_preference.description %></td>
         <td><%= app_preference.pref_type %></td>
+        <td>
+            <%= link_to app_preference_path(app_preference) do%>
+            <i class="bi bi-eye-fill text-primary"></i>
+            <%end%>
+        </td>
         <td>
           <%= link_to edit_app_preference_path(app_preference), method: :edit do %>
             <i class="bi bi-pencil-square text-primary"></i>

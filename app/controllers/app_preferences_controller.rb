@@ -63,6 +63,28 @@ class AppPreferencesController < ApplicationController
     end
   end
 
+  # GET /app_preferences/configure_prefs
+  def configure_prefs
+    @configure_prefs = AppPreference.order(:pref_type, :description, :value)
+    authorize @configure_prefs
+  end
+
+  def save_configured_prefs
+    @configure_prefs = AppPreference.all
+    authorize @configure_prefs
+    
+    params[:configure_pref]&.each do |name, value|
+      pref = AppPreference.find_by(name: name)
+      next unless pref
+      if pref.pref_type == 'boolean'
+        pref.update(value: value == '1')
+      else
+        pref.update(value: value)
+      end
+    end
+    redirect_to configure_prefs_path, notice: "Preferences are updated."
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_app_preference
