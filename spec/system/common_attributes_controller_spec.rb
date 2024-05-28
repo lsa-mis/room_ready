@@ -16,7 +16,7 @@ RSpec.describe CommonAttribute, type: :system do
         fill_in "Description", with: "common attribute one"
         check "Needs Chechbox?"
         click_on "Create"
-        sleep 5
+        sleep 2
         expect(page).to have_content("Common attribute was successfully created.")
       end
     end
