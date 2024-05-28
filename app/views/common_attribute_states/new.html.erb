@@ -1,6 +1,47 @@
 <h1>New common attribute state</h1>
 
-<%= render "form", common_attribute_state: @common_attribute_state %>
+<%= form_with url: common_attribute_states_path, method: :post do %>
+  <%= hidden_field_tag :room_id, @room_id %>
+
+  <% @common_attribute_states.each_with_index do |common_attribute_state, index| %>
+    <%= fields_for "common_attribute_states[#{index}]", common_attribute_state do |f| %>
+      <div>
+        <% if common_attribute_state.errors.any? %>
+          <div style="color: red">
+            <h2><%= pluralize(common_attribute_state.errors.count, "error") %></h2>
+
+            <ul>
+              <% common_attribute_state.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <h2><%= common_attribute_state.common_attribute.description %></h2>
+
+        <% if common_attribute_state.common_attribute.need_checkbox %>
+          <div>
+            <%= f.check_box :checkbox_value %>
+            <%= f.label :checkbox_value, "Yes" %>
+          </div>
+        <% end %>
+
+        <% if common_attribute_state.common_attribute.need_quantity_box %>
+          <div>
+            <%= f.label :quantity_box_value, "Value:", class: "form-check-label" %>
+            <%= f.number_field :quantity_box_value, class: "form-control form-control-sm" %>
+          </div>
+        <% end %>
+
+        <%= f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %>
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <%= submit_tag "Save" %>
+<% end %>
 
 <br>
 
