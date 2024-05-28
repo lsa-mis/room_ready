@@ -1,7 +1,7 @@
 class AnnouncementsController < ApplicationController
   before_action :auth_user
   before_action :set_announcement, only: %i[ show edit update ]
-  
+
   # GET /announcements or /announcements.json
   def index
     @announcements = Announcement.all.with_rich_text_content.order(:id)
