@@ -2,7 +2,7 @@ class Zones::BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ edit update remove_building ]
   before_action :set_zone
-
+  include BuildingApi
 
   def index
     @building = Building.new
@@ -19,11 +19,25 @@ class Zones::BuildingsController < ApplicationController
   end
 
   def create
-    @building = Building.new(bldrecnbr: building_params[:bldrecnbr], zone_id: params[:zone_id])
+    note = ""
+    bldrecnbr = building_params[:bldrecnbr]
+    @building = Building.new(bldrecnbr: bldrecnbr, zone_id: params[:zone_id])
+    building_data = get_building_info_by_bldrecnbr(bldrecnbr)
+    if building_data['data'].present?
+      data = building_data['data'].first
+      @building.name = data['BuildingLongDescription']
+      @building.address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+      @building.city = data['BuildingCity']
+      @building.state = data['BuildingState']
+      @building.zip = data['BuildingPostal']
+    else 
+      note = " API returned no data about #{bldrecnbr} building"
+    end
+
     authorize([@zone, @building])
     respond_to do |format|
       if @building.save
-        notice = "New Building was added to the zone."
+        notice = "New Building was added to the zone." + note
         @buildings = Building.where(zone: @zone)
         format.turbo_stream do
           @new_building = Building.new
