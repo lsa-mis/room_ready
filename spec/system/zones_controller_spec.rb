@@ -25,7 +25,7 @@ RSpec.describe Zone, type: :system do
   context 'edit a zone' do
     let!(:zone) { FactoryBot.create(:zone) }
 
-    it 'click an edit icon and go to edit page' do
+    it 'click on edit icon and go to edit page' do
       VCR.use_cassette "zone" do
         visit zones_path
         sleep 2
@@ -35,7 +35,7 @@ RSpec.describe Zone, type: :system do
       end
     end
 
-    it 'click an edit icon and cancel editing' do
+    it 'click on edit icon and cancel editing' do
       VCR.use_cassette "zone" do
         visit zones_path
         sleep 2
@@ -47,7 +47,7 @@ RSpec.describe Zone, type: :system do
       end
     end
 
-    it 'click an edit icon and update name' do
+    it 'click on edit icon and update name' do
       VCR.use_cassette "zone" do
         visit zones_path
         sleep 2
@@ -61,7 +61,7 @@ RSpec.describe Zone, type: :system do
       end
     end
 
-    it 'click an delete icon and cancel the alert message' do
+    it 'click on delete icon and cancel the alert message' do
       VCR.use_cassette "zone" do
         visit zones_path
         sleep 2
@@ -75,7 +75,7 @@ RSpec.describe Zone, type: :system do
       end
     end
 
-    it 'click an cancel icon and accept the alert message' do
+    it 'click on cancel icon and accept the alert message' do
       VCR.use_cassette "zone" do
         visit zones_path
         sleep 2
