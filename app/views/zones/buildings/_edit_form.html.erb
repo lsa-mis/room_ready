@@ -1,0 +1,65 @@
+<%= form_with model: [@zone, building], data: { controller: "building" } do |form| %>
+  <% if building.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(building.errors.count, "error") %></h2>
+
+      <ul>
+        <% building.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @building.new_record? %>
+    <div>
+      <p>Add From Existing</p>
+      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateForm" %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :bldrecnbr, style: "display: block" %>
+    <%= form.text_field :bldrecnbr, data: { building_target: "bldrecnbr" } %>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name, data: { building_target: "name" } %>
+  </div>
+
+  <div>
+    <%= form.label :nick_name, style: "display: block" %>
+    <%= form.text_field :nick_name, data: { building_target: "nickName" } %>
+  </div>
+
+  <div>
+    <%= form.label :address, style: "display: block" %>
+    <%= form.text_field :address, data: { building_target: "address" } %>
+  </div>
+
+  <div>
+    <%= form.label :city, style: "display: block" %>
+    <%= form.text_field :city, data: { building_target: "city" } %>
+  </div>
+
+  <div>
+  <%= form.label :state, style: "display: block" %>
+  <%= form.select :state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field", data: { building_target: "state" } } %>  
+  </div>
+
+  <div>
+    <%= form.label :zip, style: "display: block" %>
+    <%= form.text_field :zip, data: { building_target: "zip" } %>
+  </div>
+
+  <div>
+    <%= form.label :zone_id, style: "display: block" %>
+    <%= form.select(:zone_id, options_for_select(@zones, building.zone.id), { include_blank: "Select ..." } ) %>
+  </div>
+
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <%= form.submit "Submit", class: "btn btn-primary" %>
+    <%= link_to "Cancel", zone_buildings_path, class: "text-primary cancel-button" %>
+  </div>
+<% end %>
