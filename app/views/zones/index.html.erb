@@ -1,5 +1,4 @@
 <div class="p-5 m-5">
-  <p style="color: green"><%= notice %></p>
   <div class="container-fluid" id="zones">
     <div class="d-flex justify-content-between">
       <h1>All Zones</h1>
@@ -10,7 +9,17 @@
         <div class="card m-2" style="width: 18rem;">
           <div class="card-body">
             <h5 class="card-title"><%= render zone %></h5>
-            <%= link_to "Zone Details", zone, class: "card-link" %>
+            <div class="d-flex flex-row justify-content-between align-items-center">
+              <%= link_to "Zone Details", zone, class: "card-link" %>
+              <div class="d-flex flex-row justify-content-center align-items-center gap-3">
+                <%= link_to edit_zone_path(zone), 'aria-label': "edit_#{zone.id}" do %>
+                  <i class="bi bi-pencil-square text-primary"></i>
+                <% end %>
+                <%= link_to zone_path(zone), 'aria-label': "delete_#{zone.id}", data: { turbo_confirm: "Are you sure you want to delete this zone?" , turbo_method: :delete } do %>
+                  <i class="bi bi-trash-fill text-danger"></i>
+                <% end %>
+              </div>
+            </div>
           </div>
         </div>
       <% end %>
