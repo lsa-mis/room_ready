@@ -1,4 +1,4 @@
-<%= form_with model: [@zone, building], data: { controller: "building" } do |form| %>
+<%= form_with model: [@zone, building] do |form| %>
   <% if building.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(building.errors.count, "error") %></h2>
@@ -13,7 +13,7 @@
 
   <div>
     <%= form.label :bldrecnbr, style: "display: block" %>
-    <%= form.text_field :bldrecnbr, data: { building_target: "bldrecnbr" }, required: true %>
+    <%= form.text_field :bldrecnbr, required: true %>
   </div>
 
   <div>
