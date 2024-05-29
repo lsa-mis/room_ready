@@ -5,6 +5,7 @@ class Zones::BuildingsController < ApplicationController
   include BuildingApi
 
   def index
+    
     @building = Building.new
     @buildings = Building.where(zone: @zone)
     @idle_buildings = Building.where(zone: nil)
@@ -12,26 +13,37 @@ class Zones::BuildingsController < ApplicationController
   end
 
   def new
-    @zone_name = Zone.find(@zone_id).name
+    # @zone_name = Zone.find(@zone_id).name
     @building = Building.new
     @zones = Zone.all.map { |z| [z.name, z.id] }
     authorize @building
   end
 
   def create
-    note = ""
-    bldrecnbr = building_params[:bldrecnbr]
-    @building = Building.new(bldrecnbr: bldrecnbr, zone_id: params[:zone_id])
-    building_data = get_building_info_by_bldrecnbr(bldrecnbr)
-    if building_data['data'].present?
-      data = building_data['data'].first
-      @building.name = data['BuildingLongDescription']
-      @building.address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
-      @building.city = data['BuildingCity']
-      @building.state = data['BuildingState']
-      @building.zip = data['BuildingPostal']
-    else 
-      note = " API returned no data about #{bldrecnbr} building"
+    if params[:building_id].present?
+      @building = Building.find(params[:building_id])
+      authorize([@zone, @building]) 
+      if @zone.buildings << @building
+        @building = Building.new
+        @buildings = Building.where(zone: @zone)
+        flash.now[:notice] = "The building was added."
+        return
+      end
+    elsif building_params[:bldrecnbr].present?
+      note = ""
+      bldrecnbr = building_params[:bldrecnbr]
+      @building = Building.new(bldrecnbr: bldrecnbr, zone_id: params[:zone_id])
+      building_data = get_building_info_by_bldrecnbr(bldrecnbr)
+      if building_data['data'].present?
+        data = building_data['data'].first
+        @building.name = data['BuildingLongDescription']
+        @building.address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+        @building.city = data['BuildingCity']
+        @building.state = data['BuildingState']
+        @building.zip = data['BuildingPostal']
+      else 
+        note = " API returned no data about #{bldrecnbr} building"
+      end
     end
 
     authorize([@zone, @building])
