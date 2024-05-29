@@ -27,7 +27,7 @@ class CommonAttributeStatesController < ApplicationController
     end
 
     if @common_attribute_states.all?(&:persisted?)
-      redirect_to common_attribute_states_path, notice: 'Common Attribute States were successfully saved.'
+      redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
     end
