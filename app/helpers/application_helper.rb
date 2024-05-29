@@ -1,4 +1,19 @@
 module ApplicationHelper
+
+  def root_path
+    if user_signed_in?
+      if is_rover?(current_user)
+        welcome_rovers_path
+      elsif is_admin?(current_user)
+        dashboard_path
+      else
+        all_root_path
+      end
+    else
+      all_root_path
+    end
+  end
+
   def render_flash_stream
     turbo_stream.update "flash", partial: "layouts/flash"
   end
@@ -10,4 +25,13 @@ module ApplicationHelper
   def show_date_with_month_name(field)
     field.to_date.strftime("%B %d, %Y") unless field.blank?
   end
+
+  def is_rover?(current_user)
+    Rover.all.pluck(:uniqname).include?(current_user.uniqname)
+  end
+
+  def is_admin?(user)
+    user.membership.present?
+  end
+
 end

@@ -32,11 +32,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'static_pages#about'
+  root to: 'static_pages#about', as: :all_root
 
   get 'static_pages/about'
-
-  get 'home', to: 'static_pages#home', as: :home
+  get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
+  get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
