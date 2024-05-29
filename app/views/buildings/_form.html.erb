@@ -11,16 +11,9 @@
     </div>
   <% end %>
 
-  <% if @building.new_record? %>
-    <div>
-      <p>Add From Existing</p>
-      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateForm" %>
-    </div>
-  <% end %>
-
   <div>
     <%= form.label :bldrecnbr, style: "display: block" %>
-    <%= form.text_field :bldrecnbr, data: { building_target: "bldrecnbr" } %>
+    <%= form.text_field :bldrecnbr, required: true %>
   </div>
 
   <div>
@@ -55,7 +48,7 @@
 
   <div>
     <%= form.label :zone_id, style: "display: block" %>
-    <%= form.select(:zone_id, options_for_select(@zones, building.zone.name), { include_blank: "Select ..." } ) %>
+    <%= form.select(:zone_id, options_for_select(@zones), { include_blank: "Select ..." } ) %>
   </div>
 
   <div>

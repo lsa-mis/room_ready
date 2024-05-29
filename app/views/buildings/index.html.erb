@@ -2,12 +2,9 @@
   <div class="d-flex justify-content-between">
       <h1><%= @zone_name %> Buildings</h1>
       <div class="mb-auto mt-auto">
-        <%= link_to "Back to Zone", zones_path(@zone), class: "btn btn-secondary" %>
         <%= link_to "Add Building", new_building_path, class: "btn btn-primary" %>
       </div>
     </div>
-    <%= render "drop_down_list" %>
-    <br>
     <%= render "listing" %>
   </div>
 </div>

@@ -4,7 +4,7 @@ class BuildingsController < ApplicationController
 
   # GET /buildings or /buildings.json
   def index
-    @building = Building.new()
+    @buildings = Building.where(zone: nil)
     authorize @buildings
   end
 
@@ -15,6 +15,7 @@ class BuildingsController < ApplicationController
   # GET /buildings/new
   def new
     @building = Building.new()
+    @zones = Zone.all.map { |z| [z.name, z.id] }
     authorize @building
   end
 
