@@ -1,5 +1,6 @@
 class CommonAttributeStatesController < ApplicationController
   before_action :auth_user
+  before_action :set_room, only: %i[ new create ]
   before_action :set_common_attribute_state, only: %i[ show edit update destroy ]
 
   # GET /common_attribute_states or /common_attribute_states.json
@@ -16,8 +17,6 @@ class CommonAttributeStatesController < ApplicationController
   def new
     authorize CommonAttributeState.new
 
-    @room_id = params[:room_id]
-
     @common_attribute_states = CommonAttribute.all.map do |common_attribute|
       common_attribute.common_attribute_states.new
     end
@@ -31,8 +30,7 @@ class CommonAttributeStatesController < ApplicationController
   def create
     authorize CommonAttributeState.new
 
-    room = Room.find(params[:room_id])
-    @room_state = room.room_states.create
+    @room_state = @room.room_state_for_today
     @common_attribute_states = common_attribute_state_params.map do |cas_params|
       @room_state.common_attribute_states.new(cas_params)
     end
@@ -46,7 +44,6 @@ class CommonAttributeStatesController < ApplicationController
     if @common_attribute_states.all?(&:persisted?)
       redirect_to common_attribute_states_path, notice: 'Common Attribute States were successfully saved.'
     else
-      @room_id = params[:room_id]
       render :new, status: :unprocessable_entity
     end
   end
@@ -76,15 +73,30 @@ class CommonAttributeStatesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_common_attribute_state
-      @common_attribute_state = CommonAttributeState.find(params[:id])
-      authorize @common_attribute_state
+  def set_common_attribute_state
+    @common_attribute_state = CommonAttributeState.find(params[:id])
+    authorize @common_attribute_state
+  end
+
+  def set_room
+    @room = Room.find_by(id: params[:room_id])
+
+    unless @room
+      redirect_to rooms_path, alert: 'Room doesnt exist.' and return
     end
 
-    # Only allow a list of trusted parameters through.
-    def common_attribute_state_params
-      params.require(:common_attribute_states).values.map do |cas_param|
-        cas_param.permit(:checkbox_value, :quantity_box_value, :room_state_id, :common_attribute_id)
-      end
+    room_state = @room.room_state_for_today
+    if room_state.nil?
+      redirect_to room_path(@room), alert: 'Complete previous steps for Room.'
+    elsif room_state.common_attribute_states.any?
+      redirect_to room_path(@room), alert: 'Already saved Common Attribute States for this Room today.'
     end
+  end
+
+    # Only allow a list of trusted parameters through.
+  def common_attribute_state_params
+    params.require(:common_attribute_states).values.map do |cas_param|
+      cas_param.permit(:checkbox_value, :quantity_box_value, :room_state_id, :common_attribute_id)
+    end
+  end
 end

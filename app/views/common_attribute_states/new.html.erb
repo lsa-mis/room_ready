@@ -1,7 +1,11 @@
-<h1>New common attribute state</h1>
+<h1>Common Attribute States</h1>
+
+<h2><%= @room.floor.building.zone ? "Zone: #{@room.floor.building.zone.name}<br>" : ''  %></h2>
+<h2><%= "Building: #{@room.floor.building.name}" %></h2>
+<h2><%= "Room: #{@room.room_number}" %></h2>
 
 <%= form_with url: common_attribute_states_path, method: :post do %>
-  <%= hidden_field_tag :room_id, @room_id %>
+  <%= hidden_field_tag :room_id, @room.id %>
 
   <% @common_attribute_states.each_with_index do |common_attribute_state, index| %>
     <%= fields_for "common_attribute_states[#{index}]", common_attribute_state do |f| %>
@@ -44,11 +48,14 @@
   <% end %>
 
 
-  <%= submit_tag "Save" %>
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <%= link_to @room, class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" do %>
+      <i class="bi bi-arrow-left-circle-fill"></i>
+      Back to Room
+    <% end %>
+    <%= submit_tag "Save Response" %>
+  </div>
+
 <% end %>
 
 <br>
-
-<div>
-  <%= link_to "Back to common attribute states", common_attribute_states_path %>
-</div>

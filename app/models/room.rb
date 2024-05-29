@@ -23,4 +23,8 @@ class Room < ApplicationRecord
   def full_name
     [floor.building.nick_name, room_number].join(' ')
   end
+
+  def room_state_for_today
+    room_states.where(created_at: Time.zone.today.all_day).first
+  end
 end
