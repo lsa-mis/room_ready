@@ -19,5 +19,5 @@ class Building < ApplicationRecord
   belongs_to :zone, optional: true
 
   # validates :bldrecnbr, :name, :address, :city, :state, :zip, presence: true
-  validates :bldrecnbr, uniqueness: true
+  validates :bldrecnbr, uniqueness: true, presence: true
 end
