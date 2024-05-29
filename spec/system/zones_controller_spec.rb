@@ -16,7 +16,7 @@ RSpec.describe Zone, type: :system do
         sleep 2
         fill_in "Name", with: "Zone A"
         click_on "Create Zone"
-        sleep 5
+        sleep 2
         expect(page).to have_content("Zone was successfully created.")
       end
     end
@@ -85,7 +85,7 @@ RSpec.describe Zone, type: :system do
         expect(text).to eq 'Are you sure you want to delete this zone?'
         page.driver.browser.switch_to.alert.accept
         sleep 2
-        expect(page).to have_content("zone was successfully deleted.")
+        expect(page).to have_content("Zone was successfully deleted.")
       end
     end
   end
