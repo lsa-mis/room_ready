@@ -52,6 +52,7 @@ class ZonesController < ApplicationController
 
   # DELETE /zones/1 or /zones/1.json
   def destroy
+    @zone.buildings.delete_all
     @zone.destroy!
 
     respond_to do |format|
