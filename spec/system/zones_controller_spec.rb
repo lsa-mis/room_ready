@@ -31,63 +31,63 @@ RSpec.describe Zone, type: :system do
         sleep 2
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         sleep 2
-        expect(page).to have_content("Edit zone")
+        expect(page).to have_content("Editing Zone")
       end
     end
 
-#     it 'click an edit icon and cancel editing' do
-#       VCR.use_cassette "zone" do
-#         visit zones_path
-#         sleep 2
-#         find(:css, 'i.bi.bi-pencil-square.text-primary').click
-#         sleep 2
-#         expect(page).to have_content("Edit zone")
-#         click_on "Cancel"
-#         expect(page).to have_content(zone.description)
-#       end
-#     end
+    it 'click an edit icon and cancel editing' do
+      VCR.use_cassette "zone" do
+        visit zones_path
+        sleep 2
+        find(:css, 'i.bi.bi-pencil-square.text-primary').click
+        sleep 2
+        expect(page).to have_content("Editing Zone")
+        click_on "Cancel"
+        expect(page).to have_content(zone.name)
+      end
+    end
 
-#     it 'click an edit icon and update description' do
-#       VCR.use_cassette "zone" do
-#         visit zones_path
-#         sleep 2
-#         find(:css, 'i.bi.bi-pencil-square.text-primary').click
-#         sleep 2
-#         expect(page).to have_content("Edit zone")
-#         fill_in "Description", with: zone.description + "edited"
-#         click_on "Update"
-#         sleep 2
-#         expect(page).to have_content(zone.description + "edited")
-#       end
-#     end
+    it 'click an edit icon and update name' do
+      VCR.use_cassette "zone" do
+        visit zones_path
+        sleep 2
+        find(:css, 'i.bi.bi-pencil-square.text-primary').click
+        sleep 2
+        expect(page).to have_content("Editing Zone")
+        fill_in "Name", with: zone.name + "edited"
+        click_on "Update"
+        sleep 2
+        expect(page).to have_content(zone.name + "edited")
+      end
+    end
 
-#     it 'click an delete icon and cancel the alert messege' do
-#       VCR.use_cassette "zone" do
-#         visit zones_path
-#         sleep 2
-#         find(:css, 'i.bi.bi-trash-fill.text-danger').click
-#         sleep 2
-#         text = page.driver.browser.switch_to.alert.text
-#         expect(text).to eq 'Are you sure you want to Delete this zone?'
-#         page.driver.browser.switch_to.alert.dismiss
-#         sleep 2
-#         expect(page).to have_content(zone.description)
-#       end
-#     end
+    it 'click an delete icon and cancel the alert message' do
+      VCR.use_cassette "zone" do
+        visit zones_path
+        sleep 2
+        find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        sleep 2
+        text = page.driver.browser.switch_to.alert.text
+        expect(text).to eq 'Are you sure you want to delete this zone?'
+        page.driver.browser.switch_to.alert.dismiss
+        sleep 2
+        expect(page).to have_content(zone.name)
+      end
+    end
 
-#     it 'click an cancel icon and accept the alert message' do
-#       VCR.use_cassette "zone" do
-#         visit zones_path
-#         sleep 2
-#         find(:css, 'i.bi.bi-trash-fill.text-danger').click
-#         sleep 2
-#         text = page.driver.browser.switch_to.alert.text
-#         expect(text).to eq 'Are you sure you want to delete this zone?'
-#         page.driver.browser.switch_to.alert.accept
-#         sleep 2
-#         expect(page).to have_content("zone was successfully destroyed.")
-#       end
-#     end
-#   end
+    it 'click an cancel icon and accept the alert message' do
+      VCR.use_cassette "zone" do
+        visit zones_path
+        sleep 2
+        find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        sleep 2
+        text = page.driver.browser.switch_to.alert.text
+        expect(text).to eq 'Are you sure you want to delete this zone?'
+        page.driver.browser.switch_to.alert.accept
+        sleep 2
+        expect(page).to have_content("zone was successfully deleted.")
+      end
+    end
+  end
   
 end

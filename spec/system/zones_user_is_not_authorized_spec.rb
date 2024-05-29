@@ -8,22 +8,22 @@ RSpec.describe CommonAttribute, type: :system do
     # user.membership is [] - user should not have access to any CommonAttribute routes
 	end
 
-	context 'create a new common attribute' do
+	context 'create a new zone' do
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit common_attributes_path
+      VCR.use_cassette "zone" do
+        visit zones_path
         sleep 2
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
   end
 
-  context 'edit a common attribute' do
-    let!(:common_attribute) { FactoryBot.create(:common_attribute) }
+  context 'edit a zone' do
+    let!(:zone) { FactoryBot.create(:zone) }
 
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit edit_common_attribute_path(common_attribute)
+      VCR.use_cassette "zone" do
+        visit edit_zone_path(zone)
         sleep 2
         expect(page).to have_content("You are not authorized to perform this action.")
       end
