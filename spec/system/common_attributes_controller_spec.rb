@@ -25,7 +25,7 @@ RSpec.describe CommonAttribute, type: :system do
   context 'edit a common attribute' do
     let!(:common_attribute) { FactoryBot.create(:common_attribute) }
 
-    it 'click an edit icon and go to edit page' do
+    it 'click on edit icon and go to edit page' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         sleep 2
@@ -35,7 +35,7 @@ RSpec.describe CommonAttribute, type: :system do
       end
     end
 
-    it 'click an edit icon and cancel editing' do
+    it 'click on edit icon and cancel editing' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         sleep 2
@@ -47,7 +47,7 @@ RSpec.describe CommonAttribute, type: :system do
       end
     end
 
-    it 'click an edit icon and update description' do
+    it 'click on edit icon and update description' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         sleep 2
@@ -61,7 +61,7 @@ RSpec.describe CommonAttribute, type: :system do
       end
     end
 
-    it 'click an delete icon and cancel the alert messege' do
+    it 'click on delete icon and cancel the alert messege' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         sleep 2
@@ -75,7 +75,7 @@ RSpec.describe CommonAttribute, type: :system do
       end
     end
 
-    it 'click an cancel icon and accept the alert message' do
+    it 'click on cancel icon and accept the alert message' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         sleep 2
@@ -85,7 +85,7 @@ RSpec.describe CommonAttribute, type: :system do
         expect(text).to eq 'Are you sure you want to delete this Common Attribute?'
         page.driver.browser.switch_to.alert.accept
         sleep 2
-        expect(page).to have_content("Common attribute was successfully destroyed.")
+        expect(page).to have_content("Common attribute was successfully deleted.")
       end
     end
   end
