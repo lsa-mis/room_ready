@@ -56,7 +56,7 @@ class ZonesController < ApplicationController
     @zone.destroy!
 
     respond_to do |format|
-      format.html { redirect_to zones_url, notice: "Zone was successfully destroyed." }
+      format.html { redirect_to zones_url, notice: "Zone was successfully deleted." }
       format.json { head :no_content }
     end
   end
