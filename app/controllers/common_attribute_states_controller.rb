@@ -4,7 +4,7 @@ class CommonAttributeStatesController < ApplicationController
 
   # GET /common_attribute_states/new
   def new
-    authorize CommonAttributeState.new
+    authorize CommonAttributeState
 
     @common_attribute_states = CommonAttribute.all.map do |common_attribute|
       common_attribute.common_attribute_states.new
@@ -13,7 +13,7 @@ class CommonAttributeStatesController < ApplicationController
 
   # POST /common_attribute_states or /common_attribute_states.json
   def create
-    authorize CommonAttributeState.new
+    authorize CommonAttributeState
 
     @room_state = @room.room_state_for_today
     @common_attribute_states = common_attribute_state_params.map do |cas_params|
