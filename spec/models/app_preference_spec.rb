@@ -42,12 +42,6 @@ RSpec.describe AppPreference, type: :model do
       expect { FactoryBot.create(:app_preference, pref_type: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Pref type can't be blank")
     end
   end
-  
-  context "create app preference without a preference type" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Pref type can\'t be blank"' do
-      expect { FactoryBot.create(:app_preference, pref_type: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Pref type can't be blank")
-    end
-  end
 
   context "create app preference with a duplicated name" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Name has already been taken"' do
