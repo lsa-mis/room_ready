@@ -12,9 +12,18 @@
 #
 FactoryBot.define do
   factory :app_preference do
-    name { "MyString" }
-    description { "MyString" }
-    pref_type { 1 }
-    value { "MyString" }
+    name { Faker::Lorem.words(number: 2, supplemental: true).join(' ') }
+    description { Faker::Lorem.words(number: 4, supplemental: true).join(' ') }
+    pref_type { [0, 1, 2].sample }
+    value do
+      case pref_type
+      when 0
+        ["0", "1"].sample
+      when 1
+        Faker::Number.number(digits: 3).to_s
+      when 2  
+        Faker::Lorem.word
+      end
+    end
   end
 end
