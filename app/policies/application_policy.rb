@@ -37,8 +37,10 @@ class ApplicationPolicy
   end
 
   def user_in_admin_group?
-    admin_group = ['lsa-roomready-admins']
-    user.membership && (user.membership & admin_group).any?
+    # binding.pry
+    # admin_group = ['lsa-roomready-admins']
+    # user.membership && (user.membership & admin_group).any?
+    @user.membership && @user.membership.include?('lsa-roomready-admins')
   end
 
   def user_in_dev_group?

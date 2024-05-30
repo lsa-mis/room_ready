@@ -1,37 +1,51 @@
-<%= form_with(model: common_attribute_state) do |form| %>
-  <% if common_attribute_state.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(common_attribute_state.errors.count, "error") %></h2>
+<%= form_with url: common_attribute_states_path, method: :post do %>
+  <%= hidden_field_tag :room_id, @room.id %>
 
-      <ul>
-        <% common_attribute_state.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+  <% @common_attribute_states.each_with_index do |common_attribute_state, index| %>
+    <%= fields_for "common_attribute_states[#{index}]", common_attribute_state do |f| %>
+      <div>
+        <% if common_attribute_state.errors.any? %>
+          <div style="color: red">
+            <h2><%= pluralize(common_attribute_state.errors.count, "error") %></h2>
+
+            <ul>
+              <% common_attribute_state.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
+
+        <div class="card w-100 mb-3">
+          <div class="card-body p-4">
+            <h5 class="card-title mb-3"><%= common_attribute_state.common_attribute.description %></h5>
+            <% if common_attribute_state.common_attribute.need_checkbox %>
+              <div class="d-flex flex-row mb-1">
+                <%= f.radio_button :checkbox_value, true, class: "btn-check" %>
+                <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
+                <%= f.radio_button :checkbox_value, false, class: "btn-check" %>
+                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-success w-50" %>
+              </div>
+            <% end %>
+            <% if common_attribute_state.common_attribute.need_quantity_box %>
+              <div>
+                <%#= f.label :quantity_box_value, "Value:", class: "form-check-label" %>
+                <%= f.number_field :quantity_box_value, class: "form-control form-control-sm" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %>
+      </div>
+    <% end %>
   <% end %>
 
-  <div>
-    <%= form.label :checkbox_value, style: "display: block" %>
-    <%= form.check_box :checkbox_value %>
-  </div>
-
-  <div>
-    <%= form.label :quantity_box_value, style: "display: block" %>
-    <%= form.number_field :quantity_box_value %>
-  </div>
-
-  <div>
-    <%= form.label :room_state_id, style: "display: block" %>
-    <%= form.text_field :room_state_id %>
-  </div>
-
-  <div>
-    <%= form.label :common_attribute_id, style: "display: block" %>
-    <%= form.text_field :common_attribute_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <%= link_to @room, class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" do %>
+      <i class="bi bi-arrow-left-circle-fill"></i>
+      Back to Room
+    <% end %>
+    <%= submit_tag "Save Response" %>
   </div>
 <% end %>

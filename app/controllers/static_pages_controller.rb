@@ -7,5 +7,6 @@ class StaticPagesController < ApplicationController
 
   def about
     authorize :static_page
+    @about_page_announcement = Announcement.find_by(location: "about_page")
   end
 end
