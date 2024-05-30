@@ -58,6 +58,4 @@ RSpec.describe AppPreference, type: :model do
 
     end
   end
-
-
 end
