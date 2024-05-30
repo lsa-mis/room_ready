@@ -1,11 +1,10 @@
 class Zones::BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ edit update remove_building ]
+  before_action :set_building, only: %i[ edit update remove_building show ]
   before_action :set_zone
   include BuildingApi
 
   def index
-    
     @building = Building.new
     @buildings = Building.where(zone: @zone)
     @idle_buildings = Building.where(zone: nil)
@@ -25,6 +24,10 @@ class Zones::BuildingsController < ApplicationController
     elsif building_params[:bldrecnbr].present?
       return add_from_bldrecnbr
     end
+  end
+
+  def show
+    authorize @building
   end
 
   def edit
