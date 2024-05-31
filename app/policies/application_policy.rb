@@ -49,7 +49,7 @@ class ApplicationPolicy
   end
 
   def is_rover?
-    Rover.all.pluck(:uniqname).include?(user.uniqname)
+    Rover.exists?(uniqname: user.uniqname)
   end
 
   class Scope
