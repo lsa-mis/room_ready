@@ -1,10 +1,9 @@
-<p style="color: green"><%= notice %></p>
-
+<h2>Details</h2>
 <%= render @building %>
 
-<div>
-  <%= link_to "Edit this building", edit_building_path(@building) %> |
-  <%= link_to "Back to buildings", buildings_path %>
-
-  <%= button_to "Destroy this building", @building, method: :delete %>
+<h2>Options</h2>
+<div class="d-flex gap-2">
+  <%= link_to "Back to buildings", buildings_path, class: "btn btn-primary h-50 mt-auto mb-auto"  %>
+  <%= link_to "Edit this building", edit_building_path(@building), class: "btn btn-warning h-50 mt-auto mb-auto"  %>
+  <%= button_to "Destroy this building", @building, method: :delete, class: "btn btn-danger mt-auto mb-auto"  %>
 </div>

@@ -10,7 +10,7 @@
           <div class="card-body">
             <h5 class="card-title"><%= render zone %></h5>
             <div class="d-flex flex-row justify-content-between align-items-center">
-              <%= link_to "Zone Details", zone, class: "card-link" %>
+              <%= link_to "Zone Details", zone_buildings_path(zone), class: "card-link" %>
               <div class="d-flex flex-row justify-content-center align-items-center gap-3">
                 <%= link_to edit_zone_path(zone), 'aria-label': "edit_#{zone.id}" do %>
                   <i class="bi bi-pencil-square text-primary"></i>

@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   resources :room_states
   resources :room_tickets
   resources :rovers
-  resources :zones
+  
+  resources :zones do
+    resources :buildings, module: :zones
+  end
+  delete 'zones/buildings/:zone_id/:id', to: 'zones/buildings#remove_building', as: :remove_building
+
 
   resources :resources
   resources :rooms do
