@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: resources
+#
+#  id            :bigint           not null, primary key
+#  name          :string
+#  resource_type :string
+#  room_id       :bigint           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe Resource, type: :model do
@@ -9,8 +20,7 @@ RSpec.describe Resource, type: :model do
 
   context "create resource with all required fields present" do
     it 'is valid' do
-      room = create(:room)  # Assuming you have a factory for rooms since room_id is required
-      expect(create(:resource, room: room)).to be_valid
+      expect(create(:resource)).to be_valid
     end
   end
 
