@@ -1,18 +1,21 @@
-<!-- This is a card for newly created preference that pops up right after submitting -->
-
-<div id="<%= dom_id(app_preference) %>" class="card">
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <strong>Name:</strong> <%= app_preference.name %>
-    </li>
-    <li class="list-group-item">
-      <strong>Description:</strong> <%= app_preference.description %>
-    </li>
-    <li class="list-group-item">
-      <strong>Preference type:</strong> <%= app_preference.pref_type %>
-    </li>
-    <li class="list-group-item">
-      <strong>Value:</strong> <%= app_preference.value %>
-    </li>
-  </ul>
-</div>
+<tr id="<%= dom_id(app_preference) %>">
+  <td class="text-start">
+    <%= app_preference.name%>
+  </td>
+  <td>
+    <%= app_preference.description %>
+  </td>
+  <td>
+    <%= app_preference.pref_type %>
+  </td>
+  <td>
+    <%= link_to edit_app_preference_path(app_preference) do %>
+      <i class="bi bi-pencil-square text-primary"></i>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to app_preference_path(app_preference), 'aria-label': "delete_#{app_preference.id}", data: { turbo_confirm: "Are you sure you want to Delete This Preference?" , turbo_method: :delete } do %>
+      <i class="bi bi-trash-fill text-danger"></i>
+    <% end %>
+  </td>
+</tr>

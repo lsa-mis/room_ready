@@ -1,23 +1,22 @@
 class AppPreferencesController < ApplicationController
   before_action :auth_user
-  before_action :set_app_preference, only: %i[ show edit update destroy ]
+  before_action :set_app_preference, only: %i[ edit update destroy ]
 
   # GET /app_preferences or /app_preferences.json
   def index
     @app_preferences = AppPreference.all
+    @new_app_preference = AppPreference.new
+    @pref_types = AppPreference.pref_types.keys.map { |key| [key.titleize, key] }
     @preference_page_announcement = Announcement.find_by(location: "preference_page")
     authorize @app_preferences
-  end
-
-  # GET /app_preferences/1 or /app_preferences/1.json
-  def show
   end
 
   # GET /app_preferences/new
   def new
     @app_preference = AppPreference.new
-    authorize @app_preference
+    
     @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
+    authorize @app_preference
   end
 
   # GET /app_preferences/1/edit
@@ -29,6 +28,7 @@ class AppPreferencesController < ApplicationController
   def create
     @app_preference = AppPreference.new(app_preference_params)
     authorize @app_preference
+    
     respond_to do |format|
       if @app_preference.save
         format.html { redirect_to app_preferences_url, notice: "App preference was successfully created." }
@@ -82,7 +82,7 @@ class AppPreferencesController < ApplicationController
         pref.update(value: value)
       end
     end
-    redirect_to configure_prefs_path, notice: "Preferences are updated."
+    redirect_to configure_prefs_app_preferences_path, notice: "Preferences are updated."
   end
 
   private
