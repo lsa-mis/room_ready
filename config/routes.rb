@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :announcements, only: [ :index, :show, :edit, :update ]
   resources :resource_states
   resources :specific_attribute_states
-  resources :common_attribute_states
+  resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets

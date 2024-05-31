@@ -1,9 +1,7 @@
-<h1>New common attribute state</h1>
+<h1>Common Attribute States</h1>
 
-<%= render "form", common_attribute_state: @common_attribute_state %>
+<h2><%= @room.floor.building.zone ? "Zone: #{@room.floor.building.zone.name}" : ''  %></h2>
+<h2><%= "Building: #{@room.floor.building.name}" %></h2>
+<h2><%= "Room: #{@room.room_number}" %></h2>
 
-<br>
-
-<div>
-  <%= link_to "Back to common attribute states", common_attribute_states_path %>
-</div>
+<%= render 'form' %>

@@ -42,3 +42,5 @@
 
 # files created from js scripts
 webcheckout_api/files
+
+spec/cassettes
