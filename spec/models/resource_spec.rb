@@ -20,6 +20,7 @@ RSpec.describe Resource, type: :model do
 
   context "create resource with all required fields present" do
     it 'is valid' do
+      # room = create(:room)  # Assuming you have a factory for rooms since room_id is required
       expect(create(:resource)).to be_valid
     end
   end
