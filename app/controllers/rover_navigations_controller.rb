@@ -3,7 +3,7 @@ class RoverNavigationsController < ApplicationController
 
   def zones
     authorize :rover_navigation, :zones?
-    @zones = Zone.all
+    @zones = Zone.includes(:buildings).order(:name)
   end
 
   def buildings

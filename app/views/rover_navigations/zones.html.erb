@@ -1,1 +1,16 @@
-<%= @zones.to_a %>
+<% @zones.each do |zone| %>
+  <div class="card mt-3">
+    <h5 class="card-header">
+      Zone: <%= zone.name %>
+    </h5>
+    <div class="card-body">
+      <p class="card-text">
+        <%= truncate(
+              zone.buildings.order(:name).pluck(:name).join(', '),
+              length: 60, omission: '...') %>
+      </p>
+      <%= link_to "Zone Details", buildings_rover_navigation_path(zone_id: zone.id), class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
