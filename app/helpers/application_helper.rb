@@ -2,10 +2,10 @@ module ApplicationHelper
 
   def root_path
     if user_signed_in?
-      if is_rover?(current_user)
-        welcome_rovers_path
-      elsif is_admin?(current_user)
+      if is_admin?(current_user)
         dashboard_path
+      elsif is_rover?(current_user)
+        welcome_rovers_path
       else
         all_root_path
       end
@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def is_rover?(current_user)
-    Rover.all.pluck(:uniqname).include?(current_user.uniqname)
+    Rover.exists?(uniqname: current_user.uniqname)
   end
 
   def is_admin?(user)
