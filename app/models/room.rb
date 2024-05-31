@@ -17,7 +17,8 @@ class Room < ApplicationRecord
   has_many :room_tickets
   has_many :specific_attributes
 
-  validates :rmrecnbr, presence: true, uniqueness: true # added to test spec file
+  validates :rmrecnbr, presence: true, uniqueness: true
+  validates :room_number, :room_type, presence: true
 
   accepts_nested_attributes_for :specific_attributes
 
