@@ -24,6 +24,14 @@ Rails.application.routes.draw do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
 
+  resource :rover_navigation, only: [] do
+    member do
+      get 'zones'
+      get 'buildings'
+      get 'rooms'
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
