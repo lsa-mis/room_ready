@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationPolicy
-  attr_reader :user, :record
+  attr_reader :user, :admin, :record
 
-  def initialize(user, record)
-    @user = user
+  def initialize(context, record)
+    @user = context[:user]
+    @role = context[:role]
     @record = record
   end
 
@@ -36,20 +37,16 @@ class ApplicationPolicy
     false
   end
 
-  def user_in_admin_group?
-    # binding.pry
-    # admin_group = ['lsa-roomready-admins']
-    # user.membership && (user.membership & admin_group).any?
-    @user.membership && @user.membership.include?('lsa-roomready-admins')
+  def is_admin?
+    @role == "admin" || @role == "developer"
   end
 
-  def user_in_dev_group?
-    admin_group = ['lsa-roomready-developers']
-    user.membership && (user.membership & admin_group).any?
+  def is_developer?
+    @role == "developer"
   end
 
   def is_rover?
-    Rover.exists?(uniqname: user.uniqname)
+    @role == "rover"
   end
 
   class Scope

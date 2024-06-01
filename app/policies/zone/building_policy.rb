@@ -1,11 +1,11 @@
 class Zone::BuildingPolicy < ApplicationPolicy
 
   def create?
-    user_in_admin_group?
+    is_admin?
   end
 
   def update?
-    user_in_admin_group?
+    is_admin?
   end
   
   def edit?
@@ -13,6 +13,6 @@ class Zone::BuildingPolicy < ApplicationPolicy
   end
 
   def remove_building?
-    user_in_admin_group?
+    is_admin?
   end
 end

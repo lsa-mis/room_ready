@@ -1,15 +1,15 @@
 class AnnouncementPolicy < ApplicationPolicy
   
     def index?
-      user_in_admin_group?
+      is_admin?
     end
   
     def show?
-      user_in_admin_group?
+      is_admin?
     end
     
     def update?
-      user_in_admin_group?
+      is_admin?
     end
     
     def edit?

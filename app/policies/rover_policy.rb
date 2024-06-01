@@ -1,15 +1,15 @@
 class RoverPolicy < ApplicationPolicy
   
   def index?
-    user_in_admin_group?
+    is_admin?
   end
 
   def show?
-    user_in_admin_group?
+    is_admin?
   end
 
   def create?
-    user_in_admin_group?
+    is_admin?
   end
 
   def new?
@@ -17,7 +17,7 @@ class RoverPolicy < ApplicationPolicy
   end
 
   def update?
-    user_in_admin_group?
+    is_admin?
   end
   
   def edit?
@@ -25,7 +25,7 @@ class RoverPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user_in_admin_group?
+    is_admin?
   end
   
 end
