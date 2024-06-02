@@ -29,7 +29,7 @@
                 </tr>
               </thead>
               <tbody class="table-group-divider">
-                <% floor.rooms.each do |room| %>
+                <% floor.rooms.order(:room_number).each do |room| %>
                   <tr class="building_tbody_tr">
                     <td class="building_tbody_td">
                       <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
