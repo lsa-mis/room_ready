@@ -18,10 +18,42 @@
       </h2>
       <div id="collapse_<%= floor.id %>" class="accordion-collapse collapse" data-bs-parent="#buildingFloors">
         <div class="accordion-body">
-          <% floor.rooms.each do |room| %>
-            <div>
-              <%= link_to room.room_number, room_path(room), class: "cancel-button" %>
-            </div>
+          <%= turbo_frame_tag 'all_rooms' do %>  
+            <table class="table text-center">
+              <thead class="table-group-divider">
+                <tr>
+                  <th>Name</th>
+                  <td>View</td>
+                  <td>Edit</td>
+                  <td>Remove</td>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                <% floor.rooms.each do |room| %>
+                  <tr class="building_tbody_tr">
+                    <td class="building_tbody_td">
+                      <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
+                      <%= room.room_number %>
+                    </td>
+                    <td class="building_tbody_td">
+                      <%= link_to room_path(room), data: { turbo_frame: "_top" } do%>
+                      <i class="bi bi-eye-fill text-primary"></i>
+                      <%end%>
+                    </td>
+                    <td class="building_tbody_td">
+                      <%= link_to edit_room_path(room), data: { turbo_frame: "_top" } do%>
+                      <i class="bi bi-pencil-square text-primary"></i>
+                      <%end%>
+                    </td>
+                    <td class="building_tbody_td">
+                      <%= link_to room_path(room), data: { turbo_confirm: 'Are you sure you want to remove this building?', turbo_method: :delete} do %>
+                      <i class="bi bi-trash-fill text-danger"></i>
+                      <%end%>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           <% end %>
         </div>
       </div>
