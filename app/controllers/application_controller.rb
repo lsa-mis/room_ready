@@ -31,6 +31,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def sort_floors(floors)
+    sorted = floors.sort_by do |s|
+      if s =~ /^\d+$/
+        [2, $&.to_i]
+      else
+        [1, s]
+      end
+    end
+    return sorted
+  end
+
   def render_404
     respond_to do |format|
       format.html { render 'errors/not_found', status: :not_found, layout: 'application' }

@@ -28,6 +28,9 @@ class Zones::BuildingsController < ApplicationController
 
   def show
     authorize @building
+    floors = @building.floors
+    floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
+    @floors = floors.in_order_of(:name, floor_names_sorted)
   end
 
   def edit
