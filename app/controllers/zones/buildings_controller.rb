@@ -20,6 +20,7 @@ class Zones::BuildingsController < ApplicationController
 
   def create
     if params[:building_id].present?
+      @idle_buildings = Building.where(zone: nil)
       return add_building_from_existing
     elsif building_params[:bldrecnbr].present?
       return add_from_bldrecnbr
@@ -103,6 +104,7 @@ class Zones::BuildingsController < ApplicationController
       authorize([@zone, @building])
       respond_to do |format|
         if @building.save
+          add_classrooms_for_building(bldrecnbr)
           notice = "New Building was added to the zone." + note
           @buildings = Building.where(zone: @zone)
           format.turbo_stream do
@@ -113,6 +115,27 @@ class Zones::BuildingsController < ApplicationController
         else
           format.html { render :new, status: :unprocessable_entity }
         end
+      end
+    end
+
+    def add_classrooms_for_building(bldrecnbr)
+      result = get_classromms_for_building(bldrecnbr)
+      if result['data'].present?
+        rooms_data = result['data']
+        rooms_data.each do |row|
+          if row['RoomTypeDescription'] == "Classroom"
+            if Floor.find_by(name: row["FloorNumber"], building: @building).present?
+              floor = Floor.find_by(name: row["FloorNumber"], building: @building)
+            else
+             floor = Floor.new(name: row["FloorNumber"], building: @building)
+             floor.save
+            end
+            room = Room.new(rmrecnbr: row["RoomRecordNumber"], room_number: row["RoomNumber"], room_type: "Classroom", floor: floor)
+            room.save
+          end
+        end
+      else
+        note = " API returned bo data about classrooms for the building"
       end
     end
 end
