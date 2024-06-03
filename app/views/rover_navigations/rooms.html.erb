@@ -1,6 +1,17 @@
+<div class="mt-3"></div>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @floor.building.zone.id) %></li>
+    <li class="breadcrumb-item active" aria-current="page">Rooms</li>
+  </ol>
+</nav>
+
+<h2>Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>) </h2>
+
 <%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
   <%= form.hidden_field :floor_id, value: @floor.id %>
-  <%= form.label :search, "Search Buildings:" %>
   <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number" %>
   <%= form.submit "Search" %>
   <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'text-primary cancel-button' %>
