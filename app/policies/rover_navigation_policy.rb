@@ -1,13 +1,13 @@
 class RoverNavigationPolicy < ApplicationPolicy
   def zones?
-    user_in_admin_group?
+    is_rover?
   end
 
   def buildings?
-    user_in_admin_group?
+    is_rover?
   end
 
   def rooms?
-    user_in_admin_group?
+    is_rover?
   end
 end
