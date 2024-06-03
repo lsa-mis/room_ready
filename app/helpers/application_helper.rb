@@ -74,11 +74,6 @@ module ApplicationHelper
       ['Wyoming', 'WY']
     ]
   end
-
-  def choose_buildings_for_zone(zone)
-    Building.where(zone_id: nil)
-  end
-
   
   def show_date(field)
     field.strftime("%m/%d/%Y") unless field.blank?
