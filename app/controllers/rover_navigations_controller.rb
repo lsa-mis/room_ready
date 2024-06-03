@@ -8,7 +8,13 @@ class RoverNavigationsController < ApplicationController
 
   def buildings
     authorize :rover_navigation, :buildings?
-    @buildings = Building.all
+
+    @zone = Zone.find(params[:zone_id])
+    @buildings = @zone.buildings.includes(:floors).order(:name)
+
+    if params[:search].present?
+      @buildings = @buildings.where("name ILIKE :search OR address ILIKE :search", search: "%#{params[:search]}%")
+    end
   end
 
   def rooms

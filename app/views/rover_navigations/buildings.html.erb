@@ -1,1 +1,30 @@
-<%= @buildings.to_a %>
+<%= form_with url: buildings_rover_navigation_path, method: :get, local: true do |form| %>
+  <%= form.hidden_field :zone_id, value: @zone.id %>
+  <%= form.label :search, "Search Buildings:" %>
+  <%= form.text_field :search, value: params[:search], placeholder: "Enter name, address, state, or zip" %>
+  <%= form.submit "Search" %>
+  <%= link_to 'Clear Filter', buildings_rover_navigation_path(zone_id: @zone.id), class: 'text-primary cancel-button' %>
+<% end %>
+
+<% @buildings.each do |building| %>
+  <div class="card mt-3">
+    <h5 class="card-header">
+      <%= building.name %>
+    </h5>
+    <div class="card-body">
+      <p class="card-text">
+        <%= building.full_address %>
+      </p>
+      <div class="dropdown border-0">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Select Floor
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <% building.floors.order(:name).each do |floor| %>
+            <li><%= link_to "Floor #{floor.name}", rooms_rover_navigation_path(floor_id: floor.id), class: "dropdown-item btn-primary" %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
