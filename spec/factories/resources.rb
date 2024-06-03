@@ -11,9 +11,8 @@
 #
 FactoryBot.define do
   factory :resource do
-    name { "MyString" }
+    name { Faker::Name.name }
     resource_type { "MyString" }
-    status { "MyString" }
-    room { nil }
+    association :room
   end
 end

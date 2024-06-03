@@ -1,0 +1,48 @@
+<%= turbo_frame_tag 'all_buildings' do %>  
+  <table class="table text-center">
+    <thead class="table-group-divider">
+      <tr>
+        <th>Bldrecnbr</th>
+        <th>Name</th>
+        <th>Nick name</th>
+        <th>Address</th>
+        <td>View</td>
+        <td>Edit</td>
+        <td>Remove</td>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <% @buildings.each do |building| %>
+        <tr class="building_tbody_tr">
+          <td class="building_tbody_td">
+            <%= building.bldrecnbr %>
+          </td>
+          <td class="building_tbody_td">
+            <%= building.name %>
+          </td>
+          <td class="building_tbody_td">
+            <%= building.nick_name %>
+          </td>
+          <td class="building_tbody_td">
+            <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}"%>
+          </td>
+          <td class="building_tbody_td">
+            <%= link_to building_path(building), data: { turbo_frame: "_top" } do%>
+            <i class="bi bi-eye-fill text-primary"></i>
+            <%end%>
+          </td>
+          <td class="building_tbody_td">
+            <%= link_to edit_building_path(building), data: { turbo_frame: "_top" } do%>
+            <i class="bi bi-pencil-square text-primary"></i>
+            <%end%>
+          </td>
+          <td class="building_tbody_td">
+            <%= link_to building_path(building), data: { turbo_confirm: 'Are you sure you want to remove this building?', turbo_method: :delete} do %>
+            <i class="bi bi-trash-fill text-danger"></i>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -56,7 +56,7 @@ class CommonAttributesController < ApplicationController
     @common_attribute.destroy!
 
     respond_to do |format|
-      notice = "Common attribute was successfully destroyed."
+      notice = "Common attribute was successfully deleted."
       format.turbo_stream do
         flash.now[:notice] = notice
       end

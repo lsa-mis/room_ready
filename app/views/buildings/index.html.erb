@@ -1,14 +1,10 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Buildings</h1>
-
-<div id="buildings">
-  <% @buildings.each do |building| %>
-    <%= render building %>
-    <p>
-      <%= link_to "Show this building", building %>
-    </p>
-  <% end %>
+<div class="container-fluid" id="buildings">
+  <div class="d-flex justify-content-between">
+      <h1><%= @zone_name %> Buildings</h1>
+      <div class="mb-auto mt-auto">
+        <%= link_to "Add Building", new_building_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+    <%= render "listing" %>
+  </div>
 </div>
-
-<%= link_to "New building", new_building_path %>
