@@ -1,1 +1,24 @@
-<%= @rooms.to_a %>
+<%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
+  <%= form.hidden_field :floor_id, value: @floor.id %>
+  <%= form.label :search, "Search Buildings:" %>
+  <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number" %>
+  <%= form.submit "Search" %>
+  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'text-primary cancel-button' %>
+<% end %>
+
+<% @rooms.each do |room| %>
+  <div class="card mt-3">
+    <h5 class="card-header">
+      Room: <%= room.room_number %>
+    </h5>
+    <div class="card-body">
+      <p class="card-text">
+        Rmrecnbr: <%= room.rmrecnbr %>
+      </p>
+      <p class="card-text">
+        Room Type: <%= room.room_type %>
+      </p>
+      <%= link_to "Form", '#', class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
