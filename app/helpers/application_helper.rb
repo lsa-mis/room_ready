@@ -91,4 +91,8 @@ module ApplicationHelper
     user.membership.present?
   end
 
+  def choose_buildings_for_zone
+    Building.where(zone: nil).order(:name)
+  end
+
 end

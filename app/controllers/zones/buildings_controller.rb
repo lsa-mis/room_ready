@@ -7,12 +7,10 @@ class Zones::BuildingsController < ApplicationController
   def index
     @building = Building.new
     @buildings = Building.where(zone: @zone)
-    @idle_buildings = Building.where(zone: nil)
     authorize @buildings
   end
 
   def new
-    # @zone_name = Zone.find(@zone_id).name
     @building = Building.new
     @zones = Zone.all.map { |z| [z.name, z.id] }
     authorize @building
@@ -20,7 +18,6 @@ class Zones::BuildingsController < ApplicationController
 
   def create
     if params[:building_id].present?
-      @idle_buildings = Building.where(zone: nil)
       return add_building_from_existing
     elsif building_params[:bldrecnbr].present?
       return add_from_bldrecnbr

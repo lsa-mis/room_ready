@@ -6,7 +6,7 @@
         <%= link_to "Add New Building", new_zone_building_path, class: "btn btn-primary" %>
       </div>
     </div>
-    <% if @idle_buildings.present? %>
+    <% if choose_buildings_for_zone.present? %>
       <%= render "drop_down_list", building: @building %>
     <% end %>
     <div class="mt-4">

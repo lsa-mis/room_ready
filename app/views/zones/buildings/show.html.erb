@@ -11,11 +11,15 @@
 <div class="accordion accordion-flush" id="buildingFloors">
   <% @floors.each do |floor| %>
     <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<%= floor.id %>" aria-expanded="false" aria-controls="collapse_<%= floor.id %>">
-          Rooms on the floor <%= floor.name %>
-        </button>
-      </h2>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<%= floor.id %>" aria-expanded="false" aria-controls="collapse_<%= floor.id %>">
+            Rooms on the floor <%= floor.name %> 
+          </button>
+        </h2>
+        <%= link_to "Add New Room", new_building_floor_room_path(@building, floor), class: "cancel-button" %>
+      </div>
+      
       <div id="collapse_<%= floor.id %>" class="accordion-collapse collapse" data-bs-parent="#buildingFloors">
         <div class="accordion-body">
           <%= turbo_frame_tag 'all_rooms' do %>  

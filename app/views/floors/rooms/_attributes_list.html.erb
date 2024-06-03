@@ -1,0 +1,26 @@
+<table class="table text-center ms-3">
+  <thead>
+  <tr>
+    <th scope="col" class="text-start">Description</th>
+    <th scope="col">Needs Checkbox?</th>
+    <th scope="col">Needs Quantity Box?</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% attributes.each do |attribute| %>
+    <tr>
+      <td class="text-start"><%= attribute.description %></td>
+      <td>
+        <% if attribute.need_checkbox %>
+          <i class="bi bi-check-circle-fill text-primary"></i>
+        <% end %>
+      </td>
+      <td>
+        <% if attribute.need_quantity_box %>
+          <i class="bi bi-check-circle-fill text-primary"></i>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

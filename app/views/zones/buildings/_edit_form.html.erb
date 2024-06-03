@@ -14,7 +14,7 @@
   <% if @building.new_record? %>
     <div>
       <p>Add From Existing</p>
-      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateForm" %>
+      <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone, :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->building#populateForm" %>
     </div>
   <% end %>
 
