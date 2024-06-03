@@ -28,14 +28,21 @@ class AppPreferencesController < ApplicationController
   def create
     @app_preference = AppPreference.new(app_preference_params)
     authorize @app_preference
+
+    @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
     
     respond_to do |format|
       if @app_preference.save
-        format.html { redirect_to app_preferences_url, notice: "App preference was successfully created." }
+        notice = "App Preference was successfully created."
+        format.turbo_stream do
+          @new_app_preference = AppPreference.new
+          flash.now[:notice] = notice
+        end
+        format.html { redirect_to app_preference_path, notice: notice }
 
       else
         format.html { render :new, status: :unprocessable_entity }
-        @pref_types = AppPreference.pref_types.keys.map{ |key| [key.titleize, key] }
+
       end
     end
   end

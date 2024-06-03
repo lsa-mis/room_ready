@@ -1,6 +1,6 @@
 <tr id="<%= dom_id(app_preference) %>">
   <td class="text-start">
-    <%= app_preference.name%>
+    <%= app_preference.name %>
   </td>
   <td>
     <%= app_preference.description %>
@@ -9,7 +9,7 @@
     <%= app_preference.pref_type %>
   </td>
   <td class="text-center">
-    <%= link_to edit_app_preference_path(app_preference), data: { turbo: false }, title: "Edit #{app_preference.name}" do %>
+    <%= link_to edit_app_preference_path(app_preference), title: "Edit #{app_preference.name}" do %>
       <i class="bi bi-pencil-square text-primary"></i>
     <% end %>
   </td>

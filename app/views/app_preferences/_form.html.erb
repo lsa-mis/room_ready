@@ -33,8 +33,10 @@
 
 
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-      <%= form.submit "Submit", class: "btn btn-primary" %>
+      <%= form.submit app_preference.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
-      <%= link_to "Cancel", app_preferences_path, class: "text-primary cancel-button" %>
+      <% if app_preference.persisted? %>
+        <%= link_to "Cancel", app_preferences_path, class: "text-primary cancel-button" %>
+      <% end %>
   </div>
 <% end %>
