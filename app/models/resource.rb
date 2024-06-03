@@ -12,5 +12,8 @@
 class Resource < ApplicationRecord
   belongs_to :room
   has_many :resource_states
+
+  validates :name, presence: true
+  validates :resource_type, presence: true
   validates :room_id, presence: true
 end
