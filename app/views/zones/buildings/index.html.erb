@@ -1,12 +1,15 @@
 <div class="container-fluid" id="buildings">
   <div class="d-flex justify-content-between">
-      <h1><%= @zone_name %> Buildings</h1>
+      <h1><%= @zone.name %> Buildings</h1>
       <div class="mb-auto mt-auto">
         <%= link_to "Back to Zones", zones_path, class: "btn btn-secondary" %>
-        <%= link_to "Add Building", new_zone_building_path, class: "btn btn-primary" %>
+        <%= link_to "Add New Building", new_zone_building_path, class: "btn btn-primary" %>
       </div>
     </div>
-    <%= render "drop_down_list", building: @building %>
-    <br>
-    <%= render "listing" %>
+    <% if @idle_buildings.present? %>
+      <%= render "drop_down_list", building: @building %>
+    <% end %>
+    <div class="mt-4">
+      <%= render "listing" %>
+    </div>
 </div>
