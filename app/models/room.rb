@@ -18,6 +18,9 @@ class Room < ApplicationRecord
   has_many :specific_attributes
   has_many :room_states
 
+  validates :rmrecnbr, presence: true, uniqueness: true
+  validates :room_number, :room_type, presence: true
+
   accepts_nested_attributes_for :specific_attributes
 
   def full_name

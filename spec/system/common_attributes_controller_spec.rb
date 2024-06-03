@@ -68,7 +68,7 @@ RSpec.describe CommonAttribute, type: :system do
         find(:css, 'i.bi.bi-trash-fill.text-danger').click
         sleep 2
         text = page.driver.browser.switch_to.alert.text
-        expect(text).to eq 'Are you sure you want to Delete this Common Attribute?'
+        expect(text).to eq 'Are you sure you want to delete this Common Attribute?'
         page.driver.browser.switch_to.alert.dismiss
         sleep 2
         expect(page).to have_content(common_attribute.description)

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
+  include ApplicationHelper
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
@@ -21,6 +22,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if $baseURL.present?
       $baseURL
+    elsif session[:user_memberships].present?
+      dashboard_path
+    elsif is_rover?(resource)
+      welcome_rovers_path
     else
       root_path
     end

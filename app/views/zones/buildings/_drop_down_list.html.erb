@@ -1,0 +1,20 @@
+<%= turbo_frame_tag 'add_building' do %>
+  <%= form_with model: [@zone, building], 
+    data: { controller: "autosubmit", autosubmit_target: "form" } do |form| %>
+    <% if building.errors.any? %>
+      <div id="error_explanation" class="text-red-umred px-3 py-2 font-medium rounded-lg mt-3">
+        <h2><%= pluralize(building.errors.count, "error") %> prohibited this building from being saved:</h2>
+        <ul>
+          <% building.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div>
+    <p>Add From Existing</p>
+    <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone(@zone), :id, :name), include_blank: "Select", class: "input_text_field", "data-action" => "change->autosubmit#submitForm" %>
+    </div>
+  <% end %>
+<% end %>
