@@ -26,5 +26,4 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:saml]
 
-  attr_accessor :role
 end
