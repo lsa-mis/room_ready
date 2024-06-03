@@ -5,6 +5,7 @@ class RoomTicketsController < ApplicationController
   # GET /room_tickets or /room_tickets.json
   def index
     @room_tickets = RoomTicket.all
+    authorize @room_tickets
   end
 
   # GET /room_tickets/1 or /room_tickets/1.json
@@ -14,6 +15,7 @@ class RoomTicketsController < ApplicationController
   # GET /room_tickets/new
   def new
     @room_ticket = RoomTicket.new
+    authorize @room_ticket
   end
 
   # GET /room_tickets/1/edit
@@ -56,6 +58,10 @@ class RoomTicketsController < ApplicationController
       format.html { redirect_to room_tickets_url, notice: "Room ticket was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def send_email_for_tdx_ticket
+    fail
   end
 
   private

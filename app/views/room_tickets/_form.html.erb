@@ -1,4 +1,4 @@
-<%= form_with(model: room_ticket) do |form| %>
+<%= form_with(model: room_ticket, url: send_email_for_tdx_ticket_path, method: :get) do |form| %>
   <% if room_ticket.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
@@ -13,22 +13,22 @@
 
   <div>
     <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
+    <%= form.rich_text_area :description %>
   </div>
 
   <div>
     <%= form.label :submitted_by, style: "display: block" %>
-    <%= form.text_field :submitted_by %>
+    <%= form.text_field :submitted_by, required: true %>
   </div>
 
   <div>
     <%= form.label :submitted_at, style: "display: block" %>
-    <%= form.datetime_field :submitted_at %>
+    <%= form.datetime_field :submitted_at, required: true %>
   </div>
 
   <div>
     <%= form.label :room_id, style: "display: block" %>
-    <%= form.text_field :room_id %>
+    <%= form.text_field :room_id, required: true %>
   </div>
 
   <div>
