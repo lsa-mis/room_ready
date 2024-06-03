@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static targets = ["bldrecnbr", "name", "nickName", "address", "city", "state", "zip"];
+
   connect() {
-    this.element.textContent = "Hello World!"
+    console.log("Hello World!");
   }
 }

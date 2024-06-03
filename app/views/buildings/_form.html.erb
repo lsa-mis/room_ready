@@ -1,4 +1,4 @@
-<%= form_with(model: building) do |form| %>
+<%= form_with model: building, data: { controller: "building" } do |form| %>
   <% if building.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(building.errors.count, "error") %></h2>
@@ -13,40 +13,46 @@
 
   <div>
     <%= form.label :bldrecnbr, style: "display: block" %>
-    <%= form.text_field :bldrecnbr %>
+    <%= form.text_field :bldrecnbr, required: true %>
   </div>
 
   <div>
     <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+    <%= form.text_field :name, data: { building_target: "name" } %>
   </div>
 
   <div>
     <%= form.label :nick_name, style: "display: block" %>
-    <%= form.text_field :nick_name %>
+    <%= form.text_field :nick_name, data: { building_target: "nickName" } %>
   </div>
 
   <div>
     <%= form.label :address, style: "display: block" %>
-    <%= form.text_field :address %>
+    <%= form.text_field :address, data: { building_target: "address" } %>
   </div>
 
   <div>
     <%= form.label :city, style: "display: block" %>
-    <%= form.text_field :city %>
+    <%= form.text_field :city, data: { building_target: "city" } %>
   </div>
 
   <div>
-    <%= form.label :state, style: "display: block" %>
-    <%= form.text_field :state %>
+  <%= form.label :state, style: "display: block" %>
+  <%= form.select :state, options_for_select(us_states, us_states.rassoc(params[:building].present? ? params[:building][:zone_id] : "")), { include_blank: "Select State" }, { class: "input_text_field", data: { building_target: "state" } } %>  
   </div>
 
   <div>
     <%= form.label :zip, style: "display: block" %>
-    <%= form.text_field :zip %>
+    <%= form.text_field :zip, data: { building_target: "zip" } %>
+  </div>
+
+  <div>
+    <%= form.label :zone_id, style: "display: block" %>
+    <%= form.select(:zone_id, options_for_select(@zones), { include_blank: "Select ..." } ) %>
   </div>
 
   <div>
     <%= form.submit %>
   </div>
 <% end %>
+

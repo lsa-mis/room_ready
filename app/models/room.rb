@@ -16,10 +16,18 @@ class Room < ApplicationRecord
   has_many :resources
   has_many :room_tickets
   has_many :specific_attributes
+  has_many :room_states
+
+  validates :rmrecnbr, presence: true, uniqueness: true
+  validates :room_number, :room_type, presence: true
 
   accepts_nested_attributes_for :specific_attributes
 
   def full_name
     [floor.building.nick_name, room_number].join(' ')
+  end
+
+  def room_state_for_today
+    room_states.where(created_at: Time.zone.today.all_day).first
   end
 end

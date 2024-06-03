@@ -2,6 +2,11 @@
 
 <h1>App Preferences</h1>
 
+<div>
+  <% unless @preference_page_announcement.nil? %>
+    <%= @preference_page_announcement.content %>
+  <% end %>
+</div>
 <div id="app_preferences">
 <table class="table">
   <thead class="table-group-divider">

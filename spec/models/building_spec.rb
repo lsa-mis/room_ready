@@ -65,12 +65,6 @@ RSpec.describe Building, type: :model do
     end
   end
 
-  context "create building without a zone" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Zone must exist"' do
-      expect { FactoryBot.create(:building, zone: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Zone must exist")
-    end
-  end
-
   context "create building with a duplicated bldrecnbr" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Bldrecnbr has already been taken"' do
       building = FactoryBot.create(:building)

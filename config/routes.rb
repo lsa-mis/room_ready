@@ -4,17 +4,20 @@ Rails.application.routes.draw do
   post 'app_preferences/save_configured_prefs', to: 'app_preferences#save_configured_prefs', as: 'save_configured_prefs'
   
   resources :app_preferences
-
-
-  resources :announcements
+  resources :announcements, only: [ :index, :show, :edit, :update ]
   resources :resource_states
   resources :specific_attribute_states
-  resources :common_attribute_states
+  resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets
   resources :rovers
-  resources :zones
+  
+  resources :zones do
+    resources :buildings, module: :zones
+  end
+  delete 'zones/buildings/:zone_id/:id', to: 'zones/buildings#remove_building', as: :remove_building
+
 
   resources :resources
   resources :rooms do
@@ -34,11 +37,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'static_pages#about'
+  root to: 'static_pages#about', as: :all_root
 
   get 'static_pages/about'
-
-  get 'home', to: 'static_pages#home', as: :home
+  get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
+  get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 

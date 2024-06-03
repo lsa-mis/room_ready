@@ -2,6 +2,12 @@
 
 <h1>Rooms</h1>
 
+<div>
+  <% unless @rooms_page_announcement.nil? %>
+    <%= @rooms_page_announcement.content %>
+  <% end %>
+</div>
+
 <div id="rooms">
   <% @rooms.each do |room| %>
     <%= render room %>
