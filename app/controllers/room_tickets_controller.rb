@@ -62,7 +62,7 @@ class RoomTicketsController < ApplicationController
 
   def send_email_for_tdx_ticket
     @email_params = room_ticket_params
-    date = @email_params[:submitted_at].to_date.strftime('%m/%d/%Y')
+    date = Time.now.strftime('%m/%d/%Y')
     room_id = @email_params[:room_id]
     message = @email_params[:description]
     submitter = @email_params[:submitted_by]
