@@ -1,10 +1,10 @@
 class CommonAttributePolicy < ApplicationPolicy
   def index?
-    user_in_admin_group?
+    is_admin?
   end
 
   def create?
-    user_in_admin_group?
+    is_admin?
   end
 
   def new?
@@ -12,7 +12,7 @@ class CommonAttributePolicy < ApplicationPolicy
   end
 
   def update?
-    user_in_admin_group?
+    is_admin?
   end
   
   def edit?
@@ -20,6 +20,6 @@ class CommonAttributePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user_in_admin_group?
+    is_admin?
   end
 end

@@ -1,14 +1,14 @@
 class AppPreferencePolicy < ApplicationPolicy
   def index?
-    user_in_dev_group?
+    is_developer?
   end
 
   def show?
-    user_in_dev_group?
+    is_developer?
   end
 
   def create?
-    user_in_dev_group?
+    is_developer?
   end
 
   def new?
@@ -16,7 +16,7 @@ class AppPreferencePolicy < ApplicationPolicy
   end
 
   def update?
-    user_in_dev_group?
+    is_developer?
   end
   
   def edit?
@@ -24,15 +24,15 @@ class AppPreferencePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user_in_dev_group?
+    is_developer?
   end
 
   def configure_prefs?
-    user_in_admin_group?
+    is_admin?
   end
 
   def save_configured_prefs?
-    user_in_admin_group?
+    is_admin?
   end
 
 end
