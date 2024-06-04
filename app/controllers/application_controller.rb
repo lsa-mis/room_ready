@@ -42,6 +42,17 @@ class ApplicationController < ActionController::Base
     return sorted
   end
 
+  def redirect_back_or_default(notice: '', alert: false, default: all_root_url)
+    if alert
+      flash[:alert] = notice
+    else
+      flash[:notice] = notice
+    end
+    url = session[:return_to]
+    session[:return_to] = nil
+    redirect_to(url, anchor: "top" || default)
+  end
+
   def render_404
     respond_to do |format|
       format.html { render 'errors/not_found', status: :not_found, layout: 'application' }
