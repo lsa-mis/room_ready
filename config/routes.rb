@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  get 'app_preferences/configure_prefs', to: 'app_preferences#configure_prefs', as: :configure_prefs
-  post 'app_preferences/save_configured_prefs', to: 'app_preferences#save_configured_prefs', as: 'save_configured_prefs'
-  
-  resources :app_preferences
+  resources :app_preferences, except: [:show] do
+    collection do
+      get 'configure_prefs'
+      post 'save_configured_prefs'
+    end
+  end
   resources :announcements, only: [ :index, :show, :edit, :update ]
   resources :resource_states
   resources :specific_attribute_states
