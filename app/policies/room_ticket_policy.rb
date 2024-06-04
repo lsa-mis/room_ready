@@ -26,4 +26,8 @@ class RoomTicketPolicy < ApplicationPolicy
   def destroy?
     user_in_admin_group?
   end
+
+  def send_email_for_tdx_ticket?
+    create?
+  end
 end

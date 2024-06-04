@@ -68,7 +68,20 @@ class RoomTicketsController < ApplicationController
     submitter = @email_params[:submitted_by]
     
     RoomTicketMailer.with(date: date, room_id: room_id, message: message, submitter: submitter).send_tdx_ticket.deliver_now
-    fail
+    
+    @room_ticket = RoomTicket.new(@email_params)
+    @all_rooms = Room.all
+    authorize @room_ticket
+
+    respond_to do |format|
+      if @room_ticket.save
+        format.html { redirect_to room_tickets_path, notice: "Room ticket was successfully sent." }
+        format.json { render :show, status: :created, location: @room_ticket }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @room_ticket.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
