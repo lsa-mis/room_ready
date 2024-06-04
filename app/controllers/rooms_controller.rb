@@ -22,6 +22,8 @@ class RoomsController < ApplicationController
 
   # GET /rooms/1/edit
   def edit
+    session[:return_to] = request.referer
+    @floors = @room.floor.building.floors.pluck(:name, :id)
   end
 
   # POST /rooms or /rooms.json
@@ -42,14 +44,11 @@ class RoomsController < ApplicationController
 
   # PATCH/PUT /rooms/1 or /rooms/1.json
   def update
-    respond_to do |format|
-      if @room.update(room_params)
-        format.html { redirect_to room_url(@room), notice: "Room was successfully updated." }
-        format.json { render :show, status: :ok, location: @room }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
+    if @room.update(room_params)
+      redirect_back_or_default(notice: "The room was updated.", alert: false)
+    else
+      @floors = @room.floor.building.floors.pluck(:name, :id)
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -67,6 +66,7 @@ class RoomsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_room
       @room = Room.find(params[:id])
+
       authorize @room
     end
 
