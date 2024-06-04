@@ -3,8 +3,9 @@
 <%= render @room_state %>
 
 <div>
-  <%= link_to "Edit this room state", edit_room_state_path(@room_state) %> |
-  <%= link_to "Back to room states", room_states_path %>
-
-  <%= button_to "Destroy this room state", @room_state, method: :delete %>
+  <%= link_to "Edit This Room State", edit_room_state_path(@room_state), class: "btn btn-primary btn-sm" %> |
+  <%= link_to "Back to Room States", room_room_states_path, class: "btn btn-secondary btn-sm" %>
+  <br>
+  <br>
+  <%= button_to "Delete This Room State", @room_state, method: :delete, class: "btn btn-danger btn-sm"%>
 </div>

@@ -5,7 +5,7 @@ class Rooms::RoomStatesController < ApplicationController
 
   # GET /room_states or /room_states.json
   def index
-    @room_states = RoomState.all
+    @room_states = RoomState.all.where(room_id: @room.id)
     authorize @room_states
   end
 
@@ -26,15 +26,14 @@ class Rooms::RoomStatesController < ApplicationController
 
   # POST /room_states or /room_states.json
   def create
-    @room_state = RoomState.new(room_state_params)
-
+    @room_state = @room.room_states.new(room_state_params)
+    authorize @room_state
     respond_to do |format|
       if @room_state.save
-        format.html { redirect_to room_state_url(@room_state), notice: "Room state was successfully created." }
-        format.json { render :show, status: :created, location: @room_state }
+        notice = "A new state to this room was successfully created."
+        format.html { redirect_to room_room_states_url(@room), notice: notice }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room_state.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -43,11 +42,9 @@ class Rooms::RoomStatesController < ApplicationController
   def update
     respond_to do |format|
       if @room_state.update(room_state_params)
-        format.html { redirect_to room_state_url(@room_state), notice: "Room state was successfully updated." }
-        format.json { render :show, status: :ok, location: @room_state }
+        format.html { redirect_to room_room_state_url(@room, @room_state), notice: "Room state was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @room_state.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -65,10 +62,13 @@ class Rooms::RoomStatesController < ApplicationController
   private
     def set_room
       @room = Room.find(params[:room_id])
+      authorize @room
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state
       @room_state = RoomState.find(params[:id])
+      authorize @room_state
+      @user = current_user
     end
 
     # Only allow a list of trusted parameters through.

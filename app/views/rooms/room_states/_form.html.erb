@@ -1,4 +1,4 @@
-<%= form_with(model: room_state) do |form| %>
+<%= form_with(model: [@room, room_state]) do |form| %>
   <% if room_state.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(room_state.errors.count, "error") %></h2>
@@ -12,7 +12,8 @@
   <% end %>
 
   <div>
-    Checked by: <%= user.uniqname %>
+    <%= form.label :checked_by, style: "display: block" %>
+    <%= form.text_field :checked_by, value: user.uniqname, readonly: true %>
   </div>
 
   <div>
@@ -27,10 +28,11 @@
 
   <div>
     <%= form.label :room_id, style: "display: block" %>
-    <%= form.text_field :room_id %>
+    <%= form.text_field :room_id, value: @room.id, readonly: true%>
   </div>
 
   <div>
     <%= form.submit %>
+    <%= link_to "Cancel", room_room_states_path %>
   </div>
 <% end %>

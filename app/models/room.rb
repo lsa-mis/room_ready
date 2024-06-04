@@ -16,7 +16,7 @@ class Room < ApplicationRecord
   has_many :resources
   has_many :room_tickets
   has_many :specific_attributes
-
+  has_many :room_states
   accepts_nested_attributes_for :specific_attributes
 
   def full_name

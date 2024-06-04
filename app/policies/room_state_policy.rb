@@ -2,6 +2,10 @@ class RoomStatePolicy < ApplicationPolicy
     def index?
       is_rover?
     end
+
+    def show?
+      user_in_admin_group?
+    end
   
     def create?
       is_rover?

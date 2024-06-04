@@ -1,17 +1,63 @@
 <p></p>
-
-<div>
-<h1>Room States <%= @room.rmrecnbr? ? "for #{@room.rmrecnbr}" : '' %></h1>
-<%= link_to "Back to Room", room_path(@room), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Room States <%= @room.rmrecnbr? ? "for #{@room.rmrecnbr}" : '' %></h1>
+  <div class="d-flex flex-column gap-1">
+    <%= link_to "Back to Room", room_path(@room), class: "btn btn-secondary" %>
+    <%= link_to "New Room State", new_room_room_state_path ,class:"btn btn-primary"%>
+  </div>
 </div>
 
 <div id="room_states">
-  <% @room_states.each do |room_state| %>
-    <%= render room_state %>
-    <p>
-      <%= link_to "Show this room state", room_state %>
-    </p>
-  <% end %>
+  <% if @room_states.empty? %>
+    No room states found
+  <% else %>
+    <table class="table text-center">
+      <thead class="table-group-divider">
+        <tr>
+          <th>Checked by</th>
+          <th>Is accessed</th>
+          <th>Report to Supervisor</th>
+          <th>Room ID</th>
+          <td>View</td>
+          <td>Edit</td>
+          <td>Delete</td>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% @room_states.each do |room_state| %>
+          <tr class="rover_tbody_tr">
+            <td class="rover_tbody_td">
+              <%= room_state.checked_by %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= room_state.is_accessed %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= room_state.report_to_supervisor %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= room_state.room_id %>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to room_room_state_path(@room, room_state), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-eye-fill text-primary"></i>
+              <%end%>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to edit_room_room_state_path(@room,room_state), data: { turbo_frame: "_top" } do%>
+              <i class="bi bi-pencil-square text-primary"></i>
+              <%end%>
+            </td>
+            <td class="rover_tbody_td">
+              <%= link_to room_room_state_path(@room,room_state), data: { turbo_confirm: 'Are you sure you want to delete this state?', turbo_method: :delete} do %>
+              <i class="bi bi-trash-fill text-danger"></i>
+              <%end%>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <%end%>
 </div>
 
-<%= link_to "New room state", new_room_room_state_path %>
+
