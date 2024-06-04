@@ -79,7 +79,16 @@ const createResourcesFile = function(oid) {
   })
 }
 
-location_oids.forEach(function(oid_s) {
-  var oid = parseInt(oid_s)
-  createResourcesFile(oid)
-}, 10000)
+async function processOidsSequentially() {
+  for (const oid_s of location_oids) {
+    const oid = parseInt(oid_s);
+    try {
+      await createResourcesFile(oid);
+      await new Promise(resolve => setTimeout(resolve, 500)); // Add a delay
+    } catch (error) {
+      console.error('Error updating resources for oid', oid, ':', error);
+    }
+  }
+}
+
+processOidsSequentially();

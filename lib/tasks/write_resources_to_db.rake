@@ -59,7 +59,7 @@ task write_resources_to_db: :environment do
 
   if rooms_to_update.present?
     # these rooms were not updated because they don't eexist in wco
-    list = rooms_to_update.map { |room| Room.find_by(rmrecnbr: room).facility_id }.join(", ")
+    list = rooms_to_update.map { |room| Room.find_by(rmrecnbr: room).rmrecnbr }.join(", ")
     note = "The following rooms don't exist in WebCheCkout database: " + list
     RoomUpdateLog.create(date: Date.today, note: note)
   end 
