@@ -2,9 +2,9 @@ module ApplicationHelper
 
   def root_path
     if user_signed_in?
-      if is_admin?(current_user)
+      if is_admin?
         dashboard_path
-      elsif is_rover?(current_user)
+      elsif is_rover?
         welcome_rovers_path
       else
         all_root_path
@@ -83,12 +83,12 @@ module ApplicationHelper
     field.to_date.strftime("%B %d, %Y") unless field.blank?
   end
 
-  def is_rover?(current_user)
-    Rover.exists?(uniqname: current_user.uniqname)
+  def is_rover?
+    session[:role] == "rover"
   end
 
-  def is_admin?(user)
-    user.membership.present?
+  def is_admin?
+    session[:role] == "developer" || session[:role] == "admin"
   end
 
   def choose_buildings_for_zone

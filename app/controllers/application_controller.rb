@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
   # rescue_from Exception, with: :render_500
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
   include ApplicationHelper
 
@@ -22,9 +21,9 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if $baseURL.present?
       $baseURL
-    elsif session[:user_memberships].present?
+    elsif session[:role] == "developer" || session[:role] == "admin"
       dashboard_path
-    elsif is_rover?(resource)
+    elsif session[:role] == "rover"
       welcome_rovers_path
     else
       root_path
@@ -52,6 +51,10 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
     redirect_to(url, anchor: "top" || default)
   end
+  
+  def pundit_user
+    { user: current_user, role: session[:role] }
+  end
 
   def render_404
     respond_to do |format|
@@ -68,14 +71,4 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  private
-
-    def set_membership
-      if user_signed_in?
-        current_user.membership = session[:user_memberships]
-        current_user.admin = session[:user_admin]
-      else
-        new_user_session_path
-      end
-    end
 end

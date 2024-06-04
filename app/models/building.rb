@@ -20,4 +20,8 @@ class Building < ApplicationRecord
 
   # validates :bldrecnbr, :name, :address, :city, :state, :zip, presence: true
   validates :bldrecnbr, uniqueness: true, presence: true
+
+  def full_address
+    "#{address}, #{city}, #{state} #{zip}"
+  end
 end
