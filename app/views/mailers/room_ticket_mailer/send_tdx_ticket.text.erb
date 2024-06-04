@@ -1,1 +1,10 @@
-<%= strip_tags(@message) %>
+Message: <%= strip_tags(@message) %>
+
+Room Number: <%= @room %>
+
+Submitted by: <%= @submitter %>
+
+Thank you,
+the Room Ready team
+
+For further questions, you can email the submitter at <%= @submitter + "@umich.edu" %> or call the Room Ready office at: ENTER PHONE NUMBER HERE.

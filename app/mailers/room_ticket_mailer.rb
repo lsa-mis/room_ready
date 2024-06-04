@@ -1,7 +1,7 @@
 class RoomTicketMailer < ApplicationMailer
   def send_tdx_ticket
     @message = params[:message]
-    @submitted_by = params[:submitter]
+    @submitter = params[:submitter]
     @room = params[:room_id]
     @date = params[:date]
 
