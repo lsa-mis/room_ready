@@ -1,16 +1,12 @@
 class Floors::RoomsController < ApplicationController
   before_action :auth_user
   before_action :set_building_and_floor
-  before_action :set_room, only: %i[ edit update destroy ]
+  before_action :set_room, only: %i[ destroy ]
 
   # GET /rooms/new
   def new
     @room = Room.new
     authorize @room
-  end
-
-  # GET /rooms/1/edit
-  def edit
   end
 
   # POST /rooms or /rooms.json
@@ -25,19 +21,6 @@ class Floors::RoomsController < ApplicationController
         format.json { render :show, status: :created, location: @room }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /rooms/1 or /rooms/1.json
-  def update
-    respond_to do |format|
-      if @room.update(room_params)
-        format.html { redirect_to room_url(@room), notice: "Room was successfully updated." }
-        format.json { render :show, status: :ok, location: @room }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @room.errors, status: :unprocessable_entity }
       end
     end

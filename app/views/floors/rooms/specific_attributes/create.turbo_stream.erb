@@ -1,5 +1,0 @@
-<%= turbo_stream.update 'new_specific_attribute_form' do %>
-  <%= render 'form', specific_attribute: @new_specific_attribute %>
-<% end %>
-<%= turbo_stream.append 'specific_attributes', @specific_attribute %>
-<%= turbo_stream.update 'flash', partial: 'layouts/flash' %>
