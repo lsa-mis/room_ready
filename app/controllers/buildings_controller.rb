@@ -10,6 +10,9 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1 or /buildings/1.json
   def show
+    floors = @building.floors
+    floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
+    @floors = floors.in_order_of(:name, floor_names_sorted)
   end
 
   # GET /buildings/new
@@ -21,6 +24,7 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1/edit
   def edit
+    session[:return_to] = request.referer
     @zones = Zone.all.pluck(:name, :id)
   end
 
@@ -41,14 +45,12 @@ class BuildingsController < ApplicationController
 
   # PATCH/PUT /buildings/1 or /buildings/1.json
   def update
-    @zone = Zone.find(params[:zone_id])
+    # @zone = Zone.find(params[:zone_id])
     respond_to do |format|
       if @building.update(building_params)
-        fail
-        format.html { redirect_to zone_buildings_path(@zone,@building), notice: "building was successfully updated." }
+        format.html { redirect_to buildings_path(@building), notice: "building was successfully updated." }
         format.json { render :show, status: :ok, location: @building }
       else
-        fail
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @building.errors, status: :unprocessable_entity }
       end
