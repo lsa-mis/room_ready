@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
     redirect_to(url, anchor: "top" || default)
   end
-  
+
   def pundit_user
     { user: current_user, role: session[:role] }
   end

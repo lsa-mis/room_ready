@@ -25,6 +25,8 @@ class RoomsController < ApplicationController
   # GET /rooms/1/edit
   def edit
     session[:return_to] = request.referer
+    @building = Building.find(params[:building_id])
+    @floor = Floor.find(params[:floor_id])
     @floors = @room.floor.building.floors.pluck(:name, :id)
   end
 
@@ -37,11 +39,9 @@ class RoomsController < ApplicationController
     authorize @room
     respond_to do |format|
       if @room.save
-        fail
         format.html { redirect_to building_path(@building), notice: "Room was successfully created." }
         format.json { render :show, status: :created, location: @room }
       else
-        fail
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @room.errors, status: :unprocessable_entity }
       end

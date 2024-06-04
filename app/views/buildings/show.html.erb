@@ -50,7 +50,7 @@
                       <%end%>
                     </td>
                     <td class="building_tbody_td">
-                      <%= link_to edit_room_path(room), data: { turbo_frame: "_top" } do%>
+                      <%= link_to edit_room_path(room, :building_id => @building.id, :floor_id => floor.id), data: { turbo_frame: "_top" } do%>
                       <i class="bi bi-pencil-square text-primary"></i>
                       <%end%>
                     </td>

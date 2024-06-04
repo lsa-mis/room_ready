@@ -26,6 +26,9 @@
     <%= form.text_field :room_type, required: true %>
   </div>
 
+  <%= hidden_field_tag 'building_id', @building.id %>
+  <%= hidden_field_tag 'floor_id', @floor.id %>
+
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit "Submit", class: "btn btn-primary" %>
     <%= link_to 'Cancel', building_path(@building) %>
