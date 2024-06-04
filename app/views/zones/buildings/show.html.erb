@@ -26,6 +26,7 @@
             <table class="table text-center">
               <thead class="table-group-divider">
                 <tr>
+                  <th>Room Record Number</th>
                   <th>Number</th>
                   <td>View</td>
                   <td>Edit</td>
@@ -35,6 +36,10 @@
               <tbody class="table-group-divider">
                 <% floor.rooms.order(:room_number).each do |room| %>
                   <tr class="building_tbody_tr">
+                    <td class="building_tbody_td">
+                      <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
+                      <%= room.rmrecnbr %>
+                    </td>
                     <td class="building_tbody_td">
                       <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
                       <%= room.room_number %>
