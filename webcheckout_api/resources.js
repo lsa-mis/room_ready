@@ -14,12 +14,10 @@ try {
   console.error(err);
 }
 
-const location_oids = locations.split(" ")
+const location_oids = locations.split(" ").map(str => parseInt(str, 10));
 
-let promises = [];
-
-const createResourcesFile = function(oid) {
-  axios.request({
+async function start_session() {
+  return axios.request({
     method: "POST",
     url: host + "/rest/session/start",
     headers: {
@@ -29,66 +27,65 @@ const createResourcesFile = function(oid) {
       "userid": userid,
       "password": password
     }
-  }).then(response => {
-    sessionToken = response.data.sessionToken;
-    console.log(oid)
-    promises.push(
-      axios.request({
-        method: "POST",
-        url: host + "/rest/resource/search",
-        headers: {
-          "Authorization": "Bearer " + sessionToken
-        },
-        data: {
-          "query": {
-            "and":{
-              "homeLocation":{
-                "_class":"resource",
-                "oid": oid
-              }
-            }
-          },
-          "properties":["resourceType"],
-        },
-      }).then(response => {
-        payload = response.data.payload;
-        // console.log(payload)
-        // console.log(oid)
-        if (payload.count > 0) {
-          for (item of payload["result"]) {
-            fs.appendFileSync('webcheckout_api/files/resources.txt', + oid + ';;' + item.name + ';;' + item.resourceType.name + '\n', function(err){
-              if(err)
-                return err;
-            })
-          }
-        }
-      })
-    )
-    
-  }).then(() => {
-    // log out of the API.
-    axios.request({
-      method: "POST",
-      url: host + "/rest/session/logout",
-      headers: {
-        "Authorization": "Bearer" + sessionToken
-      }
-    })
-  }).catch(error => {
-    console.error(error);
-  })
+  });
 }
 
-async function processOidsSequentially() {
-  for (const oid_s of location_oids) {
-    const oid = parseInt(oid_s);
+async function get_resources(oid) {
+  return axios.request({
+    method: "POST",
+    url: host + "/rest/resource/search",
+    headers: {
+      "Authorization": "Bearer " + sessionToken
+    },
+    data: {
+      "query": {
+        "and":{
+          "homeLocation":{
+            "_class":"resource",
+            "oid": oid
+          }
+        }
+      },
+      "properties":["resourceType"],
+    }
+  });
+}
+
+function write_resources_to_file(oid, resources) {
+  for (item of resources["result"]) {
+    fs.appendFileSync('webcheckout_api/files/resources.txt', + oid + ';;' + item.name + ';;' + item.resourceType.name + '\n', function(err){
+      if(err)
+        return err;
+    });
+  }
+}
+
+async function end_session() {
+  axios.request({
+    method: "POST",
+    url: host + "/rest/session/logout",
+    headers: {
+      "Authorization": "Bearer" + sessionToken
+    }
+  });
+}
+
+async function main() {
+  ({ data: { sessionToken } } = await start_session());
+
+  for (const oid of location_oids) {
+    console.log(oid)
     try {
-      await createResourcesFile(oid);
-      await new Promise(resolve => setTimeout(resolve, 500)); // Add a delay
+      const { data: { payload } } = await get_resources(oid);
+      if (payload.count > 0) write_resources_to_file(oid, payload);
     } catch (error) {
       console.error('Error updating resources for oid', oid, ':', error);
     }
   }
+
+  await end_session();
 }
 
-processOidsSequentially();
+main().catch(error => {
+  console.error('Error:', error);
+});
