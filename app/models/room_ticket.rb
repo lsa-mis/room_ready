@@ -11,16 +11,8 @@
 #  updated_at   :datetime         not null
 #
 class RoomTicket < ApplicationRecord
+  belongs_to :room
   has_rich_text :description
   validates :description, presence: true
   validates :room_id, presence: true
-  validate  :room_number_must_exist
-
-  private
-
-  def room_number_must_exist
-    unless Room.exists?(room_number: self.room_id)
-      errors.add(:room, 'must exist')
-    end
-  end
 end

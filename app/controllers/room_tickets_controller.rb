@@ -70,7 +70,6 @@ class RoomTicketsController < ApplicationController
     RoomTicketMailer.with(date: date, room_id: room_id, message: message, submitter: submitter).send_tdx_ticket.deliver_now
     
     @room_ticket = RoomTicket.new(@email_params)
-    @all_rooms = Room.all
     authorize @room_ticket
 
     respond_to do |format|
