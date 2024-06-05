@@ -8,12 +8,12 @@
     <br />
     Room Number: <b><%= @room %></b>
     <br />
-    Submitted by: <b><%= @submitter %></b>
+    Submitted by (uniqname): <b><%= @submitter.uniqname %></b>
 
     <p>
-      Thank you,<br>the Room Ready team
+      Thank you,<br> <%= @submitter.display_name %>, from the Room Ready team
     </p>
-      For further questions, you can email the submitter at <a href="mailto:<%= @submitter + "@umich.edu" %>"><%= @submitter + "@umich.edu" %></a> or call the Room Ready office at: ENTER PHONE NUMBER HERE.
+      For further questions, you can email me at <a href="mailto:<%= @submitter.email %>"><%= @submitter.email %></a> or call the Room Ready office at: ENTER PHONE NUMBER HERE.
     </p>
   </body>
 </html>
