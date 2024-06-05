@@ -36,21 +36,22 @@ task write_resources_to_db: :environment do
     room = Room.find_by(rmrecnbr: room_rmrecnbr)
     if room.present?
       # hash of resources for the room that exist in db {name => id}
-      resources_in_db = room.resources.map { |r| room_resources[r.name] = r.id }
+      resources_in_db = room.resources.pluck(:name, :id).to_h
+
       room_resources.each do |resource_name, resource_type|
-        if Resource.find_by(room_id: room.id, name: resource_name).present?
+        if resources_in_db.key?(resource_name)
           # wco resource exist in db, delete from array
           resources_in_db.delete(resource_name)
         else
           # create a wco resource that was not present in db
           if type_names.include?(resource_type)
-            Resource.create(room_id: room.id, name: resource_name, resource_type: resource_type)
+            room.resources.create(name: resource_name, resource_type: resource_type)
           end
         end
       end
       if resources_in_db.present?
         # these resoursces are not present in sco any more - delete from db
-        Resource.where(id: room_resources.values).delete_all
+        room.resources.find(resources_in_db.values).delete_all
       end
       # room updated by wco - delete from list
       rooms_to_update.delete(room_rmrecnbr)
@@ -59,7 +60,8 @@ task write_resources_to_db: :environment do
 
   if rooms_to_update.present?
     # these rooms were not updated because they don't eexist in wco
-    list = rooms_to_update.map { |room| Room.find_by(rmrecnbr: room).rmrecnbr }.join(", ")
+    list = Room.where(rmrecnbr: rooms_to_update).pluck(:rmrecnbr).join(", ")
+
     note = "The following rooms don't exist in WebCheCkout database: " + list
     RoomUpdateLog.create(date: Date.today, note: note)
   end 
