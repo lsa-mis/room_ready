@@ -5,10 +5,7 @@
 <div id="room_tickets">
   <% @room_tickets.each do |room_ticket| %>
     <%= render room_ticket %>
-    <p>
-      <%= link_to "Show this room ticket", room_ticket %>
-    </p>
   <% end %>
 </div>
 
-<%= link_to "New room ticket", new_room_ticket_path %>
+<%= link_to "New room ticket", new_room_room_ticket_path %>

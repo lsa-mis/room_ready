@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
   resources :room_states
-  resources :room_tickets
   resources :rovers
   
   resources :zones do
@@ -22,6 +21,7 @@ Rails.application.routes.draw do
   resources :resources
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
+    resources :room_tickets, module: :rooms
   end
   resources :floors
   resources :buildings
@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
   get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
-  get '/send_email_for_tdx_ticket/', to: 'room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
+  get '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
