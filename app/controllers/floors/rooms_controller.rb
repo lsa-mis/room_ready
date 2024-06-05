@@ -11,6 +11,7 @@ class Floors::RoomsController < ApplicationController
 
   # POST /rooms or /rooms.json
   def create
+    fail
     @room = Room.new(room_params)
     @room.floor_id = params[:floor_id]
     authorize @room

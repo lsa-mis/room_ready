@@ -1,0 +1,5 @@
+<%= render_flash_stream %>
+
+<%= turbo_stream.update "new_room" do %>
+  <%= render "form", room: @room %>
+<% end %>

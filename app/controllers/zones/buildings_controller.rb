@@ -116,7 +116,7 @@ class Zones::BuildingsController < ApplicationController
     end
 
     def add_classrooms_for_building(bldrecnbr)
-      result = get_classromms_for_building(bldrecnbr)
+      result = get_classrooms_for_building(bldrecnbr)
       if result['data'].present?
         rooms_data = result['data']
         rooms_data.each do |row|

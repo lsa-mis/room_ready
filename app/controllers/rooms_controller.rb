@@ -1,6 +1,7 @@
 class RoomsController < ApplicationController
   before_action :auth_user
   before_action :set_room, only: %i[ show edit update destroy ]
+  include BuildingApi
 
   # GET /rooms or /rooms.json
   def index
@@ -18,7 +19,6 @@ class RoomsController < ApplicationController
   def new
     @room = Room.new
     @building = Building.find(params[:building_id])
-    @floor = Floor.find(params[:floor_id])
     authorize @room
   end
 
@@ -33,18 +33,28 @@ class RoomsController < ApplicationController
   # POST /rooms or /rooms.json
   def create
     @building = Building.find(params[:building_id])
-    @floor = Floor.find(params[:floor_id])
-    @room = Room.new(room_params)
-    @room.floor_id = params[:floor_id]
+    rmrecnbr = params[:rmrecnbr]
+    @room = Room.new(rmrecnbr: rmrecnbr)
     authorize @room
-    respond_to do |format|
-      if @room.save
-        format.html { redirect_to building_path(@building), notice: "Room was successfully created." }
-        format.json { render :show, status: :created, location: @room }
+    bldrecnbr = @building.bldrecnbr
+    result = get_room_info_by_rmrecnbr(bldrecnbr, rmrecnbr)
+    if result['success']
+      room_data = result['data']
+      if Floor.find_by(name: room_data["FloorNumber"], building: @building).present?
+        @floor = Floor.find_by(name: room_data["FloorNumber"], building: @building)
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
+       @floor = Floor.new(name: room_data["FloorNumber"], building: @building)
+       @floor.save
       end
+      @room = Room.new(rmrecnbr: room_data["RoomRecordNumber"], room_number: room_data["RoomNumber"], room_type: room_data["RoomTypeDescription"], floor: @floor)
+      authorize @room
+      if @room.save
+        redirect_to building_path(@building), notice: "Room was successfully created."
+      else
+        render :new, status: :unprocessable_entity
+      end
+    else
+      flash.now[:alert] = result['error']
     end
   end
 

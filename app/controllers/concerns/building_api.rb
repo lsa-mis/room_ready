@@ -37,7 +37,7 @@ module BuildingApi
     return result
   end
 
-  def get_classromms_for_building(bldrecnbr)
+  def get_classrooms_for_building(bldrecnbr)
     begin
       token = get_auth_token("buildings")
       if token['success']
@@ -85,6 +85,64 @@ module BuildingApi
     rescue StandardError => e
         result['errorcode'] = "Exception"
         result['error'] = e.message
+    end
+    return result
+  end
+
+  def get_room_info_by_rmrecnbr(bldrecnbr, rmrecnbr)
+    begin
+      token = get_auth_token("buildings")
+      if token['success']
+        result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+        start_index = 0
+        count = 1000
+        next_page = true
+        while next_page do
+
+          url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{bldrecnbr}?$start_index=#{start_index}&$count=#{count}")
+          http = Net::HTTP.new(url.host, url.port)
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+          request = Net::HTTP::Get.new(url)
+          request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
+          request["authorization"] = "Bearer #{token['access_token']}"
+          request["accept"] = 'application/json'
+
+          response = http.request(request)
+          link = response.to_hash["link"].to_s
+          if link.include? "rel=next"
+            start_index += count
+          else
+            next_page = false
+          end
+          response_json = JSON.parse(response.read_body)
+          if response.code == "200"
+            result['success'] = true
+            if response_json['ListOfRooms'].present?
+              response_json['ListOfRooms']['RoomData'].each do |room|
+                if room["RoomRecordNumber"] == rmrecnbr
+                  result['data'] = room
+                  return result
+                end
+              end
+            end
+          elsif response_json['errorCode'].present?
+            result['errorcode'] = response_json['errorCode']
+            result['error'] = response_json['errorMessage']
+          else 
+            result['errorcode'] = "Unknown error"
+          end
+        end
+      else
+      end
+    rescue StandardError => e
+      result['errorcode'] = "Exception"
+      result['error'] = e.message
+    end
+    unless result['data'].present?
+      result['success'] = false
+      result['error'] = "Room record number " + rmrecnbr + " is not valid. "
     end
     return result
   end

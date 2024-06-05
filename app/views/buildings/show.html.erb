@@ -17,7 +17,7 @@
             Rooms on the floor <%= floor.name %> 
           </button>
         </h2>
-        <%= link_to "Add New Room", new_room_path(:building_id => @building.id, :floor_id => floor.id), class: "cancel-button" %>
+        <%= link_to "Add New Room", new_room_path(:building_id => @building.id), class: "cancel-button" %>
       </div>
       
       <div id="collapse_<%= floor.id %>" class="accordion-collapse collapse" data-bs-parent="#buildingFloors">
