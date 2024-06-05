@@ -23,3 +23,4 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
       is_rover?
     end
   end
+  

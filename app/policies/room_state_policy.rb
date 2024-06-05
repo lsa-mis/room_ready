@@ -27,3 +27,4 @@ class RoomStatePolicy < ApplicationPolicy
       is_rover?
     end
   end
+  
