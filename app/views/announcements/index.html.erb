@@ -1,14 +1,26 @@
-<p style="color: green"><%= notice %></p>
-
 <h1>Announcements</h1>
-
-<div id="announcements">
+<div class="row row-cols-1 row-cols-md-3">
   <% @announcements.each do |announcement| %>
-    <%= render announcement %>
-    <p>
-      <%= link_to "Show this announcement", announcement %>
-    </p>
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <%= announcement.location.titleize %> Announcement
+        </div>
+        <div class="card-body">
+          <div class="card-text mb-4">
+            <%= announcement.content %>
+          </div>
+          <div>
+            <%= link_to 'Edit', edit_announcement_path(announcement), class:"btn btn-primary" %>
+            <%= link_to 'Preview', rooms_path, class:"btn btn-primary" if announcement.location == "rooms_page"%>
+            <%= link_to 'Preview', app_preferences_path, class:"btn btn-primary" if announcement.location == "preference_page"%>
+            <%= link_to 'Preview', static_pages_about_path, class:"btn btn-primary" if announcement.location == "about_page"%>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          Last Time Updated: <%= show_date_with_month_name(announcement.updated_at) %>
+        </div>
+      </div>
+    </div>
   <% end %>
 </div>
-
-<%= link_to "New announcement", new_announcement_path %>

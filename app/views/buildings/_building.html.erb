@@ -1,4 +1,5 @@
 <div id="<%= dom_id building %>">
+
   <p>
     <strong>Bldrecnbr:</strong>
     <%= building.bldrecnbr %>
@@ -16,22 +17,17 @@
   
   <p>
     <strong>Address:</strong>
-    <%= building.address %>
+    <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}"%>
+  </p>
+  
+  <p>
+    <strong>Zone ID:</strong>
+    <%= building.zone_id %>
   </p>
 
   <p>
-    <strong>City:</strong>
-    <%= building.city %>
-  </p>
-
-  <p>
-    <strong>State:</strong>
-    <%= building.state %>
-  </p>
-
-  <p>
-    <strong>Zip:</strong>
-    <%= building.zip %>
+    <strong>ID:</strong>
+    <%= building.id %>
   </p>
 
 </div>

@@ -13,30 +13,30 @@
     </div>
   <% end %>
 
-  <div class="mb-3 row">
-    <%= form.label :name,  "Name *", class: "col-sm-2 col-form-label", style: "display: block" %>
-    <div class="col-sm-10">
-      <%= form.text_field :name, required: true  %>
-      </div>
+  <div class="mb-3"> 
+    <%= form.label :name,  "Name *", class: "form-label" %>
+
+    <%= form.text_field :name, class: "form-control form-control-sm", required: true  %>
+  </div>
+    
+  <div class="mb-3">
+    <%= form.label :description, "Description *", class: "form-label" %>
+
+    <%= form.text_field :description, class: "form-control form-control-sm", required: true  %>
   </div>
 
-  <div class="mb-3 row">
-    <%= form.label :description, "Description *", class: "col-sm-2 col-form-label", style: "display: block" %>
-    <div class="col-sm-10">
-      <%= form.text_field :description, required: true  %>
-      </div>
+  <div class="mb-3">
+    <%= form.label :pref_type, "Type *", class: "form-label" %>
+
+    <%= form.select :pref_type,  @pref_types, { include_blank: "Select ...", required: true }, { class: "input_text_field" } %>
   </div>
 
-  <div class="mb-3 row">
-    <%= form.label :pref_type, "Type *", class: "col-sm-2 col-form-label", style: "display: block" %>
-    <div class="col-sm-10">
-      <%= form.select :pref_type,  @pref_types, { include_blank: "Select ...", required: true }, { class: "input_text_field" } %>
-      
-  </div>
 
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-      <%= form.submit "Submit", class: "btn btn-primary" %>
+      <%= form.submit app_preference.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
-      <%= link_to "Cancel", app_preferences_path, class: "text-primary" %>
+      <% if app_preference.persisted? %>
+        <%= link_to "Cancel", app_preferences_path, class: "text-primary cancel-button" %>
+      <% end %>
   </div>
 <% end %>

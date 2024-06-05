@@ -1,7 +1,7 @@
 <div class="mx-auto w-100">
   <div class="px-5 py-3">
     <h1>Configure App Preferences</h1>
-    <%= form_tag save_configured_prefs_path, method: :post do %>
+    <%= form_tag save_configured_prefs_app_preferences_path, method: :post do %>
       <% @configure_prefs.each do |pref| %>
         <%= fields_for 'configure_prefs[]' do %>
           <div>

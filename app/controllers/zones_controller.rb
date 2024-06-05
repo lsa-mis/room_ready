@@ -41,7 +41,7 @@ class ZonesController < ApplicationController
   def update
     respond_to do |format|
       if @zone.update(zone_params)
-        format.html { redirect_to zone_url(@zone), notice: "Zone was successfully updated." }
+        format.html { redirect_to zones_path, notice: "Zone was successfully updated." }
         format.json { render :show, status: :ok, location: @zone }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,10 +52,11 @@ class ZonesController < ApplicationController
 
   # DELETE /zones/1 or /zones/1.json
   def destroy
+    @zone.buildings.delete_all
     @zone.destroy!
 
     respond_to do |format|
-      format.html { redirect_to zones_url, notice: "Zone was successfully destroyed." }
+      format.html { redirect_to zones_url, notice: "Zone was successfully deleted." }
       format.json { head :no_content }
     end
   end

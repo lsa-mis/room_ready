@@ -4,8 +4,12 @@ class StaticPagePolicy < ApplicationPolicy
     true
   end
 
-  def home?
-    user_in_admin_group?
+  def dashboard?
+    is_admin?
+  end
+
+  def welcome_rovers?
+    is_rover?
   end
 
 end

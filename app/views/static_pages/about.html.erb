@@ -1,4 +1,9 @@
 <div class="container">
+<div>
+  <% unless @about_page_announcement.nil? %>
+    <%= @about_page_announcement.content %>
+  <% end %>
+</div>
   <div class="row">
     <div class="col-md-8 col-lg-6 w-100">
       <!-- Heading -->

@@ -1,0 +1,33 @@
+<div id="<%= dom_id building %>">
+
+  <p>
+    <strong>Bldrecnbr:</strong>
+    <%= building.bldrecnbr %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= building.name %>
+  </p>
+
+  <p>
+    <strong>Nick name:</strong>
+    <%= building.nick_name %>
+  </p>
+  
+  <p>
+    <strong>Address:</strong>
+    <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}"%>
+  </p>
+  
+  <p>
+    <strong>Zone:</strong>
+    <%= building.zone.name %>
+  </p>
+
+  <p>
+    <strong>ID:</strong>
+    <%= building.id %>
+  </p>
+
+</div>

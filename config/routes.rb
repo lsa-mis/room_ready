@@ -1,20 +1,25 @@
 Rails.application.routes.draw do
 
-  get 'app_preferences/configure_prefs', to: 'app_preferences#configure_prefs', as: :configure_prefs
-  post 'app_preferences/save_configured_prefs', to: 'app_preferences#save_configured_prefs', as: 'save_configured_prefs'
-  
-  resources :app_preferences
-
-
-  resources :announcements
+  resources :app_preferences, except: [:show] do
+    collection do
+      get 'configure_prefs'
+      post 'save_configured_prefs'
+    end
+  end
+  resources :announcements, only: [ :index, :show, :edit, :update ]
   resources :resource_states
   resources :specific_attribute_states
-  resources :common_attribute_states
+  resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
   resources :room_states
   resources :room_tickets
   resources :rovers
-  resources :zones
+  
+  resources :zones do
+    resources :buildings, module: :zones
+  end
+  delete 'zones/buildings/:zone_id/:id', to: 'zones/buildings#remove_building', as: :remove_building
+
 
   resources :resources
   resources :rooms do
@@ -27,6 +32,14 @@ Rails.application.routes.draw do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
 
+  resource :rover_navigation, only: [] do
+    member do
+      get 'zones'
+      get 'buildings'
+      get 'rooms'
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -35,11 +48,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'static_pages#about'
+  root to: 'static_pages#about', as: :all_root
 
   get 'static_pages/about'
-
-  get 'home', to: 'static_pages#home', as: :home
+  get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
+  get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 

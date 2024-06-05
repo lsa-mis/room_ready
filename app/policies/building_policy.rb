@@ -1,14 +1,14 @@
 class BuildingPolicy < ApplicationPolicy
   def index?
-    user_in_admin_group? || is_rover?
+    is_admin? || is_rover?
   end
 
   def show?
-    user_in_admin_group? || is_rover?
+    is_admin? || is_rover?
   end
 
   def create?
-    user_in_admin_group?
+    is_admin?
   end
 
   def new?
@@ -16,7 +16,7 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def update?
-    user_in_admin_group?
+    is_admin?
   end
   
   def edit?
@@ -24,6 +24,6 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user_in_admin_group?
+    is_admin?
   end
 end
