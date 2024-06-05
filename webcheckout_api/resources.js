@@ -8,7 +8,7 @@ let sessionToken = "Bearer Requested"
 const fs = require('node:fs');
 
 try {
-  locations = fs.readFileSync('files/locations_oids.txt', 'utf8');
+  locations = fs.readFileSync('webcheckout_api/files/locations_oids.txt', 'utf8');
   console.log(locations);
 } catch (err) {
   console.error(err);
@@ -56,7 +56,7 @@ const createResourcesFile = function(oid) {
         // console.log(oid)
         if (payload.count > 0) {
           for (item of payload["result"]) {
-            fs.appendFileSync('files/resources.txt', + oid + ';;' + item.name + ';;' + item.resourceType.name + '\n', function(err){
+            fs.appendFileSync('webcheckout_api/files/resources.txt', + oid + ';;' + item.name + ';;' + item.resourceType.name + '\n', function(err){
               if(err)
                 return err;
             })
