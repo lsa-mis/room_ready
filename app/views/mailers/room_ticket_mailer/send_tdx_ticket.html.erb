@@ -6,7 +6,9 @@
   <body>
     Message: <b><%= raw(@message) %></b>
     <br />
-    Room Number: <b><%= @room %></b>
+    Room Number: <b><%= @room.room_number %></b>
+    <br />
+    Building: <b><%= @building.name %></b>
     <br />
     Submitted by (uniqname): <b><%= @submitter.uniqname %></b>
 

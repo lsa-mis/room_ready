@@ -1,6 +1,8 @@
 Message: <%= strip_tags(@message) %>
 
-Room Number: <%= @room %>
+Room Number: <%= @room.room_number %>
+
+Building: <%= @building.name %>
 
 Submitted by (uniqname): <%= @submitter.uniqname %>
 
