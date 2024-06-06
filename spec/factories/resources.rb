@@ -13,6 +13,6 @@ FactoryBot.define do
   factory :resource do
     name { Faker::Name.name }
     resource_type { "MyString" }
-    room { nil }
+    association :room
   end
 end

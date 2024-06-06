@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  get 'app_preferences/configure_prefs', to: 'app_preferences#configure_prefs', as: :configure_prefs
-  post 'app_preferences/save_configured_prefs', to: 'app_preferences#save_configured_prefs', as: 'save_configured_prefs'
-  
-  resources :app_preferences
+  resources :app_preferences, except: [:show] do
+    collection do
+      get 'configure_prefs'
+      post 'save_configured_prefs'
+    end
+  end
   resources :announcements, only: [ :index, :show, :edit, :update ]
   resources :resource_states
   resources :specific_attribute_states
@@ -27,6 +29,14 @@ Rails.application.routes.draw do
   resources :buildings
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
+  end
+
+  resource :rover_navigation, only: [] do
+    member do
+      get 'zones'
+      get 'buildings'
+      get 'rooms'
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

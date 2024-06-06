@@ -42,14 +42,15 @@ def set_user
   if @user
     session[:user_email] = @user.email
 
-    membership = []
-    access_groups = ['lsa-roomready-admins', 'lsa-roomready-developers']
-    access_groups.each do |group|
-      if  LdapLookup.is_member_of_group?(@user.uniqname, group)
-        membership.append(group)
-      end
+    if LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-developers')
+      session[:role] = "developer"
+    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-admins')
+      session[:role] = "admin"
+    elsif  Rover.exists?(uniqname: @user.uniqname)
+      session[:role] = "rover"
+    else
+      session[:role] = "none"
     end
-    session[:user_memberships] = membership
   end
 end
 
