@@ -1,6 +1,5 @@
 class WebcheckoutApi
-  def initialize(scope)
-    @scope = scope
+  def initialize
     @returned_data = {'success' => false, 'error' => '', 'access_token' => nil}
     @user_id = ENV['WEBCHECKOUT_USERID']
     @password = ENV['WEBCHECKOUT_PASSWORD']
