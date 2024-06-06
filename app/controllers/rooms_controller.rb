@@ -5,7 +5,7 @@ class RoomsController < ApplicationController
 
   # GET /rooms or /rooms.json
   def index
-    @rooms = Room.all
+    @rooms = Room.all.order(:room_number)
     @rooms_page_announcement = Announcement.find_by(location: "rooms_page")
     authorize @rooms
   end
@@ -33,7 +33,7 @@ class RoomsController < ApplicationController
   # POST /rooms or /rooms.json
   def create
     @building = Building.find(params[:building_id])
-    rmrecnbr = params[:rmrecnbr]
+    rmrecnbr = room_params[:rmrecnbr]
     @room = Room.new(rmrecnbr: rmrecnbr)
     authorize @room
     bldrecnbr = @building.bldrecnbr
@@ -55,6 +55,7 @@ class RoomsController < ApplicationController
       end
     else
       flash.now[:alert] = result['error']
+      render :new, status: :unprocessable_entity
     end
   end
 

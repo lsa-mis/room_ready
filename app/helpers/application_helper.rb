@@ -95,4 +95,12 @@ module ApplicationHelper
     Building.where(zone: nil).order(:name)
   end
 
+  def show_zone(building)
+    if building.zone.present?
+      building.zone.name
+    else
+      ""
+    end
+  end
+
 end

@@ -6,9 +6,10 @@
         <th>Name</th>
         <th>Nick name</th>
         <th>Address</th>
-        <td>View</td>
-        <td>Edit</td>
-        <td>Remove</td>
+        <th>Zone</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Remove</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -24,22 +25,26 @@
             <%= building.nick_name %>
           </td>
           <td class="building_tbody_td">
-            <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}"%>
+            <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}" %>
+          </td>
+          </td>
+          <td class="building_tbody_td">
+            <%= show_zone(building) %>
           </td>
           <td class="building_tbody_td">
             <%= link_to building_path(building), data: { turbo_frame: "_top" } do%>
             <i class="bi bi-eye-fill text-primary"></i>
-            <%end%>
+            <% end %>
           </td>
           <td class="building_tbody_td">
-            <%= link_to edit_building_path(building), data: { turbo_frame: "_top" } do%>
+            <%= link_to edit_building_path(building), data: { turbo_frame: "_top" } do %>
             <i class="bi bi-pencil-square text-primary"></i>
-            <%end%>
+            <% end %>
           </td>
           <td class="building_tbody_td">
-            <%= link_to building_path(building), data: { turbo_confirm: 'Are you sure you want to remove this building?', turbo_method: :delete} do %>
+            <%= link_to "#" do %>
             <i class="bi bi-trash-fill text-danger"></i>
-            <%end%>
+            <% end %>
           </td>
         </tr>
       <% end %>

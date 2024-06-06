@@ -20,8 +20,12 @@ module BuildingApi
         response = http.request(request)
         response_json = JSON.parse(response.read_body)
         if response.code == "200"
-          result['success'] = true
-          result['data'] = response_json['ListOfBldgs']['Buildings']
+          if response_json['ListOfBldgs'].present?
+            result['success'] = true
+            result['data'] = response_json['ListOfBldgs']['Buildings']
+          else
+            result['error'] = "Building record number " + bldrecnbr + " is not valid. "
+          end
         elsif response_json['errorCode'].present?
           result['errorcode'] = response_json['errorCode']
           result['error'] = response_json['errorMessage']
