@@ -9,59 +9,69 @@ const fs = require('node:fs');
 var rooms = ""
 
 try {
-  rooms = fs.readFileSync('files/room_rmrecnbr.txt', 'utf8');
+  rooms = fs.readFileSync('webcheckout_api/files/room_rmrecnbr.txt', 'utf8');
 } catch (err) {
   console.error(err);
 }
 
 const r = rooms.split(" ")
 
-axios.request({
-  method: "POST",
-  url: host + "/rest/session/start",
-  headers: {
-    "Authorization": sessionToken
-  },
-  data: {
-    "userid": userid,
-    "password": password
-  }
-  }).then(response => {
-    sessionToken = response.data.sessionToken;
-    return axios.request({
-      method: "POST",
-      url: host + "/rest/resource/search",
-      headers: {
-        "Authorization": "Bearer " + sessionToken
-      },
-      data: {
-        //  1
-        "query": {
-          barcode: r
-        }
-      }
-    })
-  }).then(response => {
-    payload = response.data.payload;
-    var location_oids = ""
-    // console.log(payload)
-    for (item of payload["result"]) {
-      // console.log("item")
-      // console.log(item.oid)
-      location_oids += item.oid + " "
-      // console.log(location_oids)
-      fs.writeFileSync('files/locations_oids.txt', location_oids);
-      fs.appendFileSync('files/room_location.txt', + item.barcode + ' ' + item.oid + '\n')
+async function start_session() {
+  return axios.request({
+    method: "POST",
+    url: host + "/rest/session/start",
+    headers: {
+      "Authorization": sessionToken
+    },
+    data: {
+      "userid": userid,
+      "password": password
     }
-  }).then(() => {
-    // log out of the API.
-    axios.request({
-      method: "POST",
-      url: host + "/rest/session/logout",
-      headers: {
-        "Authorization": "Bearer" + sessionToken
+  });
+}
+
+async function get_location_oids() {
+  return axios.request({
+    method: "POST",
+    url: host + "/rest/resource/search",
+    headers: {
+      "Authorization": "Bearer " + sessionToken
+    },
+    data: {
+      "query": {
+        barcode: r
       }
-    })
-  }).catch(error => {
-    console.error(error);
+    }
+  })
+}
+
+function write_get_location_oids_to_file(oids) {
+  console.log(oids)
+  const location_oids = oids.map(item => item.oid).join(' ');
+  const roomLocationData = oids.map(item => `${item.barcode} ${item.oid}`).join('\n');
+  fs.writeFileSync('webcheckout_api/files/locations_oids.txt', location_oids);
+  fs.appendFileSync('webcheckout_api/files/room_location.txt', roomLocationData)
+}
+
+async function end_session() {
+  axios.request({
+    method: "POST",
+    url: host + "/rest/session/logout",
+    headers: {
+      "Authorization": "Bearer" + sessionToken
+    }
+  });
+}
+
+async function main() {
+  ({ data: { sessionToken } } = await start_session());
+
+  const { data: { payload: { result } } } = await get_location_oids();
+  write_get_location_oids_to_file(result);
+
+  await end_session();
+}
+
+main().catch(error => {
+  console.error('Error:', error);
 });
