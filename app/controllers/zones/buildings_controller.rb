@@ -1,6 +1,6 @@
 class Zones::BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ remove_building show ]
+  before_action :set_building, only: %i[ remove_building ]
   before_action :set_zone
   include BuildingApi
 

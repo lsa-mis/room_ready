@@ -1,7 +1,7 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ show edit update ]
-  before_action :set_zone, only: %i[ new create edit update ]
+  before_action :set_zone, only: %i[ new show create edit update ]
   include BuildingApi
 
   def index
