@@ -1,11 +1,12 @@
 <div class="d-flex justify-content-between align-items-center">
   <h1>Building Details</h1>
-  <div class="">
+  <div class="d-flex flex-column gap-1 mt-2">
     <% if @zone.present? %>
       <%= link_to "Back to Buildings", zone_buildings_path(@zone), class: "btn btn-primary h-50 mt-auto mb-auto" %>
     <% else %>
       <%= link_to "Back to Buildings", buildings_path, class: "btn btn-primary h-50 mt-auto mb-auto" %>
-    <%end %>
+    <% end %>
+    <%= link_to "Edit Bulding", edit_building_path(@building), class: "btn btn-primary h-50 mt-auto mb-auto" %>
   </div>
 </div>
 <%= render @building %>
