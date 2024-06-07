@@ -20,7 +20,7 @@ class Rooms::RoomTicketsController < ApplicationController
     message = params.require(:room_ticket).permit(:description)[:description]
     submitter = current_user
 
-    @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: submitter )
+    @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: submitter.uniqname )
     authorize @room_ticket
 
     respond_to do |format|
