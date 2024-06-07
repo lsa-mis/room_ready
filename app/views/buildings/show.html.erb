@@ -1,7 +1,11 @@
 <div class="d-flex justify-content-between align-items-center">
   <h1>Building Details</h1>
   <div class="">
-    <%= link_to "Back to Buildings", buildings_path, class: "btn btn-primary h-50 mt-auto mb-auto"  %>
+    <% if @zone.present? %>
+      <%= link_to "Back to Buildings", zone_buildings_path(@zone), class: "btn btn-primary h-50 mt-auto mb-auto" %>
+    <% else %>
+      <%= link_to "Back to Buildings", buildings_path, class: "btn btn-primary h-50 mt-auto mb-auto" %>
+    <%end %>
   </div>
 </div>
 <%= render @building %>
