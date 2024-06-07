@@ -16,17 +16,15 @@ class Rooms::RoomTicketsController < ApplicationController
   end
 
   def send_email_for_tdx_ticket
-    date = Time.now.strftime('%m/%d/%Y')
     message = params.require(:room_ticket).permit(:description)[:description]
     submitter = current_user
-    room = @room
 
-    @room_ticket = RoomTicket.new(description: message, submitted_at: date, room_id: room.id, submitted_by: submitter )
+    @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: submitter )
     authorize @room_ticket
 
     respond_to do |format|
       if @room_ticket.save
-        RoomTicketMailer.with(date: date, room: room, message: message, submitter: submitter).send_tdx_ticket.deliver_now
+        RoomTicketMailer.with(date: @room_ticket.created_at.strftime('%m/%d/%Y'), room: @room, message: message, submitter: submitter).send_tdx_ticket.deliver_now
         format.html { redirect_to room_room_tickets_path, notice: "Room ticket was successfully sent." }
         format.json { render :show, status: :created, location: @room_ticket }
       else
