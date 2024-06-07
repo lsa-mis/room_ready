@@ -1,3 +1,14 @@
+# Rails interface to interact with the Webcheckout API
+#
+# Example Usage:
+#   api = WebcheckoutApi.new(host, userid, password)
+#   api.start_session
+#   payload = api.get_location_oids([2188409, 2188410])
+#   api.end_session
+#
+# Note: Webcheckout 'expires' session tokens after 300s (5min). So make sure
+# any tasks don't exceed that / the session is restarted.
+
 class WebcheckoutApi
   def initialize(host, userid, password)
     @host = host
