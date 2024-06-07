@@ -1,9 +1,8 @@
 class WebcheckoutApi
-  def initialize
-    @returned_data = {'success' => false, 'error' => '', 'access_token' => nil}
-    @user_id = ENV['WEBCHECKOUT_USERID']
-    @password = ENV['WEBCHECKOUT_PASSWORD']
-    @host =  "https://webcheckout.lsa.umich.edu"
+  def initialize(host, userid, password)
+    @host = host
+    @user_id = userid
+    @password = password
     @session_token = 'Bearer Requested'
   end
 
@@ -41,6 +40,11 @@ class WebcheckoutApi
       http.request(request)
     end
 
-    JSON.parse(response.body)
+    response_body = JSON.parse(response.body)
+    if response_body['status'] == 'ok'
+      response_body
+    else
+      raise StandardError, "API request to Webcheckout failed with status [#{response_body['status']}]: #{response_body['payload']['message']}"
+    end
   end
 end
