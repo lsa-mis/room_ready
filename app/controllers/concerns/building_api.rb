@@ -3,10 +3,11 @@ module BuildingApi
   require 'net/http'
 
   def get_building_info_by_bldrecnbr(bldrecnbr)
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     begin
       token = get_auth_token("buildings")
       if token['success']
-        result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+        # result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
         url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfoById/#{bldrecnbr}")
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
@@ -30,12 +31,12 @@ module BuildingApi
           result['errorcode'] = response_json['errorCode']
           result['error'] = response_json['errorMessage']
         else 
-          result['errorcode'] = "Unknown error"
+          result['errorcode'] = "Unknown error "
         end
       else
       end
       rescue StandardError => e
-        result['errorcode'] = "Exception"
+        result['errorcode'] = "Exception "
         result['error'] = e.message
     end
     return result

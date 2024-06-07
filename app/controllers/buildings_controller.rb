@@ -20,18 +20,15 @@ class BuildingsController < ApplicationController
   end
 
   def new
-    # if params[:zone_id].present?
-    #   @zone = Zone.find(params[:zone_id])
-    # end
     @building = Building.new
     @zones = Zone.all
     authorize @building
   end
 
   def create
-    # if building_params[:bldrecnbr].present?
-    #   return add_from_bldrecnbr
-    # end
+    if building_params[:bldrecnbr].present?
+      return add_from_bldrecnbr
+    end
   end
 
   def show
@@ -42,18 +39,12 @@ class BuildingsController < ApplicationController
   end
 
   def edit
-    # if params[:zone_id].present?
-    #   @zone = Zone.find(params[:zone_id])
-    # end
     @zones = Zone.all.map { |z| [z.name, z.id] }
     authorize @building
   end
     
   # PATCH/PUT /buildings/1 or /buildings/1.json
   def update
-    # if params[:zone_id].present?
-    #   @zone = Zone.find(params[:zone_id])
-    # end
     authorize @building
     if @building.update(building_params)
       if @zone.present?
@@ -66,15 +57,6 @@ class BuildingsController < ApplicationController
     end
   end
 
-  # DELETE /buildings/1 or /buildings/1.json
-  # def remove_building
-  #   authorize([@zone, @building])
-  #   if @zone.buildings.delete(@building)
-  #     @buildings = Building.where(zone: @zone)
-  #     flash.now[:notice] = "The building was removed from the zone."
-  #   end
-  #   @building = Building.new
-  # end
 
   private
     # Only allow a list of trusted parameters through.
@@ -92,16 +74,6 @@ class BuildingsController < ApplicationController
         @zone = Zone.find(params[:zone_id])
       end
     end
-
-    # def add_building_from_existing
-    #   @building = Building.find(params[:building_id])
-    #   authorize([@zone, @building]) 
-    #   if @zone.buildings << @building
-    #     @building = Building.new
-    #     @buildings = Building.where(zone: @zone)
-    #     flash.now[:notice] = "The building was added."
-    #   end
-    # end
 
     def add_from_bldrecnbr
       note = ""
@@ -137,7 +109,7 @@ class BuildingsController < ApplicationController
           end
         end
       else
-        flash.now[:alert] = result['error']
+        flash.now[:alert] = result['errorcode'] + result['error']
         render :new, status: :unprocessable_entity
       end
     end
