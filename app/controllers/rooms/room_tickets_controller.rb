@@ -12,6 +12,7 @@ class Rooms::RoomTicketsController < ApplicationController
   # GET /room_tickets/new
   def new
     @room_ticket = RoomTicket.new
+    @building = @room.floor.building
     authorize @room_ticket
   end
 
