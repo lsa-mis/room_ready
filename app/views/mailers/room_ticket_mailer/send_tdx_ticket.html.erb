@@ -4,13 +4,15 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    Message: <b><%= raw(@message) %></b>
-    <br />
     Room Number: <b><%= @room.room_number %></b>
     <br />
     Building: <b><%= @building.name %></b>
     <br />
     Submitted by (uniqname): <b><%= @submitter.uniqname %></b>
+    <br /><br/>
+    Message: <b><%= raw(@message) %></b>
+    
+    
 
     <p>
       Thank you,<br> <%= @submitter.display_name %>, from the Room Ready team
