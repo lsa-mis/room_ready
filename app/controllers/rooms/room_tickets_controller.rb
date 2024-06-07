@@ -1,18 +1,17 @@
 class Rooms::RoomTicketsController < ApplicationController
   before_action :auth_user
   before_action :set_room_ticket, only: %i[ show ]
-  before_action :set_room, only: %i[ new send_email_for_tdx_ticket ]
+  before_action :set_room, only: %i[ new send_email_for_tdx_ticket index ]
 
   # GET /room_tickets or /room_tickets.json
   def index
-    @room_tickets = RoomTicket.all
+    @room_tickets = RoomTicket.where(room_id: @room.id)
     authorize @room_tickets
   end
 
   # GET /room_tickets/new
   def new
     @room_ticket = RoomTicket.new
-    @building = @room.floor.building
     authorize @room_ticket
   end
 
@@ -44,5 +43,6 @@ class Rooms::RoomTicketsController < ApplicationController
     def set_room
       @room_id = params[:room_id]
       @room = Room.find(params[:room_id])
+      @building = @room.floor.building
     end
 end
