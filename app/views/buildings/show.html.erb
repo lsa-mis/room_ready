@@ -6,19 +6,19 @@
 </div>
 <%= render @building %>
 
-<h2>Rooms </h2>
+<div class="d-flex flex-row justify-content-start align-items-center gap-3">
+  <h2>Rooms </h2>
+  <%= link_to "Add New Room", new_room_path(:building_id => @building.id), class: "cancel-button" %>
+</div>
 
 <div class="accordion accordion-flush" id="buildingFloors">
   <% @floors.each do |floor| %>
     <div class="accordion-item">
-      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<%= floor.id %>" aria-expanded="false" aria-controls="collapse_<%= floor.id %>">
-            Rooms on the floor <%= floor.name %> 
-          </button>
-        </h2>
-        <%= link_to "Add New Room", new_room_path(:building_id => @building.id), class: "cancel-button" %>
-      </div>
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<%= floor.id %>" aria-expanded="false" aria-controls="collapse_<%= floor.id %>">
+          Rooms on the floor <%= floor.name %> 
+        </button>
+      </h2>
       
       <div id="collapse_<%= floor.id %>" class="accordion-collapse collapse" data-bs-parent="#buildingFloors">
         <div class="accordion-body">
@@ -28,8 +28,8 @@
                 <tr>
                   <th>Room Record Number</th>
                   <th>Number</th>
+                  <th>Room Type</th>
                   <td>View</td>
-                  <td>Edit</td>
                   <td>Remove</td>
                 </tr>
               </thead>
@@ -41,23 +41,20 @@
                       <%= room.rmrecnbr %>
                     </td>
                     <td class="building_tbody_td">
-                      <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
-                      <%= room.room_number %>
+                      <%= link_to room.room_number, room_path(room), data: { turbo_frame: "_top" } %>
                     </td>
                     <td class="building_tbody_td">
-                      <%= link_to room_path(room), data: { turbo_frame: "_top" } do%>
+                    <%= room.room_type %>
+                  </td>
+                    <td class="building_tbody_td">
+                      <%= link_to room_path(room), data: { turbo_frame: "_top" } do %>
                       <i class="bi bi-eye-fill text-primary"></i>
-                      <%end%>
+                      <% end %>
                     </td>
                     <td class="building_tbody_td">
-                      <%= link_to edit_room_path(room, :building_id => @building.id, :floor_id => floor.id), data: { turbo_frame: "_top" } do%>
-                      <i class="bi bi-pencil-square text-primary"></i>
-                      <%end%>
-                    </td>
-                    <td class="building_tbody_td">
-                      <%= link_to room_path(room), data: { turbo_confirm: 'Are you sure you want to remove this building?', turbo_method: :delete} do %>
+                      <%= link_to "#" do %>
                       <i class="bi bi-trash-fill text-danger"></i>
-                      <%end%>
+                      <% end %>
                     </td>
                   </tr>
                 <% end %>

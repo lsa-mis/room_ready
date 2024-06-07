@@ -49,7 +49,7 @@ class RoomsController < ApplicationController
       @room = Room.new(rmrecnbr: room_data["RoomRecordNumber"], room_number: room_data["RoomNumber"], room_type: room_data["RoomTypeDescription"], floor: @floor)
       authorize @room
       if @room.save
-        redirect_to building_path(@building), notice: "Room was successfully created."
+        redirect_to building_path(@building), notice: "Room was successfully added to " + @floor.name + " floor."
       else
         render :new, status: :unprocessable_entity
       end
