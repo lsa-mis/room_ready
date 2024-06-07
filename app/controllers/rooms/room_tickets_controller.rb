@@ -5,7 +5,7 @@ class Rooms::RoomTicketsController < ApplicationController
 
   # GET /room_tickets or /room_tickets.json
   def index
-    @room_tickets = RoomTicket.where(room_id: @room.id)
+    @room_tickets = RoomTicket.where(room_id: @room.id).order(created_at: :desc)
     authorize @room_tickets
   end
 
