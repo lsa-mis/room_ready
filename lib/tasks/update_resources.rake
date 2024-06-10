@@ -35,8 +35,7 @@ task update_resources: :environment do
     #=============================
     #   update the database      #
     #=============================
-    type_names = ['Wireless Bodypack Transmitter', "Instructional PC Desktop",
-                  "Blu-Ray Player", "Lecture Capture Camera", "Video Projector"]
+    type_names = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
     rooms_to_update = Room.all.pluck(:rmrecnbr)
 
     # convert wco_resources to hash of arrays: array of resources for every room
