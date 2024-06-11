@@ -12,13 +12,7 @@
   <% end %>
 
   <div>
-    <%= form.label :checked_by, style: "display: block" %>
-    <%= form.text_field :checked_by, value: user.uniqname, readonly: true %>
-  </div>
-
-  <div>
-    <%= form.label :room_id, style: "display: block" %>
-    <%= form.text_field :room_id, value: @room.id, readonly: true%>
+    <h3>Checked By: <%= user.uniqname %></h3>
   </div>
 
   <div>
@@ -46,7 +40,7 @@
 
   <div>
     <%= form.submit %>
-    <%= link_to "Cancel", room_room_states_path %>
+    <%= link_to "Cancel", :back, class:"text-primary cancel-button" %>
   </div>
 
 <% end %>

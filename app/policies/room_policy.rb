@@ -1,6 +1,6 @@
 class RoomPolicy < ApplicationPolicy
   def index?
-    is_admin? || is_rover?
+    is_admin?
   end
 
   def show?
@@ -8,7 +8,7 @@ class RoomPolicy < ApplicationPolicy
   end
 
   def create?
-    is_admin? || is_rover?
+    is_admin?
   end
 
   def new?

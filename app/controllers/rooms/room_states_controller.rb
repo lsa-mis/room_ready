@@ -27,6 +27,7 @@ class Rooms::RoomStatesController < ApplicationController
   # POST /room_states or /room_states.json
   def create
     @room_state = @room.room_states.new(room_state_params)
+    @room_state.checked_by = current_user.uniqname
     authorize @room_state
     respond_to do |format|
       if @room_state.save
@@ -62,7 +63,6 @@ class Rooms::RoomStatesController < ApplicationController
   private
     def set_room
       @room = Room.find(params[:room_id])
-      authorize @room
       @no_access_reasons = AppPreference.find_by(name: 'no_access_reason_pref')&.value&.split(',').map(&:strip)
     end
     # Use callbacks to share common setup or constraints between actions.

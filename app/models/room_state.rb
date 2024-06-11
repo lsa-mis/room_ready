@@ -16,5 +16,4 @@ class RoomState < ApplicationRecord
   has_many :common_attribute_states
   has_many :specific_attribute_states
   has_many :resource_states
-  
 end
