@@ -1,71 +1,62 @@
 class ResourceStatesController < ApplicationController
   before_action :auth_user
-  before_action :set_resource_state, only: %i[ show edit update destroy ]
-
-  # GET /resource_states or /resource_states.json
-  def index
-    @resource_states = ResourceState.all
-  end
-
-  # GET /resource_states/1 or /resource_states/1.json
-  def show
-  end
+  before_action :set_room, only: %i[ new create ]
 
   # GET /resource_states/new
   def new
-    @resource_state = ResourceState.new
-  end
-
-  # GET /resource_states/1/edit
-  def edit
+    authorize ResourceState
+    @resource_states = Resource.all.map. do |resource|
+      resource.resource_states.new
+    end
   end
 
   # POST /resource_states or /resource_states.json
   def create
-    @resource_state = ResourceState.new(resource_state_params)
+    authorize ResourceState
 
-    respond_to do |format|
-      if @resource_state.save
-        format.html { redirect_to resource_state_url(@resource_state), notice: "Resource state was successfully created." }
-        format.json { render :show, status: :created, location: @resource_state }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @resource_state.errors, status: :unprocessable_entity }
+    @room_state = @room.room_state_for_today
+    
+    @resource_states = resource_state_params.map do |res_params|
+      @room_state.resource_states.new(res_params)
+    end
+
+    ActiveRecord::Base.transaction do
+      @resource_states.each do |res|
+        raise ActiveRecord::Rollback unless res.save
+
       end
     end
-  end
 
-  # PATCH/PUT /resource_states/1 or /resource_states/1.json
-  def update
-    respond_to do |format|
-      if @resource_state.update(resource_state_params)
-        format.html { redirect_to resource_state_url(@resource_state), notice: "Resource state was successfully updated." }
-        format.json { render :show, status: :ok, location: @resource_state }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @resource_state.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /resource_states/1 or /resource_states/1.json
-  def destroy
-    @resource_state.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to resource_states_url, notice: "Resource state was successfully destroyed." }
-      format.json { head :no_content }
+    if @resource_states.all?(&:persisted?)
+      redirect_to room_path(@room), notice: 'Resource States were successfully saved.'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_resource_state
-      @resource_state = ResourceState.find(params[:id])
+
+    def set_room
+      @room = Room.find_by(id: params[:room_id])
+
+      unless @room
+        redirect_to rooms_path, alert: 'This Room does not exist.' and return
+      end
+
+      room_state = @room.room_state_for_today
+
+      if room_state.nil?
+        redirect_to rooms_path(@room), alert: 'ALert.'
+
+      elsif room_state.resource_state.any?
+        redirect_to rooms_path(@room), alert: 'Already saved reosurces states today for this room.'
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def resource_state_params
-      params.require(:resource_state).permit(:status, :is_checked, :room_state_id, :resource_id)
+
+      params.require(:resource_state).values.map do |res_params|
+        res_params.permit(:checkbox_value, :room_state_id, :resource_id)
+      end
     end
-end

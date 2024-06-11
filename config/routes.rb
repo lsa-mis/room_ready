@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   
   resources :app_preferences
   resources :announcements, only: [ :index, :show, :edit, :update ]
-  resources :resource_states
+  resources :resource_states, only: [:new, :create]
   resources :specific_attribute_states
   resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]

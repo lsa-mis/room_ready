@@ -1,4 +1,7 @@
-<%= form_with(model: resource_state) do |form| %>
+<%= form_with url: reource_states_path, method: :post do %>
+   <%= hidden_field_tag :room_id, @room.id %>
+
+<!-- <%= form_with(model: resource_state) do |form| %>
   <% if resource_state.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(resource_state.errors.count, "error") %></h2>
@@ -34,4 +37,4 @@
   <div>
     <%= form.submit %>
   </div>
-<% end %>
+<% end %> -->
