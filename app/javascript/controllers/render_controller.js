@@ -3,6 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["access", "noaccess"];
 
+  noReasonField =  document.getElementById("no-reason").style;
+
   connect() {
     const isBothOptionsEmpty = !this.accessTarget.checked && !this.noaccessTarget.checked;
     if(!isBothOptionsEmpty){
@@ -15,12 +17,11 @@ export default class extends Controller {
   }
 
   render(){
-    const noReasonField =  document.getElementById("no-reason");
     const roverHasAccess = this.accessTarget.checked;
     if (!roverHasAccess){
-     noReasonField.style.display = "block";
+      this.noReasonField.display = "block";
     } else {
-      noReasonField.style.display = "none";
+      this.noReasonField.display = "none";
     }
   }
 }
