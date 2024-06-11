@@ -1,4 +1,4 @@
-<%= form_with(model: [@room, room_state]) do |form| %>
+<%= form_with(model: [@room, room_state], data: { controller: "render" }) do |form| %>
   <% if room_state.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(room_state.errors.count, "error") %></h2>
@@ -22,21 +22,26 @@
   </div>
 
   <div>
-    <%= form.label :report_to_supervisor, "Do you want to send report to supervisor?"%>
+    <%= form.label :report_to_supervisor, "Do you want to send report to supervisor? *"%>
   </div>
   <div class="d-flex flex-row mb-1">
-    <%= form.radio_button :report_to_supervisor, true, class: "btn-check" %>
+    <%= form.radio_button :report_to_supervisor, true, class: "btn-check", required: true%>
     <%= form.label :report_to_supervisor_true, "Yes", class: "btn btn-outline-success w-50" %>
-    <%= form.radio_button :report_to_supervisor, false, class: "btn-check" %>
+    <%= form.radio_button :report_to_supervisor, false, class: "btn-check", required: true%>
     <%= form.label :report_to_supervisor_false, "No", class: "btn btn-outline-success w-50" %>
   </div>
 
-    <%= form.label :is_accessed, "Can you access the room?"%>
+    <%= form.label :is_accessed, "Can you access the room? *"%>
   <div class="d-flex flex-row mb-1">
-    <%= form.radio_button :is_accessed, true, class: "btn-check"%>
+    <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true%>
     <%= form.label :is_accessed_true, "Yes", class: "btn btn-outline-success w-50" %>
-    <%= form.radio_button :is_accessed, false, class: "btn-check"%>
+    <%= form.radio_button :is_accessed, false, class: "btn-check", data: { render_target: "noaccess" }, "data-action" => "change->render#renderNoAccessReasonField", required: true%>
     <%= form.label :is_accessed_false, "No", class: "btn btn-outline-success w-50" %>
+  </div>
+
+  <div id="no-reason" style="display:none">
+    <%= form.label :no_access_reason, "Can not access the room because: ", style: "display: block" %>
+    <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason" }, { class: "input_text_field" } %>
   </div>
 
   <div>

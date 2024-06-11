@@ -63,6 +63,7 @@ class Rooms::RoomStatesController < ApplicationController
     def set_room
       @room = Room.find(params[:room_id])
       authorize @room
+      @no_access_reasons = AppPreference.find_by(name: 'no_access_reason_pref')&.value&.split(',').map(&:strip)
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state
@@ -73,6 +74,6 @@ class Rooms::RoomStatesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def room_state_params
-      params.require(:room_state).permit(:checked_by, :is_accessed, :report_to_supervisor, :room_id)
+      params.require(:room_state).permit(:checked_by, :is_accessed, :report_to_supervisor, :no_access_reason, :room_id)
     end
 end
