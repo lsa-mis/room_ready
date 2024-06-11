@@ -17,22 +17,31 @@
   </div>
 
   <div>
-    <%= form.label :is_accessed, style: "display: block" %>
-    <%= form.check_box :is_accessed %>
-  </div>
-
-  <div>
-    <%= form.label :report_to_supervisor, style: "display: block" %>
-    <%= form.check_box :report_to_supervisor %>
-  </div>
-
-  <div>
     <%= form.label :room_id, style: "display: block" %>
     <%= form.text_field :room_id, value: @room.id, readonly: true%>
+  </div>
+
+  <div>
+    <%= form.label :report_to_supervisor, "Do you want to send report to supervisor?"%>
+  </div>
+  <div class="d-flex flex-row mb-1">
+    <%= form.radio_button :report_to_supervisor, true, class: "btn-check" %>
+    <%= form.label :report_to_supervisor_true, "Yes", class: "btn btn-outline-success w-50" %>
+    <%= form.radio_button :report_to_supervisor, false, class: "btn-check" %>
+    <%= form.label :report_to_supervisor_false, "No", class: "btn btn-outline-success w-50" %>
+  </div>
+
+    <%= form.label :is_accessed, "Can you access the room?"%>
+  <div class="d-flex flex-row mb-1">
+    <%= form.radio_button :is_accessed, true, class: "btn-check"%>
+    <%= form.label :is_accessed_true, "Yes", class: "btn btn-outline-success w-50" %>
+    <%= form.radio_button :is_accessed, false, class: "btn-check"%>
+    <%= form.label :is_accessed_false, "No", class: "btn btn-outline-success w-50" %>
   </div>
 
   <div>
     <%= form.submit %>
     <%= link_to "Cancel", room_room_states_path %>
   </div>
+
 <% end %>
