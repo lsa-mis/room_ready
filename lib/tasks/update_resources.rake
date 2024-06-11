@@ -4,6 +4,12 @@ task update_resources: :environment do
   userid = Rails.application.credentials.dig(:webcheckout_api, :userid)
   password = Rails.application.credentials.dig(:webcheckout_api, :password)
 
+  type_names = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
+  if type_names.empty?
+    RoomUpdateLog.create(date: Date.today, note: "No resource_types defined in app preferences. Task was not run.")
+    next # skips the task
+  end
+
   begin
     rooms = Room.all.pluck(:rmrecnbr)
 
@@ -35,7 +41,6 @@ task update_resources: :environment do
     #=============================
     #   update the database      #
     #=============================
-    type_names = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
     rooms_to_update = Room.all.pluck(:rmrecnbr)
 
     # convert wco_resources to hash of arrays: array of resources for every room
