@@ -142,7 +142,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_142409) do
   create_table "room_tickets", force: :cascade do |t|
     t.string "description"
     t.string "submitted_by"
-    t.datetime "submitted_at"
     t.bigint "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
