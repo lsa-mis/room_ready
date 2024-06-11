@@ -83,6 +83,10 @@ module ApplicationHelper
     field.to_date.strftime("%B %d, %Y") unless field.blank?
   end
 
+  def show_date_with_time(field)
+    field.to_datetime.strftime("%B %d, %Y at %I:%M%p") unless field.blank?
+  end
+
   def is_rover?
     session[:role] == "rover"
   end

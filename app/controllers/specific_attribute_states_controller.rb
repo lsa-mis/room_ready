@@ -5,6 +5,7 @@ class SpecificAttributeStatesController < ApplicationController
   # GET /specific_attribute_states or /specific_attribute_states.json
   def index
     @specific_attribute_states = SpecificAttributeState.all
+    authorize @specific_attribute_states
   end
 
   # GET /specific_attribute_states/1 or /specific_attribute_states/1.json
