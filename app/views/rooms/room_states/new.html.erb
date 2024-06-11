@@ -1,4 +1,5 @@
 <p></p>
-<h1>Room state for Room <%= @room.room_number %> </h1>
+<h1>Creating Room State for Room <%= @room.room_number %> </h1>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
+
 <%= render "form", room_state: @room_state, user: @user %>

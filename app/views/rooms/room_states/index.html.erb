@@ -40,7 +40,7 @@
               <%= room_state.room_id %>
             </td>
             <td class="rover_tbody_td">
-              <%= show_date_with_month_name(room_state.updated_at) %>
+              <%= show_date_with_time(room_state.updated_at) %>
             </td>
             <td class="rover_tbody_td">
               <%= link_to room_room_state_path(@room, room_state), data: { turbo_frame: "_top" } do%>
