@@ -1,17 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe Building, type: :system do
+RSpec.describe Building, type: :request do
 
   before do
 		user = FactoryBot.create(:user)
 		mock_login(user)
-    allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
+    # allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
+    # create_cookie("role", "admin")
 	end
 
 	context 'create a new building' do
     it 'fills out the form and submit it' do
       VCR.use_cassette "LdapLookup.is_member_of_group?" do
         visit new_building_path
+        # binding.pry
         sleep 2
         fill_in "Bldrecnbr", with: "1234567"
         fill_in "Name", with: "Chemistry"

@@ -68,6 +68,7 @@ group :development, :test do
   gem 'pundit-matchers', '~> 3.1', '>= 3.1.2'
   gem "webmock"
   gem 'vcr'
+  gem "show_me_the_cookies"
 end
 
 group :development, :staging do

@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'pundit/matchers'
+require 'show_me_the_cookies'
 ENV['RAILS_ENV'] = 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
@@ -69,8 +70,13 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include FactoryBot::Syntax::Methods
   config.include SpecHelper
+  config.include Capybara::DSL
 
   config.before(:each, type: :request) do
     host! "localhost"
   end
+end
+
+RSpec.configure do |config|
+  config.include ShowMeTheCookies, :type => :request
 end

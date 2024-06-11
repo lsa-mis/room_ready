@@ -307,6 +307,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    show_me_the_cookies (6.0.0)
+      capybara (>= 2, < 4)
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     sprockets (4.2.1)
@@ -386,6 +388,7 @@ DEPENDENCIES
   redis (>= 4.0.1)
   repost
   rspec-rails
+  show_me_the_cookies
   skylight
   sprockets-rails
   stimulus-rails

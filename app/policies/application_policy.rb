@@ -39,6 +39,7 @@ class ApplicationPolicy
   end
 
   def is_admin?
+    # binding.pry
     @role == "admin" || @role == "developer"
   end
 
