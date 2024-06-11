@@ -1,62 +1,50 @@
 class ResourceStatesController < ApplicationController
   before_action :auth_user
-  before_action :set_room, only: %i[ new create ]
+  before_action :set_room_state, only: %i[ new ]
 
   # GET /resource_states/new
   def new
-    authorize ResourceState
-    @resource_states = Resource.all.map. do |resource|
-      resource.resource_states.new
-    end
+    @resources = Resource.where(room_id: @room)
+
+    authorize @resources
+    #defaults to /resource_states
+    @resource_state = ResourceState.new
+
   end
 
   # POST /resource_states or /resource_states.json
   def create
-    authorize ResourceState
 
-    @room_state = @room.room_state_for_today
-    
-    @resource_states = resource_state_params.map do |res_params|
-      @room_state.resource_states.new(res_params)
-    end
+    @resource_state = ResourceState.new(resource_state_params)
+    authorize @resource_state
+    respond_to do |format|
+      if @resource_state.save
+        @room = Room.find(params[:room_id])
 
-    ActiveRecord::Base.transaction do
-      @resource_states.each do |res|
-        raise ActiveRecord::Rollback unless res.save
+        @room_state = RoomState.find(params[:room_state_id])
+        format.html { redirect_to resource_state_url, notice: "Resource state was saved." }
 
+
+      else
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
 
-    if @resource_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Resource States were successfully saved.'
-    else
-      render :new, status: :unprocessable_entity
-    end
   end
 
   private
 
-    def set_room
-      @room = Room.find_by(id: params[:room_id])
+    def set_room_state
+      @room = Room.find(params[:room_id])
 
-      unless @room
-        redirect_to rooms_path, alert: 'This Room does not exist.' and return
-      end
-
-      room_state = @room.room_state_for_today
-
-      if room_state.nil?
-        redirect_to rooms_path(@room), alert: 'ALert.'
-
-      elsif room_state.resource_state.any?
-        redirect_to rooms_path(@room), alert: 'Already saved reosurces states today for this room.'
-      end
+      @room_state = RoomState.find(params[:room_state_id])
+      authorize ResourceState
     end
 
     # Only allow a list of trusted parameters through.
     def resource_state_params
 
-      params.require(:resource_state).values.map do |res_params|
-        res_params.permit(:checkbox_value, :room_state_id, :resource_id)
+      params.require(:resource_state).permit(:room_state_id, :is_checked, :resource_id)
       end
-    end
+  end
+

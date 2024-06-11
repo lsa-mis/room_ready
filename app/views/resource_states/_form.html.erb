@@ -1,40 +1,19 @@
-<%= form_with url: reource_states_path, method: :post do %>
+<%= form_with(model: @resource_state, remote: true) do |form| %>
+
    <%= hidden_field_tag :room_id, @room.id %>
 
-<!-- <%= form_with(model: resource_state) do |form| %>
-  <% if resource_state.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(resource_state.errors.count, "error") %></h2>
+   <%= form.hidden_field :resource_id, value: resource.id %>
 
-      <ul>
-        <% resource_state.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+   <%= form.hidden_field :room_state_id, value: @room_state.id %>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>
-  </div>
 
-  <div>
-    <%= form.label :is_checked, style: "display: block" %>
-    <%= form.check_box :is_checked %>
-  </div>
+   <p>Here is the form for </p> 
+   <%= resource.name %> 
+   <%= resource.resource_type %> 
 
-  <div>
-    <%= form.label :room_state_id, style: "display: block" %>
-    <%= form.text_field :room_state_id %>
-  </div>
+   <%= form.label :is_checked, style: "display: block" %>
+   <%= form.check_box :is_checked %>
 
-  <div>
-    <%= form.label :resource_id, style: "display: block" %>
-    <%= form.text_field :resource_id %>
-  </div>
+   <%= form.submit "Submit", class: "btn btn-primary" %>
 
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %> -->
+ <% end %>
