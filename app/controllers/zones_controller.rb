@@ -4,7 +4,7 @@ class ZonesController < ApplicationController
 
   # GET /zones or /zones.json
   def index
-    @zones = Zone.all
+    @zones = Zone.all.order(:name)
     authorize @zones
   end
 
