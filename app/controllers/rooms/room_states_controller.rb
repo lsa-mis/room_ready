@@ -43,7 +43,7 @@ class Rooms::RoomStatesController < ApplicationController
   def update
     respond_to do |format|
       if @room_state.update(room_state_params)
-        format.html { redirect_to room_room_state_url(@room, @room_state), notice: "Room state was successfully updated." }
+        format.html { redirect_to room_room_states_url(@room), notice: "Room state was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
