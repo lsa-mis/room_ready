@@ -11,8 +11,6 @@ Rails.application.routes.draw do
   resources :specific_attribute_states
   resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
-  # resources :room_states
-  resources :room_tickets
   resources :rovers
   
   resources :zones do
@@ -25,9 +23,15 @@ Rails.application.routes.draw do
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
     resources :room_states, module: :rooms
+    resources :room_tickets, module: :rooms
   end
   resources :floors
-  resources :buildings
+  resources :buildings do
+    resources :floors do 
+      resources :rooms, module: :floors
+    end
+  end
+
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
@@ -53,6 +57,8 @@ Rails.application.routes.draw do
   get 'static_pages/about'
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
   get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
+
+  get '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
