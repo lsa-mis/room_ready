@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   resources :specific_attribute_states
   resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
-  resources :room_states
   resources :rovers
   
   resources :zones do
@@ -23,6 +22,7 @@ Rails.application.routes.draw do
   resources :resources
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
+    resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
   resources :floors

@@ -1,10 +1,12 @@
-class RoomStatesController < ApplicationController
+class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
+  before_action :set_room
   before_action :set_room_state, only: %i[ show edit update destroy ]
 
   # GET /room_states or /room_states.json
   def index
-    @room_states = RoomState.all
+    @room_states = RoomState.all.where(room_id: @room.id)
+    authorize @room_states
   end
 
   # GET /room_states/1 or /room_states/1.json
@@ -14,6 +16,8 @@ class RoomStatesController < ApplicationController
   # GET /room_states/new
   def new
     @room_state = RoomState.new
+    authorize @room_state
+    @user = current_user
   end
 
   # GET /room_states/1/edit
@@ -22,15 +26,15 @@ class RoomStatesController < ApplicationController
 
   # POST /room_states or /room_states.json
   def create
-    @room_state = RoomState.new(room_state_params)
-
+    @room_state = @room.room_states.new(room_state_params)
+    @room_state.checked_by = current_user.uniqname
+    authorize @room_state
     respond_to do |format|
       if @room_state.save
-        format.html { redirect_to room_state_url(@room_state), notice: "Room state was successfully created." }
-        format.json { render :show, status: :created, location: @room_state }
+        notice = "A new state to this room was successfully created."
+        format.html { redirect_to room_room_states_url(@room), notice: notice }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room_state.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -39,11 +43,9 @@ class RoomStatesController < ApplicationController
   def update
     respond_to do |format|
       if @room_state.update(room_state_params)
-        format.html { redirect_to room_state_url(@room_state), notice: "Room state was successfully updated." }
-        format.json { render :show, status: :ok, location: @room_state }
+        format.html { redirect_to room_room_states_url(@room), notice: "Room state was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @room_state.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -59,13 +61,19 @@ class RoomStatesController < ApplicationController
   end
 
   private
+    def set_room
+      @room = Room.find(params[:room_id])
+      @no_access_reasons = AppPreference.find_by(name: 'no_access_reason_pref')&.value&.split(',').map(&:strip)
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state
       @room_state = RoomState.find(params[:id])
+      authorize @room_state
+      @user = current_user
     end
 
     # Only allow a list of trusted parameters through.
     def room_state_params
-      params.require(:room_state).permit(:checked_by, :is_accessed, :report_to_supervisor, :room_id)
+      params.require(:room_state).permit(:checked_by, :is_accessed, :report_to_supervisor, :no_access_reason, :room_id)
     end
 end
