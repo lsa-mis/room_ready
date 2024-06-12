@@ -1,4 +1,4 @@
-class ResourceStatesController < ApplicationController
+class RoomStates::ResourceStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room, only: %i[ new create ]
 
@@ -16,9 +16,10 @@ class ResourceStatesController < ApplicationController
 
     resources_ids = Resource.where(room_id: @room).ids
 
-    @resource_states = @room.resources.all.map do |resource|
-      room_state.resource_states.new(resource: resource)
+    @resource_states = ResourceState.where(resource_id: resources_ids).map do |resource|
+      room_state.resource_states.new
     end
+
     # @room = Room.find(params[:room_id])
     # 
     # authorize @resources
@@ -37,17 +38,32 @@ class ResourceStatesController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @resource_states.each do |res|
-        raise ActiveRecord::Rollback unless res.save
+        raise ActiveRecord::Rollback unless cas.save
       end
     end
 
     if @common_attribute_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Resources States were successfully saved.'
+      redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
     end
   end
+  #   @resource_state = ResourceState.new(resource_state_params)
+  #   authorize @resource_state
+  #   respond_to do |format|
+  #     if @resource_state.save
+  #       @room = Room.find(params[:room_id])
 
+  #       @room_state = RoomState.find(params[:room_state_id])
+  #       format.html { redirect_to resource_state_url(room_id: @room.id, room_state_id: @room_state.id), notice: "Resources state was saved." }
+
+
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #     end
+  #   end
+
+  # end
 
   private
 
@@ -61,7 +77,7 @@ class ResourceStatesController < ApplicationController
     room_state = @room.room_state_for_today
     if room_state.nil?
       redirect_to room_path(@room), alert: 'Complete previous steps for Room.'
-    elsif room_state.resource_states.any?
+    elsif room_state.common_attribute_states.any?
       redirect_to room_path(@room), alert: 'Already saved Common Attribute States for this Room today.'
     end
 
