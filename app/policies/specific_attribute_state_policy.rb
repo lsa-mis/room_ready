@@ -1,10 +1,10 @@
 class SpecificAttributeStatePolicy < ApplicationPolicy
     def index?
-      is_rover?
+      is_admin?
     end
-  
+
     def create?
-      is_rover?
+      is_admin?
     end
   
     def new?
@@ -12,7 +12,7 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
     end
   
     def update?
-      is_rover?
+      is_admin?
     end
   
     def edit?
@@ -20,7 +20,7 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
     end
   
     def destroy?
-      is_rover?
+      is_admin?
     end
   end
   
