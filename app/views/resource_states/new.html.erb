@@ -4,6 +4,8 @@
  <h2><%= "Building: #{@room.floor.building.name}" %></h2>
  <h2><%= "Room: #{@room.room_number}" %></h2>
 
-<% @resources.each do |resource| %>
-  <%= render 'form', resource: resource %>
+<!--<% @resources.each do |resource| %> 
  <% end %>
+-->
+  <%= render 'form' %>
+

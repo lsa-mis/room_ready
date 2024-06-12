@@ -1,19 +1,32 @@
-<%= form_with(model: @resource_state, remote: true) do |form| %>
+<%= form_with(model: [@resource, @resource_state]) do |form| %>
 
-   <%= hidden_field_tag :room_id, @room.id %>
+   <% if @resource_state.errors.any? %>
+     <div style="color: red">
+       <h2><%= pluralize(resource_state.errors.count, "error") %></h2>
 
-   <%= form.hidden_field :resource_id, value: resource.id %>
+       <ul>
+         <% resource_state.errors.each do |error| %>
+           <li><%= error.full_message %></li>
+         <% end %>
+       </ul>
+     </div>
+   <% end %>
 
-   <%= form.hidden_field :room_state_id, value: @room_state.id %>
+   <div>
+     <%= form.label :is_checked, "Was the resource checked? *"%>
+   </div>
+   <div class="d-flex flex-row mb-1">
+     <%= form.radio_button :report_to_supervisor, true, class: "btn-check", required: true%>
+     <%= form.label :report_to_supervisor_true, "Yes", class: "btn btn-outline-success w-50" %>
+     <%= form.radio_button :report_to_supervisor, false, class: "btn-check", required: true%>
+     <%= form.label :report_to_supervisor_false, "No", class: "btn btn-outline-success w-50" %>
+   </div>
 
-
-   <p>Here is the form for </p> 
-   <%= resource.name %> 
-   <%= resource.resource_type %> 
-
-   <%= form.label :is_checked, style: "display: block" %>
-   <%= form.check_box :is_checked %>
-
-   <%= form.submit "Submit", class: "btn btn-primary" %>
+   <div>
+     <%= form.submit %>
+     <%= link_to "Cancel", :back, class:"text-primary cancel-button" %>
+   </div>
 
  <% end %>
+
+

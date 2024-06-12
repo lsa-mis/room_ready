@@ -22,7 +22,7 @@ class ResourceStatesController < ApplicationController
         @room = Room.find(params[:room_id])
 
         @room_state = RoomState.find(params[:room_state_id])
-        format.html { redirect_to resource_state_url, notice: "Resource state was saved." }
+        format.html { redirect_to resource_state_url(room_id: @room.id, room_state_id: @room_state.id), notice: "Resources state was saved." }
 
 
       else
