@@ -31,7 +31,7 @@ class ResourceStatesController < ApplicationController
     end
 
     if @resource_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Resources States were successfully saved.'
+      redirect_to new_room_room_ticket_path(@room), notice: 'Resources States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
     end

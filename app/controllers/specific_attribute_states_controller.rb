@@ -43,7 +43,7 @@ class SpecificAttributeStatesController < ApplicationController
     end
 
     if @specific_attribute_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Specific Attribute States were successfully saved.'
+      redirect_to new_resource_state_path(room_id: @room), notice: 'Common Attribute States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
     end
