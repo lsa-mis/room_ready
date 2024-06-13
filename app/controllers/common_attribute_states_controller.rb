@@ -4,6 +4,7 @@ class CommonAttributeStatesController < ApplicationController
 
   # GET /common_attribute_states/new
   def new
+    
     authorize CommonAttributeState
 
     @common_attribute_states = CommonAttribute.all.map do |common_attribute|
@@ -27,7 +28,8 @@ class CommonAttributeStatesController < ApplicationController
     end
 
     if @common_attribute_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
+      # redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
+      redirect_to new_specific_attribute_state_path(room_id: @room), notice: 'Common Attribute States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
     end

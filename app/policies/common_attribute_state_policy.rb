@@ -1,6 +1,6 @@
 class CommonAttributeStatePolicy < ApplicationPolicy
   def create?
-   is_admin?
+   is_rover?
   end
 
   def new?
