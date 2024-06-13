@@ -1,9 +1,7 @@
-<h1>New specific attribute state</h1>
+<h1>Specific Attribute States</h1>
 
-<%= render "form", specific_attribute_state: @specific_attribute_state %>
+<h2><%= @room.floor.building.zone ? "Zone: #{@room.floor.building.zone.name}" : ''  %></h2>
+<h2><%= "Building: #{@room.floor.building.name}" %></h2>
+<h2><%= "Room: #{@room.room_number}" %></h2>
 
-<br>
-
-<div>
-  <%= link_to "Back to specific attribute states", specific_attribute_states_path %>
-</div>
+<%= render 'form' %>

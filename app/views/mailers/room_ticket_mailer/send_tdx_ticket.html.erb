@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    Room Number: <b><%= @room.room_number %></b>
+    <br />
+    Building: <b><%= @building.name %></b>
+    <br />
+    Submitted by (uniqname): <b><%= @submitter.uniqname %></b>
+    <br /><br/>
+    Message: <b><%= raw(@message) %></b>
+    
+    
+
+    <p>
+      Thank you,<br> <%= @submitter.display_name %>, from the Room Ready team
+    </p>
+      For further questions, you can email me at <a href="mailto:<%= @submitter.email %>"><%= @submitter.email %></a> or call the Room Ready office at: ENTER PHONE NUMBER HERE.
+    </p>
+  </body>
+</html>

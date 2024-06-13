@@ -1,0 +1,27 @@
+<div id="<%= dom_id room_state %>">
+  <p>
+    <strong>Checked by:</strong>
+    <%= room_state.checked_by %>
+  </p>
+
+  <p>
+    <strong>Is accessed:</strong>
+    <%= room_state.is_accessed %>
+  </p>
+
+  <p>
+    <strong>Report to supervisor:</strong>
+    <%= room_state.report_to_supervisor %>
+  </p>
+
+  <p>
+    <strong>Room:</strong>
+    <%= room_state.room_id %>
+  </p>
+
+  <p>
+    <strong>If no access to room, No Access reason: </strong>
+    <%= room_state.no_access_reason %>
+  </p>
+
+</div>

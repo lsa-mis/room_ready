@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @room_state %>
+
+<div>
+  <%= link_to "Edit This Room State", edit_room_state_path(@room_state), class: "btn btn-primary btn-sm" %> |
+  <%= link_to "Back to Room States", room_room_states_path, class: "btn btn-secondary btn-sm" %>
+  <br>
+  <br>
+  <%= button_to "Delete This Room State", @room_state, method: :delete, class: "btn btn-danger btn-sm"%>
+</div>

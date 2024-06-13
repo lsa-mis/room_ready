@@ -1,0 +1,10 @@
+<h1>Submit a TDX Ticket</h1>
+<h2><%= "#{@building.name}, room #{@room.room_number}" %></h2>
+
+<%= render "form", room_ticket: @room_ticket %>
+
+<br>
+
+<div>
+  <%= link_to "Back to room tickets", room_room_tickets_path %>
+</div>

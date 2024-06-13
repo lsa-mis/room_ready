@@ -1,0 +1,21 @@
+
+
+<div class="px-5 py-3">
+  <h2 class="mb-3">Tickets for room <%= @room.room_number %>, <%= @building.name %></h2>
+  <%= link_to "Submit a Ticket", new_room_room_ticket_path%>
+
+  <table class="table text-center mt-4">
+    <thead class="table-group-divider">
+    <tr>
+      <th scope="col" class="text-start">Description</th>
+      <th scope="col">Submitted By </th>
+      <th scope="col">Date Submitted</th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider" id="common_attributes">
+      <% @room_tickets.each do |room_ticket| %>
+        <%= render room_ticket %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

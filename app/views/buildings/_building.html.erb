@@ -1,7 +1,7 @@
 <div id="<%= dom_id building %>">
 
   <p>
-    <strong>Bldrecnbr:</strong>
+    <strong>Building Record Number:</strong>
     <%= building.bldrecnbr %>
   </p>
 
@@ -21,13 +21,8 @@
   </p>
   
   <p>
-    <strong>Zone ID:</strong>
-    <%= building.zone_id %>
-  </p>
-
-  <p>
-    <strong>ID:</strong>
-    <%= building.id %>
+    <strong>Zone:</strong>
+    <%= show_zone(building) %>
   </p>
 
 </div>

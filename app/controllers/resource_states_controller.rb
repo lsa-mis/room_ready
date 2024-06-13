@@ -1,5 +1,6 @@
 class ResourceStatesController < ApplicationController
   before_action :auth_user
+  before_action :set_resource_state, only: %i[ edit ]
   before_action :set_room, only: %i[ new create ]
 
   # GET /resource_states/new
@@ -42,6 +43,10 @@ class ResourceStatesController < ApplicationController
 
 
   private
+
+  def set_resource_state
+    @resource_state = ResourceState.find(params[:id])
+  end
 
   def set_room
     @room = Room.find_by(id: params[:room_id])

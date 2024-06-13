@@ -1,7 +1,7 @@
 <h1>Add New Building</h1>
+<% if @zone.present? %>
+  <h2><%= "to #{@zone.name}" %></h2>
+<% end %>
 
 <%= render "form", building: @building %>
 <br>
-<div>
-  <%= link_to "Back to buildings", buildings_path %>
-</div>

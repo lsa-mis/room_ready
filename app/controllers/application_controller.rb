@@ -30,6 +30,28 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def sort_floors(floors)
+    sorted = floors.sort_by do |s|
+      if s =~ /^\d+$/
+        [2, $&.to_i]
+      else
+        [1, s]
+      end
+    end
+    return sorted
+  end
+
+  def redirect_back_or_default(notice: '', alert: false, default: all_root_url)
+    if alert
+      flash[:alert] = notice
+    else
+      flash[:notice] = notice
+    end
+    url = session[:return_to]
+    session[:return_to] = nil
+    redirect_to(url, anchor: "top" || default)
+  end
+
   def pundit_user
     { user: current_user, role: session[:role] }
   end

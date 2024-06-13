@@ -1,52 +1,32 @@
-<div class="w-100">
+<div class="px-5 py-3">
+  <h1 class="mb-3">App Preferences</h1>
 
-<h1>App Preferences</h1>
-
-<div>
-  <% unless @preference_page_announcement.nil? %>
-    <%= @preference_page_announcement.content %>
-  <% end %>
-</div>
-<div id="app_preferences">
-<table class="table">
-  <thead class="table-group-divider">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">Type</th>
-      <th scope="col">View</th>
-      <th scope="col">Edit</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-  
-  <tbody class="table-group-divider">
-    <% @app_preferences.each do |app_preference| %>
-      <tr>
-        <td><%= app_preference.name %></td>
-        <td><%= app_preference.description %></td>
-        <td><%= app_preference.pref_type %></td>
-        <td>
-            <%= link_to app_preference_path(app_preference) do%>
-            <i class="bi bi-eye-fill text-primary"></i>
-            <%end%>
-        </td>
-        <td>
-          <%= link_to edit_app_preference_path(app_preference), method: :edit do %>
-            <i class="bi bi-pencil-square text-primary"></i>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to app_preference_path(app_preference), data: { turbo_confirm: "Are you sure you want to Delete This Preference?" , turbo_method: :delete } do %>
-            <i class="bi bi-trash-fill text-danger"></i>
-          <% end %>
-        </td>
-        
-      </tr>
+  <div>
+    <% unless @preference_page_announcement.nil? %>
+      <%= @preference_page_announcement.content %>
     <% end %>
-  </tbody>
-</table>
-</div>
+  </div>
 
-<%= link_to "New App Preference", new_app_preference_path, method: :post , class: "btn btn-primary"  %>
+  <%= turbo_frame_tag 'new_app_preference_form' do %>
+    <%= render 'form', app_preference: @new_app_preference %>
+  <% end %>
+
+  <table class="table">
+    <thead class="table-group-divider">
+      <tr>
+        <th scope="col" class="text-start">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col" class="text-center">Type</th>
+        <th scope="col" class="text-center">Edit</th>
+        <th scope="col" class="text-center">Delete</th>
+      </tr>
+    </thead>
+    
+    <tbody class="table-group-divider" id="app_preferences">
+      <% @app_preferences.each do |app_preference| %>
+        <%= render app_preference %>
+      <% end %>
+    </tbody>
+  </table>
 </div>
+  

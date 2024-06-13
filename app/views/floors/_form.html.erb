@@ -21,7 +21,8 @@
     <%= form.text_field :building_id %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <%= form.submit "Submit", class: "btn btn-primary" %>
+    <%= link_to 'Cancel', :back %>
   </div>
 <% end %>
