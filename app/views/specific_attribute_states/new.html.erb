@@ -1,7 +1,7 @@
 <h1>Specific Attribute States</h1>
 
 <h2><%= @room.floor.building.zone ? "Zone: #{@room.floor.building.zone.name}" : ''  %></h2>
-<h2><%= "Building: #{@room.floor.building.name}" %></h2>
+<h2><%= "Building: #{@room.floor.building.name}" %>(Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
 <%= render 'form' %>
