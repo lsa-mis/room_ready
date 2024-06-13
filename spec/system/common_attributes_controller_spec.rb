@@ -5,7 +5,9 @@ RSpec.describe CommonAttribute, type: :system do
   before do
 		user = FactoryBot.create(:user)
 		mock_login(user)
-    allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
+    session[:role] = "admin"
 	end
 
 	context 'create a new common attribute' do
@@ -14,10 +16,23 @@ RSpec.describe CommonAttribute, type: :system do
         visit common_attributes_path
         sleep 2
         fill_in "Description", with: "common attribute one"
-        check "Needs Chechbox?"
+        check "Needs Checkbox?"
         click_on "Create"
         sleep 2
         expect(page).to have_content("Common attribute was successfully created.")
+      end
+    end
+  end
+
+  context 'validate a new common attribute' do
+    it 'fills out the form and submits it' do
+      VCR.use_cassette "common_attribute" do
+        visit common_attributes_path
+        sleep 2
+        fill_in "Description", with: "common attribute one"
+        click_on "Create"
+        sleep 2
+        expect(page).to have_content("Needs to have either a checkbox or a quantity box, or both.")
       end
     end
   end
