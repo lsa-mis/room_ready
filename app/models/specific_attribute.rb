@@ -14,7 +14,8 @@ class SpecificAttribute < ApplicationRecord
   belongs_to :room
   has_many :specific_attribute_states
 
-  validates :description, presence: true, uniqueness: true
+  validates :description, presence: true
+  validates :description, uniqueness: { scope: [:room_id], message: "already has this attribute" }
   validate :needs_either_checkbox_or_quantity_box
 
   private
