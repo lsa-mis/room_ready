@@ -1,6 +1,5 @@
 class ResourceStatesController < ApplicationController
   before_action :auth_user
-  before_action :set_resource_state, only: %i[ edit ]
   before_action :set_room, only: %i[ new create ]
 
   # GET /resource_states/new
