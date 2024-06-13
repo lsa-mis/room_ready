@@ -1,37 +1,26 @@
-<%= form_with(model: room) do |form| %>
-  <% if room.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(room.errors.count, "error") %></h2>
+<%= turbo_frame_tag 'new_room' do %>  
+  <%= form_with model: @room do |form| %>
+    <% if room.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(room.errors.count, "error") %></h2>
 
-      <ul>
-        <% room.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% room.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :rmrecnbr, 'Room Record Number (Barcode) *', style: "display: block" %>
+      <%= form.text_field :rmrecnbr, required: true %>
+    </div>
+
+    <%= hidden_field_tag 'building_id', @building.id %>
+
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.submit "Submit", class: "btn btn-primary", data: { turbo_frame: "_top" } %>
+      <%= link_to 'Cancel', building_path(@building), data: { turbo_frame: "_top" } %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :rmrecnbr, style: "display: block" %>
-    <%= form.text_field :rmrecnbr %>
-  </div>
-
-  <div>
-    <%= form.label :room_number, style: "display: block" %>
-    <%= form.text_field :room_number %>
-  </div>
-
-  <div>
-    <%= form.label :room_type, style: "display: block" %>
-    <%= form.text_field :room_type %>
-  </div>
-
-  <div>
-    <%= form.label :floor_id, style: "display: block" %>
-    <%= form.text_field :floor_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>

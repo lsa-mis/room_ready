@@ -1,9 +1,0 @@
-<%= render @app_preference %>
-
-<div>
-  <%= link_to "Edit This App Preference", edit_app_preference_path(@app_preference), class: "btn btn-secondary" %> |
-  <%= link_to "Back to App Preferences", app_preferences_path, class: "btn btn-secondary" %> |
-  <%= link_to "Delete This App Preference", app_preference_path(@app_preference), data: { turbo_confirm: "Are you sure you want to Delete This Preference?" , turbo_method: :delete }, class: "btn btn-secondary" %>
-  </div>
-
-</div>

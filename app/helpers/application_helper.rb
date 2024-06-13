@@ -74,11 +74,6 @@ module ApplicationHelper
       ['Wyoming', 'WY']
     ]
   end
-
-  def choose_buildings_for_zone(zone)
-    Building.where(zone_id: nil)
-  end
-
   
   def show_date(field)
     field.strftime("%m/%d/%Y") unless field.blank?
@@ -88,12 +83,28 @@ module ApplicationHelper
     field.to_date.strftime("%B %d, %Y") unless field.blank?
   end
 
+  def show_date_with_time(field)
+    field.to_datetime.strftime("%B %d, %Y at %I:%M%p") unless field.blank?
+  end
+
   def is_rover?
     session[:role] == "rover"
   end
 
   def is_admin?
     session[:role] == "developer" || session[:role] == "admin"
+  end
+
+  def choose_buildings_for_zone
+    Building.where(zone: nil).order(:name)
+  end
+
+  def show_zone(building)
+    if building.zone.present?
+      building.zone.name
+    else
+      ""
+    end
   end
 
 end

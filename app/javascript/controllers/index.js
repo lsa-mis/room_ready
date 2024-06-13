@@ -15,3 +15,6 @@ application.register("building", BuildingController)
 
 import AutosubmitController from "./autosubmit_controller"
 application.register("autosubmit", AutosubmitController)
+
+import RenderNoAccessReasonController from "./render_controller"
+application.register("render", RenderNoAccessReasonController)
