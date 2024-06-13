@@ -5,17 +5,14 @@
   <% @resource_states.each_with_index do |resource_state, index| %>
 
     <%= fields_for "resource_states[#{index}]", resource_state do |f| %>
+      <div>
 
-      
-
-   <div>
-
-    <% if resource_state.errors.any? %>
+        <% if resource_state.errors.any? %>
           <div style="color: red;">
             <h2><%= pluralize(resource_state.errors.count, "error") %> prohibited this resource_state from being saved:</h2>
             <ul>
-              <% resource_state.errors.full_messages.each do |error_message| %>
-                <li><%= error_message %></li>
+              <% resource_state.errors.each do |error_message| %>
+                <li><%= error_message.full_message %></li>
               <% end %>
             </ul>
           </div>
@@ -48,7 +45,7 @@
     
   </div>
 
-    <% end %>
+<% end %>
 
 
 

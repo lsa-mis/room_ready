@@ -14,13 +14,15 @@ class ResourceState < ApplicationRecord
   belongs_to :room_state
   belongs_to :resource
 
-  validate :resource_must_be_checked
+  validates_inclusion_of :is_checked, in: [true, false], message: 'must be selected'
 
-  private
+  # validate :resource_must_be_checked
 
-  # Custom validation
-  def resource_must_be_checked
-    errors.add(:is_checked, "Resource must be checked") unless is_checked == true or is_checked == false
-  end
+  # private
+
+  # # Custom validation
+  # def resource_must_be_checked
+  #   errors.add(:is_checked, "Resource must be checked") unless is_checked != nil
+  # end
 
 end
