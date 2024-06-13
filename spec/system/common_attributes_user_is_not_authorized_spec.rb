@@ -5,8 +5,10 @@ RSpec.describe CommonAttribute, type: :system do
   before do
 		user = FactoryBot.create(:user)
 		mock_login(user)
-    # user.membership is [] - user should not have access to any CommonAttribute routes
-	end
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(false)
+    session[:role] = "none"
+  end
 
 	context 'create a new common attribute' do
     it 'returns a "You are not authorized to perform this action." message' do
