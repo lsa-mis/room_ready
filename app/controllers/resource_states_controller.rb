@@ -6,24 +6,13 @@ class ResourceStatesController < ApplicationController
   def new
     authorize ResourceState
 
-    # @room = Room.find(params[:room_id])
-
-    # if params[:room_state_id].present?
-    #   @room_state_id = params[:room_state_id].to_i
-    # end
-
-    room_state = @room.room_state_for_today
+    @room_state = @room.room_state_for_today
 
     resources_ids = Resource.where(room_id: @room).ids
 
     @resource_states = @room.resources.all.map do |resource|
-      room_state.resource_states.new(resource: resource)
+      @room_state.resource_states.new(resource: resource)
     end
-    # @room = Room.find(params[:room_id])
-    # 
-    # authorize @resources
-    # #defaults to /resource_states
-    # @resource_state = ResourceState.new
   end
 
   # POST /resource_states or /resource_states.json
@@ -35,18 +24,21 @@ class ResourceStatesController < ApplicationController
       @room_state.resource_states.new(res_params)
     end
 
-    ActiveRecord::Base.transaction do
-      @resource_states.each do |res|
-        raise ActiveRecord::Rollback unless res.save
+    if @resource_states.any?(&:is_checked)
+      ActiveRecord::Base.transaction do
+        @resource_states.each do |res|
+          raise ActiveRecord::Rollback unless res.save
+        end
+      end
+
+      if @resource_states.all?(&:valid?)
+        redirect_to room_path(@room), notice: 'Resources States were successfully saved.'
+      else
+        render :new, status: :unprocessable_entity
+      end
+
       end
     end
-
-    if @common_attribute_states.all?(&:persisted?)
-      redirect_to room_path(@room), notice: 'Resources States were successfully saved.'
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
 
 
   private
@@ -69,8 +61,8 @@ class ResourceStatesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def resource_state_params
-
-    params.require(:resource_state).permit(:room_state_id, :is_checked, :resource_id)
+    params.require(:resource_states).permit!.to_h.values.map do |resource_state_params|
+      resource_state_params #.permit(:room_state_id, :is_checked, :resource_id)
     end
   end
-
+end

@@ -14,4 +14,13 @@ class ResourceState < ApplicationRecord
   belongs_to :room_state
   belongs_to :resource
 
+  validate :resource_must_be_checked
+
+  private
+
+  # Custom validation
+  def resource_must_be_checked
+    errors.add(:is_checked, "Resource must be checked") unless is_checked == true or is_checked == false
+  end
+
 end

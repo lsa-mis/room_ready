@@ -6,14 +6,16 @@
 
     <%= fields_for "resource_states[#{index}]", resource_state do |f| %>
 
-   <div>
-        <% if resource_state.errors.any? %>
-          <div style="color: red">
-            <h2><%= pluralize(resource_state.errors.count, "error") %></h2>
+      
 
+   <div>
+
+    <% if resource_state.errors.any? %>
+          <div style="color: red;">
+            <h2><%= pluralize(resource_state.errors.count, "error") %> prohibited this resource_state from being saved:</h2>
             <ul>
-              <% resource_state.errors.each do |error| %>
-                <li><%= error.full_message %></li>
+              <% resource_state.errors.full_messages.each do |error_message| %>
+                <li><%= error_message %></li>
               <% end %>
             </ul>
           </div>
@@ -21,7 +23,7 @@
 
         <div class="card w-100 mb-3">
           <div class="card-body p-4">
-            <h5 class="card-title mb-3"><%= resource_state.resource.name %></h5>
+            <h5 class="card-title mb-3">Was <%= resource_state.resource.name %> checked?</h5>
               <div class="d-flex flex-row mb-1">
                 <%= f.radio_button :is_checked, true, class: "btn-check" %>
                 <%= f.label :is_checked_true, "Yes", class: "btn btn-outline-success w-50" %>
@@ -32,7 +34,7 @@
           </div>
         </div>
 
-        <%#=f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %> 
+        <%=f.hidden_field :resource_id, value: resource_state.resource_id %> 
       </div>
     <% end %>
   <% end %>
@@ -43,6 +45,7 @@
       Back to Room
     <% end %>
     <%= submit_tag "Save Response" %>
+    
   </div>
 
     <% end %>
