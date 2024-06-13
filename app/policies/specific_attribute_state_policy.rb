@@ -11,12 +11,12 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
       create?
     end
   
-    def update?
+    def update_specific_attribute_states?
       is_rover?
     end
   
     def edit?
-      update?
+      update_specific_attribute_states?
     end
   
     def destroy?
