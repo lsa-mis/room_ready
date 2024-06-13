@@ -5,8 +5,10 @@ RSpec.describe Zone, type: :system do
   before do
 		user = FactoryBot.create(:user)
 		mock_login(user)
-    allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
-	end
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
+    session[:role] = "admin"
+  end
 
 	context 'create a new zone' do
     it 'fills out the form and submits it' do
