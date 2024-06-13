@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     end
   end
   resources :announcements, only: [ :index, :show, :edit, :update ]
+
   resources :resource_states
+  
   resources :specific_attribute_states
   resources :common_attribute_states, only: [:new, :create]
   resources :common_attributes, except: [:show]
