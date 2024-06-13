@@ -1,29 +1,18 @@
 class ResourceStatesController < ApplicationController
   before_action :auth_user
+  before_action :set_resource_state, only: %i[ edit ]
   before_action :set_room, only: %i[ new create ]
 
   # GET /resource_states/new
   def new
     authorize ResourceState
 
-    # @room = Room.find(params[:room_id])
-
-    # if params[:room_state_id].present?
-    #   @room_state_id = params[:room_state_id].to_i
-    # end
-
-    room_state = @room.room_state_for_today
-
-    resources_ids = Resource.where(room_id: @room).ids
-
     @resource_states = @room.resources.all.map do |resource|
-      room_state.resource_states.new(resource: resource)
+      resource.resource_states.new
     end
-    # @room = Room.find(params[:room_id])
-    # 
-    # authorize @resources
-    # #defaults to /resource_states
-    # @resource_state = ResourceState.new
+  end
+
+  def edit
   end
 
   # POST /resource_states or /resource_states.json
@@ -41,7 +30,7 @@ class ResourceStatesController < ApplicationController
       end
     end
 
-    if @common_attribute_states.all?(&:persisted?)
+    if @resource_states.all?(&:persisted?)
       redirect_to room_path(@room), notice: 'Resources States were successfully saved.'
     else
       render :new, status: :unprocessable_entity
@@ -50,6 +39,10 @@ class ResourceStatesController < ApplicationController
 
 
   private
+
+  def set_resource_state
+    @resource_state = ResourceState.find(params[:id])
+  end
 
   def set_room
     @room = Room.find_by(id: params[:room_id])
@@ -69,8 +62,8 @@ class ResourceStatesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def resource_state_params
-
-    params.require(:resource_state).permit(:room_state_id, :is_checked, :resource_id)
+    params.require(:resource_states).values.map do |res_param|
+      res_param.permit(:is_checked, :room_state_id, :resource_id)
     end
   end
-
+end
