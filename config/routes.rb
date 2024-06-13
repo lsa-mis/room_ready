@@ -9,9 +9,14 @@ Rails.application.routes.draw do
   resources :announcements, only: [ :index, :show, :edit, :update ]
 
   resources :resource_states
+  post '/resource_states/update_resource_states/:id', to: 'resource_states#update_resource_states', as: :update_resource_states
   
   resources :specific_attribute_states
-  resources :common_attribute_states, only: [:new, :create]
+  post '/specific_attribute_states/update_specific_attribute_states/:id', to: 'specific_attribute_states#update_specific_attribute_states', as: :update_specific_attribute_states
+
+  resources :common_attribute_states
+  post '/common_attribute_states/update_common_attribute_states/:id', to: 'common_attribute_states#update_common_attribute_states', as: :update_common_attribute_states
+
   resources :common_attributes, except: [:show]
   resources :rovers
   
