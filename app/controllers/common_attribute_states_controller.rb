@@ -41,7 +41,6 @@ class CommonAttributeStatesController < ApplicationController
 
   def update_common_attribute_states
     authorize CommonAttributeState
-
     common_attribute_state_params.each do |cas_params|
       common_attribute_state = CommonAttributeState.find(cas_params[:common_attribute_state_id])
       # raise ActiveRecord::Rollback unless common_attribute_state.update(cas_params)
