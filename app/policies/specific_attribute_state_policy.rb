@@ -4,19 +4,19 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
     end
 
     def create?
-      is_admin?
+      is_rover?
     end
   
     def new?
       create?
     end
   
-    def update?
-      is_admin?
+    def update_specific_attribute_states?
+      is_rover?
     end
   
     def edit?
-      update?
+      update_specific_attribute_states?
     end
   
     def destroy?

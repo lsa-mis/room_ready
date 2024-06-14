@@ -1,4 +1,4 @@
-<%= form_with url: specific_attribute_states_path, method: :post do %>
+<%= form_with url: update_specific_attribute_states_path, method: :post do %>
   <%= hidden_field_tag :room_state_id, @room_state.id %>
 
   <% @specific_attribute_states.each_with_index do |specific_attribute_state, index| %>
@@ -35,7 +35,8 @@
           </div>
         </div>
 
-        <%= f.hidden_field :specific_attribute_id, value: specific_attribute_state.specific_attribute_id %>
+        <%#= f.hidden_field :specific_attribute_id, value: specific_attribute_state.specific_attribute_id %>
+        <%= f.hidden_field :specific_attribute_state_id, value: specific_attribute_state.id %>
       </div>
     <% end %>
   <% end %>
@@ -45,6 +46,6 @@
       <i class="bi bi-arrow-left-circle-fill"></i>
       Back to Rooms
     <% end %>
-    <%= submit_tag "Save Response" %>
+    <%= submit_tag "Update Response" %>
   </div>
 <% end %>

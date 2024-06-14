@@ -1,4 +1,4 @@
-<%= form_with url: common_attribute_states_path, method: :post do %>
+<%= form_with url: update_common_attribute_states_path, method: :post do %>
   <%= hidden_field_tag :room_state_id, @room_state.id %>
 
   <% @common_attribute_states.each_with_index do |common_attribute_state, index| %>
@@ -36,7 +36,8 @@
           </div>
         </div>
 
-        <%= f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %>
+        <%#= f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %>
+        <%= f.hidden_field :common_attribute_state_id, value: common_attribute_state.id %>
       </div>
     <% end %>
   <% end %>
@@ -46,6 +47,6 @@
       <i class="bi bi-arrow-left-circle-fill"></i>
       Back to Rooms
     <% end %>
-    <%= submit_tag "Save Response" %>
+    <%= submit_tag "Update Response" %>
   </div>
 <% end %>

@@ -5,7 +5,7 @@ class Rooms::SpecificAttributesController < ApplicationController
 
   # GET /specific_attributes or /specific_attributes.json
   def index
-    @specific_attributes = SpecificAttribute.all
+    @specific_attributes = SpecificAttribute.where(room_id: @room)
     @new_specific_attribute = SpecificAttribute.new
     authorize @specific_attributes
   end

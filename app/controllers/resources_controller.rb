@@ -5,15 +5,14 @@ class ResourcesController < ApplicationController
   # GET /resources or /resources.json
   def index
     @resources = Resource.all
-  end
-
-  # GET /resources/1 or /resources/1.json
-  def show
+    @new_resource = Resource.new
+    authorize @resources
   end
 
   # GET /resources/new
   def new
     @resource = Resource.new
+    authorize @resource
   end
 
   # GET /resources/1/edit
@@ -23,6 +22,7 @@ class ResourcesController < ApplicationController
   # POST /resources or /resources.json
   def create
     @resource = Resource.new(resource_params)
+    authorize @resource
 
     respond_to do |format|
       if @resource.save
@@ -62,10 +62,11 @@ class ResourcesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
       @resource = Resource.find(params[:id])
+      authorize @resource
     end
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:resource).permit(:name, :resource_type, :status, :room_id)
+      params.require(:resource).permit(:name, :resource_type, :is_checked, :room_id)
     end
 end

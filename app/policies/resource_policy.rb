@@ -1,14 +1,10 @@
-class RoomTicketPolicy < ApplicationPolicy
+class ResourcePolicy < ApplicationPolicy
   def index?
     is_admin?
   end
 
-  def show?
-    is_admin?
-  end
-
   def create?
-    is_rover?
+    is_admin?
   end
 
   def new?
@@ -25,9 +21,5 @@ class RoomTicketPolicy < ApplicationPolicy
 
   def destroy?
     is_admin?
-  end
-
-  def send_email_for_tdx_ticket?
-    create?
   end
 end
