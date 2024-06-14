@@ -25,8 +25,10 @@ class Rooms::RoomTicketsController < ApplicationController
     respond_to do |format|
       if @room_ticket.save
         RoomTicketMailer.with(date: @room_ticket.created_at.strftime('%m/%d/%Y'), room: @room, message: message, submitter: submitter).send_tdx_ticket.deliver_now
-        format.html { redirect_to welcome_rovers_path, notice: "Room ticket was successfully sent." }
-        format.json { render :show, status: :created, location: @room_ticket }
+        # format.html { redirect_to welcome_rovers_path, notice: "Room ticket was successfully sent." }
+        # format.json { render :show, status: :created, location: @room_ticket }
+        flash[:notice] = "Room ticket was successfully sent."
+        return
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @room_ticket.errors, status: :unprocessable_entity }
