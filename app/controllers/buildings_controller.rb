@@ -92,8 +92,8 @@ class BuildingsController < ApplicationController
     
           respond_to do |format|
             if @building.save
-              add_classrooms_for_building(bldrecnbr)
-              notice = "New Building was added to the zone." + note
+              note = add_classrooms_for_building(bldrecnbr)
+              notice = "New Building was added." + note
               @buildings = Building.where(zone: @zone)
               format.turbo_stream do
                 @new_building = Building.new
@@ -116,6 +116,7 @@ class BuildingsController < ApplicationController
 
     def add_classrooms_for_building(bldrecnbr)
       result = get_classrooms_for_building(bldrecnbr)
+      note = ''
       if result['data'].present?
         rooms_data = result['data']
         rooms_data.each do |row|
@@ -131,7 +132,8 @@ class BuildingsController < ApplicationController
           end
         end
       else
-        note = " API returned bo data about classrooms for the building"
+        note = " API returned no data about classrooms for the building"
       end
+      return note
     end
 end
