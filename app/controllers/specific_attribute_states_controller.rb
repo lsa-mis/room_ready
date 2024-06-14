@@ -20,6 +20,10 @@ class SpecificAttributeStatesController < ApplicationController
     end
 
     authorize SpecificAttributeState
+
+    unless @specific_attribute_states.present?
+      redirect_to new_resource_state_path(room_state_id: @room_state.id)
+    end
   end
 
   # GET /specific_attribute_states/1/edit

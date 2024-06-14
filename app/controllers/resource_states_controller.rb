@@ -9,6 +9,10 @@ class ResourceStatesController < ApplicationController
     @resource_states = @room.resources.all.map do |resource|
       resource.resource_states.new
     end
+
+    unless @resource_states.present?
+      redirect_to rooms_rover_navigation_path(floor_id: @room.floor.id)
+    end
   end
 
   def edit

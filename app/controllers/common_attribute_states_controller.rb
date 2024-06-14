@@ -10,6 +10,10 @@ class CommonAttributeStatesController < ApplicationController
     @common_attribute_states = CommonAttribute.all.map do |common_attribute|
       common_attribute.common_attribute_states.new
     end
+
+    unless @common_attribute_states.present?
+      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
+    end
   end
 
   def edit
