@@ -42,11 +42,41 @@ RSpec.describe Building, type: :system do
       end
     end
   end
+
+	context 'edit a building' do
+    it 'returns "bldrecnbr is invalid" message' do
+      VCR.use_cassette "building" do
+        bldrecnbr = create(:building)
+        visit buildings_path
+
+        find(:css, 'i.bi.bi-pencil-square.text-primary').click
+
+        expect(page).to have_content("Editing Building")
+      end
+    end
+  end
+
+  it 'click on edit icon and cancel editing' do
+    VCR.use_cassette "building" do
+      building = create(:building)
+      visit buildings_path
+      find(:css, 'i.bi.bi-pencil-square.text-primary').click
+      expect(page).to have_content("Editing Building")
+      click_on "Cancel"
+      expect(page).to have_content(building.name)
+    end
+  end
+
+  it 'click on edit icon and update name' do
+    VCR.use_cassette "building" do
+      building = create(:building)
+      visit buildings_path
+      find(:css, 'i.bi.bi-pencil-square.text-primary').click
+      expect(page).to have_content("Editing Building")
+      fill_in "Nick name", with: building.nick_name + "edited"
+      click_on "Update"
+      expect(page).to have_content(building.nick_name + "edited")
+    end
+  end
+
 end
-
-
-
-
-
-
-{"success"=>true, "errorcode"=>"", "error"=>"", "data"=>[{"FiscalYear"=>2024, "BuildingRecordNumber"=>"1234567", "BuildingShortDescription"=>"BLAU HALL", "BuildingLongDescription"=>"BLAU JEFF T HALL", "BuildingStreetNumber"=>"700", "BuildingStreetDirection"=>"E", "BuildingStreetName"=>"UNIVERSITY AVE", "BuildingCity"=>"ANN ARBOR", "BuildingState"=>"MI", "BuildingPostal"=>"48109", "BuildingTypeDescription"=>"Teach, Research, Support", "BuildingPhaseCode"=>"SERV", "BuildingPhaseDescription"=>"In Service", "BuildingCampusCode"=>"100", "BuildingCampusDescription"=>"Central Campus", "BuildingOwnership"=>"Owned"}]}
