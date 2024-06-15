@@ -4,8 +4,9 @@ RSpec.describe CommonAttribute, type: :system do
 
   before do
 		user = FactoryBot.create(:user)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
 		mock_login(user)
-    allow_any_instance_of(User).to receive(:membership).and_return(['lsa-roomready-admins'])
 	end
 
 	context 'create a new common attribute' do
@@ -14,7 +15,7 @@ RSpec.describe CommonAttribute, type: :system do
         visit common_attributes_path
         sleep 2
         fill_in "Description", with: "common attribute one"
-        check "Needs Chechbox?"
+        check "Needs Checkbox?"
         click_on "Create"
         sleep 2
         expect(page).to have_content("Common attribute was successfully created.")

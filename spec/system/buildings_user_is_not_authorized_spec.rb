@@ -9,22 +9,22 @@ RSpec.describe CommonAttribute, type: :system do
 		mock_login(user)
 	end
 
-	context 'create a new common attribute' do
+	context 'create a new building' do
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit common_attributes_path
+      VCR.use_cassette "building" do
+        visit buildings_path
         sleep 2
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
   end
 
-  context 'edit a common attribute' do
-    let!(:common_attribute) { FactoryBot.create(:common_attribute) }
+  context 'edit a building' do
+    let!(:building) { FactoryBot.create(:building) }
 
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit edit_common_attribute_path(common_attribute)
+      VCR.use_cassette "building" do
+        visit edit_building_path(building)
         sleep 2
         expect(page).to have_content("You are not authorized to perform this action.")
       end
