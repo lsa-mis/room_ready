@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommonAttributePolicy do
+RSpec.describe CommonAttributePolicy, type: :policy do
   let(:user) { FactoryBot.create(:user) }
   let(:common_attribute) { CommonAttribute.new }
 
