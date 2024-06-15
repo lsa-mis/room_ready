@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RoverPolicy do
+RSpec.describe RoverPolicy, type: :policy do
   let(:user) { FactoryBot.create(:user) }
   let(:rover) { Rover.new }
 

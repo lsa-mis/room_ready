@@ -4,8 +4,9 @@ RSpec.describe CommonAttribute, type: :system do
 
   before do
 		user = FactoryBot.create(:user)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(false)
 		mock_login(user)
-    # user.membership is [] - user should not have access to any CommonAttribute routes
 	end
 
 	context 'create a new zone' do
