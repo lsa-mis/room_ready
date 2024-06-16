@@ -8,7 +8,7 @@ class RoomTicketPolicy < ApplicationPolicy
   end
 
   def create?
-    is_admin?
+    is_rover?
   end
 
   def new?

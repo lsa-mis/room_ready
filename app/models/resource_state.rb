@@ -13,4 +13,5 @@
 class ResourceState < ApplicationRecord
   belongs_to :room_state
   belongs_to :resource
+
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ZonePolicy do
+RSpec.describe ZonePolicy, type: :policy do
   let(:user) { FactoryBot.create(:user) }
   let(:zone) { Zone.new }
 

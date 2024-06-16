@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AppPreferencePolicy do
+RSpec.describe AppPreferencePolicy, type: :policy do
   let(:user) { FactoryBot.create(:user) }
   let(:app_preference) { AppPreference.new }
 

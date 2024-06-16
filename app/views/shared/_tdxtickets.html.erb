@@ -1,0 +1,43 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Create a TDX Ticket
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Create a TDX Ticket</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room.id), method: :get) do |form| %>
+  <% if room_ticket.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
+
+      <ul>
+        <% room_ticket.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.rich_text_area :description %>
+  </div>
+  <div class="mt-1 gap-1 d-flex flex-row justify-content-start align-items-center">
+    <%= form.submit 'Submit' %>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  </div>
+<% end %>
+
+      </div>
+      
+    </div>
+  </div>
+</div>

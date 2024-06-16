@@ -32,7 +32,7 @@ class Rooms::RoomStatesController < ApplicationController
     respond_to do |format|
       if @room_state.save
         notice = "A new state to this room was successfully created."
-        format.html { redirect_to room_room_states_url(@room), notice: notice }
+        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: notice }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -43,7 +43,11 @@ class Rooms::RoomStatesController < ApplicationController
   def update
     respond_to do |format|
       if @room_state.update(room_state_params)
-        format.html { redirect_to room_room_states_url(@room), notice: "Room state was successfully updated." }
+        if @room_state.common_attribute_states.any?
+          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+        else
+          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
       end

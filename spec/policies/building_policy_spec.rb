@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BuildingPolicy do
+RSpec.describe BuildingPolicy, type: :policy do
   let(:user) { FactoryBot.create(:user) }
   let(:building) { Building.new }
 

@@ -1,9 +1,5 @@
-class BuildingPolicy < ApplicationPolicy
+class ResourcePolicy < ApplicationPolicy
   def index?
-    is_admin?
-  end
-
-  def show?
     is_admin?
   end
 
