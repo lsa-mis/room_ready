@@ -1,10 +1,10 @@
 class BuildingPolicy < ApplicationPolicy
   def index?
-    is_admin? || is_rover?
+    is_admin?
   end
 
   def show?
-    is_admin? || is_rover?
+    is_admin?
   end
 
   def create?
