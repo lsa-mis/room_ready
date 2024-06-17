@@ -3,10 +3,10 @@
     <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path %></li>
     <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id) %></li>
     <li class="breadcrumb-item"><%= link_to "Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id) %></li>
-    <li class="breadcrumb-item active" aria-current="page">Form 1</li>
+    <li class="breadcrumb-item active" aria-current="page">Begin Check</li>
   </ol>
 </nav>
-<h1>Editing Room State for Room <%= @room.room_number %> </h1>
+<h1>Edit Room Check for Room <%= @room.room_number %> </h1>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
 
 <%= render "form", room_state: @room_state, user: @user %>
