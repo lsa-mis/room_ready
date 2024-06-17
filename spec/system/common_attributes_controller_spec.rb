@@ -68,10 +68,8 @@ RSpec.describe CommonAttribute, type: :system do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        text = page.driver.browser.switch_to.alert.text
-        expect(text).to eq 'Are you sure you want to delete this Common Attribute?'
-        page.driver.browser.switch_to.alert.dismiss
-        expect(page).to have_content(common_attribute.description)
+        dismiss_browser_dialog
+        expect(page).to_not have_content("Common attribute was successfully deleted.")
       end
     end
 
@@ -79,9 +77,7 @@ RSpec.describe CommonAttribute, type: :system do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        text = page.driver.browser.switch_to.alert.text
-        expect(text).to eq 'Are you sure you want to delete this Common Attribute?'
-        page.driver.browser.switch_to.alert.accept
+        accept_browser_dialog
         expect(page).to have_content("Common attribute was successfully deleted.")
       end
     end
