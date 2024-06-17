@@ -117,10 +117,12 @@ class BuildingsController < ApplicationController
     def add_classrooms_for_building(bldrecnbr)
       result = get_classrooms_for_building(bldrecnbr)
       note = ''
+      classrooms = false
       if result['data'].present?
         rooms_data = result['data']
         rooms_data.each do |row|
           if row['RoomTypeDescription'] == "Classroom"
+            classrooms = true
             if Floor.find_by(name: row["FloorNumber"], building: @building).present?
               floor = Floor.find_by(name: row["FloorNumber"], building: @building)
             else
@@ -131,6 +133,7 @@ class BuildingsController < ApplicationController
             room.save
           end
         end
+        note = " API returned no data about classrooms for the building" unless classrooms
       else
         note = " API returned no data about classrooms for the building"
       end
