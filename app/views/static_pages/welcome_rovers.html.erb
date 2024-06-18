@@ -4,6 +4,14 @@
       <!-- Heading -->
       <h1 class="text-start mt-6 ms-6">Welcome Rovers</h1>
   </div>
+
+  <div>
+    <% unless @rovers_welcome_page_announcement.nil? %>
+      <%= @rovers_welcome_page_announcement.content %>
+    <% end %>
+  </div>
+
+
   <div>
     <div class="d-grid w-25 ms-6 mt-6 mb-8">
       <% if user_signed_in? %>
