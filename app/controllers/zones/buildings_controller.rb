@@ -29,7 +29,7 @@ class Zones::BuildingsController < ApplicationController
   private
     # Only allow a list of trusted parameters through.
     def building_params
-      params.require(:building).permit(:bldrecnbr, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :zone_id)
+      params.require(:building).permit(:bldrecnbr, :name, :nick_name, :address, :city, :state, :zip, :zone_id)
     end
 
     # Use callbacks to share common setup or constraints between actions.
