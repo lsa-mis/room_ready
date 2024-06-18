@@ -12,23 +12,16 @@
         turbo_frame: "all_buildings" 
       } do |form| %>
       <div>
-        <label for="zone_id" class="fancy_label">Select a Zone</label>
-        <%#= select_tag "zone_id", options_from_collection_for_select(@zones, :id, :name, selected: params[:zone_id]), include_blank: "Select ...",
-          :"data-action" => "change->autosubmit#submitForm" %>
-          <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "Select ..."}, { :"data-action" => "change->autosubmit#submitForm" } %>
-
-          <%#= form.select "student_id", options_for_select(@students_data, selected: params[:student_id]), {include_blank: "All Programs"}, {class: "filter_select w-full",
-                :"data-action" => "change->autosubmit#search"} %>
+        <%= form.text_field :search, placeholder: "Search by Name, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
-      <h3>
-        <% if @zone.present? %>
-          <%= @zone.name %>
-        <% else %>
-          All
-        <% end %>
-        Buildings (<%= @buildings.count %>)
-      </h3>
-      <%= render "listing" %>
+      <div>
+        <label for="zone_id" class="fancy_label">Select a Zone</label>
+        <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, { :"data-action" => "change->autosubmit#submitForm" } %>
+      </div>
     <% end %>
+    <h3>
+      <%= if @zone.nil? then nil else @zone.name end %> Buildings (<%= @buildings.count %>)
+    </h3>
+    <%= render "listing" %>
   </div>
 </div>

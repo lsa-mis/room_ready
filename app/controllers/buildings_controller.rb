@@ -1,22 +1,31 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ show edit update ]
-  before_action :set_zone, only: %i[ new show create edit update ]
+  before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
   def index
-    if params[:zone_id].present?
-      if params[:zone_id] == "0"
-        @buildings = Building.where(zone_id: nil).order(:name)
-      else
-        @buildings = Building.where(zone_id: params[:zone_id]).order(:name)
-      end
-    else
-      @buildings = Building.all.order(:zone_id, :name)
-    end
-    authorize @buildings
+    @zone_id = params[:zone_id]
+    @search_query = params[:search]
+
+    zone_id_exists = !(@zone_id.nil? || @zone_id.strip.empty?)
+    search_query_exists = !(@search_query.nil? || @search_query.strip.empty?)
+
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-    @zones << ["No Zone", 0]
+
+    if zone_id_exists
+      @buildings = Building.where(zone_id: @zone_id)
+    else
+      @buildings = Building.all
+    end
+
+    if search_query_exists
+      search_term = "%#{@search_query}%"
+      @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ?', search_term, search_term, search_term)
+    end
+
+    @buildings = @buildings.order(:name)
+    authorize @buildings
   end
 
   def new
@@ -92,8 +101,8 @@ class BuildingsController < ApplicationController
     
           respond_to do |format|
             if @building.save
-              note = add_classrooms_for_building(bldrecnbr)
-              notice = "New Building was added." + note
+              add_classrooms_for_building(bldrecnbr)
+              notice = "New Building was added to the zone." + note
               @buildings = Building.where(zone: @zone)
               format.turbo_stream do
                 @new_building = Building.new
@@ -116,13 +125,10 @@ class BuildingsController < ApplicationController
 
     def add_classrooms_for_building(bldrecnbr)
       result = get_classrooms_for_building(bldrecnbr)
-      note = ''
-      classrooms = false
       if result['data'].present?
         rooms_data = result['data']
         rooms_data.each do |row|
           if row['RoomTypeDescription'] == "Classroom"
-            classrooms = true
             if Floor.find_by(name: row["FloorNumber"], building: @building).present?
               floor = Floor.find_by(name: row["FloorNumber"], building: @building)
             else
@@ -133,10 +139,8 @@ class BuildingsController < ApplicationController
             room.save
           end
         end
-        note = " API returned no data about classrooms for the building" unless classrooms
       else
-        note = " API returned no data about classrooms for the building"
+        note = " API returned bo data about classrooms for the building"
       end
-      return note
     end
 end
