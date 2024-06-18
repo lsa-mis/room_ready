@@ -1,6 +1,4 @@
 module ApplicationHelper
-  # include ActionView::Helpers::DateHelper
-  # include ActionView::Helpers::NumberHelper
 
   def root_path
     if user_signed_in?
