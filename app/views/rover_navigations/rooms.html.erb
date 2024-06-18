@@ -29,9 +29,8 @@
       <p class="card-text">
         Room Type: <%= room.room_type %>
       </p>
-      <% if !room.room_state_for_today.nil? %>
-        <p style="color:red">A room state has already been created today. You can now edit the room state.</p>
-        <p style="color:red">Last Time Updated: <%= show_date_with_time(room.room_state_for_today.updated_at) %> </p>
+      <p style="color:red">Last Time Checked: <%= show_date_with_time(room.last_time_checked) %> </p>
+      <% if RoomStatus.new(room).room_checked_today? %>
         <%= link_to "Edit Today's Form", edit_room_room_state_path(room, room.room_state_for_today.id), class: "btn btn-primary" %>
       <% else %>
         <%= link_to "Start Checking Room", new_room_room_state_path(room), class: "btn btn-primary" %>
