@@ -4,11 +4,11 @@ class RoomStatePolicy < ApplicationPolicy
     end
 
     def show?
-      is_rover?
+      is_rover? || is_admin?
     end
   
     def create?
-      is_rover?
+      is_rover? || is_admin?
     end
   
     def new?
@@ -16,7 +16,7 @@ class RoomStatePolicy < ApplicationPolicy
     end
   
     def update?
-      is_rover?
+      is_rover? || is_admin?
     end
   
     def edit?
@@ -24,6 +24,6 @@ class RoomStatePolicy < ApplicationPolicy
     end
   
     def destroy?
-      is_rover?
+      is_admin?
     end
   end
