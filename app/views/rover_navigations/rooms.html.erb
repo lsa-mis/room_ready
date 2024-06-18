@@ -20,7 +20,7 @@
 <% @rooms.each do |room| %>
   <div class="card mt-3">
     <h5 class="card-header">
-      Room: <%= room.room_number %>
+      Room: <%= room.room_number %> <%= show_status(room) %>
     </h5>
     <div class="card-body">
       <p class="card-text">
