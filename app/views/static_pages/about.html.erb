@@ -1,24 +1,16 @@
 <div class="container">
-<div>
-  <% unless @about_page_announcement.nil? %>
-    <%= @about_page_announcement.content %>
-  <% end %>
-</div>
   <div class="row">
     <div class="col-md-8 col-lg-6 w-100">
       <!-- Heading -->
-      <h1 class="text-start mt-6 ms-6">About Room Ready Application</h1>
-      <p class="mt-2 w-75">
-        Lorem ipsum dolor sit amet, vince adipiscing elit, 
-        sed do eiusmod tempor incididunt ut labore et dolore 
-        magna aliqua. Ut enim ad minim veniam, quis nostrud 
-        exercitation ullamco laboris nisi ut aliquip ex ea 
-        commodo consequat. Duis aute irure dolor in reprehenderit 
-        in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </p>
+      <h1 class="text-start mt-6">About Room Ready Application</h1>
+      <p class="text-start mt-6 ms-6">
+          <% unless @about_page_announcement.nil? %>
+            <%= @about_page_announcement.content %>
+          <% end %>
+      </p>
   </div>
   <div>
-    <div class="d-grid w-25 ms-6 mt-6 mb-8">
+    <div class="d-grid w-25 mt-6 mb-8">
       <% if user_signed_in? %>
         <div>
           <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>

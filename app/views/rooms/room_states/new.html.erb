@@ -9,4 +9,10 @@
 <h1>Begin Room Check for Room <%= @room.room_number %> </h1>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
 
+<div>
+  <% unless @rovers_form_announcement.nil? %>
+    <%= @rovers_form_announcement.content %>
+  <% end %>
+</div>
+
 <%= render "form", room_state: @room_state, user: @user %>

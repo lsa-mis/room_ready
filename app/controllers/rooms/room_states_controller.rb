@@ -17,11 +17,15 @@ class Rooms::RoomStatesController < ApplicationController
   def new
     @room_state = RoomState.new
     authorize @room_state
+    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
     @user = current_user
+    
   end
 
   # GET /room_states/1/edit
   def edit
+    authorize @room_state
+    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
   end
 
   # POST /room_states or /room_states.json
