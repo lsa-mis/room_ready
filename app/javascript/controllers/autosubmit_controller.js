@@ -10,4 +10,11 @@ export default class extends Controller {
     console.log("here")
     Turbo.navigator.submitForm(this.formTarget)
   }
+
+  submitFormOnEnter(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.element.submit();
+    }
+  }
 }
