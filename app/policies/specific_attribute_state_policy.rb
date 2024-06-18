@@ -4,7 +4,7 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
     end
 
     def create?
-      is_rover?
+      is_rover? || is_admin?
     end
   
     def new?
@@ -12,7 +12,7 @@ class SpecificAttributeStatePolicy < ApplicationPolicy
     end
   
     def update_specific_attribute_states?
-      is_rover?
+      is_rover? || is_admin?
     end
   
     def edit?
