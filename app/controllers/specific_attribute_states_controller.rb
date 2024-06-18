@@ -44,6 +44,10 @@ class SpecificAttributeStatesController < ApplicationController
       @specific_attribute_states.each do |sas|
         raise ActiveRecord::Rollback unless sas.save
       end
+      unless @room.update(last_time_checked: DateTime.now)
+        flash.now['alert'] = "Error updating room record"
+        return
+      end
     end
 
     if @specific_attribute_states.all?(&:persisted?)
@@ -63,6 +67,11 @@ class SpecificAttributeStatesController < ApplicationController
         render :edit, status: :unprocessable_entity
         return
       end
+    end
+
+    unless @room.update(last_time_checked: DateTime.now)
+      flash.now['alert'] = "Error updating room record"
+      return
     end
 
     # if @specific_attribute_states.all?(&:persisted?)

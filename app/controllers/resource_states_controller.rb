@@ -33,6 +33,10 @@ class ResourceStatesController < ApplicationController
       @resource_states.each do |res|
         raise ActiveRecord::Rollback unless res.save
       end
+      unless @room.update(last_time_checked: DateTime.now)
+        flash.now['alert'] = "Error updating room record"
+        return
+      end
     end
 
     if @resource_states.all?(&:persisted?)
@@ -51,6 +55,11 @@ class ResourceStatesController < ApplicationController
         render :edit, status: :unprocessable_entity
         return
       end
+    end
+
+    unless @room.update(last_time_checked: DateTime.now)
+      flash.now['alert'] = "Error updating room record"
+      return
     end
 
     # if @resource_states.all?(&:persisted?)
