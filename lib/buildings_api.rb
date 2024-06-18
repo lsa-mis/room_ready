@@ -33,7 +33,7 @@ class BuildingsApi
 
   def create_building(row)
     bldrecnbr = row['BuildingRecordNumber'].to_i
-    building = Building.new(bldrecnbr: bldrecnbr, name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
+    building = Building.new(bldrecnbr: bldrecnbr, name: row['BuildingLongDescription'], 
         address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
         city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'])
     unless building.save
