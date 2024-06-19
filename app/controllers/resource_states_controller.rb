@@ -85,4 +85,8 @@ class ResourceStatesController < ApplicationController
       res_param.permit(:is_checked, :room_state_id, :resource_id, :resource_state_id)
     end
   end
+
+  def recommended_next_room_check
+    
+  end
 end
