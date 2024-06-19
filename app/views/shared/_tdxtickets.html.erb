@@ -13,7 +13,7 @@
       </div>
       <div class="modal-body">
 
-        <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room.id), method: :get) do |form| %>
+        <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room.id), id: "tdx_form") do |form| %>
   <% if room_ticket.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
@@ -28,16 +28,59 @@
 
   <div>
     <%= form.label :description, style: "display: block" %>
-    <%= form.rich_text_area :description %>
+    <%= form.rich_text_area :description, id: "description_field" %>
   </div>
   <div class="mt-1 gap-1 d-flex flex-row justify-content-start align-items-center">
-    <%= form.submit 'Submit' %>
+    <%= form.submit 'Submit', id: "submit_button", data: { bs_dismiss: "modal" } %>
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
   </div>
 <% end %>
-
       </div>
-      
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("tdx_form");
+    const descriptionField = document.getElementById("description_field");
+
+    if (form) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const editorContent = descriptionField.value.trim();
+        if (!editorContent) {
+          alert("Description field cannot be blank.");
+          return;
+        }
+
+        // Gather form data
+        const formData = new FormData(form);
+
+        try {
+          // Send data using Fetch API
+          const response = await fetch(form.action, {
+            method: form.method,
+            headers: {
+              'Accept': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert(data.notice);
+            form.reset();
+          } else {
+            alert(data.errors.join(", "));
+          }
+        } catch (error) {
+          console.error("Error submitting form", error);
+          alert("An error occurred while submitting the form.");
+        }
+      });
+    }
+  });
+</script>
