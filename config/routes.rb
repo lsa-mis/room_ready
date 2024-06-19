@@ -25,6 +25,14 @@ Rails.application.routes.draw do
   end
   delete 'zones/buildings/:zone_id/:id', to: 'zones/buildings#remove_building', as: :remove_building
 
+  resource :report, only: [] do
+    collection do
+      get 'index'
+    end
+    member do
+      get 'room_issues_report', to: 'reports#room_issues_report'
+    end
+  end
 
   resources :resources
   resources :rooms do

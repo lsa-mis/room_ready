@@ -1,0 +1,43 @@
+<h1>Room Issues Reports</h1>
+<h6>This report shows information on Room Issues (TDx Tickets)</h6>
+
+<div class="px-5 py-3">
+    <%= form_with url: room_issues_report_report_path, method: :get do |form| %>
+      <div>
+        <label for="zone_id" class="fancy_label">Select a Zone</label>
+        <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"} %>
+        <label for="date_from" class="fancy_label">Time Frame</label>
+        <%= form.select :time_frame, options_for_select(@time_frames, selected: params[:time_frame]), {include_blank: "All Time"} %>
+      </div>
+      <%= form.submit "Preview" %>
+    <% end %>
+  <table class="table text-center mt-4">
+    <thead class="table-group-divider">
+    <tr>
+      <th scope="col" class="text-start">Room</th>
+      <th scope="col">Building</th>
+      <th scope="col">Zone</th>
+      <th scope="col"># Issues</th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider" id="common_attributes">
+      <% @rooms.each do |room| %>
+        <tr>
+          <td class="text-start"><%= room.room_number %></td>
+          <td><%= room.floor.building.name %></td>
+          <td>
+            <% unless room.floor.building.zone.nil? %>
+              <%= room.floor.building.zone.name %>
+            <% else %>
+              No Zone
+            <% end %>
+          </td>
+          <td>
+              <%= room.tickets_count %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <h2>Total number of issues submitted: <%= @tickets.count %></h2>
+</div>
