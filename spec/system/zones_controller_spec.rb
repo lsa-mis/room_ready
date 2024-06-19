@@ -56,8 +56,10 @@ RSpec.describe Zone, type: :system do
     it 'click on delete icon and cancel the alert message' do
       VCR.use_cassette "zone" do
         visit zones_path
-        find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        dismiss_browser_dialog
+        # dismiss_browser_dialog
+        dismiss_confirm 'Are you sure you want to delete this zone?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
         expect(page).to_not have_content("Zone was successfully deleted.")
       end
     end
@@ -65,8 +67,10 @@ RSpec.describe Zone, type: :system do
     it 'click on cancel icon and accept the alert message' do
       VCR.use_cassette "zone" do
         visit zones_path
-        find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        accept_browser_dialog
+        # accept_browser_dialog
+        accept_confirm 'Are you sure you want to delete this zone?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
         expect(page).to have_content("Zone was successfully deleted.")
       end
     end

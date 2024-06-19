@@ -67,17 +67,19 @@ RSpec.describe CommonAttribute, type: :system do
     it 'click on delete icon and cancel the alert messege' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
-        find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        dismiss_browser_dialog
+        dismiss_confirm 'Are you sure you want to delete this Common Attribute?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
         expect(page).to_not have_content("Common attribute was successfully deleted.")
       end
     end
 
-    it 'click on cancel icon and accept the alert message' do
+    it 'click on delete icon and accept the alert message' do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
-        find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        accept_browser_dialog
+        accept_confirm 'Are you sure you want to delete this Common Attribute?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
         expect(page).to have_content("Common attribute was successfully deleted.")
       end
     end
