@@ -107,4 +107,8 @@ module ApplicationHelper
     end
   end
 
+  def google_map_navigation_path(address)
+    formatted_address = address.gsub(/\s/,'+')
+    "https://www.google.com/maps/dir//" + formatted_address
+  end
 end

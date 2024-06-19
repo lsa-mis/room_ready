@@ -20,6 +20,9 @@
   <div class="card mt-3">
     <h5 class="card-header">
       <%= building.name %>
+      <%= link_to google_map_navigation_path(building.full_address), target: "_blank" do%>
+        <i class="bi bi-geo-alt text-primary"></i>
+      <%end%>
     </h5>
     <div class="card-body">
       <p class="card-text">

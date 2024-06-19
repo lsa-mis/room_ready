@@ -8,7 +8,12 @@
   </ol>
 </nav>
 
-<h2>Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>) </h2>
+<h2>
+  Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>)
+  <%= link_to google_map_navigation_path(@floor.building.full_address), target: "_blank" do%>
+    <i class="bi bi-geo-alt text-primary"></i>
+  <%end%> 
+</h2>
 
 <%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
   <%= form.hidden_field :floor_id, value: @floor.id %>
