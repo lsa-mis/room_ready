@@ -48,9 +48,7 @@ RSpec.describe Building, type: :system do
       VCR.use_cassette "building" do
         bldrecnbr = create(:building)
         visit buildings_path
-
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
-
         expect(page).to have_content("Editing Building")
       end
     end
