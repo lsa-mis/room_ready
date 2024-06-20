@@ -21,7 +21,7 @@ class BuildingsController < ApplicationController
 
     if search_query_exists
       search_term = "%#{@search_query}%"
-      @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ?', search_term, search_term, search_term)
+      @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ? OR nick_name ILIKE ?', search_term, search_term, search_term, search_term)
     end
 
     @buildings = @buildings.order(:name)
