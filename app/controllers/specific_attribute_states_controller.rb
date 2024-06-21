@@ -35,7 +35,6 @@ class SpecificAttributeStatesController < ApplicationController
   # POST /specific_attribute_states or /specific_attribute_states.json
   def create
     authorize SpecificAttributeState
-    # @room_state = @room.room_state_for_today
     @specific_attribute_states = specific_attribute_state_params.map do |sas_params|
       @room_state.specific_attribute_states.new(sas_params)
     end
@@ -43,6 +42,10 @@ class SpecificAttributeStatesController < ApplicationController
     ActiveRecord::Base.transaction do
       @specific_attribute_states.each do |sas|
         raise ActiveRecord::Rollback unless sas.save
+      end
+      unless @room.update(last_time_checked: DateTime.now)
+        flash.now['alert'] = "Error updating room record"
+        return
       end
     end
 
@@ -63,6 +66,11 @@ class SpecificAttributeStatesController < ApplicationController
         render :edit, status: :unprocessable_entity
         return
       end
+    end
+
+    unless @room.update(last_time_checked: DateTime.now)
+      flash.now['alert'] = "Error updating room record"
+      return
     end
 
     # if @specific_attribute_states.all?(&:persisted?)
@@ -106,12 +114,5 @@ class SpecificAttributeStatesController < ApplicationController
       unless @room
         redirect_to rooms_path, alert: 'Room doesnt exist.' and return
       end
-  
-      # room_state = @room.room_state_for_today
-      # if room_state.nil?
-      #   redirect_to room_path(@room), alert: 'Complete previous steps for Room.'
-      # elsif room_state.specific_attribute_states.any?
-      #   redirect_to room_path(@room), alert: 'Already saved Specific Attribute States for this Room today.'
-      # end
     end
 end
