@@ -96,7 +96,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.where(zone: nil).order(:name)
+    Building.where(zone: nil).order(:name).collect { |b| [b.name.titleize, b.id] }
   end
 
   def show_zone(building)
