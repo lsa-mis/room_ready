@@ -6,7 +6,6 @@ class RoomsController < ApplicationController
   # GET /rooms or /rooms.json
   def index
     @rooms = Room.all.order(:room_number)
-    @rooms_page_announcement = Announcement.find_by(location: "rooms_page")
     authorize @rooms
   end
 

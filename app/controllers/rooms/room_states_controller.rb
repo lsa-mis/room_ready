@@ -17,11 +17,15 @@ class Rooms::RoomStatesController < ApplicationController
   def new
     @room_state = RoomState.new
     authorize @room_state
+    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
     @user = current_user
+    
   end
 
   # GET /room_states/1/edit
   def edit
+    authorize @room_state
+    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
   end
 
   # POST /room_states or /room_states.json
@@ -31,8 +35,11 @@ class Rooms::RoomStatesController < ApplicationController
     authorize @room_state
     respond_to do |format|
       if @room_state.save
-        notice = "A new state to this room was successfully created."
-        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: notice }
+        unless @room.update(last_time_checked: DateTime.now)
+          flash.now['alert'] = "Error updating room record"
+          return
+        end
+        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -43,10 +50,14 @@ class Rooms::RoomStatesController < ApplicationController
   def update
     respond_to do |format|
       if @room_state.update(room_state_params)
+        unless @room.update(last_time_checked: DateTime.now)
+          flash.now['alert'] = "Error updating room record"
+          return
+        end
         if @room_state.common_attribute_states.any?
-          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
         else
-          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
         end
       else
         format.html { render :edit, status: :unprocessable_entity }

@@ -24,7 +24,6 @@ class ResourceStatesController < ApplicationController
   def create
     authorize ResourceState
 
-    # @room_state = @room.room_state_for_today
     @resource_states = resource_state_params.map do |res_params|
       @room_state.resource_states.new(res_params)
     end
@@ -32,6 +31,10 @@ class ResourceStatesController < ApplicationController
     ActiveRecord::Base.transaction do
       @resource_states.each do |res|
         raise ActiveRecord::Rollback unless res.save
+      end
+      unless @room.update(last_time_checked: DateTime.now)
+        flash.now['alert'] = "Error updating room record"
+        return
       end
     end
 
@@ -53,6 +56,11 @@ class ResourceStatesController < ApplicationController
       end
     end
 
+    unless @room.update(last_time_checked: DateTime.now)
+      flash.now['alert'] = "Error updating room record"
+      return
+    end
+
     # if @resource_states.all?(&:persisted?)
       redirect_to new_room_room_ticket_path(@room), notice: 'Resources States were successfully saved.'
     # else
@@ -69,13 +77,6 @@ class ResourceStatesController < ApplicationController
     unless @room
       redirect_to rooms_path, alert: 'Room doesnt exist.' and return
     end
-
-    # room_state = @room.room_state_for_today
-    # if room_state.nil?
-    #   redirect_to room_path(@room), alert: 'Complete previous steps for Room.'
-    # elsif room_state.resource_states.any?
-    #   redirect_to room_path(@room), alert: 'Already saved Common Attribute States for this Room today.'
-    # end
 
   end
 

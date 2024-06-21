@@ -1,4 +1,7 @@
 <div id="<%= dom_id room %>" class="ms-3">
+  <div class="fs-5 fw-bold">
+    <%= RoomStatus.new(room).show_status %>
+  </div>
   <div class="py-1 d-flex flex-row align-items-center gap-3">
     <div class="fs-5 fw-bold">Room Record Number (Barcode): </div>
     <div class="fs-5"><%= room.rmrecnbr %></div>
