@@ -16,22 +16,17 @@ RSpec.describe SpecificAttribute, type: :system do
         visit "rooms/#{room.id}/specific_attributes"
         expect(page).to have_content("You are not authorized to perform this action.")
       end
-      room.delete
     end
   end
 
   context 'edit a specific_attribute' do
-    let!(:room) { FactoryBot.create(:room) }
     let!(:specific_attribute) { FactoryBot.create(:specific_attribute) }
-
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room.id}/specific_attributes"
-        binding.pry
-        find(:css, 'i.bi.bi-pencil-square.text-primary').click
+        room_id = specific_attribute.room.id
+        visit "rooms/#{room_id}/specific_attributes/#{specific_attribute}/edit"
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
   end
-  
 end
