@@ -18,3 +18,6 @@ application.register("autosubmit", AutosubmitController)
 
 import RenderNoAccessReasonController from "./render_controller"
 application.register("render", RenderNoAccessReasonController)
+
+import RoomTicketsController from "./room_tickets_controller"
+application.register("room-tickets", RoomTicketsController)
