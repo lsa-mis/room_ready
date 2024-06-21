@@ -6,16 +6,8 @@ class ReportsController < ApplicationController
   def room_issues_report
     authorize :report, :room_issues_report?
 
-    end_time = Time.current.end_of_day
-    start_time = case params[:time_frame]&.to_i
-      when 0 then 1.week.ago.beginning_of_day
-      when 1 then 1.month.ago.beginning_of_day
-      when 2 then 3.month.ago.beginning_of_day
-      when 3 then 6.month.ago.beginning_of_day
-      when 4 then 1.year.ago.beginning_of_day
-    end
-
-    @tickets = RoomTicket.all
+    start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+    end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
 
     @rooms = Room.joins(floor: :building).joins(:room_tickets)
                  .where(buildings: { zone_id: params[:zone_id].presence ? params[:zone_id].presence : Zone.all.pluck(:id).push(nil) })
@@ -25,13 +17,8 @@ class ReportsController < ApplicationController
                  .having('COUNT(room_tickets.id) > 0')
                  .order('tickets_count DESC')
 
-
-    
+    @total_tickets_count = @rooms.sum(&:tickets_count)
 
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
-    @time_frames = [ ["1 week", 0], ["1 month", 1], ["3 month", 2], ["6 months", 3], ["1 yr", 4] ]
   end
-
-  
 end
