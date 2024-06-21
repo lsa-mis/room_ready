@@ -35,22 +35,19 @@ RSpec.describe SpecificAttribute, type: :system do
   end
 
   context 'edit a specific attribute' do
-    let!(:room) { FactoryBot.create(:room) }
     let!(:specific_attribute) { FactoryBot.create(:specific_attribute) }
-
+    let!(:room_id) { specific_attribute.room.id }
     it 'click on edit icon and go to edit page' do
       VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room.id}/specific_attributes"
+        visit "rooms/#{room_id}/specific_attributes"
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Edit Specific Attribute")
       end
     end
 
     it 'click on edit icon and cancel editing' do
-      let!(:room) { FactoryBot.create(:room) }
-      visit "rooms/#{room.id}/specific_attributes"
       VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room.id}/specific_attributes"
+        visit "rooms/#{room_id}/specific_attributes"
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Edit Specific Attribute")
         click_on "Cancel"
@@ -60,7 +57,7 @@ RSpec.describe SpecificAttribute, type: :system do
 
     it 'click on edit icon and update description' do
       VCR.use_cassette "specific_attribute" do
-        visit specific_attributes_path
+        visit "rooms/#{room_id}/specific_attributes"
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Edit Specific Attribute")
         fill_in "Description", with: specific_attribute.description + "edited"
@@ -71,18 +68,18 @@ RSpec.describe SpecificAttribute, type: :system do
 
     it 'click on delete icon and cancel the alert messege' do
       VCR.use_cassette "specific_attribute" do
-        visit specific_attributes_path
-        dismiss_confirm 'Are you sure you want to delete this specific Attribute?' do
+        visit "rooms/#{room_id}/specific_attributes"
+        dismiss_confirm 'Are you sure you want to delete this specific attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
-        expect(page).to_not have_content("specific attribute was successfully deleted.")
+        expect(page).to_not have_content("Specific attribute was successfully deleted.")
       end
     end
 
     it 'click on delete icon and accept the alert message' do
       VCR.use_cassette "specific_attribute" do
-        visit specific_attributes_path
-        accept_confirm 'Are you sure you want to delete this specific Attribute?' do
+        visit "rooms/#{room_id}/specific_attributes"
+        accept_confirm 'Are you sure you want to delete this specific attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to have_content("Specific attribute was successfully deleted.")
