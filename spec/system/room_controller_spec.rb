@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Building, type: :system do
+RSpec.describe Room, type: :system do
 
   before do
 		user = FactoryBot.create(:user)
@@ -28,7 +28,7 @@ RSpec.describe Building, type: :system do
   context 'create a new room with valid bldrecnbr' do
     let!(:building) { FactoryBot.create(:building) }
     it 'returns "New Room was added" message' do
-      VCR.use_cassette "building" do
+      VCR.use_cassette "room" do
         rmrecnbr = '1234567'
         result = {"success"=>true, "errorcode"=>"Exception", "error"=>"", 
           "data"=>{"RoomRecordNumber"=>"1234567", "RoomNumber"=>"102", "FloorNumber"=>"01", 
