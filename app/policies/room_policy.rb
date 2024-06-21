@@ -15,14 +15,6 @@ class RoomPolicy < ApplicationPolicy
     create?
   end
 
-  def update?
-    is_admin?
-  end
-  
-  def edit?
-    update?
-  end
-
   def destroy?
     is_admin?
   end

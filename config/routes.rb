@@ -27,6 +27,8 @@ Rails.application.routes.draw do
 
 
   resources :resources
+
+  resources :rooms, :except => [:edit, :update]
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
     resources :room_states, module: :rooms
