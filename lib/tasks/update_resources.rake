@@ -49,14 +49,17 @@ task update_resources: :environment do
                   .group_by(&:first)
                   .transform_values { |group| group.map { |resource| resource[1..-1] } }
 
-    ActiveRecord::Base.transaction do
+    transaction_error = nil
+    transaction_succeeded = ActiveRecord::Base.transaction do
       begin
         rooms_to_update = update_resources_in_db(resources, room_location, type_names, rooms_to_update)
       rescue StandardError => e
-        RoomUpdateLog.create(date: Date.today, note: "Error updating resources: #{e.message}")
+        transaction_error = e
         raise ActiveRecord::Rollback # Manually rollback the transaction
       end
     end
+
+    raise "Transaction failed, error updating resources: #{transaction_error.message}" unless transaction_succeeded
 
     if rooms_to_update.any?
       # these rooms were not updated because they don't eexist in wco
@@ -93,7 +96,7 @@ def update_resources_in_db(resources, room_location, type_names, rooms_to_update
       end
       if resources_in_db.present?
         # these resoursces are not present in sco any more - delete from db
-        room.resources.find(resources_in_db.values).delete_all
+        Resource.where(id: resources_in_db.values).delete_all
       end
       # room updated by wco - delete from list
       rooms_to_update.delete(room_rmrecnbr)
