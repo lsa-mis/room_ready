@@ -50,7 +50,7 @@ class SpecificAttributeStatesController < ApplicationController
     end
 
     if @specific_attribute_states.all?(&:persisted?)
-      redirect_to new_resource_state_path(room_state_id: @room_state.id), notice: 'Specific Attribute States were successfully saved.'
+      redirect_to new_resource_state_path(room_state_id: @room_state.id)
     else
       render :new, status: :unprocessable_entity
     end
@@ -75,9 +75,9 @@ class SpecificAttributeStatesController < ApplicationController
 
     # if @specific_attribute_states.all?(&:persisted?)
       if @room_state.resource_states.any?
-        redirect_to edit_resource_state_path(room_state_id: @room_state.id), notice: "Specific Attribute States were successfully updated."
+        redirect_to edit_resource_state_path(room_state_id: @room_state.id)
       else
-        redirect_to new_resource_state_path(room_state_id: @room_state.id), notice: 'Specific Attribute States were successfully saved.'
+        redirect_to new_resource_state_path(room_state_id: @room_state.id)
       end
     # else
     #   render :edit, status: :unprocessable_entity
