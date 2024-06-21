@@ -1,5 +1,5 @@
 <p></p>
-<h1>Editing rover</h1>
+<h1>Editing Rover</h1>
 
 <%= form_with(model: rover=@rover) do |form| %>
   <% if rover.errors.any? %>
@@ -12,24 +12,20 @@
       </ul>
     </div>
   <% end %>
+  <p>
+    <strong>Uniqname:</strong>
+    <%= rover.uniqname %>
+  </p>
   <div>
-    <div>Rover Uniqname:</div>
-    <div><%= rover.uniqname %></div>
-  </div>
-  <div>
-    <%= form.label :first_name, "First Name:", style: "display: block"%>
+    <%= form.label :first_name, "First Name:", style: "display: block" %>
     <%= form.text_field :first_name %>
   </div>
   <div>
-    <%= form.label :last_name, "Last Name:", style: "display: block"%>
+    <%= form.label :last_name, "Last Name:", style: "display: block" %>
     <%= form.text_field :last_name %>
   </div>
-  <div>
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit %>
+    <%= link_to "Cancel", rovers_path %>
   </div>
 <% end %>
-<br>
-
-<div>
-  <%= link_to "Back to Rovers", rovers_path , class: "btn btn-primary btn-sm"%>
-</div>
