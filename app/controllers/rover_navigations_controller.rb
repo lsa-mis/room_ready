@@ -26,4 +26,8 @@ class RoverNavigationsController < ApplicationController
       @rooms = @rooms.where("room_number ILIKE :search", search: "%#{params[:search]}%")
     end
   end
+
+  def confirmation
+    authorize :rover_navigation, :confirmation?
+  end
 end
