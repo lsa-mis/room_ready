@@ -12,8 +12,19 @@ RSpec.describe CommonAttribute, type: :system do
 	context 'create a new room' do
     let!(:building) { FactoryBot.create(:building) }
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "building" do
+      VCR.use_cassette "room" do
         visit "rooms/new?building_id=#{building.id}"
+        sleep 2
+        expect(page).to have_content("You are not authorized to perform this action.")
+      end
+    end
+  end
+
+  context 'show a room' do
+    let!(:room) { FactoryBot.create(:room) }
+    it 'returns a "You are not authorized to perform this action." message' do
+      VCR.use_cassette "room" do
+        visit "rooms/#{room.id}"
         sleep 2
         expect(page).to have_content("You are not authorized to perform this action.")
       end
