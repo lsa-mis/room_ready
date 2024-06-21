@@ -20,9 +20,7 @@
   <div class="card mt-3">
     <h5 class="card-header">
       <%= building.name %>
-      <%= link_to google_map_navigation_path(building.full_address), target: "_blank" do%>
-        <i class="bi bi-geo-alt text-primary"></i>
-      <%end%>
+      <i id="redirect-to-maps" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(building.full_address) %>"></i>
     </h5>
     <div class="card-body">
       <p class="card-text">
@@ -41,3 +39,4 @@
     </div>
   </div>
 <% end %>
+<%= javascript_include_tag 'confirm_redirect.js' %>
