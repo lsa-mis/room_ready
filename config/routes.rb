@@ -73,7 +73,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
   get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
-  get '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
+  post '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 

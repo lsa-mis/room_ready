@@ -14,6 +14,8 @@
 <h2><%= "Building: #{@room.floor.building.name}" %> (Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
-<%= render 'rover_navigations/form_progress_bar', percentage: 25 %>
-
+<%= render 'rover_navigations/form_progress_bar', room: @room %>
+<%= render 'shared/tdxtickets' %>
+<br>
+<br>
 <%= render 'edit_form', room_state_id: @room_state.id %>

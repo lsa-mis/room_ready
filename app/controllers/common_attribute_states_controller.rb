@@ -24,7 +24,6 @@ class CommonAttributeStatesController < ApplicationController
   # POST /common_attribute_states or /common_attribute_states.json
   def create
     authorize CommonAttributeState
-    # @room_state = @room.room_state_for_today
     @common_attribute_states = common_attribute_state_params.map do |cas_params|
       @room_state.common_attribute_states.new(cas_params)
     end
@@ -33,11 +32,15 @@ class CommonAttributeStatesController < ApplicationController
       @common_attribute_states.each do |cas|
         raise ActiveRecord::Rollback unless cas.save
       end
+      unless @room.update(last_time_checked: DateTime.now)
+        flash.now['alert'] = "Error updating room record"
+        return
+      end
     end
 
     if @common_attribute_states.all?(&:persisted?)
       # redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id), notice: 'Common Attribute States were successfully saved.'
+      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
     else
       render :new, status: :unprocessable_entity
     end
@@ -54,11 +57,16 @@ class CommonAttributeStatesController < ApplicationController
       end
     end
 
+    unless @room.update(last_time_checked: DateTime.now)
+      flash.now['alert'] = "Error updating room record"
+      return
+    end
+
     # if @common_attribute_states.all?(&:persisted?)
       if @room_state.specific_attribute_states.any?
-        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id), notice: "Common Attribute States were successfully updated."
+        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id)
       else
-        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id), notice: 'Common Attribute States were successfully saved.'
+        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
       end
     # else
     #   render :edit, status: :unprocessable_entity
@@ -69,7 +77,6 @@ class CommonAttributeStatesController < ApplicationController
 
   def set_room
     @room_state = RoomState.find(params[:room_state_id])
-    # @room = Room.find_by(id: params[:room_id])
     @room = @room_state.room
     # Redirects if certain conditions are not met
 
@@ -77,12 +84,6 @@ class CommonAttributeStatesController < ApplicationController
       redirect_to rooms_path, alert: 'Room doesnt exist.' and return
     end
 
-    # @room_state = @room.room_state_for_today
-    # if room_state.nil?
-    #   redirect_to room_path(@room), alert: 'Complete previous steps for Room.'
-    # elsif room_state.common_attribute_states.any?
-    #   redirect_to room_path(@room), alert: 'Already saved Common Attribute States for this Room today.'
-    # end
   end
 
     # Only allow a list of trusted parameters through.

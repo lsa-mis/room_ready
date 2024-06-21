@@ -107,4 +107,7 @@ module ApplicationHelper
     end
   end
 
+  def show_room_percentage(room)
+    RoomStatus.new(room).calculate_percentage
+  end
 end
