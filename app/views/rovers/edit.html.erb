@@ -1,5 +1,5 @@
 <p></p>
-<h1>Editing rover</h1>
+<h1>Editing Rover</h1>
 
 <%= form_with(model: rover=@rover) do |form| %>
   <% if rover.errors.any? %>
@@ -25,7 +25,7 @@
     <%= form.text_field :last_name %>
   </div>
   <div>
-    <%= form.submit %>
+    <%= form.submit "Update" %>
   </div>
 <% end %>
 <br>
