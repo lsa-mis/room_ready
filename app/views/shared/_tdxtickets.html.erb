@@ -24,6 +24,10 @@
             </div>
           <% end %>
           <div>
+            <%= form.label :tdx_email, "Select TDX ticket email *", class: "form-label" %>
+            <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building)), { required: true }, { class: "input_text_field" }) %>
+          </div>
+          <div>
             <%= form.label :description, style: "display: block" %>
             <%= form.rich_text_area :description, data: { room_tickets_target: "description"} %>
           </div>
