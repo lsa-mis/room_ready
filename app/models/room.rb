@@ -28,6 +28,6 @@ class Room < ApplicationRecord
   end
 
   def room_state_for_today
-    room_states.find_by(created_at: Time.zone.today.all_day)
+    room_states.find_by(created_at: Time.now.all_day)
   end
 end
