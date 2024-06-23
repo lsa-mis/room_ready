@@ -58,6 +58,14 @@ class RoomStatus
     @room.room_states.last
   end
 
+  def room_state_today
+    if room_checked_today?
+      room_state
+    else 
+      nil
+    end
+  end
+
   def common_attribute_checked?
     room_state.common_attribute_states.last.present? && (yesterday..tomorrow).include?(room_state.common_attribute_states.last.updated_at.to_date)
   end
