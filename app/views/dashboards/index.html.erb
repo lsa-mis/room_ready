@@ -1,3 +1,38 @@
-<h1>Dashboards#index</h1>
-<p>Find me in app/views/dashboards/index.html.erb</p>
-<%= line_chart RoomState.group_by_day(:created_at).count %>
+<div class="container">
+
+  <h1>Admin Dashboard</h1>
+  <h2>Zone Overview</h2>
+  <div class="row">    
+    <% @zones.each do |zone| %>
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="card">
+          <div class="card-header">
+            <h3>Zone  <%= zone.name %></h3>
+           
+          </div>
+          <div class="card-body">
+            <div class="progress mb-3">
+              <div class="progress-bar <%= room_check_progress_class(zone.rooms_checked_today, zone.total_rooms) %> text-white" role="progressbar" 
+              style="width: <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%" 
+              aria-valuenow="<%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>" 
+              aria-valuemin="0" aria-valuemax="100">
+              <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%
+              </div>
+            </div>
+
+            <h6 class="card-text mb-4 <%= room_check_status_class(zone.rooms_checked_today, zone.total_rooms) %>"><%= zone.rooms_checked_today %>/<%= zone.total_rooms %> Classrooms Complete</h6>
+
+            <div class="mt-auto d-flex justify-content-between">
+              <div>
+                <a href="" class="btn btn-warning btn-sm flex-fill">Incomplete Rooms</a> 
+              </div>
+              <div>
+                <a href="" class="btn btn-success btn-sm flex-fill">Complete Rooms</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

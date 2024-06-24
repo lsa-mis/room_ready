@@ -4,6 +4,8 @@ class DashboardsController < ApplicationController
   def index
     @dashboard = Dashboard.new
     authorize @dashboard
+
+    @zones = Zone.all
   end
 
   def new
