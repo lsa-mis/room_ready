@@ -1,6 +1,10 @@
 class ReportsController < ApplicationController
   def index
     authorize :report, :index?
+
+    @reports_list = [
+      {title: "Room Issues", url: room_issues_report_reports_path },
+    ]
   end
 
   def room_issues_report
