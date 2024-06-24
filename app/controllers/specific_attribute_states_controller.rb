@@ -107,6 +107,7 @@ class SpecificAttributeStatesController < ApplicationController
     def set_room
       @room_state = RoomState.find(params[:room_state_id])
       @room = @room_state.room
+      @phone = AppPreference.find_by(name: 'supervisor_phone_number').value
       # @room = Room.find_by(id: params[:room_id])
   
       # Redirects if certain conditions are not met

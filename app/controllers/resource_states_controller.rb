@@ -72,6 +72,7 @@ class ResourceStatesController < ApplicationController
 
   def set_room
     @room_state = RoomState.find(params[:room_state_id])
+    @phone = AppPreference.find_by(name: 'supervisor_phone_number').value
       @room = @room_state.room
 
     unless @room

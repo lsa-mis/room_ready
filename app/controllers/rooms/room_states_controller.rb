@@ -79,6 +79,7 @@ class Rooms::RoomStatesController < ApplicationController
     def set_room
       @room = Room.find(params[:room_id])
       @no_access_reasons = AppPreference.find_by(name: 'no_access_reason_pref')&.value&.split(',').map(&:strip)
+      @phone = AppPreference.find_by(name: 'supervisor_phone_number').value
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state
