@@ -21,3 +21,6 @@ application.register("render", RenderNoAccessReasonController);
 
 import ConfirmRedirectController from "./confirm_redirect_controller";
 application.register("redirect", ConfirmRedirectController);
+
+import RoomTicketsController from "./room_tickets_controller";
+application.register("room-tickets", RoomTicketsController);
