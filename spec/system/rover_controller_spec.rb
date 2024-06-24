@@ -9,7 +9,7 @@ RSpec.describe Rover, type: :system do
     mock_login(user)
   end
 
-	context 'create a new rover with invalid uniqname' do
+  context 'create a new rover with invalid uniqname' do
     it 'returns "uniqname is invalid" message' do
       VCR.use_cassette "building" do
         uniqname = 'randomname'
