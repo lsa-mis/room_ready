@@ -37,7 +37,7 @@ RSpec.describe Rover, type: :system do
     end
   end
 
-	context 'edit a rover' do
+  context 'edit a rover' do
     let!(:rover) { FactoryBot.create(:rover) }
     it 'go to Editing Rover page' do
       VCR.use_cassette "rover" do
