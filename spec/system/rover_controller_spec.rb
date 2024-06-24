@@ -72,7 +72,7 @@ RSpec.describe Rover, type: :system do
   end
 
   context 'fail deleting a rover' do
-    let!(:rover) { build_stubbed(:rover) }
+    let!(:rover) { create(:rover) }
 
     it 'click on delete icon and delete returns error' do
       allow(rover).to receive(:destroy).and_return(false)
