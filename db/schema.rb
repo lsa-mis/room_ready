@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_11_142409) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_21_145957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -96,6 +96,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_142409) do
     t.string "description"
     t.boolean "need_checkbox"
     t.boolean "need_quantity_box"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "dashboards", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

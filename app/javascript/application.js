@@ -5,3 +5,8 @@ import * as bootstrap from "bootstrap"
 
 import "trix"
 import "@rails/actiontext"
+import "chartkick"
+import "Chart.bundle"
+import "chartkick/chart.js"
+//= require chartkick
+//= require Chart.bundle
