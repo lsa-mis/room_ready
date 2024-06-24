@@ -8,6 +8,7 @@
 #  room_id      :bigint           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  tdx_email    :string
 #
 require 'rails_helper'
 
