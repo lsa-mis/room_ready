@@ -14,7 +14,7 @@
   
     <div>
     <h3>List of Unassigned Buildings</h3>
-    <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone, :id, :name), include_blank: "Select to Add to the Zone ...", class: "input_text_field", "data-action" => "change->autosubmit#submitForm" %>
+    <%= select_tag "building_id", options_from_collection_for_select(choose_buildings_for_zone, :id, :name), include_blank: "Select Building ...", class: "input_text_field", "data-action" => "change->autosubmit#submitForm" %>
     </div>
   <% end %>
 <% end %>
