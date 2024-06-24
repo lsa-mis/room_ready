@@ -9,7 +9,7 @@ RSpec.describe Rover, type: :system do
 		mock_login(user)
   end
 
-	context 'create a new rover' do
+  context 'create a new rover' do
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "rover" do
         visit rovers_path
