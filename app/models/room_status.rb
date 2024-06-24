@@ -58,6 +58,14 @@ class RoomStatus
     @room.room_states.last
   end
 
+  def room_state_today
+    if room_checked_today?
+      room_state
+    else 
+      nil
+    end
+  end
+
   def common_attribute_checked?
     room_state.common_attribute_states.last.present? && (yesterday..tomorrow).include?(room_state.common_attribute_states.last.updated_at.to_date)
   end
@@ -70,21 +78,25 @@ class RoomStatus
     room_state.resource_states.last.present? && (yesterday..tomorrow).include?(room_state.resource_states.last.updated_at.to_date)
   end
 
+  def calculate_percentage
+    w = status_weight
+    percentage = w
+    if common_attributes_exist?
+      percentage += w if common_attribute_checked?
+    end
+    if specific_attributes_exist?
+      percentage += w if specific_attribute_checked?
+    end
+    if resources_exist?
+      percentage += w if resources_checked?
+    end
+    number_with_precision(percentage, precision: 2)
+  end
+
   def show_status
     if room_checked_once?
       if room_checked_today?
-        w = status_weight
-        percentage = w
-        if common_attributes_exist?
-            percentage += w if common_attribute_checked?
-        end
-        if specific_attributes_exist?
-            percentage += w if specific_attribute_checked?
-        end
-        if resources_exist?
-            percentage += w if resources_checked?
-        end
-        checked = "Checked " + number_with_precision(percentage, precision: 2).to_s + "%"
+        checked = "Checked " + calculate_percentage.to_s + "%"
       else
         checked = "Checked " + time_ago_in_words(last_time_checked) + " ago"
       end

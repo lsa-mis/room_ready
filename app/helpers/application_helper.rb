@@ -133,4 +133,46 @@ module ApplicationHelper
     ((checked.to_f / total) * 100).round
   end
 
+  def google_map_navigation_path(address)
+    formatted_address = address.gsub(/\s/,'+')
+    "https://www.google.com/maps/dir//" + formatted_address
+  end
+
+  def show_room_percentage(room)
+    RoomStatus.new(room).calculate_percentage
+  end
+
+  def tdx_emails(building)
+    emails = []
+    if AppPreference.find_by(name: 'tdx_facilities_email').value.present?
+      value =  AppPreference.find_by(name: 'tdx_facilities_email')&.value&.split(':').map(&:strip)
+      facility_email = [value[0], value[1]]
+    end
+    if AppPreference.find_by(name: 'tdx_lsa_ts_email').value.present?
+      value = AppPreference.find_by(name: 'tdx_lsa_ts_email')&.value&.split(':').map(&:strip)
+      emails << [value[0], value[1]]
+    else
+      emails << "No LSA TS Help desk email in the App Preferences - report an issue"
+    end
+    case building.nick_name.downcase
+    when "dana"
+      if AppPreference.find_by(name: 'dana_building_facility_issues_email').value.present?
+        value =  AppPreference.find_by(name: 'dana_building_facility_issues_email')&.value&.split(':').map(&:strip)
+        emails << [value[0], value[1]]
+      else
+        emails << facility_email
+      end
+    when "skb"
+      if AppPreference.find_by(name: 'skb_facility_issues_email').value.present?
+        value =  AppPreference.find_by(name: 'skb_facility_issues_email')&.value&.split(':').map(&:strip)
+        emails << [value[0], value[1]]
+      else
+        emails << facility_email
+      end
+    else
+      emails << facility_email
+    end
+    return emails
+  end
+  
 end

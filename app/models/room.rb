@@ -27,7 +27,4 @@ class Room < ApplicationRecord
     [floor.building.nick_name, room_number].join(' ')
   end
 
-  def room_state_for_today
-    room_states.find_by(created_at: Time.zone.today.all_day)
-  end
 end

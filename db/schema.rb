@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.1].define(version: 2024_06_21_145957) do
+=======
+ActiveRecord::Schema[7.1].define(version: 2024_06_23_030212) do
+>>>>>>> staging
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -150,6 +154,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_145957) do
     t.bigint "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tdx_email"
     t.index ["room_id"], name: "index_room_tickets_on_room_id"
   end
 

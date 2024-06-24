@@ -40,7 +40,7 @@ class CommonAttributeStatesController < ApplicationController
 
     if @common_attribute_states.all?(&:persisted?)
       # redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id), notice: 'Common Attribute States were successfully saved.'
+      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
     else
       render :new, status: :unprocessable_entity
     end
@@ -64,9 +64,9 @@ class CommonAttributeStatesController < ApplicationController
 
     # if @common_attribute_states.all?(&:persisted?)
       if @room_state.specific_attribute_states.any?
-        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id), notice: "Common Attribute States were successfully updated."
+        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id)
       else
-        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id), notice: 'Common Attribute States were successfully saved.'
+        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
       end
     # else
     #   render :edit, status: :unprocessable_entity
