@@ -8,7 +8,7 @@ class RoomTicketPolicy < ApplicationPolicy
   end
 
   def create?
-    is_rover?
+    is_rover? || is_admin?
   end
 
   def new?
@@ -28,6 +28,6 @@ class RoomTicketPolicy < ApplicationPolicy
   end
 
   def send_email_for_tdx_ticket?
-    create?
+    is_rover? || is_admin?
   end
 end

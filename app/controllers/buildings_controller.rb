@@ -102,7 +102,7 @@ class BuildingsController < ApplicationController
           respond_to do |format|
             if @building.save
               add_classrooms_for_building(bldrecnbr)
-              notice = "New Building was added to the zone." + note
+              notice = "New Building was added." + note
               @buildings = Building.where(zone: @zone)
               format.turbo_stream do
                 @new_building = Building.new

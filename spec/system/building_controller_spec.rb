@@ -23,7 +23,7 @@ RSpec.describe Building, type: :system do
     end
   end
 
-  context 'create a new building valid bldrecnbr' do
+  context 'create a new building with valid bldrecnbr' do
     it 'returns "New Building was added" message' do
       VCR.use_cassette "building" do
         bldrecnbr = '1234567'

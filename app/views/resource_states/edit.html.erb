@@ -3,7 +3,7 @@
     <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path %></li>
     <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id) %></li>
     <li class="breadcrumb-item"><%= link_to "Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id) %></li>
-    <li class="breadcrumb-item"><%= link_to "Begin Check", edit_room_room_state_path(@room, @room.room_state_for_today.id) %></li>
+    <li class="breadcrumb-item"><%= link_to "Begin Check", edit_room_room_state_path(@room, RoomStatus.new(@room).room_state_today.id) %></li>
     <li class="breadcrumb-item"><%= link_to "Common Questions", edit_common_attribute_state_path(id: @room_state.id, room_state_id: @room_state.id) %></li>
     <li class="breadcrumb-item"><%= link_to "Specific Questions", edit_specific_attribute_state_path(id: @room_state.id, room_state_id: @room_state.id) %></li>
     <li class="breadcrumb-item active" aria-current="page">Resources</li>
@@ -15,6 +15,8 @@
 <h2><%= "Building: #{@room.floor.building.name}" %> (Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
-<%= render 'rover_navigations/form_progress_bar', percentage: 75 %>
-
+<%= render 'rover_navigations/form_progress_bar', room: @room %>
+<%= render 'shared/tdxtickets' %>
+<br>
+<br>
 <%= render 'edit_form', room_state_id: @room_state.id %>
