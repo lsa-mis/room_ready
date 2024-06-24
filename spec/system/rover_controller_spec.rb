@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Rover, type: :system do
 
   before do
-		user = FactoryBot.create(:user)
+    user = FactoryBot.create(:user)
     allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
     allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
     mock_login(user)
