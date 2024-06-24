@@ -18,8 +18,8 @@ class Building < ApplicationRecord
   has_many :floors
   belongs_to :zone, optional: true
 
-  # validates :bldrecnbr, :name, :address, :city, :state, :zip, presence: true
   validates :bldrecnbr, uniqueness: true, presence: true
+  validates :name, uniqueness: true
 
   def full_address
     "#{address}, #{city}, #{state} #{zip}"
