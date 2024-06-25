@@ -60,7 +60,7 @@ class RoverNavigationsController < ApplicationController
       rooms_not_checked_ordered = rooms_not_checked.order(:room_number).pluck(:room_number)
       closest_room_to_current = closest_room(rooms_not_checked_ordered, @room.room_number) 
       @recommended_room = Room.find_by(room_number: closest_room_to_current, floor_id: @room.floor.id)
-      return @recommended_room
+      return @recommended_room if !@recommended_room.nil?
     end
 
     room_in_nearby_floor = room_on_nearest_floor(@room)
@@ -69,6 +69,8 @@ class RoverNavigationsController < ApplicationController
       @recommended_room = room_in_nearby_floor
       return @recommended_room
     end
+
+    fail
   end
 
   private
