@@ -5,9 +5,10 @@ class RoomTicketMailer < ApplicationMailer
     @room = params[:room]
     @date = params[:date]
     @building = @room.floor.building
+    tdx_email = params[:tdx_email]
 
     subject = "Issue for Room " + @room.room_number + " in " + @building.name + ", "  + @date
     
-    mail(to: "test@gmail.com", subject: subject)
+    mail(to: tdx_email, subject: subject)
   end
 end

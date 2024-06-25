@@ -16,7 +16,8 @@ class Rooms::RoomTicketsController < ApplicationController
   end
 
   def send_email_for_tdx_ticket
-    message = params.require(:room_ticket).permit(:description)[:description]
+    message = room_ticket_params[:description]
+    tdx_email = room_ticket_params[:tdx_email]
     submitter = current_user
 
     @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: submitter.uniqname )
@@ -24,14 +25,10 @@ class Rooms::RoomTicketsController < ApplicationController
 
     respond_to do |format|
       if @room_ticket.save
-        RoomTicketMailer.with(date: @room_ticket.created_at.strftime('%m/%d/%Y'), room: @room, message: message, submitter: submitter).send_tdx_ticket.deliver_now
-        # format.html { redirect_to welcome_rovers_path, notice: "Room ticket was successfully sent." }
-        # format.json { render :show, status: :created, location: @room_ticket }
-        flash[:notice] = "Room ticket was successfully sent."
-        return
+        RoomTicketMailer.with(date: @room_ticket.created_at.strftime('%m/%d/%Y'), room: @room, message: message, submitter: submitter, tdx_email: tdx_email).send_tdx_ticket.deliver_now
+        format.json { render json: { notice: "Room ticket was successfully sent." }, status: :ok }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room_ticket.errors, status: :unprocessable_entity }
+        format.json { render json: { errors: @room_ticket.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end
@@ -43,8 +40,12 @@ class Rooms::RoomTicketsController < ApplicationController
     end
 
     def set_room
-      @room_id = params[:room_id]
+      # @room_id = params[:room_id]
       @room = Room.find(params[:room_id])
       @building = @room.floor.building
+    end
+
+    def room_ticket_params
+      params.require(:room_ticket).permit(:description, :tdx_email)
     end
 end

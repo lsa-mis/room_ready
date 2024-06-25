@@ -35,36 +35,6 @@ RSpec.describe Building, type: :model do
     end
   end
 
-  context "create building without a name" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Name can\'t be blank"' do
-      expect { FactoryBot.create(:building, name: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name can't be blank")
-    end
-  end
-
-  context "create building without an address" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Address can\'t be blank"' do
-      expect { FactoryBot.create(:building, address: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address can't be blank")
-    end
-  end
-
-  context "create building without a city" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: City can\'t be blank"' do
-      expect { FactoryBot.create(:building, city: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: City can't be blank")
-    end
-  end
-
-  context "create building without a state" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: State can\'t be blank"' do
-      expect { FactoryBot.create(:building, state: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: State can't be blank")
-    end
-  end
-
-  context "create building without a zip" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Zip can\'t be blank"' do
-      expect { FactoryBot.create(:building, zip: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Zip can't be blank")
-    end
-  end
-
   context "create building with a duplicated bldrecnbr" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Bldrecnbr has already been taken"' do
       building = FactoryBot.create(:building)

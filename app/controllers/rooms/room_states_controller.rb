@@ -39,10 +39,11 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
-        notice = "A new state to this room was successfully created."
-        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: notice }
+        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+        format.json { render json: { status: 'ok' }, status: :ok }
       else
         format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: { errors: @room_state.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end
@@ -56,9 +57,11 @@ class Rooms::RoomStatesController < ApplicationController
           return
         end
         if @room_state.common_attribute_states.any?
-          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.json { render json: { status: 'ok' }, status: :ok }
         else
-          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id), notice: "Room state was successfully updated." }
+          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.json { render json: { status: 'ok' }, status: :ok }
         end
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -79,7 +82,11 @@ class Rooms::RoomStatesController < ApplicationController
   private
     def set_room
       @room = Room.find(params[:room_id])
-      @no_access_reasons = AppPreference.find_by(name: 'no_access_reason_pref')&.value&.split(',').map(&:strip)
+      if AppPreference.find_by(name: 'no_access_reason').value.present?
+        @no_access_reasons = AppPreference.find_by(name: 'no_access_reason')&.value&.split(',').map(&:strip)
+      else
+        @no_access_reasons = []
+      end
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_room_state

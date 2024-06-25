@@ -1,28 +1,18 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ['form']
-  
-  connect () {
-    console.log("connect autosubmit")
-  }
-  submitForm() {
-    console.log("here")
-    Turbo.navigator.submitForm(this.formTarget)
-  }
-  
-  search() {
-    console.log("search")
-    clearTimeout(this.timeout)
+  static targets = ["form", "description"];
 
-    this.timeout = setTimeout(() => {
-      this.formTarget.requestSubmit()
-    }, 200)
+  connect() {
+    console.log("Hello World!");
   }
-
   async check(event){
     console.log("check");
     event.preventDefault(); // Prevent default form submission
+    if (this.descriptionTarget.value.trim() === ""){
+      alert("Description field cannot be blank.");
+      return;
+    }
     // Gather form data
     const formData = new FormData(this.formTarget);
     try {
@@ -35,6 +25,13 @@ export default class extends Controller {
         },
         body: formData
       });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.notice);
+        this.formTarget.reset();
+      } else {
+        alert(data.errors.join(", "));
+      }
     } 
     catch (error) {
       console.error("Error submitting form", error);
