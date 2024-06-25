@@ -35,12 +35,6 @@ export default class extends Controller {
         },
         body: formData
       });
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.notice);
-      } else {
-        alert(data.errors.join(", "));
-      }
     } 
     catch (error) {
       console.error("Error submitting form", error);
