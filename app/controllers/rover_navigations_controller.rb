@@ -54,12 +54,12 @@ class RoverNavigationsController < ApplicationController
       if rooms_with_no_check_time.exists?
         rooms_not_checked = rooms_with_no_check_time
       else
-        rooms_not_checked = @rooms_in_same_floor.where(last_time_checked: start_of_day..end_of_day)
+        rooms_not_checked = rooms_in_same_floor.where.not(last_time_checked: start_of_day..end_of_day)
       end
 
       rooms_not_checked_ordered = rooms_not_checked.order(:room_number).pluck(:room_number)
       closest_room_to_current = closest_room(rooms_not_checked_ordered, @room.room_number) 
-      @recommended_room = Room.find_by(room_number: closest_room_to_current)
+      @recommended_room = Room.find_by(room_number: closest_room_to_current, floor_id: @room.floor.id)
       return @recommended_room
     end
 
@@ -96,7 +96,7 @@ class RoverNavigationsController < ApplicationController
           if rooms_with_no_check_time.exists?
             return rooms_with_no_check_time.first
           end
-          
+
           rooms_not_checked = rooms_for_floor.where(last_time_checked: start_of_day..end_of_day)
 
           if rooms_not_checked.exists?
