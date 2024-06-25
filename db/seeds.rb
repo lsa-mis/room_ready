@@ -18,7 +18,7 @@ end
 
 preferences = [
   {:name => 'no_access_reason', :description => "Comma-separated list of why you can't access a room", :pref_type => 'string'},
-  {:name => 'supervisor_phone', :description => 'A phone to report to a supervisor', :pref_type => 'string'},
+  {:name => 'supervisor_phone_number', :description => 'A phone to report to a supervisor', :pref_type => 'string'},
   {:name => 'resource_types', :description => 'Comma-separated list of resource types to add from WebCheckout', :pref_type => 'string'},
   {:name => 'tdx_lsa_ts_email', :description => 'An email address to create a TDX ticket with LSA TS', :pref_type => 'string', :value => "Technology Issues (all classrooms): LSATechnologyServices@umich.edu"},
   {:name => 'tdx_facilities_email', :description => 'An email address to create a TDX ticket with LSA Facilities', :pref_type => 'string', :value => "Facilities Issues (LSA classrooms): lsa-facilities@umich.edu"},

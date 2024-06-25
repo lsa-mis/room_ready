@@ -53,7 +53,7 @@ class RoversController < ApplicationController
   def update
     respond_to do |format|
       if @rover.update(rover_params)
-        format.html { redirect_to rover_url(@rover), notice: "Rover was successfully updated." }
+        format.html { redirect_to rovers_url, notice: "Rover was successfully updated." }
         format.json { render :show, status: :ok, location: @rover }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -64,11 +64,13 @@ class RoversController < ApplicationController
 
   # DELETE /rovers/1 or /rovers/1.json
   def destroy
-    @rover.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to rovers_url, notice: "Rover was successfully deleted." }
-      format.json { head :no_content }
+    if @rover.destroy
+      @rovers = Rover.all
+      @rover = Rover.new
+      flash.now[:notice] = "Rover was successfully deleted."
+    else
+      @rovers = Rover.all
+      flash.now[:notice] = "Error deleting rover."
     end
   end
 

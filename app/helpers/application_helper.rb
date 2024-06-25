@@ -148,5 +148,13 @@ module ApplicationHelper
     end
     return emails
   end
+
+  def show_supervisor_phone
+    if AppPreference.find_by(name: 'supervisor_phone_number').present? && AppPreference.find_by(name: 'supervisor_phone_number').value.present?
+      "at " + AppPreference.find_by(name: 'supervisor_phone_number').value
+    else 
+      ""
+    end
+  end
   
 end
