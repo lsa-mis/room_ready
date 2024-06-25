@@ -83,7 +83,6 @@
                 <h5 class="card-title">Room <%= @recommended_room.room_number %></h5>
                 <h6 class="card-subtitle mb-2 text-muted"><%= @recommended_room.floor.building.name %>,</h6>
                 <h6 class="card-subtitle mb-2 text-muted">Floor <%= @recommended_room.floor.name %></h6>
-                <h6 class="card-subtitle mb-2 text-muted">Date <%= @recommended_room.last_time_checked %></h6>
                 <%= link_to "Start Checking", new_room_room_state_path(room_id: @recommended_room.id), class: "btn btn-success w-100"%>
               </div>
             </div>
