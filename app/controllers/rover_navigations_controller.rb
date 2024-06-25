@@ -43,7 +43,6 @@ class RoverNavigationsController < ApplicationController
     end
 
     rooms_in_same_floor = rooms_on_same_floor_except_current(@room)
-    room_in_nearby_floor = room_on_nearest_floor(@room)
     @recommended_room = nil
 
     unless rooms_in_same_floor.nil?
@@ -64,6 +63,8 @@ class RoverNavigationsController < ApplicationController
       return @recommended_room
     end
 
+    room_in_nearby_floor = room_on_nearest_floor(@room)
+
     unless room_in_nearby_floor.nil?
       @recommended_room = room_in_nearby_floor
       return @recommended_room
@@ -79,7 +80,7 @@ class RoverNavigationsController < ApplicationController
     def room_on_nearest_floor(room)
       building = room.floor.building
       nearby_floors = building.floors.where.not(id: room.floor.id)
-      
+
       start_of_day = Time.now.beginning_of_day
       end_of_day = Time.now.end_of_day
 
