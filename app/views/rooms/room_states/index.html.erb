@@ -2,7 +2,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1>Room States <%= @room.rmrecnbr? ? "for #{@room.room_number}" : '' %></h1>
   <div class="d-flex flex-column gap-1">
-    <%= link_to "Back to Room", room_path(@room) %>
+    <%= link_to "Back to Room", room_path(@room), class: "link_to" %>
   </div>
 </div>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
