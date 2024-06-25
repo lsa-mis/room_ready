@@ -79,6 +79,7 @@ class CommonAttributeStatesController < ApplicationController
     @room_state = RoomState.find(params[:room_state_id])
     @room = @room_state.room
     # Redirects if certain conditions are not met
+
     unless @room
       redirect_to rooms_path, alert: 'Room doesnt exist.' and return
     end
