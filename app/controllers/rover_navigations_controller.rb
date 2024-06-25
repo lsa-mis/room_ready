@@ -36,7 +36,7 @@ class RoverNavigationsController < ApplicationController
       redirect_to zones_rover_navigation_path, notice: 'Room does not exist!'
     end
 
-    @room_state_today = @room.room_state_for_today
+    @room_state_today = RoomStatus.new(@room).room_state_today
 
     if @room_state_today.nil?
       redirect_to zones_rover_navigation_path, notice: 'Room not checked or Invalid!'
