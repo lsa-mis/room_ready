@@ -22,8 +22,11 @@
 
 <% @rooms.each do |room| %>
   <div class="card mt-3">
-    <h5 class="card-header text-success">
-      Room: <%= room.room_number %> <%= RoomStatus.new(room).show_status %>
+    <h5 class="card-header">
+      Room: <%= room.room_number %> 
+      <span class="fs-5 fw-bold text-success">
+        <%= RoomStatus.new(room).show_status %>
+      </span>
     </h5>
     <div class="card-body">
       <p class="card-text">
@@ -41,4 +44,3 @@
     </div>
   </div>
 <% end %>
- 
