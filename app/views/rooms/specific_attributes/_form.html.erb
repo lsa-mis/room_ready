@@ -30,7 +30,7 @@
     <%= form.submit specific_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
     <% if specific_attribute.persisted? %>
-      <%= link_to "Cancel", room_specific_attributes_path(@room), class: "text-primary link_to" %>
+      <%= link_to "Cancel", room_specific_attributes_path(@room), class: "ink_to" %>
     <% end %>
   </div>
 <% end %>
