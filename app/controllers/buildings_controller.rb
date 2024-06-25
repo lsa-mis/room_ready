@@ -11,7 +11,7 @@ class BuildingsController < ApplicationController
     zone_id_exists = !(@zone_id.nil? || @zone_id.strip.empty?)
     search_query_exists = !(@search_query.nil? || @search_query.strip.empty?)
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @zones = Zone.get_array_of_all_zones
 
     if zone_id_exists
       @buildings = Building.where(zone_id: @zone_id)
@@ -48,7 +48,7 @@ class BuildingsController < ApplicationController
   end
 
   def edit
-    @zones = Zone.all.map { |z| [z.name, z.id] }
+    @zones = Zone.get_array_of_all_zones
     authorize @building
   end
     
