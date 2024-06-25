@@ -98,9 +98,13 @@ class RoomStatus
   def show_status
     if room_checked_once?
       if room_checked_today?
-        checked = "Checked " + calculate_percentage.to_s + "%"
+        if room_state_today&.is_accessed
+          checked = "Checked #{calculate_percentage}%"
+        else
+          checked = "Checked #{calculate_percentage}% - no access"
+        end
       else
-        checked = "Checked " + time_ago_in_words(last_time_checked) + " ago"
+        checked = "Checked #{time_ago_in_words(last_time_checked)} ago"
       end
     else
       checked = "Never checked"
