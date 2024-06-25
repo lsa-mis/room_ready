@@ -1,33 +1,40 @@
 <h1>Room Issues Reports</h1>
 <h6>This report shows information on Room Issues (TDx Tickets)</h6>
 
-<div class="px-5 py-3">
-    <%= form_with url: room_issues_report_reports_path, method: :get do |form| %>
-      <div>
-        <label for="zone_id" class="fancy_label">Select a Zone</label>
-        <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"} %>
-        <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-          <%= form.label :from, "From: "%>
-          <%= form.date_field :from, value: params[:from], class: "form-control" %>
-          <%= form.label :to, "To: "%>
-          <%= form.date_field :to, value: params[:to], class: "form-control" %>
-        </div>
-      </div>
+<div class="py-3">
+  <%= form_with url: room_issues_report_reports_path, method: :get, class: "mb-3" do |form| %>
+    <div>
+      <label for="zone_id" class="fancy_label">Select a Zone</label>
+      <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, class: "form-select" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <%= form.submit "Preview" %>
-        <%= link_to "Clear filters", room_issues_report_reports_path %>
+        <%= form.label :from, "From: "%>
+        <%= form.date_field :from, value: params[:from], class: "form-control" %>
+        <%= form.label :to, "To: "%>
+        <%= form.date_field :to, value: params[:to], class: "form-control" %>
       </div>
-    <% end %>
-  <table class="table text-center mt-4">
-    <thead class="table-group-divider">
-    <tr>
-      <th scope="col" class="text-start">Room</th>
-      <th scope="col">Building</th>
-      <th scope="col">Zone</th>
-      <th scope="col"># Issues</th>
-    </tr>
-    </thead>
-    <tbody class="table-group-divider" id="common_attributes">
+      <div class="d-flex flex-row justify-content-start align-items-center">
+        <%= form.label :report_type, "Report Type: ", class: "form-label" %>
+        <%= form.select :report_type, options_for_select([["Display in Browser", "browser"], ["Export to CSV", "csv"]],
+                                                         selected: params[:report_type]), {}, class: "form-select" %>
+      </div>
+    </div>
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.submit "Run Report" %>
+      <%= link_to "Clear filters", room_issues_report_reports_path, class: "text-primary cancel-button" %>
+    </div>
+  <% end %>
+  <% if params[:commit] && params[:report_type] == 'browser' %>
+    <h3>Total number of issues submitted: <%= @total_tickets_count %></h3>
+    <table class="table text-center mt-4">
+      <thead class="table-group-divider">
+      <tr>
+        <th scope="col" class="text-start">Room</th>
+        <th scope="col">Building</th>
+        <th scope="col">Zone</th>
+        <th scope="col"># Issues</th>
+      </tr>
+      </thead>
+      <tbody class="table-group-divider" id="common_attributes">
       <% @rooms.each do |room| %>
         <tr>
           <td class="text-start"><%= room.room_number %></td>
@@ -40,11 +47,12 @@
             <% end %>
           </td>
           <td>
-              <%= room.tickets_count %>
+            <%= room.tickets_count %>
           </td>
         </tr>
       <% end %>
-    </tbody>
-  </table>
-  <h2>Total number of issues submitted: <%= @total_tickets_count %></h2>
+      </tbody>
+    </table>
+  <% end %>
+
 </div>
