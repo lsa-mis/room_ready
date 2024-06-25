@@ -36,7 +36,7 @@
       <%= form.submit app_preference.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
 
       <% if app_preference.persisted? %>
-        <%= link_to "Cancel", app_preferences_path, class: "text-primary cancel-button" %>
+        <%= link_to "Cancel", app_preferences_path, class: "text-primary link_to" %>
       <% end %>
   </div>
 <% end %>

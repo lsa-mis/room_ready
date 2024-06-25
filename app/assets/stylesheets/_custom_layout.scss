@@ -214,11 +214,12 @@ svg.wh6 {
   height: 24px;
 }
 
-.cancel-button {
+.link_to {
+  color: $um-blue;
   text-decoration: none; /* Ensures no underline by default */
 }
 
-.cancel-button:hover {
+.link_to:hover {
   text-decoration: underline; /* Adds underline on hover */
 }
 
@@ -229,4 +230,12 @@ svg.wh6 {
 .navbar_dropdown_item:hover {
   background-color: $um_blue;
   color: $um_maize;
+}
+
+.breadcrumb-item >.active a {
+  color: $um-blue;
+}
+
+.breadcrumb-item > .active {
+  color: #00274c;
 }

@@ -2,9 +2,9 @@
   <h1>Building Details</h1>
   <div class="d-flex flex-column gap-1 mt-2">
     <% if @zone.present? %>
-      <%= link_to "Back to Buildings", zone_buildings_path(@zone) %>
+      <%= link_to "Back to Buildings", zone_buildings_path(@zone), class: "link_to" %>
     <% else %>
-      <%= link_to "Back to Buildings", buildings_path %>
+      <%= link_to "Back to Buildings", buildings_path, class: "link_to" %>
     <% end %>
     <%= link_to "Edit Bulding", edit_building_path(@building), class: "btn btn-primary h-50 mt-auto mb-auto" %>
   </div>
@@ -13,7 +13,7 @@
 
 <div class="d-flex flex-row justify-content-start align-items-center gap-3">
   <h2>Rooms </h2>
-  <%= link_to "Add Room", new_room_path(:building_id => @building.id), class: "cancel-button" %>
+  <%= link_to "Add Room", new_room_path(:building_id => @building.id), class: "link_to" %>
 </div>
 
 <div class="accordion accordion-flush" id="buildingFloors">
@@ -42,17 +42,17 @@
                 <% floor.rooms.order(:room_number).each do |room| %>
                   <tr class="building_tbody_tr">
                     <td class="building_tbody_td">
-                      <%#= link_to room.room_number, room_path(room), class: "cancel-button" %>
+                      <%#= link_to room.room_number, room_path(room), class: "link_to" %>
                       <%= room.rmrecnbr %>
                     </td>
                     <td class="building_tbody_td">
-                      <%= link_to room.room_number, room_path(room), data: { turbo_frame: "_top" } %>
+                      <%= link_to room.room_number, room_path(room), data: { turbo_frame: "_top" }, class: "link_to" %>
                     </td>
                     <td class="building_tbody_td">
                     <%= room.room_type %>
                   </td>
                     <td class="building_tbody_td">
-                      <%= link_to room_path(room), data: { turbo_frame: "_top" } do %>
+                      <%= link_to room_path(room), class: "link_to", data: { turbo_frame: "_top" } do %>
                       <i class="bi bi-eye-fill text-primary"></i>
                       <% end %>
                     </td>
