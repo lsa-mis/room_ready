@@ -79,6 +79,8 @@ class RoomStatus
   end
 
   def calculate_percentage
+    return "100.00" if room_state_today&.is_accessed == false
+
     w = status_weight
     percentage = w
     if common_attributes_exist?
