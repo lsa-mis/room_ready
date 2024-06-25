@@ -23,8 +23,8 @@ RSpec.describe Building, type: :system do
     end
   end
 
-  context 'create a new building valid bldrecnbr' do
-    it 'returns "bldrecnbr is invalid" message' do
+  context 'create a new building with valid bldrecnbr' do
+    it 'returns "New Building was added" message' do
       VCR.use_cassette "building" do
         bldrecnbr = '1234567'
         result = {"success"=>true, "errorcode"=>"", "error"=>"", 
@@ -37,8 +37,7 @@ RSpec.describe Building, type: :system do
         visit new_building_path
         fill_in "Building Record Number", with: "1234567"
         click_on "Create Building"
-        sleep 3
-        expect(page).to have_content("New Building was added.")
+        expect(page).to have_content("New Building was added")
       end
     end
   end

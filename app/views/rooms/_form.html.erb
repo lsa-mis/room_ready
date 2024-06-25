@@ -19,7 +19,7 @@
     <%= hidden_field_tag 'building_id', @building.id %>
 
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-      <%= form.submit "Submit", class: "btn btn-primary", data: { turbo_frame: "_top" } %>
+      <%= form.submit "Create Room", class: "btn btn-primary", data: { turbo_frame: "_top" } %>
       <%= link_to 'Cancel', building_path(@building), data: { turbo_frame: "_top" } %>
     </div>
   <% end %>

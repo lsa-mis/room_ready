@@ -57,7 +57,7 @@ class Rooms::SpecificAttributesController < ApplicationController
     @specific_attribute.destroy!
 
     respond_to do |format|
-      notice = "Specific attribute was successfully destroyed."
+      notice = "Specific attribute was successfully deleted."
       format.turbo_stream do
         flash.now[:notice] = notice
       end

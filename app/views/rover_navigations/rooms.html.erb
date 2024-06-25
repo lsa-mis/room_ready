@@ -8,7 +8,10 @@
   </ol>
 </nav>
 
-<h2>Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>) </h2>
+<h2>
+  Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>)
+  <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(@floor.building.full_address) %>"></i>
+</h2>
 
 <%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
   <%= form.hidden_field :floor_id, value: @floor.id %>
@@ -31,10 +34,11 @@
       </p>
       <p style="color:red">Last Time Checked: <%= show_date_with_time(room.last_time_checked) %> </p>
       <% if RoomStatus.new(room).room_checked_today? %>
-        <%= link_to "Edit Today's Form", edit_room_room_state_path(room, room.room_state_for_today.id), class: "btn btn-primary" %>
+        <%= link_to "Edit Today's Form", edit_room_room_state_path(room, RoomStatus.new(room).room_state_today.id), class: "btn btn-primary" %>
       <% else %>
         <%= link_to "Start Checking Room", new_room_room_state_path(room), class: "btn btn-primary" %>
       <% end %>
     </div>
   </div>
 <% end %>
+ 
