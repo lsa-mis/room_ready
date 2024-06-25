@@ -2,7 +2,8 @@ module DashboardHelper
 
   # getter for the number of latest tickets to be displayed on the dashboard, or makes it 5 by default
   def recent_tickets_quantity
-    AppPreference.find_by(name: "tdx_tickets_quantity_on_dashboard")&.value || 5
+    value = AppPreference.find_by(name: "tdx_tickets_quantity_on_dashboard")&.value
+    value.presence&.to_i || 5
   end
 
 
