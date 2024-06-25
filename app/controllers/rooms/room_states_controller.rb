@@ -40,8 +40,10 @@ class Rooms::RoomStatesController < ApplicationController
           return
         end
         format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+        # format.json { render json: { status: 'ok' }, status: :ok }
       else
         format.html { render :new, status: :unprocessable_entity }
+        # format.json { render json: { errors: @room_state.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end
