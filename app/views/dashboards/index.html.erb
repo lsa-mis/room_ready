@@ -35,4 +35,20 @@
       </div>
     <% end %>
   </div>
+
+  <h2>Recent Room Tickets</h2>
+  <div class="row">
+    <% latest_room_tickets.each do |ticket| %>
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Room <%= ticket.room.room_number %> - <%= ticket.room.floor.building.name.titleize %></h5>
+            <p class="card-text"><%= ticket.description.presence || "No description provided." %></p>
+            
+            <p class="card-text">Submitted by: <%= ticket.submitted_by %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
