@@ -6,9 +6,6 @@
       <%= link_to room_path(@room), class: 'btn btn-danger' do %>
         Archive <i class="bi bi-archive-fill"></i>
       <% end %>
-      <%= link_to 'Edit Common Attribute States', new_common_attribute_state_path(room_id: @room.id) %>
-
-      <%= link_to 'Add Resources States', new_resource_state_path(room_id: @room.id, room_state_id: @room_state_id) %>
     </div>
   </div>
 
