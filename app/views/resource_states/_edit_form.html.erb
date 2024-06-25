@@ -3,7 +3,7 @@
   data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
   <div class="d-inline-flex gap-1 mt-1 mb-1 p-2 bg-um-blue border rounded">
     <%= form.check_box :report_to_supervisor, class: "form-check-input", data: { action: "change->autosubmit#check" }  %>
-    <%= form.label :report_to_supervisor, "Reported to supervisor at #{@phone}", class: "form-check-label text-white" %>
+    <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
   </div>
   <%end%>
 </div>
