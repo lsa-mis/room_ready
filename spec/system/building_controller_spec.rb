@@ -70,7 +70,7 @@ RSpec.describe Building, type: :system do
       visit buildings_path
       find(:css, 'i.bi.bi-pencil-square.text-primary').click
       expect(page).to have_content("Editing Building")
-      fill_in "Nick name", with: building.nick_name + "edited"
+      fill_in "Nickname", with: building.nick_name + "edited"
       click_on "Update"
       expect(page).to have_content(building.nick_name + "edited")
     end

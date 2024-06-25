@@ -17,13 +17,16 @@
   <%= form.hidden_field :floor_id, value: @floor.id %>
   <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number", aria: { label: "search" } %>
   <%= form.submit "Search" %>
-  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'text-primary cancel-button' %>
+  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'link_to' %>
 <% end %>
 
 <% @rooms.each do |room| %>
   <div class="card mt-3">
     <h5 class="card-header">
-      Room: <%= room.room_number %> <%= RoomStatus.new(room).show_status %>
+      Room: <%= room.room_number %> 
+      <span class="fs-5 fw-bold text-success">
+        <%= RoomStatus.new(room).show_status %>
+      </span>
     </h5>
     <div class="card-body">
       <p class="card-text">
@@ -41,4 +44,3 @@
     </div>
   </div>
 <% end %>
- 

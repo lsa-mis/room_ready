@@ -4,7 +4,7 @@
       <tr>
         <th>Building Record Number</th>
         <th>Name</th>
-        <th>Nick name</th>
+        <th>Nickname</th>
         <th>Address</th>
         <th>Zone</th>
         <th>View</th>
@@ -19,13 +19,13 @@
             <%= building.bldrecnbr %>
           </td>
           <td class="building_tbody_td">
-            <%= building.name %>
+            <%= building.name.titleize %>
           </td>
           <td class="building_tbody_td">
             <%= building.nick_name %>
           </td>
           <td class="building_tbody_td">
-            <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}" %>
+            <%= building.full_address %>
           </td>
           </td>
           <td class="building_tbody_td">

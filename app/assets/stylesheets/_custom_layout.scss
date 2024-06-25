@@ -53,6 +53,12 @@ h2 {
   font-weight: 700;
   line-height: 38.4px;
   letter-spacing: 0em;
+  margin-top: 1rem;
+}
+
+h3, h4, h5, h6 {
+  font-family: Roboto;
+  margin-top: 1rem;
 }
 
 p {
@@ -197,11 +203,12 @@ svg.wh6 {
   height: 24px;
 }
 
-.cancel-button {
+.link_to {
+  color: $um-blue;
   text-decoration: none; /* Ensures no underline by default */
 }
 
-.cancel-button:hover {
+.link_to:hover {
   text-decoration: underline; /* Adds underline on hover */
 }
 

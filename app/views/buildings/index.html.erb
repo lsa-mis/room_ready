@@ -12,7 +12,7 @@
         turbo_frame: "all_buildings" 
       } do |form| %>
       <div>
-        <%= form.text_field :search, placeholder: "Search by Name, Nick Name, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
+        <%= form.text_field :search, placeholder: "Search by Name, Nickname, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
       <div>
         <label for="zone_id" class="fancy_label">Select a Zone</label>
