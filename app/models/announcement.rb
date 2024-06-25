@@ -9,4 +9,6 @@
 #
 class Announcement < ApplicationRecord
   has_rich_text :content
+
+  validates :location, uniqueness: true, presence: true
 end
