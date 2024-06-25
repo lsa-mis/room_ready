@@ -56,19 +56,8 @@ h2 {
   margin-top: 1rem;
 }
 
-h3 {
-  margin-top: 1rem;
-}
-
-h4 {
-  margin-top: 1rem;
-}
-
-h5 {
-  margin-top: 1rem;
-}
-
-h6 {
+h3, h4,h5, h6 {
+  font-family: Roboto;
   margin-top: 1rem;
 }
 
@@ -230,12 +219,4 @@ svg.wh6 {
 .navbar_dropdown_item:hover {
   background-color: $um_blue;
   color: $um_maize;
-}
-
-.breadcrumb-item >.active a {
-  color: $um-blue;
-}
-
-.breadcrumb-item > .active {
-  color: #00274c;
 }
