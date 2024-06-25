@@ -95,12 +95,12 @@ class RoverNavigationsController < ApplicationController
 
           if rooms_with_no_check_time.exists?
             return rooms_with_no_check_time.first
-          else
-            rooms_not_checked = rooms_for_floor.where(last_time_checked: start_of_day..end_of_day)
+          end
+          
+          rooms_not_checked = rooms_for_floor.where(last_time_checked: start_of_day..end_of_day)
 
-            if rooms_not_checked.exists?
-              return rooms_not_checked.first
-            end
+          if rooms_not_checked.exists?
+            return rooms_not_checked.first
           end
         end
       end
