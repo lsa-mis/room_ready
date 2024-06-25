@@ -38,18 +38,18 @@
                 <p><%= @room_state_today.updated_at.strftime('%m/%d/%Y') %></p>
               </div>
               <div class="col mb-3">
-                <p class="small text-muted mb-1">Room No.</p>
-                <p><%= @room.room_number %></p>
+                <p class="small text-muted mb-1">Building</p>
+                <p><%= @room.floor.building.name %></p>
               </div>
             </div>
             <div class="row">
               <div class="col mb-3">
-                <p class="small text-muted mb-1">Building</p>
-                <p><%= @room.floor.building.name %> </p>
-              </div>
-              <div class="col mb-3">
                 <p class="small text-muted mb-1">Floor</p>
                 <p><%= @room.floor.name %></p>
+              </div>
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Room No.</p>
+                <p><%= @room.room_number %></p>
               </div>
             </div>
             <hr />
