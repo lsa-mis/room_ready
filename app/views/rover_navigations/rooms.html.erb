@@ -17,7 +17,7 @@
   <%= form.hidden_field :floor_id, value: @floor.id %>
   <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number", aria: { label: "search" } %>
   <%= form.submit "Search" %>
-  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'text-primary link_to' %>
+  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'link_to' %>
 <% end %>
 
 <% @rooms.each do |room| %>
