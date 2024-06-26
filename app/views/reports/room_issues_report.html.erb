@@ -24,35 +24,6 @@
     </div>
   <% end %>
   <% if params[:commit] && params[:report_type] == 'browser' %>
-    <h3>Total number of issues submitted: <%= @total_tickets_count %></h3>
-    <table class="table text-center mt-4">
-      <thead class="table-group-divider">
-      <tr>
-        <th scope="col" class="text-start">Room</th>
-        <th scope="col">Building</th>
-        <th scope="col">Zone</th>
-        <th scope="col"># Issues</th>
-      </tr>
-      </thead>
-      <tbody class="table-group-divider" id="common_attributes">
-      <% @rooms.each do |room| %>
-        <tr>
-          <td class="text-start"><%= room.room_number %></td>
-          <td><%= room.floor.building.name %></td>
-          <td>
-            <% unless room.floor.building.zone.nil? %>
-              <%= room.floor.building.zone.name %>
-            <% else %>
-              No Zone
-            <% end %>
-          </td>
-          <td>
-            <%= room.tickets_count %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+    <%= render 'reports_table' %>
   <% end %>
-
 </div>

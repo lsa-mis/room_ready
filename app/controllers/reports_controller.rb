@@ -22,7 +22,20 @@ class ReportsController < ApplicationController
                    .having('COUNT(room_tickets.id) > 0')
                    .order('tickets_count DESC')
 
-      @total_tickets_count = @rooms.sum(&:tickets_count)
+      @title = 'Room Issues Report'
+      @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+      @data = @rooms.map do |room|
+        [
+          room.room_number,
+          room.floor.building.name,
+          room.floor.building.zone.name,
+          room.tickets_count,
+        ]
+      end
+
+      @metrics = {
+        'Total Tickets Count' => @rooms.sum(&:tickets_count),
+      }
     end
 
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
