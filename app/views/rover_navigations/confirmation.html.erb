@@ -76,7 +76,7 @@
               </div>
             </div>
             <hr />
-            <% unless @recommended_room.nil? %>
+            <% if @recommended_room %>
             <p class="lead fw-bold text-primary">Next Room</p>
             <div class="card border-success border-3 mb-4">
               <div class="card-body">
