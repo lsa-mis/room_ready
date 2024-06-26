@@ -21,9 +21,9 @@
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit %>
     <% if @zone.present? %>
-      <%= link_to "Cancel", zone_buildings_path(@zone.id) %>
+      <%= link_to "Cancel", zone_buildings_path(@zone.id), class: "link_to" %>
     <% else %>
-      <%= link_to "Cancel", buildings_path %>
+      <%= link_to "Cancel", buildings_path, class: "link_to" %>
     <% end %>
   </div>
 <% end %>

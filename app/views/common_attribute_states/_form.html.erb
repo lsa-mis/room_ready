@@ -1,6 +1,14 @@
-<%= form_with url: common_attribute_states_path, method: :post do %>
+<div data-controller='autosubmit'>
+  <%= form_with(model: [@room, @room_state],
+  data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+  <div class="d-inline-flex gap-1 mt-1 mb-1 p-2 bg-um-blue border rounded">
+    <%= form.check_box :report_to_supervisor, class: "form-check-input", data: { action: "change->autosubmit#check" }  %>
+    <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
+  </div>
+  <%end%>
+</div>
+<%= form_with url: common_attribute_states_path, method: :post do%>
   <%= hidden_field_tag :room_state_id, @room_state.id %>
-
   <% @common_attribute_states.each_with_index do |common_attribute_state, index| %>
     <%= fields_for "common_attribute_states[#{index}]", common_attribute_state do |f| %>
       <div>
@@ -42,7 +50,7 @@
   <% end %>
 
   <div class="d-flex flex-row justify-content-between align-items-center">
-    <%= link_to rooms_rover_navigation_path(floor_id: @room.floor.id), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" do %>
+    <%= link_to rooms_rover_navigation_path(floor_id: @room.floor.id), class: "link_to" do %>
       <i class="bi bi-arrow-left-circle-fill"></i>
       Back to Rooms
     <% end %>

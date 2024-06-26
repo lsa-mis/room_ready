@@ -1,7 +1,7 @@
 <div class="py-3">
   <div class="mb-3 d-flex flex-row align-items-center justify-content-between">
     <h1>Specific Attributes</h1>
-    <%= link_to "Back to Room", room_path(@room), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" %>
+    <%= link_to "Back to Room", room_path(@room), class: "link_to" %>
   </div>
 
   <%= turbo_frame_tag 'new_specific_attribute_form' do %>

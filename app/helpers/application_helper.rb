@@ -96,7 +96,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.where(zone: nil).order(:name)
+    Building.where(zone: nil).order(:name).collect { |b| [b.name.titleize, b.id] }
   end
 
   def show_zone(building)
@@ -173,6 +173,14 @@ module ApplicationHelper
       emails << facility_email
     end
     return emails
+  end
+
+  def show_supervisor_phone
+    if AppPreference.find_by(name: 'supervisor_phone_number').present? && AppPreference.find_by(name: 'supervisor_phone_number').value.present?
+      "at " + AppPreference.find_by(name: 'supervisor_phone_number').value
+    else 
+      ""
+    end
   end
   
 end

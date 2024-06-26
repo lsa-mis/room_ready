@@ -13,6 +13,7 @@ $lsa_success: #00664D;
 $lsa_cyan: #00AEEF;
 $flash-notice-color: #DBFFDD;
 $flash-alert-color:  #FFE1DE;
+$accordion: #F2F2F2;
 
 // Import Bootstrap's functions and variables
 @import "bootstrap/scss/functions";
@@ -28,6 +29,7 @@ $theme-colors: (
   "info":       $lsa_cyan,
   "warning":    $um_maize,
   "danger":     $rigorous_red,
+  "accordion":  $accordion,
    // Add more custom colors or override existing ones here
 );
 
