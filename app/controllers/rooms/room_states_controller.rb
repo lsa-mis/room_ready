@@ -18,7 +18,7 @@ class Rooms::RoomStatesController < ApplicationController
     @room_state = RoomState.new
     authorize @room_state
     @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
-    @user = current_user
+    @notes = @room.notes.order("created_at DESC")
     
   end
 
@@ -92,7 +92,6 @@ class Rooms::RoomStatesController < ApplicationController
     def set_room_state
       @room_state = RoomState.find(params[:id])
       authorize @room_state
-      @user = current_user
     end
 
     # Only allow a list of trusted parameters through.
