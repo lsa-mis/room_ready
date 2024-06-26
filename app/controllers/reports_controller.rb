@@ -20,11 +20,12 @@ class ReportsController < ApplicationController
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
 
     if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
       end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
 
       @rooms = Room.joins(floor: :building).joins(:room_tickets)
-                   .where(buildings: { zone_id: params[:zone_id].presence ? params[:zone_id].presence : Zone.all.pluck(:id).push(nil) })
+                   .where(buildings: { zone_id: zone_id })
                    .where(room_tickets: { created_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
