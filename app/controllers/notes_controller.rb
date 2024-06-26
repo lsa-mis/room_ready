@@ -32,7 +32,6 @@ class NotesController < ApplicationController
     if @note.save
       @notes = Note.where(room: @room).order("updated_at DESC")
       @new_note = Note.new(room: @room)
-      flash.now[:notice] = "note successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -42,7 +41,6 @@ class NotesController < ApplicationController
   def update
     if @note.update(note_params)
       @notes = Note.where(room: @note.room).order("updated_at DESC")
-      flash.now[:notice] = "note successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -50,11 +48,10 @@ class NotesController < ApplicationController
 
   # DELETE /notes/1 or /notes/1.json
   def destroy
-    @note.destroy!
-    respond_to do |format|
-      format.html { redirect_to notes_url, notice: "Note was successfully destroyed." }
-      format.json { head :no_content }
+    if @note.destroy
+      @notes = Note.where(room: @note.room).order("updated_at DESC")
     end
+    
   end
 
   private
