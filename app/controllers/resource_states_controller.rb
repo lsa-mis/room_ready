@@ -61,11 +61,11 @@ class ResourceStatesController < ApplicationController
       return
     end
 
-    if @resource_states.all?(&:persisted?)
+    # if @resource_states.all?(&:persisted?)
       redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!'
-    else
-      render :edit, status: :unprocessable_entity
-    end
+    # else
+    #   render :edit, status: :unprocessable_entity
+    # end
   end
 
   private
