@@ -39,6 +39,8 @@ Rails.application.routes.draw do
     resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
+  resources :notes
+
   resources :floors
   resources :buildings do
     resources :floors do 
