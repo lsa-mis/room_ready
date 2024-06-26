@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
-  resources :notes
+  resources :notes, :except => [:index]
 
   resources :floors
   resources :buildings do

@@ -1,13 +1,5 @@
 class NotesController < ApplicationController
-  # before_action :auth_user
-  # before_action :set_room
   before_action :set_note, only: %i[ show edit update destroy ]
-
-  # GET /notes or /notes.json
-  def index
-    @notes = Note.all
-    authorize @notes
-  end
 
   # GET /notes/1 or /notes/1.json
   def show
@@ -26,7 +18,6 @@ class NotesController < ApplicationController
   # POST /notes or /notes.json
   def create
     @note = Note.new(note_params)
-    # @note.room = @room
     @note.user = current_user
     authorize @note
     if @note.save
@@ -39,7 +30,7 @@ class NotesController < ApplicationController
 
   # PATCH/PUT /notes/1 or /notes/1.json
   def update
-    if @note.update(note_params)
+    if @note.update(note_params) && @note.update(user_id: current_user.id)
       @notes = Note.where(room: @note.room).order("updated_at DESC")
     else
       render :edit, status: :unprocessable_entity
@@ -55,11 +46,6 @@ class NotesController < ApplicationController
   end
 
   private
-
-    # def set_room
-    #   fail
-    #   @room = Room.find(params[:room_id])
-    # end 
 
     def set_note
       @note = Note.find(params[:id])
