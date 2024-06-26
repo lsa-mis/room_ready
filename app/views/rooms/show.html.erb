@@ -39,15 +39,13 @@
   </div>
 
   <% if is_admin? %>
-    <div class="mt-8 mx-2">
+    <div class="">
       <h2>Notes:</h2>
-      <div class="mb-20">
-        <%= turbo_frame_tag "new_note" do %>
-          <%= render "notes/form", note: @new_note %>
-        <% end %>
-        <div class="notes" id="notes">
-          <%= render @notes %>
-        </div>
+      <%= turbo_frame_tag "new_note" do %>
+        <%= render "notes/form", note: @new_note %>
+      <% end %>
+      <div class="notes" id="notes">
+        <%= render @notes %>
       </div>
     </div>
   <% end %>
