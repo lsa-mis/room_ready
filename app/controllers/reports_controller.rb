@@ -39,5 +39,35 @@ class ReportsController < ApplicationController
     end
 
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'room_issues_report.csv', type: 'text/csv' }
+    end
+
+
+  end
+
+  private
+
+  # Design
+  # 1) run the query based on params
+  # 2) format in a table view
+  # 3) add list of headers/titles
+  # 4) calculate cumulative metrics
+  # 5) export to csv/display in browser
+  def csv_data
+    CSV.generate(headers: true) do |csv|
+      csv << [@title]
+      csv << []
+      @metrics.each do |description, value|
+        csv << [description, value]
+      end
+      csv << []
+      csv << @headers
+      @data.each do |row|
+        csv << row
+      end
+    end
   end
 end

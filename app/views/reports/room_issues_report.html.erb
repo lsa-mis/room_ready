@@ -2,7 +2,8 @@
 <h6>This report shows information on Room Issues (TDx Tickets)</h6>
 
 <div class="py-3">
-  <%= form_with url: room_issues_report_reports_path, method: :get, class: "mb-3" do |form| %>
+  <!-- turning off turbo for the form is necessary - otherwise the browser doesn't download the csv properly -->
+  <%= form_with url: room_issues_report_reports_path, method: :get, data: { turbo: false }, class: "mb-3" do |form| %>
     <div>
       <label for="zone_id" class="fancy_label">Select a Zone</label>
       <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, class: "form-select" %>
@@ -13,9 +14,9 @@
         <%= form.date_field :to, value: params[:to], class: "form-control" %>
       </div>
       <div class="d-flex flex-row justify-content-start align-items-center">
-        <%= form.label :report_type, "Report Type: ", class: "form-label" %>
-        <%= form.select :report_type, options_for_select([["Display in Browser", "browser"], ["Export to CSV", "csv"]],
-                                                         selected: params[:report_type]), {}, class: "form-select" %>
+        <%= form.label :format, "Report Type: ", class: "form-label" %>
+        <%= form.select :format, options_for_select([["Display in Browser", "html"], ["Export to CSV", "csv"]],
+                                                         selected: params[:format]), {}, class: "form-select" %>
       </div>
     </div>
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
@@ -23,7 +24,7 @@
       <%= link_to "Clear filters", room_issues_report_reports_path, class: "text-primary cancel-button" %>
     </div>
   <% end %>
-  <% if params[:commit] && params[:report_type] == 'browser' %>
+  <% if params[:commit] && params[:format] == 'html' %>
     <%= render 'reports_table' %>
   <% end %>
 </div>

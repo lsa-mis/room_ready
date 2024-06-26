@@ -4,20 +4,19 @@
 
 <table class="table text-center mt-4">
   <thead class="table-group-divider">
-
-  <tr>
-    <% @headers.each do |header| %>
-      <th scope="col"><%= header %></th>
-    <% end %>
-  </tr>
-  </thead>
-  <tbody class="table-group-divider" id="common_attributes">
-  <% @data.each do |row| %>
     <tr>
-      <% row.each do |cell| %>
-        <td><%= cell %></td>
+      <% @headers.each do |header| %>
+        <th scope="col"><%= header %></th>
       <% end %>
     </tr>
-  <% end %>
+  </thead>
+  <tbody class="table-group-divider" id="common_attributes">
+    <% @data.each do |row| %>
+      <tr>
+        <% row.each do |cell| %>
+          <td><%= cell %></td>
+        <% end %>
+      </tr>
+    <% end %>
   </tbody>
 </table>
