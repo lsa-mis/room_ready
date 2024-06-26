@@ -43,12 +43,36 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Room <%= ticket.room.room_number %> - <%= ticket.room.floor.building.name.titleize %></h5>
-            <p class="card-text"><%= ticket.description.presence || "No description provided." %></p>
+            <p class="card-text"><%= ticket.description %></p>
             
             <p class="card-text">Submitted by: <%= ticket.submitted_by %></p>
           </div>
         </div>
       </div>
     <% end %>
+  </div>
+
+  <h2>Reports</h2>
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>No Room Access for Various Reasons</h4>
+        </div>
+        <div class="card-body">
+          <%= pie_chart @room_access_data %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>Rooms Were Not Checked by Rovers</h4>
+        </div>
+        <div class="card-body">
+          <%= pie_chart @room_check_in_data %>
+        </div>
+    </div>
   </div>
 </div>
