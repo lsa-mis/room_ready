@@ -12,6 +12,8 @@ class RoomsController < ApplicationController
   # GET /rooms/1 or /rooms/1.json
   def show
     @common_attributes = CommonAttribute.all
+    @new_note = Note.new(room: @room)
+    @notes = @room.notes.order("created_at DESC")
   end
 
   # GET /rooms/new

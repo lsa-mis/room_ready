@@ -156,5 +156,9 @@ module ApplicationHelper
       ""
     end
   end
+
+  def show_user_name_by_id(id)
+    User.find(id).display_name
+  end
   
 end

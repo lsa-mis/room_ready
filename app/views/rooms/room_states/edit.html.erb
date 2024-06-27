@@ -15,4 +15,17 @@
   <% end %>
 </div>
 
+<% if @notes.present? %>
+  <div class="bg-accordion">
+    <h4>Notes</h4>
+    <% @notes.each do |note| %>
+      <p>
+        <%= note.content %>
+        Updated on
+        <%= note.updated_at.strftime('%m/%d/%Y') %>
+      <p>
+    <% end %>
+  </div>
+<% end %>
+
 <%= render "form", room_state: @room_state, user: @user %>

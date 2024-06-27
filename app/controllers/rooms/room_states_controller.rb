@@ -2,6 +2,7 @@ class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room
   before_action :set_room_state, only: %i[ show edit update destroy ]
+  before_action :set_notes_andannouncements, only: %i[new edit]
 
   # GET /room_states or /room_states.json
   def index
@@ -17,15 +18,11 @@ class Rooms::RoomStatesController < ApplicationController
   def new
     @room_state = RoomState.new
     authorize @room_state
-    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
-    @user = current_user
-    
   end
 
   # GET /room_states/1/edit
   def edit
     authorize @room_state
-    @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
   end
 
   # POST /room_states or /room_states.json
@@ -92,7 +89,11 @@ class Rooms::RoomStatesController < ApplicationController
     def set_room_state
       @room_state = RoomState.find(params[:id])
       authorize @room_state
-      @user = current_user
+    end
+
+    def set_notes_andannouncements
+      @rovers_form_announcement = Announcement.find_by(location: "rovers_form")
+      @notes = @room.notes.order("created_at DESC")
     end
 
     # Only allow a list of trusted parameters through.
