@@ -33,9 +33,10 @@ class BuildingsApi
 
   def create_building(row)
     bldrecnbr = row['BuildingRecordNumber'].to_i
-    building = Building.new(bldrecnbr: bldrecnbr, name: row['BuildingLongDescription'], 
-        address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
-        city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'])
+    address = " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+    building = Building.new(bldrecnbr: bldrecnbr, name: row['BuildingLongDescription'].titleize, 
+        address: address.titleize, 
+        city: row['BuildingCity'].titleize, state: row['BuildingState'], zip: row['BuildingPostal'])
     unless building.save
       puts "update_all_buildings, error: Could not create #{bldrecnbr} because : #{building.errors.messages}"
       @debug = true
