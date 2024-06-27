@@ -131,6 +131,7 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.1.0)
     hashie (5.0.0)
+    humanize (3.1.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -370,6 +371,7 @@ DEPENDENCIES
   devise (~> 4.9)
   factory_bot_rails
   faker
+  humanize (~> 3.1)
   image_processing (~> 1.2)
   jbuilder
   jsbundling-rails
