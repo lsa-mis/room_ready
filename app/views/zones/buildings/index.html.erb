@@ -1,8 +1,8 @@
 <div class="container-fluid" id="buildings">
   <div class="d-flex justify-content-between">
       <h1><%= @zone.name %> Buildings</h1>
-      <div class="mb-auto mt-auto">
-        <%= link_to "Back to Zones", zones_path, class: "btn btn-secondary" %>
+      <div class="d-flex flex-column gap-1 mt-2">
+        <%= link_to "Back to Zones", zones_path, class: "link_to" %>
         <%= link_to "Add New Building", new_building_path(zone_id: @zone.id), class: "btn btn-primary" %>
       </div>
     </div>

@@ -13,7 +13,7 @@
   <%= form.hidden_field :zone_id, value: @zone.id %>
   <%= form.text_field :search, value: params[:search], placeholder: "Enter name, address, state, or zip", aria: { label: "search" } %>
   <%= form.submit "Search" %>
-  <%= link_to 'Clear Filter', buildings_rover_navigation_path(zone_id: @zone.id), class: 'text-primary cancel-button' %>
+  <%= link_to 'Clear Filter', buildings_rover_navigation_path(zone_id: @zone.id), class: 'link_to' %>
 <% end %>
 
 <% @buildings.each_with_index do |building, i| %>

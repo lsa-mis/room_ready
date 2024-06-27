@@ -13,9 +13,9 @@
 #
 FactoryBot.define do
   factory :room_state do
-    checked_by { "MyString" }
-    is_accessed { false }
+    checked_by { Faker::Name.first_name }
+    is_accessed { true }
     report_to_supervisor { false }
-    room { nil }
+    association :room
   end
 end

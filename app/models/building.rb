@@ -22,6 +22,6 @@ class Building < ApplicationRecord
   validates :name, uniqueness: true
 
   def full_address
-    "#{address}, #{city}, #{state} #{zip}"
+    "#{address.titleize}, #{city.titleize}, #{state} #{zip}"
   end
 end

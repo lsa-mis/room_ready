@@ -17,6 +17,15 @@ class RoomState < ApplicationRecord
   has_many :specific_attribute_states
   has_many :resource_states
 
-  # validates :room_id, uniqueness: { scope: [:updated_at.to_date], message: "already exist" }
+  validate :unique_room_state_per_day
 
+  private
+  def unique_room_state_per_day
+    date = (updated_at || Time.current).to_date # different based on whether it is a new record or an existing one
+    existing_records = RoomState.where(room_id: room_id, updated_at: date.beginning_of_day..date.end_of_day)
+                               .where.not(id: id)
+    if existing_records.exists?
+      errors.add(:base, 'There can only be one RoomState per room per day')
+    end
+  end
 end
