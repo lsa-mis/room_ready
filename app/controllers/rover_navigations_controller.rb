@@ -26,4 +26,22 @@ class RoverNavigationsController < ApplicationController
       @rooms = @rooms.where("room_number ILIKE :search", search: "%#{params[:search]}%")
     end
   end
+
+  def confirmation
+    authorize :rover_navigation, :confirmation?
+    @room = Room.find(params[:room_id])
+ 
+    if @room.nil?
+      redirect_to zones_rover_navigation_path, notice: 'Room does not exist!'
+    end
+
+    @room_state_today = RoomStatus.new(@room).room_state_today
+
+    if @room_state_today.nil?
+      redirect_to zones_rover_navigation_path, notice: 'Room not checked or Invalid!'
+    end
+
+    r = Recommendation.new(@room)
+    @recommended_room = r.recommend_room
+  end
 end

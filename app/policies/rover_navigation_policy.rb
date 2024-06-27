@@ -10,4 +10,8 @@ class RoverNavigationPolicy < ApplicationPolicy
   def rooms?
     is_rover? || is_admin?
   end
+
+  def confirmation?
+    is_rover? || is_admin?
+  end
 end

@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       get 'zones'
       get 'buildings'
       get 'rooms'
+      get 'confirmation'
     end
   end
 

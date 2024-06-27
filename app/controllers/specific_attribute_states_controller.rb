@@ -30,6 +30,10 @@ class SpecificAttributeStatesController < ApplicationController
   def edit
     @specific_attribute_states = @room_state.specific_attribute_states
     authorize @specific_attribute_states
+    
+    unless @specific_attribute_states.present?
+      redirect_to new_resource_state_path(room_state_id: @room_state.id)
+    end
   end
 
   # POST /specific_attribute_states or /specific_attribute_states.json
