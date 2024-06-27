@@ -20,32 +20,44 @@ class DashboardsController < ApplicationController
     }
 
     @room_check_in_data = {
-    "Not checked for 3 days": Room.left_outer_joins(:room_states)
-      .where(room_states: { id: nil })
-      .or(
-        Room.left_outer_joins(:room_states)
-            .where('room_states.created_at >= ?', 3.days.ago.beginning_of_day)
-            .where('room_states.created_at < ?', 2.days.ago.beginning_of_day)
-      )
-      .distinct.count,
+  "Not checked for 3 days": Room.joins(floor: :building)
+    .left_outer_joins(:room_states)
+    .where(buildings: { zone_id: !nil })
+    .where(room_states: { id: nil })
+    .or(
+      Room.joins(floor: :building)
+          .left_outer_joins(:room_states)
+          .where(buildings: { zone_id: !nil })
+          .where('room_states.created_at >= ?', 3.days.ago.beginning_of_day)
+          .where('room_states.created_at < ?', 2.days.ago.beginning_of_day)
+    )
+    .distinct.count,
 
-    "Not checked for 4 to 7 days": Room.left_outer_joins(:room_states)
-      .where(room_states: { id: nil })
-      .or(
-        Room.left_outer_joins(:room_states)
-            .where('room_states.created_at < ?', 4.days.ago.beginning_of_day)
-            .where('room_states.created_at >= ?', 7.days.ago.beginning_of_day)
-      )
-      .distinct.count,
+  "Not checked for 4 to 7 days": Room.joins(floor: :building)
+    .left_outer_joins(:room_states)
+    .where(buildings: { zone_id: !nil })
+    .where(room_states: { id: nil })
+    .or(
+      Room.joins(floor: :building)
+          .left_outer_joins(:room_states)
+          .where(buildings: { zone_id: !nil })
+          .where('room_states.created_at < ?', 4.days.ago.beginning_of_day)
+          .where('room_states.created_at >= ?', 7.days.ago.beginning_of_day)
+    )
+    .distinct.count,
 
-    "Not checked for over 7 days": Room.left_outer_joins(:room_states)
-      .where(room_states: { id: nil })
-      .or(
-        Room.left_outer_joins(:room_states)
-            .where('room_states.created_at < ?', 7.days.ago.beginning_of_day)
-      )
-      .distinct.count
-    }
+  "Not checked for over 7 days": Room.joins(floor: :building)
+    .left_outer_joins(:room_states)
+    .where(buildings: { zone_id: !nil })
+    .where(room_states: { id: nil })
+    .or(
+      Room.joins(floor: :building)
+          .left_outer_joins(:room_states)
+          .where(buildings: { zone_id: !nil })
+          .where('room_states.created_at < ?', 7.days.ago.beginning_of_day)
+    )
+    .distinct.count
+}
     
   end
 
