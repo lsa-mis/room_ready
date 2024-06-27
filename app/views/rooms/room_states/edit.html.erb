@@ -9,11 +9,14 @@
 <h1>Edit Room Check for Room <%= @room.room_number %> </h1>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
 
-<div>
-  <% unless @rovers_form_announcement.nil? %>
-    <%= @rovers_form_announcement.content %>
-  <% end %>
-</div>
+<% if @rovers_form_announcement.content.present? %>
+  <div class="bg-accordion">
+    <h4>What to do:</h4>
+      <p>
+        <%= @rovers_form_announcement.content %>
+      <p>
+  </div>
+<% end %>
 
 <% if @notes.present? %>
   <div class="bg-accordion">
