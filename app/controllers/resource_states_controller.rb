@@ -11,13 +11,17 @@ class ResourceStatesController < ApplicationController
     end
 
     unless @resource_states.present?
-      redirect_to rooms_rover_navigation_path(floor_id: @room.floor.id)
+      redirect_to confirmation_rover_navigation_path(room_id: @room.id)
     end
   end
 
   def edit
     @resource_states = @room_state.resource_states
     authorize @resource_states
+
+    unless @resource_states.present?
+      redirect_to confirmation_rover_navigation_path(room_id: @room.id)
+    end
   end
 
   # POST /resource_states or /resource_states.json
