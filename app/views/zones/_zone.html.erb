@@ -1,10 +1,6 @@
 <div id="<%= dom_id zone %>">
   <p>
-    <strong>Name:</strong>
-    <%= zone.name %>
-    <br />
-    <strong>Zone ID:</strong>
-    <%= zone.id %>
+    <%= zone.buildings.count.humanize.titleize %> buildings in <%= zone.name %>
   </p>
 
 </div>
