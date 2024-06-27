@@ -15,6 +15,12 @@
 <h2><%= "Building: #{@room.floor.building.name}" %> (Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
+<div>
+  <% unless @resource_form_announcement.nil? %>
+    <%= @resource_form_announcement.content %>
+  <% end %>
+</div>
+
 <%= render 'rover_navigations/form_progress_bar', room: @room %>
 <%= render 'shared/tdxtickets' %>
 <%= render 'edit_form', room_state_id: @room_state.id %>
