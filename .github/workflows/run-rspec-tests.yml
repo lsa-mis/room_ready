@@ -8,6 +8,9 @@ on:
 jobs:
   run-rspec-tests:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
     services:
       postgres:
         image: postgres
@@ -21,6 +24,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,38 +36,30 @@ jobs:
 
       - name: Set up PostgreSQL client
         run: sudo apt-get install -y postgresql-client
+
       - name: Install Node.js
         with:
           node-version-file: '.node-version'
         uses: actions/setup-node@v3
+
       - name: Install Yarn
         run: npm install -g yarn
+
       - name: Install Dependencies
         run: |
           bundle install
           yarn install
 
       - name: Precompile Assets
-        env:
-          RAILS_ENV: test
         run: bundle exec rails assets:precompile
 
       - name: Setup DB
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: bin/rails db:create db:migrate db:seed
 
       - name: Run Model tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: bundle exec rspec spec/models/*
 
       - name: Run System tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: bundle exec rspec spec/system/*
 
       - name: Keep screenshots from failed system tests
