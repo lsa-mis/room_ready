@@ -37,6 +37,7 @@ RSpec.describe Building, type: :system do
         visit new_building_path
         fill_in "Building Record Number", with: "1234567"
         click_on "Create Building"
+	sleep 2
         expect(page).to have_content("New Building was added")
       end
     end
