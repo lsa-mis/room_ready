@@ -1,4 +1,5 @@
 <div class="container">
+  <h1>Admin Dashboard</h1>
 
   <%= form_with(url: dashboards_path, method: :get) do |form| %>
   <div class="field">
@@ -11,7 +12,7 @@
   <%= form.submit "Update Dashboard" %>
 <% end %>
 
-  <h1>Admin Dashboard</h1>
+  
   <h2>Zone Overview</h2>
   <div class="row">    
     <% @zones.each do |zone| %>
