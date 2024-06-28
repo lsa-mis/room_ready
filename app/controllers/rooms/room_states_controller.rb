@@ -36,8 +36,14 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
-        format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state) }
-        format.json { render json: { status: 'ok' }, status: :ok }
+
+        if @room_state.is_accessed?
+          format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state) }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        else
+          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: { errors: @room_state.errors.full_messages }, status: :unprocessable_entity }
@@ -58,6 +64,12 @@ class Rooms::RoomStatesController < ApplicationController
           format.json { render json: { status: 'ok' }, status: :ok }
         else
           format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state) }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        if @room_state.is_accessed?
+          format.html { redirect_to redirect_rover_to_correct_state_edit(@room, @room_state) }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        else
+          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
           format.json { render json: { status: 'ok' }, status: :ok }
         end
       else
