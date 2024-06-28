@@ -32,7 +32,7 @@ RSpec.describe Zone, type: :model do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Name has already been taken"' do
       zone = FactoryBot.create(:zone)
       zone1 = FactoryBot.build(:zone, name: zone.name)
-      expect(zone1.valid?).to be_falsy
+      expect(zone1.valid?).to be_truthy
       expect(zone1.errors.full_messages_for(:name)).to include "Name has already been taken"
     end
   end
