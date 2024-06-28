@@ -52,7 +52,6 @@ gem 'repost'
 
 gem "ldap_lookup" # will use for admin interface, add rovers
 gem "pundit"
-gem 'humanize', '~> 3.1'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
