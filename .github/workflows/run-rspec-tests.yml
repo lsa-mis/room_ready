@@ -29,6 +29,8 @@ jobs:
       - name: Set up PostgreSQL client
         run: sudo apt-get install -y postgresql-client
       - name: Install Node.js
+        with: 
+          node-version-file: '.node-version'
         uses: actions/setup-node@v3
       - name: Install Yarn
         run: npm install -g yarn
@@ -36,6 +38,10 @@ jobs:
         run: |
           bundle install
           yarn install
+      - name: Precompile Assets
+        env:
+          RAILS_ENV: test
+        run: bundle exec rails assets:precompile
       - name: Setup DB
         env:
           RAILS_ENV: test
