@@ -77,7 +77,7 @@ class ResourceStatesController < ApplicationController
   def set_room
     @room_state = RoomState.find(params[:room_state_id])
     @room = @room_state.room
-
+    @resource_form_announcement = Announcement.find_by(location: "resource_form")
     unless @room
       redirect_to rooms_path, alert: 'Room doesnt exist.' and return
     end

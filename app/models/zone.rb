@@ -25,5 +25,4 @@ class Zone < ApplicationRecord
         .where(zones: { id: self.id })
         .count
   end
-  
 end

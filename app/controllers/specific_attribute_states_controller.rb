@@ -111,7 +111,7 @@ class SpecificAttributeStatesController < ApplicationController
     def set_room
       @room_state = RoomState.find(params[:room_state_id])
       @room = @room_state.room
-  
+      @specific_form_announcement = Announcement.find_by(location: "specific_form")
       unless @room
         redirect_to rooms_path, alert: 'Room doesnt exist.' and return
       end

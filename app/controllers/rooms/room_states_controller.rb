@@ -36,8 +36,13 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
-        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
-        format.json { render json: { status: 'ok' }, status: :ok }
+        if @room_state.is_accessed?
+          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        else
+          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
+          format.json { render json: { status: 'ok' }, status: :ok }
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: { errors: @room_state.errors.full_messages }, status: :unprocessable_entity }
@@ -53,12 +58,17 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
-        if @room_state.common_attribute_states.any?
-          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
-          format.json { render json: { status: 'ok' }, status: :ok }
-        else
-          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
-          format.json { render json: { status: 'ok' }, status: :ok }
+        if @room_state.is_accessed?
+          if @room_state.common_attribute_states.any?
+            format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
+            format.json { render json: { status: 'ok' }, status: :ok }
+          else
+            format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+            format.json { render json: { status: 'ok' }, status: :ok }
+          end
+        else 
+          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room state was successfully updated.' }
+          format.json { render :show, status: :ok, location: @room_state }
         end
       else
         format.html { render :edit, status: :unprocessable_entity }

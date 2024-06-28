@@ -93,9 +93,10 @@ class BuildingsController < ApplicationController
       if result['success']
         if result['data'].present?
           data = result['data'].first
-          @building.name = data['BuildingLongDescription']
-          @building.address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
-          @building.city = data['BuildingCity']
+          @building.name = data['BuildingLongDescription'].titleize
+          address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+          @building.address = address.titleize
+          @building.city = data['BuildingCity'].titleize
           @building.state = data['BuildingState']
           @building.zip = data['BuildingPostal']
     
