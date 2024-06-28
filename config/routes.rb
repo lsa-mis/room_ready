@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   resources :reports, only: [:index] do
     collection do
       get 'room_issues_report', to: 'reports#room_issues_report'
+      get 'no_access_report', to: 'reports#no_access_report'
     end
   end
 

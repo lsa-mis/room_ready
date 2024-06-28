@@ -6,4 +6,8 @@ class ReportPolicy < ApplicationPolicy
   def room_issues_report?
     is_admin?
   end
+
+  def no_access_report?
+    is_admin?
+  end
 end
