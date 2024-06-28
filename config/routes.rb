@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
   resources :resources
 
   resources :rooms, :except => [:edit, :update]
@@ -72,7 +73,7 @@ Rails.application.routes.draw do
   root to: 'static_pages#about', as: :all_root
 
   get 'static_pages/about'
-  get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
+
   get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
   post '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
