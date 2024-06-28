@@ -14,10 +14,22 @@
 <h2><%= "Building: #{@room.floor.building.name}" %>(Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
-<div>
-  <% unless @specific_form_announcement.nil? %>
-    <%= @specific_form_announcement.content %>
-  <% end %>
+<div data-controller='hideelement'>
+  <a class="link_to mb-1 d-block d-md-none" data-hideelement-target="more_button" data-action="hideelement#showElement">
+    Show Announcement
+    <i class="bi bi-caret-up-fill"></i>
+  </a>
+  <a class="link_to mb-1 d-none d-md-none" data-hideelement-target="less_button" data-action="hideelement#hideElement">
+    Hide Announcement
+    <i class="bi bi-caret-down-fill"></i>
+  </a>
+  <div class="d-none d-md-block" data-hideelement-target="hide_section">
+    <% if @specific_form_announcement.content.present? %>
+      <div class="bg-accordion">
+        <p><%= @specific_form_announcement.content %></p>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <%= render 'rover_navigations/form_progress_bar', room: @room %>

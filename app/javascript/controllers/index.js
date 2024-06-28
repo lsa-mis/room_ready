@@ -19,8 +19,8 @@ application.register("flash", FlashController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
-import HidingElementController from "./hiding_element_controller"
-application.register("hiding-element", HidingElementController)
+import HideelementController from "./hideelement_controller"
+application.register("hideelement", HideelementController)
 
 import RenderController from "./render_controller"
 application.register("render", RenderController)
