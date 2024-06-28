@@ -27,7 +27,7 @@
 
   <div id="no-reason" style="display:none">
     <%= form.label :no_access_reason, "Can not access the room because: ", style: "display: block" %>
-    <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason", required: true }, { class: "input_text_field" } %>
+    <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason"}, { class: "input_text_field" } %>
   </div>
 
   <div>
