@@ -31,7 +31,7 @@ jobs:
       - name: Setup DB
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/postgres
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: bin/rails db:create db:migrate db:seed 
       - name: Run tests
         env:
