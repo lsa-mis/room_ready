@@ -26,6 +26,7 @@ RSpec.describe Building, type: :system do
   context 'create a new building with valid bldrecnbr' do
     it 'returns "New Building was added" message' do
       VCR.use_cassette "building" do
+	sleep 7
         bldrecnbr = '1234567'
         result = {"success"=>true, "errorcode"=>"", "error"=>"", 
           "data"=>[{"FiscalYear"=>2024, "BuildingRecordNumber"=>"1234567", "BuildingShortDescription"=>"BLAU HALL", 
