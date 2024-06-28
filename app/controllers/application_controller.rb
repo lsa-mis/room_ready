@@ -71,4 +71,48 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_rover_to_correct_state_new(room, room_state)
+    state_to_redirect_to = nil
+
+    common_attributes = CommonAttribute.all
+    specific_attributes = @room.specific_attributes
+    resources = @room.resources
+
+    unless common_attributes.present?
+      state_to_redirect_to = new_specific_attribute_state_path(room_state_id: @room_state.id)
+    end
+
+    unless specific_attributes.present?
+      state_to_redirect_to = new_resource_state_path(room_state_id: @room_state.id)
+    end
+
+    unless resources.present?
+      state_to_redirect_to = confirmation_rover_navigation_path(room_id: @room.id)
+    end
+
+    state_to_redirect_to
+  end
+
+  def redirect_rover_to_correct_state_edit(room, room_state)
+    state_to_redirect_to = nil
+
+    common_attributes = CommonAttribute.all
+    specific_attributes = @room.specific_attributes
+    resources = @room.resources
+
+    unless common_attributes.present?
+      state_to_redirect_to = edit_specific_attribute_state_path(room_state_id: @room_state.id)
+    end
+
+    unless specific_attributes.present?
+      state_to_redirect_to = edit_resource_state_path(room_state_id: @room_state.id)
+    end
+
+    unless resources.present?
+      state_to_redirect_to = confirmation_rover_navigation_path(room_id: @room.id)
+    end
+
+    state_to_redirect_to
+  end
+
 end

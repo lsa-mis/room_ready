@@ -2,7 +2,7 @@ class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room
   before_action :set_room_state, only: %i[ show edit update destroy ]
-  before_action :set_notes_andannouncements, only: %i[new edit]
+  before_action :set_notes_andannouncements, only: %i[new edit create]
 
   # GET /room_states or /room_states.json
   def index
@@ -36,7 +36,7 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
-        format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+        format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state) }
         format.json { render json: { status: 'ok' }, status: :ok }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -54,10 +54,10 @@ class Rooms::RoomStatesController < ApplicationController
           return
         end
         if @room_state.common_attribute_states.any?
-          format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.html { redirect_to redirect_rover_to_correct_state_edit(@room, @room_state) }
           format.json { render json: { status: 'ok' }, status: :ok }
         else
-          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state) }
           format.json { render json: { status: 'ok' }, status: :ok }
         end
       else

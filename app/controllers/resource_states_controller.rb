@@ -9,19 +9,11 @@ class ResourceStatesController < ApplicationController
     @resource_states = @room.resources.all.map do |resource|
       resource.resource_states.new
     end
-
-    unless @resource_states.present?
-      redirect_to confirmation_rover_navigation_path(room_id: @room.id)
-    end
   end
 
   def edit
     @resource_states = @room_state.resource_states
     authorize @resource_states
-
-    unless @resource_states.present?
-      redirect_to confirmation_rover_navigation_path(room_id: @room.id)
-    end
   end
 
   # POST /resource_states or /resource_states.json
