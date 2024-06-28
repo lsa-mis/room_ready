@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     if $baseURL.present?
       $baseURL
     elsif session[:role] == "developer" || session[:role] == "admin"
-      dashboards_path
+      dashboard_path
     elsif session[:role] == "rover"
       welcome_rovers_path
     else

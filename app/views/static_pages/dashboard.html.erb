@@ -1,10 +1,85 @@
 <div class="container">
+  <h1>Admin Dashboard</h1>
+
+  <%= form_with(url: dashboard_path, method: :get) do |form| %>
+  <div class="field">
+    <%= form.label :dashboard_date, "Select Dashboard Date" %>
+    <%= form.date_field :dashboard_date, value: params[:dashboard_date], max: Date.today.to_s, class: "form-control" %>
+
+
+  </div>
+
+  <%= form.submit "Update Dashboard" %>
+<% end %>
+
+  
+  <h2>Zone Overview</h2>
+  <div class="row">    
+    <% @zones.each do |zone| %>
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="card">
+          <div class="card-header">
+            <h3><%= zone.name %></h3>
+           
+          </div>
+          <div class="card-body">
+            <div class="progress mb-3">
+              <div class="progress-bar <%= room_check_progress_class(zone.rooms_checked_today, zone.total_rooms) %> text-white" role="progressbar" 
+              style="width: <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%" 
+              aria-valuenow="<%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>" 
+              aria-valuemin="0" aria-valuemax="100">
+              <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%
+              </div>
+            </div>
+
+            <h6 class="card-text mb-4 <%= room_check_status_class(zone.rooms_checked_today, zone.total_rooms) %>"><%= zone.rooms_checked_today %>/<%= zone.total_rooms %> Classrooms Complete</h6>
+
+            <div class="mt-auto d-flex">
+              <a href="" class="btn btn-primary btn-sm flex-fill">Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <h2>Recent Room Issues</h2>
   <div class="row">
-    <div class="col-md-8 col-lg-6 w-100">
-      <!-- Heading -->
-      <h1 class="text-start mt-6 ms-6">Admin Dashboard</h1>
-      <p class="mt-2 w-75">
-       Dashboard
-    </p>
+    <% latest_room_tickets.each do |ticket| %>
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Room <%= ticket.room.room_number %> - <%= ticket.room.floor.building.name.titleize %></h5>
+            <p class="card-text"><%= ticket.description %></p>
+            <p class="card-text">Date Submitted: <%= show_date_with_time(ticket.created_at) %></p>
+            <p class="card-text">Created by: <%= ticket.submitted_by %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <h2>Reports</h2>
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>No Room Access for Various Reasons</h4>
+        </div>
+        <div class="card-body">
+          <%= pie_chart @room_access_data %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>Rooms Were Not Checked by Rovers</h4>
+        </div>
+        <div class="card-body">
+          <%= pie_chart @room_check_in_data %>
+        </div>
+    </div>
   </div>
 </div>

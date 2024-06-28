@@ -3,7 +3,7 @@ module ApplicationHelper
   def root_path
     if user_signed_in?
       if is_admin?
-        dashboards_path
+        dashboard_path
       elsif is_rover?
         welcome_rovers_path
       else

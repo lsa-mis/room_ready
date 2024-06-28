@@ -18,7 +18,7 @@
             </a>
             <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
               <li>
-                <%= link_to "Dashboard", dashboards_path, class: 'dropdown-item navbar_dropdown_item' if policy(:static_page).dashboard? %>
+                <%= link_to "Dashboard", dashboard_path, class: 'dropdown-item navbar_dropdown_item' if policy(:static_page).dashboard? %>
               </li>
               <li>
                 <%= link_to "Zones", zones_path, class: 'dropdown-item navbar_dropdown_item' if policy(Zone).index? %>
