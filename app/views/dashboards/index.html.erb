@@ -1,9 +1,11 @@
 <div class="container">
 
-  <%= form_with(url: dashboards_path, method: :get, local: true) do |form| %>
+  <%= form_with(url: dashboards_path, method: :get) do |form| %>
   <div class="field">
     <%= form.label :dashboard_date, "Select Dashboard Date" %>
-    <%= form.date_field :dashboard_date, max: Date.today.to_s %>
+    <%= form.date_field :dashboard_date, value: params[:dashboard_date], max: Date.today.to_s, class: "form-control" %>
+
+
   </div>
 
   <%= form.submit "Show Dashboard" %>
