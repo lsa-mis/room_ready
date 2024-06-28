@@ -6,13 +6,30 @@ on:
 jobs:
   run-rspec-tests:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with: # gets version from .ruby-version file
           # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
+      - name: Setup DB
+        run: bin/rails db:setup 
       - name: Run tests
-        run: |
-          bundle exec rspec spec/models
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bundle exec rspec spec/models/*
