@@ -1,5 +1,14 @@
 <div class="container">
 
+  <%= form_with(url: dashboards_path, method: :get, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :dashboard_date, "Select Dashboard Date" %>
+    <%= form.date_field :dashboard_date, max: Date.today.to_s %>
+  </div>
+
+  <%= form.submit "Show Dashboard" %>
+<% end %>
+
   <h1>Admin Dashboard</h1>
   <h2>Zone Overview</h2>
   <div class="row">    
