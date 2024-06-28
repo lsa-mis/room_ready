@@ -20,6 +20,7 @@ RSpec.describe Building, type: :system do
 	          "BuildingTypeDescription"=>"Teach, Research, Support", "BuildingPhaseCode"=>"SERV", "BuildingPhaseDescription"=>"In Service", 
 	          "BuildingCampusCode"=>"100", "BuildingCampusDescription"=>"Central Campus", "BuildingOwnership"=>"Owned"}]}
 	        allow_any_instance_of(BuildingApi).to receive(:get_building_info_by_bldrecnbr).with(bldrecnbr).and_return(result)
+		allow_any_instance_of(BuildingApi).to receive(:get_classrooms_for_building).with(bldrecnbr).and_return({})
 	        visit new_building_path
 	        fill_in "Building Record Number", with: "1234567"
 	        click_on "Create Building"
@@ -35,7 +36,6 @@ RSpec.describe Building, type: :system do
         bldrecnbr = '1234567'
         result = {"success"=>false, "errorcode"=>"", "error"=>"Building record number 123456 is not valid. ", "data"=>{}}
         allow_any_instance_of(BuildingApi).to receive(:get_building_info_by_bldrecnbr).with(bldrecnbr).and_return(result)
-	allow_any_instance_of(BuildingApi).to receive(:get_classrooms_for_building).with(bldrecnbr).and_return({})
         visit new_building_path
         fill_in "Building Record Number", with: "1234567"
         click_on "Create Building"
