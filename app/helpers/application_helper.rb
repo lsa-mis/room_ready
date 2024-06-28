@@ -96,7 +96,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.where(zone: nil).order(:name).collect { |b| [b.name.titleize, b.id] }
+    Building.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
   end
 
   def show_zone(building)
@@ -155,6 +155,10 @@ module ApplicationHelper
     else 
       ""
     end
+  end
+
+  def show_user_name_by_id(id)
+    User.find(id).display_name
   end
   
 end

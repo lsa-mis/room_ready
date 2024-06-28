@@ -9,10 +9,25 @@
 <h1>Edit Room Check for Room <%= @room.room_number %> </h1>
 <h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
 
-<div>
-  <% unless @rovers_form_announcement.nil? %>
-    <%= @rovers_form_announcement.content %>
-  <% end %>
-</div>
+<% if @rovers_form_announcement.content.present? %>
+  <div class="bg-accordion">
+    <p>
+      <%= @rovers_form_announcement.content %>
+    <p>
+  </div>
+<% end %>
+
+<% if @notes.present? %>
+  <div class="bg-accordion">
+    <h4>Notes</h4>
+    <% @notes.each do |note| %>
+      <p>
+        <%= note.content %>
+        Updated on
+        <%= note.updated_at.strftime('%m/%d/%Y') %>
+      <p>
+    <% end %>
+  </div>
+<% end %>
 
 <%= render "form", room_state: @room_state, user: @user %>

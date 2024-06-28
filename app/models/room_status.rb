@@ -99,12 +99,12 @@ class RoomStatus
     if room_checked_once?
       if room_checked_today?
         if room_state_today&.is_accessed
-          checked = "Checked #{calculate_percentage}%"
+          checked = "Checked #{calculate_percentage}% by #{room_state_today.checked_by}"
         else
-          checked = "Checked #{calculate_percentage}% - no access"
+          checked = "Checked #{calculate_percentage}% - no access by #{room_state_today.checked_by}"
         end
       else
-        checked = "Checked #{time_ago_in_words(last_time_checked)} ago"
+        checked = "Checked #{time_ago_in_words(last_time_checked)} ago by #{room_state_today.checked_by}"
       end
     else
       checked = "Never checked"

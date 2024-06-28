@@ -17,6 +17,7 @@ class Room < ApplicationRecord
   has_many :room_tickets
   has_many :specific_attributes
   has_many :room_states
+  has_many :notes
 
   validates :rmrecnbr, presence: true, uniqueness: true
   validates :room_number, :room_type, presence: true

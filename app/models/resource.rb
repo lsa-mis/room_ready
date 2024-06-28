@@ -16,4 +16,8 @@ class Resource < ApplicationRecord
   validates :name, presence: true
   validates :resource_type, presence: true
   validates :room_id, presence: true
+
+  def display_name
+    "#{self.name} - #{self.resource_type}"
+  end
 end

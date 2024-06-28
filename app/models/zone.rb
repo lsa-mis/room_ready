@@ -11,4 +11,10 @@ class Zone < ApplicationRecord
   validates :name, uniqueness: true
   validates :name, presence: true
   has_many :buildings
+
+  def total_rooms
+    Room.joins(floor: { building: :zone })
+        .where(zones: { id: self.id })
+        .count
+  end
 end
