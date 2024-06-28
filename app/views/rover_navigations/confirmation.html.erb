@@ -1,0 +1,98 @@
+<style>
+  @media (min-width: 1025px) {
+  .h-custom {
+  height: 100vh !important;
+  }
+  }
+  .horizontal-timeline .items {
+  border-top: 3px solid;
+  }
+  .horizontal-timeline .items .items-list {
+  position: relative;
+  margin-right: 0;
+  }
+  .horizontal-timeline .items .items-list:before {
+  content: "";
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: var(--bs-primary);
+  top: 0;
+  margin-top: -5px;
+  }
+  .horizontal-timeline .items .items-list {
+  padding-top: 15px;
+  }
+</style>
+<section>
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-8 col-xl-6">
+        <div class="card border-top border-bottom border-3 border-primary">
+          <div class="card-body p-5">
+            <p class="lead fw-bold mb-5 text-primary">Room Check Confirmation</p>
+            <div class="row">
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Date</p>
+                <p><%= @room_state_today.updated_at.strftime('%m/%d/%Y') %></p>
+              </div>
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Building</p>
+                <p><%= @room.floor.building.name %></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Floor</p>
+                <p><%= @room.floor.name %></p>
+              </div>
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Room No.</p>
+                <p><%= @room.room_number %></p>
+              </div>
+            </div>
+            <hr />
+            <p class="lead fw-bold mb-4 pb-2 text-primary">Room Check Process</p>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="horizontal-timeline">
+                  <div class="progress-bar bg-primary"></div>
+                  <ul class="list-inline items border-primary d-flex justify-content-between">
+                    <li class="list-inline-item items-list">
+                      <p class="py-1 px-2 rounded text-white bg-primary">Common</p>
+                    </li>
+                    <li class="list-inline-item items-list">
+                      <p class="py-1 px-2 rounded text-white bg-primary">Specific</p>
+                    </li>
+                    <li class="list-inline-item items-list">
+                      <p class="py-1 px-2 rounded text-white bg-primary">Resources</p>
+                    </li>
+                    <li class="list-inline-item items-list text-end" style="margin-right: 8px;">
+                      <p style="margin-right: -8px;" class="py-1 px-2 rounded text-white bg-success">Done!</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <% if @recommended_room %>
+            <p class="lead fw-bold text-primary">Next Room</p>
+            <div class="card border-success border-3 mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Room <%= @recommended_room.room_number %></h5>
+                <h6 class="card-subtitle mb-2 text-muted"><%= @recommended_room.floor.building.name %>,</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Floor <%= @recommended_room.floor.name %></h6>
+                <%= link_to "Start Checking", new_room_room_state_path(room_id: @recommended_room.id), class: "btn btn-success w-100"%>
+              </div>
+            </div>
+            <% else %>
+            <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
+            <% end %>
+            <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

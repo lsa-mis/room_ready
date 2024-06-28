@@ -1,0 +1,7 @@
+<%= turbo_stream.prepend "notes", @note %>
+
+<%= turbo_stream.update "new_note" do %>
+  <%= render "form", note: @new_note %>
+<% end %>
+
+<%= render_flash_stream %>

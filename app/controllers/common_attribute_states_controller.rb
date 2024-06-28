@@ -19,6 +19,10 @@ class CommonAttributeStatesController < ApplicationController
   def edit
     @common_attribute_states = @room_state.common_attribute_states
     authorize @common_attribute_states
+
+    unless @common_attribute_states.present?
+      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
+    end
   end
 
   # POST /common_attribute_states or /common_attribute_states.json

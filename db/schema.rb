@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.1].define(version: 2024_06_21_145957) do
-=======
-ActiveRecord::Schema[7.1].define(version: 2024_06_23_030212) do
->>>>>>> staging
+ActiveRecord::Schema[7.1].define(version: 2024_06_25_202115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -115,6 +111,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_23_030212) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["building_id"], name: "index_floors_on_building_id"
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_notes_on_room_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
   create_table "resource_states", force: :cascade do |t|
@@ -236,6 +241,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_23_030212) do
   add_foreign_key "common_attribute_states", "common_attributes"
   add_foreign_key "common_attribute_states", "room_states"
   add_foreign_key "floors", "buildings"
+  add_foreign_key "notes", "rooms"
+  add_foreign_key "notes", "users"
   add_foreign_key "resource_states", "resources"
   add_foreign_key "resource_states", "room_states"
   add_foreign_key "resources", "rooms"
