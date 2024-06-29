@@ -7,7 +7,7 @@ RSpec.describe BuildingPolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, building) }
 
-    it { is_expected.to permit_only_actions(%i[index show is_rover]) }
+    it { is_expected.to permit_only_actions(%i[is_rover]) }
   end
 
   context 'with admin role' do
