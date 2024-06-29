@@ -29,7 +29,7 @@
             <h5 class="card-title mb-3"><%= common_attribute_state.common_attribute.description %></h5>
             <% if common_attribute_state.common_attribute.need_checkbox %>
               <div class="d-flex flex-row mb-1">
-                <%= f.radio_button :checkbox_value, true, class: "btn-check" %>
+                <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
                 <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
                 <%= f.radio_button :checkbox_value, false, class: "btn-check" %>
                 <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-success w-50" %>
@@ -38,7 +38,7 @@
             <% if common_attribute_state.common_attribute.need_quantity_box %>
               <div>
                 <%#= f.label :quantity_box_value, "Value:", class: "form-check-label" %>
-                <%= f.number_field :quantity_box_value, class: "form-control form-control-sm" %>
+                <%= f.number_field :quantity_box_value, value: 0, class: "form-control form-control-sm" %>
               </div>
             <% end %>
           </div>

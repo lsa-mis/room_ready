@@ -19,9 +19,9 @@
     <%= form.label :is_accessed, "Can you access the room? *"%>
   </div>
   <div class="d-flex flex-row mb-1">
-    <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true%>
+    <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true %>
     <%= form.label :is_accessed_true, "Yes", class: "btn btn-outline-success w-50" %>
-    <%= form.radio_button :is_accessed, false, class: "btn-check", data: { render_target: "noaccess" }, "data-action" => "change->render#renderNoAccessReasonField", required: true%>
+    <%= form.radio_button :is_accessed, false, class: "btn-check", data: { render_target: "noaccess" }, "data-action" => "change->render#renderNoAccessReasonField" %>
     <%= form.label :is_accessed_false, "No", class: "btn btn-outline-success w-50" %>
   </div>
 
