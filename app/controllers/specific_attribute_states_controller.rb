@@ -46,7 +46,7 @@ class SpecificAttributeStatesController < ApplicationController
     end
 
     if @specific_attribute_states.all?(&:persisted?)
-      redirect_to new_resource_state_path(room_state_id: @room_state.id)
+      redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "specific_attributes")
     else
       render :new, status: :unprocessable_entity
     end
@@ -71,9 +71,9 @@ class SpecificAttributeStatesController < ApplicationController
 
     # if @specific_attribute_states.all?(&:persisted?)
       if @room_state.resource_states.any?
-        redirect_to edit_resource_state_path(room_state_id: @room_state.id)
+        redirect_to redirect_rover_to_correct_state_edit(@room, @room_state, "specific_attributes")
       else
-        redirect_to new_resource_state_path(room_state_id: @room_state.id)
+        redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "specific_attributes")
       end
     # else
     #   render :edit, status: :unprocessable_entity

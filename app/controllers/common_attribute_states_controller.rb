@@ -35,7 +35,7 @@ class CommonAttributeStatesController < ApplicationController
     end
 
     if @common_attribute_states.all?(&:persisted?)
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
+      redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "common_attributes")
     else
       render :new, status: :unprocessable_entity
     end
@@ -59,9 +59,10 @@ class CommonAttributeStatesController < ApplicationController
 
     # if @common_attribute_states.all?(&:persisted?)
       if @room_state.specific_attribute_states.any?
-        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id)
+        fail
+        redirect_to redirect_rover_to_correct_state_edit(@room, @room_state, "common_attributes")
       else
-        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
+        redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "common_attributes")
       end
     # else
     #   render :edit, status: :unprocessable_entity

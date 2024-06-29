@@ -71,47 +71,51 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def redirect_rover_to_correct_state_new(room, room_state)
-    state_to_redirect_to = nil
+  def redirect_rover_to_correct_state_new(room, room_state, step)
+    state_to_redirect_to = confirmation_rover_navigation_path(room_id: room.id)
+    steps = ["room", "common_attributes", "specific_attributes", "resources"]
+    index = steps.find_index(step) + 1
+    redirect = {}
+    CommonAttribute.all.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
+    room.specific_attributes.present? ? redirect["specific_attributes"] = true : redirect["specific_attributes"] = false
+    room.resources.present? ? redirect["resources"] = true : redirect["resources"] = false
 
-    common_attributes = CommonAttribute.all
-    specific_attributes = @room.specific_attributes
-    resources = @room.resources
-
-    unless common_attributes.present?
-      state_to_redirect_to = new_specific_attribute_state_path(room_state_id: @room_state.id)
+    path_to_redirect = {
+      "common_attributes" => new_common_attribute_state_path(room_state_id: room_state.id),
+      "specific_attributes" => new_specific_attribute_state_path(room_state_id: room_state.id), 
+      "resources" => new_resource_state_path(room_state_id: room_state.id)
+  }
+    while index < steps.count
+      if redirect[steps[index]]
+        return state_to_redirect_to = path_to_redirect[steps[index]]
+      end
+      index += 1
     end
-
-    unless specific_attributes.present?
-      state_to_redirect_to = new_resource_state_path(room_state_id: @room_state.id)
-    end
-
-    unless resources.present?
-      state_to_redirect_to = confirmation_rover_navigation_path(room_id: @room.id)
-    end
-
     state_to_redirect_to
   end
 
-  def redirect_rover_to_correct_state_edit(room, room_state)
-    state_to_redirect_to = nil
 
-    common_attributes = CommonAttribute.all
-    specific_attributes = @room.specific_attributes
-    resources = @room.resources
+  def redirect_rover_to_correct_state_edit(room, room_state, step)
+    state_to_redirect_to = confirmation_rover_navigation_path(room_id: room.id)
+    steps = ["room", "common_attributes", "specific_attributes", "resources"]
+    index = steps.find_index(step) + 1
+    redirect = {}
+    CommonAttribute.all.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
+    room.specific_attributes.present? ? redirect["specific_attributes"] = true : redirect["specific_attributes"] = false
+    room.resources.present? ? redirect["resources"] = true : redirect["resources"] = false
 
-    unless common_attributes.present?
-      state_to_redirect_to = edit_specific_attribute_state_path(room_state_id: @room_state.id)
+    path_to_redirect = {
+      "common_attributes" => edit_common_attribute_state_path(room_state_id: room_state.id),
+      "specific_attributes" => edit_specific_attribute_state_path(room_state_id: room_state.id), 
+      "resources" => edit_resource_state_path(room_state_id: room_state.id)
+    }
+
+    while index < steps.count
+      if redirect[steps[index]]
+        return state_to_redirect_to = path_to_redirect[steps[index]]
+      end
+      index += 1
     end
-
-    unless specific_attributes.present?
-      state_to_redirect_to = edit_resource_state_path(room_state_id: @room_state.id)
-    end
-
-    unless resources.present?
-      state_to_redirect_to = confirmation_rover_navigation_path(room_id: @room.id)
-    end
-
     state_to_redirect_to
   end
 
