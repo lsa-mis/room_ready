@@ -1,6 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ show edit update ]
+  before_action :set_building, only: %i[ show edit update destroy ]
   before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
@@ -64,6 +64,23 @@ class BuildingsController < ApplicationController
     else 
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    if @building.has_checked_rooms?
+      flash.now['alert'] = "The buildings has data about room - archoive this building"
+    else
+      authorize @building
+      if delete_building(@building)
+        @buildings = Building.all.order(:name)
+        flash.now['notice'] = "The buildind was deleted"
+      else
+        @buildings = Building.all.order(:name)
+      end
+    end
+  end
+
+  def archive
   end
 
 
@@ -142,6 +159,17 @@ class BuildingsController < ApplicationController
         end
       else
         note = " API returned bo data about classrooms for the building"
+      end
+    end
+
+    def delete_building(building)
+      Resource.where(room_id: building.rooms.ids).delete_all
+      Room.where(floor_id: building.floors.ids).delete_all
+      Floor.where(building_id: building).delete_all
+      if building.delete
+        return true
+      else
+        return false
       end
     end
 end
