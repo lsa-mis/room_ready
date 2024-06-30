@@ -1,26 +1,20 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ show edit update destroy ]
+  before_action :set_building, only: %i[ show edit update destroy archive]
   before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
   def index
-    @zone_id = params[:zone_id]
-    @search_query = params[:search]
-
-    zone_id_exists = !(@zone_id.nil? || @zone_id.strip.empty?)
-    search_query_exists = !(@search_query.nil? || @search_query.strip.empty?)
-
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
 
-    if zone_id_exists
-      @buildings = Building.where(zone_id: @zone_id)
+    if @zone
+      @buildings = Building.active.where(zone_id: @zone)
     else
-      @buildings = Building.all
+      @buildings = Building.active
     end
 
-    if search_query_exists
-      search_term = "%#{@search_query}%"
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
       @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ? OR nick_name ILIKE ?', search_term, search_term, search_term, search_term)
     end
 
@@ -72,15 +66,22 @@ class BuildingsController < ApplicationController
     else
       authorize @building
       if delete_building(@building)
-        @buildings = Building.all.order(:name)
-        flash.now['notice'] = "The buildind was deleted"
+        @buildings = Building.active.order(:name)
+        flash.now['notice'] = "The building was deleted"
       else
-        @buildings = Building.all.order(:name)
+        @buildings = Building.active.order(:name)
       end
     end
   end
 
   def archive
+    authorize @building
+    if @building.update(archived: true)
+      @buildings = Building.active.order(:name)
+      flash.now['notice'] = "The building was archived"
+    else
+      @buildings = Building.active.order(:name)
+    end
   end
 
 
@@ -98,6 +99,8 @@ class BuildingsController < ApplicationController
     def set_zone
       if params[:zone_id].present?
         @zone = Zone.find(params[:zone_id])
+      else
+        @zone = false
       end
     end
 
@@ -121,7 +124,7 @@ class BuildingsController < ApplicationController
             if @building.save
               add_classrooms_for_building(bldrecnbr)
               notice = "New Building was added." + note
-              @buildings = Building.where(zone: @zone)
+              @buildings = Building.active.where(zone: @zone)
               format.turbo_stream do
                 @new_building = Building.new
                 if @zone.present?

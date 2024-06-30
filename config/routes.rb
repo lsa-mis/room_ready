@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       resources :rooms, module: :floors
     end
   end
+  post 'archive_building/:id', to: 'buildings#archive', as: :archive_building
 
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
