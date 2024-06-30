@@ -24,4 +24,13 @@ class Building < ApplicationRecord
   def full_address
     "#{address}, #{city}, #{state} #{zip}"
   end
+
+  def rooms
+    Room.joins(floor: [ :building]).where(building: {id: self.id})
+  end
+
+  def has_checked_rooms?
+    rooms.detect(&:room_state?).present?
+  end
+
 end

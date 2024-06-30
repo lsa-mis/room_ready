@@ -23,4 +23,8 @@ class SpecificAttribute < ApplicationRecord
   def needs_either_checkbox_or_quantity_box
     errors.add(:base, 'Needs to have either a checkbox or a quantity box, or both.') unless need_checkbox || need_quantity_box
   end
+
+  def state_exist?
+    SpecificAttributeState.find_by(specific_attribute_id: self).present?
+  end
 end
