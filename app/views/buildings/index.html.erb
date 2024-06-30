@@ -20,7 +20,7 @@
       </div>
     <% end %>
     <h3>
-      <%= if @zone.nil? then nil else @zone.name end %> Buildings (<%= @buildings.count %>)
+      <%= @zone.name if @zone.present?  %> Buildings (<%= @buildings.count %>)
     </h3>
     <%= render "listing" %>
   </div>
