@@ -59,7 +59,6 @@ class CommonAttributeStatesController < ApplicationController
 
     # if @common_attribute_states.all?(&:persisted?)
       if @room_state.specific_attribute_states.any?
-        fail
         redirect_to redirect_rover_to_correct_state_edit(@room, @room_state, "common_attributes")
       else
         redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "common_attributes")
