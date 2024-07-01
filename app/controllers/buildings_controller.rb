@@ -94,6 +94,7 @@ class BuildingsController < ApplicationController
 
   def unarchive
     authorize @building
+    @archived = true
     if @building.update(archived: false)
       @buildings = Building.archived.order(:name)
       flash.now['notice'] = "The building was unarchived"
