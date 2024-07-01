@@ -6,6 +6,7 @@ class BuildingsController < ApplicationController
 
   def index
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @zones << ["No Zone", 0]
     if params[:show_archived] == "1" 
       @buildings = Building.archived
       @archived = true
@@ -15,7 +16,12 @@ class BuildingsController < ApplicationController
     end
 
     if params[:zone_id].present?
-      @buildings = Building.active.where(zone_id: params[:zone_id])
+      zone_id = params[:zone_id]
+      if zone_id == "0"
+        @buildings = Building.active.where(zone_id: nil)
+      else
+        @buildings = Building.active.where(zone_id: zone_id)
+      end
     end
     
     if params[:search].present?

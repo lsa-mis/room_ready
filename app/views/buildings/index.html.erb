@@ -4,23 +4,31 @@
     <div class="mb-auto mt-auto">
       <%= link_to "Add Building", new_building_path, class: "btn btn-primary" %>
     </div>
-    </div>
+  </div>
+  <div>
     <%= form_with url: buildings_path, method: :get, class: "", 
       data: { 
         controller: "autosubmit", 
         autosubmit_target: "form", 
         turbo_frame: "all_buildings" 
       } do |form| %>
-      <div>
+      <div class="">
         <%= form.text_field :search, placeholder: "Search by Name, Nickname, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
-      <div>
+      <div class="">
+        <label for="zone_id" aria-label="zone_id"></label>
+        <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "Select Zone ..."}, { :"data-action" => "change->autosubmit#submitForm" } %>
+      </div>
+      <div class="mt-2">
         <%= form.check_box :show_archived, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
         <%= form.label :show_archived, "Show Archived Buildings" %>
       </div>
-      <div>
-        <label for="zone_id" class="fancy_label">Select a Zone</label>
-        <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, { :"data-action" => "change->autosubmit#submitForm" } %>
+      <div class="mt-2">
+        <button type="button" data-action='click->autosubmit#clearFilters'>
+          <span class="link_to">Clear Filters
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </span>
+        </button>
       </div>
     <% end %>
     <h3>

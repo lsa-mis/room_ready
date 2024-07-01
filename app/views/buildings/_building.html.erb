@@ -27,7 +27,7 @@
 
 </div>
 
-<div class="d-flex flex-row justify-content-start align-items-center gap-3">
+<div class="d-flex flex-row justify-content-start align-items-center gap-3 pl-2">
   <% if building.has_checked_rooms? %>
     <% if building.archived %>
       <%= link_to unarchive_building_path(building), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Unarchive", data: { turbo_confirm: "Are you sure you want to unarchive this building?" , turbo_method: :post }  do %>
