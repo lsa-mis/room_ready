@@ -9,7 +9,7 @@
 </nav>
 
 <h2>
-  Rooms for Building: <%= @floor.building.name %> (Floor <%= @floor.name %>)
+  Rooms for <%= @floor.building.name %> (Floor <%= @floor.name %>)
   <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(@floor.building.full_address) %>"></i>
 </h2>
 

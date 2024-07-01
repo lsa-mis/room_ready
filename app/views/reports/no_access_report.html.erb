@@ -8,7 +8,7 @@
   <!-- turning off turbo for the form is necessary - otherwise the browser doesn't download the csv properly -->
   <%= form_with url: no_access_report_reports_path, method: :get, data: { turbo: false }, class: "mb-3" do |form| %>
     <div>
-      <label for="zone_id" class="fancy_label">Select a Zone</label>
+      <label for="zone_id" class="">Select a Zone</label>
       <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, class: "form-select" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
         <%= form.label :from, "From: "%>

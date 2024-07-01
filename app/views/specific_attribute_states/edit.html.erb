@@ -11,8 +11,8 @@
 
 <h1>Editing Specific Room Questions</h1>
 
-<h2><%= @room.floor.building.zone ? "Zone: #{@room.floor.building.zone.name}" : ''  %></h2>
-<h2><%= "Building: #{@room.floor.building.name}" %>(Floor <%= @room.floor.name %>)</h2>
+<h2><%= @room.floor.building.zone ? "#{@room.floor.building.zone.name}" : ''  %></h2>
+<h2><%= @room.floor.building.name %>(Floor <%= @room.floor.name %>)</h2>
 <h2><%= "Room: #{@room.room_number}" %></h2>
 
 <div data-controller='hideelement'>
