@@ -15,7 +15,7 @@
         <%= form.text_field :search, placeholder: "Search by Name, Nickname, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
       <div>
-        <label for="zone_id" class="fancy_label">Select a Zone</label>
+        <label for="zone_id" class="">Select a Zone</label>
         <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, { :"data-action" => "change->autosubmit#submitForm" } %>
       </div>
     <% end %>
