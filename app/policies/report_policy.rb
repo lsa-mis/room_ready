@@ -10,4 +10,8 @@ class ReportPolicy < ApplicationPolicy
   def inspection_rate_report?
     is_admin?
   end
+  
+  def no_access_report?
+    is_admin?
+  end
 end

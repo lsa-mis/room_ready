@@ -10,6 +10,8 @@
 #
 FactoryBot.define do
   factory :note do
-    
+    content { Faker::Lorem.sentence }
+    association :user
+    association :room
   end
 end
