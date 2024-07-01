@@ -1,18 +1,23 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ show edit update destroy archive]
-  before_action :set_zone, only: %i[ new show create edit update index ]
+  before_action :set_building, only: %i[ show edit update destroy archive unarchive]
+  # before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
   def index
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
-    if @zone
-      @buildings = Building.active.where(zone_id: @zone)
+    if params[:show_archived] == "1" 
+      @buildings = Building.archived
+      @archived = true
     else
       @buildings = Building.active
+      @archived = false
     end
 
+    if params[:zone_id].present?
+      @buildings = Building.active.where(zone_id: params[:zone_id])
+    end
+    
     if params[:search].present?
       search_term = "%#{params[:search]}%"
       @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ? OR nick_name ILIKE ?', search_term, search_term, search_term, search_term)
@@ -61,13 +66,13 @@ class BuildingsController < ApplicationController
   end
 
   def destroy
+    authorize @building
     if @building.has_checked_rooms?
-      flash.now['alert'] = "The buildings has data about room - archoive this building"
+      flash.now['alert'] = "The buildings has checked rooms - archive this building instead"
+      @buildings = Building.active.order(:name)
     else
-      authorize @building
       if delete_building(@building)
-        @buildings = Building.active.order(:name)
-        flash.now['notice'] = "The building was deleted"
+        redirect_to request.referrer, notice: "The building was deleted."
       else
         @buildings = Building.active.order(:name)
       end
@@ -76,11 +81,24 @@ class BuildingsController < ApplicationController
 
   def archive
     authorize @building
+    if @building.zone.present?
+      @building.update(zone_id: nil)
+    end
     if @building.update(archived: true)
       @buildings = Building.active.order(:name)
       flash.now['notice'] = "The building was archived"
     else
       @buildings = Building.active.order(:name)
+    end
+  end
+
+  def unarchive
+    authorize @building
+    if @building.update(archived: false)
+      @buildings = Building.archived.order(:name)
+      flash.now['notice'] = "The building was unarchived"
+    else
+      @buildings = Building.archived.order(:name)
     end
   end
 
@@ -94,14 +112,6 @@ class BuildingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
-    end
-
-    def set_zone
-      if params[:zone_id].present?
-        @zone = Zone.find(params[:zone_id])
-      else
-        @zone = false
-      end
     end
 
     def add_from_bldrecnbr
@@ -169,10 +179,6 @@ class BuildingsController < ApplicationController
       Resource.where(room_id: building.rooms.ids).delete_all
       Room.where(floor_id: building.floors.ids).delete_all
       Floor.where(building_id: building).delete_all
-      if building.delete
-        return true
-      else
-        return false
-      end
+      building.delete ? true : false
     end
 end

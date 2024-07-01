@@ -30,7 +30,7 @@ class Building < ApplicationRecord
   end
 
   def rooms
-    Room.joins(floor: [ :building]).where(building: {id: self.id})
+    Room.joins(floor: [:building]).where(building: {id: self.id})
   end
 
   def has_checked_rooms?

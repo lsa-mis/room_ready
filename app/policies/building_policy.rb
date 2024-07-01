@@ -30,4 +30,9 @@ class BuildingPolicy < ApplicationPolicy
   def archive?
     is_admin?
   end
+
+  def unarchive?
+    is_admin?
+  end
+
 end
