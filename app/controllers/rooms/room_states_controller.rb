@@ -60,8 +60,13 @@ class Rooms::RoomStatesController < ApplicationController
           return
         end
         if @room_state.is_accessed?
-          format.html { redirect_to redirect_rover_to_correct_state_edit(@room, @room_state, "room") }
-          format.json { render json: { status: 'ok' }, status: :ok }
+          if @room_state.common_attribute_states.any?
+            format.html { redirect_to redirect_rover_to_correct_state_edit(@room, @room_state, "room") }
+            format.json { render json: { status: 'ok' }, status: :ok }
+          else
+            format.html { redirect_to redirect_rover_to_correct_state_new(@room, @room_state, "room") }
+            format.json { render json: { status: 'ok' }, status: :ok }
+          end
         else
           format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
           format.json { render json: { status: 'ok' }, status: :ok }
