@@ -7,8 +7,7 @@ class NotesController < ApplicationController
 
   # GET /notes/new
   def new
-    fail
-    @note = Note.new
+    @new_note = Note.new
   end
 
   # GET /notes/1/edit
@@ -21,8 +20,8 @@ class NotesController < ApplicationController
     @note.user = current_user
     authorize @note
     if @note.save
-      @notes = Note.where(room: @room).order("updated_at DESC")
-      @new_note = Note.new(room: @room)
+      @notes = Note.where(room: @note.room).order("updated_at DESC")
+      @new_note = Note.new(room: @note.room)
     else
       render :new, status: :unprocessable_entity
     end

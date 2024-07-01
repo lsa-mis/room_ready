@@ -28,7 +28,7 @@
               <%= resource_state.resource.display_name %>
             </h5>
             <div class="d-flex flex-row mb-1">
-              <%= f.radio_button :is_checked, true, class: "btn-check" %>
+              <%= f.radio_button :is_checked, true, class: "btn-check", required: true %>
               <%= f.label :is_checked_true, "Yes", class: "btn btn-outline-success w-50" %>
               <%= f.radio_button :is_checked, false, class: "btn-check" %>
               <%= f.label :is_checked_false, "No", class: "btn btn-outline-success w-50" %>

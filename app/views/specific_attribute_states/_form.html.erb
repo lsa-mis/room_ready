@@ -37,7 +37,7 @@
             <% end %>
             <% if specific_attribute_state.specific_attribute.need_quantity_box %>
               <div>
-                <%= f.number_field :quantity_box_value, class: "form-control form-control-sm", required: true %>
+                <%= f.number_field :quantity_box_value, value: 0, class: "form-control form-control-sm", required: true %>
               </div>
             <% end %>
           </div>
