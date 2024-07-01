@@ -72,7 +72,7 @@ class BuildingsController < ApplicationController
       @buildings = Building.active.order(:name)
     else
       if delete_building(@building)
-        redirect_to request.referrer, notice: "The building was deleted."
+        redirect_to buildings_path, notice: "The building was deleted."
       else
         @buildings = Building.active.order(:name)
       end
@@ -86,7 +86,7 @@ class BuildingsController < ApplicationController
     end
     if @building.update(archived: true)
       @buildings = Building.active.order(:name)
-      flash.now['notice'] = "The building was archived"
+      redirect_to buildings_path, notice: "The building was archived"
     else
       @buildings = Building.active.order(:name)
     end
@@ -97,7 +97,7 @@ class BuildingsController < ApplicationController
     @archived = true
     if @building.update(archived: false)
       @buildings = Building.archived.order(:name)
-      flash.now['notice'] = "The building was unarchived"
+      redirect_to buildings_path, notice: "The building was unarchived"
     else
       @buildings = Building.archived.order(:name)
     end
