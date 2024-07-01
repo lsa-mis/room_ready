@@ -28,4 +28,8 @@ class Room < ApplicationRecord
     [floor.building.nick_name, room_number].join(' ')
   end
 
+  def room_state?
+    RoomState.find_by(room_id: self).present?
+  end
+
 end

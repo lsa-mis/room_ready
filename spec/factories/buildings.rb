@@ -13,6 +13,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  zone_id    :bigint
+#  archived   :boolean          default(FALSE)
 #
 FactoryBot.define do
   factory :building do

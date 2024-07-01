@@ -20,4 +20,8 @@ class Resource < ApplicationRecord
   def display_name
     "#{self.name} - #{self.resource_type}"
   end
+
+  def state_exist?
+    ResourceState.find_by(resource_id: self).present?
+  end
 end
