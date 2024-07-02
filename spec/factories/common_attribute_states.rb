@@ -14,7 +14,7 @@ FactoryBot.define do
   factory :common_attribute_state do
     checkbox_value { false }
     quantity_box_value { 1 }
-    room_state { nil }
-    common_attribute { nil }
+    association :room_state, factory: :room_state
+    association :common_attribute, factory: :common_attribute
   end
 end

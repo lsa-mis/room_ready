@@ -16,6 +16,7 @@ class CommonAttributeState < ApplicationRecord
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
+  validate :unique_common_attribute_state_per_room_state
 
   private
 
@@ -28,6 +29,12 @@ class CommonAttributeState < ApplicationRecord
   def quantity_box_presence_if_required
     if common_attribute.need_quantity_box && quantity_box_value.nil?
       errors.add(:quantity_box_value, "can't be blank if quantity box is required")
+    end
+  end
+
+  def unique_common_attribute_state_per_room_state
+    if room_state.common_attribute_states.where(common_attribute_id: common_attribute_id).any?
+      errors.add(:base, "There can only be one Common Attribute State per Common Attribute per Room State")
     end
   end
 end
