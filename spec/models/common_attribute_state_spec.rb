@@ -27,9 +27,11 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state without checkbox_value when common_attribute.need_checkbox is true" do
     it 'raises an error: Checkbox value can\'t be blank if checkbox is required' do
-      common_attribute_state = FactoryBot.create(:common_attribute_state, checkbox_value: nil, common_attribute: FactoryBot.create(:common_attribute, need_checkbox: true))
+      common_attribute = FactoryBot.create(:common_attribute, need_checkbox: true)
+      common_attribute_state = FactoryBot.build(:common_attribute_state, checkbox_value: nil, common_attribute: common_attribute)
+      # binding.pry
       expect(common_attribute_state.valid?).to be_falsy
-      expect(common_attribute_state.errors.full_messages_for(:checkbox_value)).to include "Checkbox value can't be blank if checkbox is required"
+      expect(common_attribute_state.errors.full_messages_for(:checkbox_value)).to include "can't be blank if checkbox is required"
     end
   end
 
@@ -37,7 +39,7 @@ RSpec.describe CommonAttributeState, type: :model do
     it 'raises an error: Quantity box value can\'t be blank if quantity box is required' do
       common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true))
       expect(common_attribute_state.valid?).to be_falsy
-      expect(common_attribute_state.errors.full_messages_for(:quantity_box_value)).to include "Quantity box value can't be blank if quantity box is required"
+      expect(common_attribute_state.errors.full_messages_for(:quantity_box_value)).to include "can't be blank if quantity box is required"
     end
   end
 

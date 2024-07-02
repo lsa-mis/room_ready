@@ -16,7 +16,7 @@ class CommonAttributeState < ApplicationRecord
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
-  validate :unique_common_attribute_state_per_room_state
+  validate :unique_common_attribute_state_per_room_state, on: :create
 
   private
 
