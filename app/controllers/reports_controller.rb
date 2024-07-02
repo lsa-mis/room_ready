@@ -57,6 +57,49 @@ class ReportsController < ApplicationController
 
   def inspection_rate_report
     authorize :report, :inspection_rate_report?
+    
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
+
+      @rooms = Room.joins(floor: :building).joins(:room_states)
+                   .where(buildings: { zone_id: zone_id })
+                   .where(room_states: { updated_at: start_time..end_time })
+                   .group('rooms.id')
+                   .select('rooms.*')
+                   .select('COUNT(room_states.id) AS room_check_count')
+                   .order('room_check_count DESC')
+
+      oldest_record = @rooms.min_by { |room| room.room_states.first.updated_at }
+      oldest_record_date = oldest_record.room_states.first.updated_at
+      start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+
+      days = (end_time - start_time).to_i
+
+      @title = 'Inspection Rate Report'
+      @metrics = {
+        'Total room checks' => @rooms.sum(&:room_check_count),
+        'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",  
+      }
+      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate (Checks/Days)']
+      @data = @rooms.map do |room|
+        [
+          room.room_number,
+          room.floor.building.name,
+          room.floor.building.zone.name,
+          room.room_check_count,
+          "#{(room.room_check_count.to_f / days * 100).round(2)}%"
+        ]
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'inpection_rate_report.csv', type: 'text/csv' }
+    end
   end
 
   def no_access_report
