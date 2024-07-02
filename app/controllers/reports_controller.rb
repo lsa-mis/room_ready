@@ -135,7 +135,8 @@ class ReportsController < ApplicationController
 
       header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
       header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
-      @headers = ['Zone', 'Building', 'Room'] + (header_start..header_end).to_a
+      @date_headers = (header_start..header_end).to_a
+      @headers = ['Zone', 'Building', 'Room'] + @date_headers
 
       @data = grouped_rooms.transform_values do |rooms|
         rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
@@ -158,13 +159,19 @@ class ReportsController < ApplicationController
     CSV.generate(headers: true) do |csv|
       csv << [@title]
       csv << []
-      @metrics.each do |description, value|
-        csv << [description, value]
-      end
-      csv << []
-      csv << @headers
-      @data.each do |row|
-        csv << row
+      @metrics && @metrics.each { |desc, value| csv << [desc, value] }
+
+      if @grouped
+        @data.each do |group, pivot_table|
+          csv << []
+          csv << [group]
+          csv << @headers
+          pivot_table.each { |keys, record| csv << keys + @date_headers.map { |date| record[date] } }
+        end
+      else
+        csv << []
+        csv << @headers
+        @data.each { |row| csv << row }
       end
     end
   end
