@@ -19,12 +19,14 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if $baseURL.present?
-      $baseURL
-    elsif session[:role] == "developer" || session[:role] == "admin"
-      dashboard_path
-    elsif session[:role] == "rover"
+    if session[:role] == "rover"
       welcome_rovers_path
+    elsif session[:role] == "developer" || session[:role] == "admin"
+      if $baseURL.present?
+        $baseURL
+      else
+        dashboard_path
+      end
     else
       root_path
     end
