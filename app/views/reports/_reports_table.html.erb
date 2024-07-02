@@ -1,4 +1,4 @@
-<% @metrics.each do |description, value| %>
+<% @metrics && @metrics.each do |description, value| %>
   <h3><%= "#{description}: #{value}" %></h3>
 <% end %>
 
@@ -14,9 +14,11 @@
       </tr>
       </thead>
       <tbody class="table-group-divider">
-        <% pivot_table.each do |room, record| %>
+        <% pivot_table.each do |keys, record| %>
           <tr>
-            <td><%= room %></td>
+            <% keys.each do |key| %>
+              <td><%= key %></td>
+            <% end %>
             <% @headers.each do |date| %>
               <td><%= record[date] %></td>
             <% end %>

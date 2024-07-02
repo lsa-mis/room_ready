@@ -114,32 +114,35 @@ class ReportsController < ApplicationController
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
       end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
 
-      @rooms = Room.joins(floor: :building).joins(room_states: { common_attribute_states: :common_attribute })
+      rooms = Room.joins(floor: :building).joins(room_states: { common_attribute_states: :common_attribute })
                    .where(buildings: { zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
-                   .select('rooms.*, room_states.updated_at,common_attribute_states.checkbox_value as checkbox_value, common_attribute_states.quantity_box_value as quantity_box_value, common_attributes.description as common_attribute_description')
+                   .select('rooms.*')
+                   .select('room_states.updated_at')
+                   .select('common_attributes.description AS common_attribute_description')
+                   .select('common_attributes.need_checkbox as need_checkbox')
+                   .select('common_attribute_states.checkbox_value as checkbox_value')
+                   .select('common_attribute_states.quantity_box_value as quantity_box_value')
+                   .order('buildings.name DESC, rooms.room_number ASC')
 
-      @grouped_rooms = @rooms.group_by { |room| room.common_attribute_description }
+      grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
 
       @grouped = true
 
       @title = 'Common Attribute States Report'
-      @metrics = {
-        # 'Total No Access Count' => @rooms.sum(&:na_states_count)
-      }
-      earliest_date = @rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-      latest_date = @rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
 
       header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
       header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
-      @headers = ['Room'] + (header_start..header_end).to_a
+      @headers = ['Zone', 'Building', 'Room'] + (header_start..header_end).to_a
 
-      @data = @grouped_rooms.transform_values do |rooms|
-        pivot_table = Hash.new { |hash, key| hash[key] = Hash.new(nil) }
-        rooms.each do |room|
-          pivot_table[room.room_number][room.updated_at.to_date] = ["#{room.checkbox_value}  #{room.quantity_box_value}"]
+      @data = grouped_rooms.transform_values do |rooms|
+        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+          key = [room.floor.building.zone.name, room.floor.building.name, room.room_number]
+          value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
+          pivot_table[key][room.updated_at.to_date] = value
         end
-        pivot_table
       end
     end
 
