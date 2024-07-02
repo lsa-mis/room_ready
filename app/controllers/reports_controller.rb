@@ -73,11 +73,23 @@ class ReportsController < ApplicationController
                    .select('COUNT(room_states.id) AS room_check_count')
                    .order('room_check_count DESC')
 
+      @rooms_no_room_state = Room.left_outer_joins(:room_states)
+                                  .joins(floor: :building)
+                                  .where(buildings: { zone_id: zone_id })
+                                  .where(room_states: { id: nil })
+                                  .where.not(id: @rooms.map(&:id))
+                                  .select('rooms.*')
+                                  .select('0 AS room_check_count')
+                                  .order('rooms.room_number')
+
+
       oldest_record = @rooms.min_by { |room| room.room_states.first.updated_at }
       oldest_record_date = oldest_record.room_states.first.updated_at
       start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
 
       days = (end_time - start_time).to_i
+
+      @rooms = @rooms + @rooms_no_room_state
 
       @title = 'Inspection Rate Report'
       @metrics = {
@@ -89,7 +101,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          room.floor.building.zone.nil? ? 'N/A' : room.floor.building.zone.name,
           room.room_check_count,
           "#{(room.room_check_count.to_f / days * 100).round(2)}%"
         ]
