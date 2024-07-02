@@ -35,4 +35,8 @@ class BuildingPolicy < ApplicationPolicy
     is_admin?
   end
 
+  def unarchive_index?
+    is_admin?
+  end
+
 end

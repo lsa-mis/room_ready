@@ -1,6 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ show edit update destroy archive unarchive]
+  before_action :set_building, only: %i[ show edit update destroy archive unarchive unarchive_index] 
   # before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
@@ -105,12 +105,21 @@ class BuildingsController < ApplicationController
     @archived = true
     if @building.update(archived: false)
       @buildings = Building.archived.order(:name)
-      if request.path == "/buildings"
-        session[:return_to] = nil
-        redirect_back_or_default(notice: "The building was archived", default: building_url(:show_archived => "1"))
-      else
-        redirect_back_or_default(notice: "The building was archived")
-      end
+      redirect_back_or_default(notice: "The building was unarchived")
+    else
+      @buildings = Building.archived.order(:name)
+    end
+  end
+
+  def unarchive_index
+    session[:return_to] = request.referer
+    authorize @building
+    @archived = true
+    if @building.update(archived: false)
+      @buildings = Building.archived.order(:name)
+      @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+      @zones << ["No Zone", 0]
+      render :index, notice: "The building was unarchived"
     else
       @buildings = Building.archived.order(:name)
     end
