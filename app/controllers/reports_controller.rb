@@ -124,7 +124,7 @@ class ReportsController < ApplicationController
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
       end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
 
-      rooms = Room.joins(floor: :building).joins(room_states: { common_attribute_states: :common_attribute })
+      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
                    .where(buildings: { zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .select('rooms.*')
@@ -133,7 +133,7 @@ class ReportsController < ApplicationController
                    .select('common_attributes.need_checkbox as need_checkbox')
                    .select('common_attribute_states.checkbox_value as checkbox_value')
                    .select('common_attribute_states.quantity_box_value as quantity_box_value')
-                   .order('buildings.name DESC, rooms.room_number ASC')
+                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
 
       grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
 
