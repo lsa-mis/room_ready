@@ -34,9 +34,8 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state without quantity_box_value when common_attribute.need_quantity_box is true" do
     it 'raises an error: Quantity box value can\'t be blank if quantity box is required' do
-      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true))
-      expect(common_attribute_state.valid?).to be_falsy
-      expect(common_attribute_state.errors.full_messages_for(:quantity_box_value)).to include "can't be blank if quantity box is required"
+      common_attribute = FactoryBot.create(:common_attribute, need_quantity_box: true)
+      expect { FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: common_attribute) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Quantity box value can't be blank if quantity box is required")
     end
   end
 
