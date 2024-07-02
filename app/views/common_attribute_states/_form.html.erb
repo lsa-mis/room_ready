@@ -28,11 +28,11 @@
           <div class="card-body p-4">
             <h5 class="card-title mb-3"><%= common_attribute_state.common_attribute.description %></h5>
             <% if common_attribute_state.common_attribute.need_checkbox %>
-              <div class="d-flex flex-row mb-1">
+              <div class="d-flex flex-row mb-1 gap-2">
                 <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
                 <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
                 <%= f.radio_button :checkbox_value, false, class: "btn-check" %>
-                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-success w-50" %>
+                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
               </div>
             <% end %>
             <% if common_attribute_state.common_attribute.need_quantity_box %>
