@@ -13,8 +13,18 @@ class ReportsController < ApplicationController
   # 1) run the logic / activerecord query based on params
   # 2) define a title for the report: @title
   # 3) calculate summary metrics in a hash of description:value pairs : @metrics
-  # 4) define an array of headers/column titles: @headers
-  # 5) convert the query results into an array of arrays in order same as headers: @data
+  # 4) for a basic report:
+  #   a) define an array of headers/column titles: @headers
+  #   b) convert the query results into an array of arrays in order same as headers: @data
+  # 5) for a grouped pivot-table report (w/ dates as columns):
+  #   a) set @grouped = true
+  #   b) define an array of date headers: @date_headers
+  #   c) define an array of all headers (indluding date headers): @headers
+  #   d) convert the query results into a grouped hash of hashes: @data
+  #     i) the first key should be an array of 'grouped' keys, like for e.g [zone, building, room]
+  #     ii) the second key should be the date
+  #     iii) the value should be the cell value
+  #     iv) for e.g: @data[[Zone, Building, Room]][Date] = Value
 
   def room_issues_report
     authorize :report, :room_issues_report?
