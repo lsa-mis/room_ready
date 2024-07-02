@@ -184,6 +184,7 @@ class BuildingsController < ApplicationController
 
     def delete_building(building)
       Resource.where(room_id: building.rooms.ids).delete_all
+      SpecificAttribute.where(room_id: building.rooms.ids).delete_all
       Room.where(floor_id: building.floors.ids).delete_all
       Floor.where(building_id: building).delete_all
       building.delete ? true : false
