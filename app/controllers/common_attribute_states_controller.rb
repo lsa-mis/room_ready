@@ -10,19 +10,11 @@ class CommonAttributeStatesController < ApplicationController
     @common_attribute_states = CommonAttribute.all.map do |common_attribute|
       common_attribute.common_attribute_states.new
     end
-
-    unless @common_attribute_states.present?
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
-    end
   end
 
   def edit
     @common_attribute_states = @room_state.common_attribute_states
     authorize @common_attribute_states
-
-    unless @common_attribute_states.present?
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
-    end
   end
 
   # POST /common_attribute_states or /common_attribute_states.json
@@ -43,8 +35,7 @@ class CommonAttributeStatesController < ApplicationController
     end
 
     if @common_attribute_states.all?(&:persisted?)
-      # redirect_to room_path(@room), notice: 'Common Attribute States were successfully saved.'
-      redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
+      redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "common_attributes", mode: "new")
     else
       render :new, status: :unprocessable_entity
     end
@@ -67,11 +58,7 @@ class CommonAttributeStatesController < ApplicationController
     end
 
     # if @common_attribute_states.all?(&:persisted?)
-      if @room_state.specific_attribute_states.any?
-        redirect_to edit_specific_attribute_state_path(room_state_id: @room_state.id)
-      else
-        redirect_to new_specific_attribute_state_path(room_state_id: @room_state.id)
-      end
+    redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "common_attributes", mode: "edit")
     # else
     #   render :edit, status: :unprocessable_entity
     # end
