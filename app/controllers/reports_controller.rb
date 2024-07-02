@@ -5,6 +5,7 @@ class ReportsController < ApplicationController
     @reports_list = [
       {title: "Room Issues", url: room_issues_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
+      {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
     ]
   end
 
@@ -100,6 +101,51 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'no_access_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def common_attribute_states_report
+    authorize :report, :common_attribute_states_report?
+
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+
+      @rooms = Room.joins(floor: :building).joins(room_states: { common_attribute_states: :common_attribute })
+                   .where(buildings: { zone_id: zone_id })
+                   .where(room_states: { updated_at: start_time..end_time })
+                   .select('rooms.*, room_states.updated_at,common_attribute_states.checkbox_value as checkbox_value, common_attribute_states.quantity_box_value as quantity_box_value, common_attributes.description as common_attribute_description')
+
+      @grouped_rooms = @rooms.group_by { |room| room.common_attribute_description }
+
+      @grouped = true
+
+      @title = 'Common Attribute States Report'
+      @metrics = {
+        # 'Total No Access Count' => @rooms.sum(&:na_states_count)
+      }
+      earliest_date = @rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = @rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+
+      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
+      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
+      @headers = ['Room'] + (header_start..header_end).to_a
+
+      @data = @grouped_rooms.transform_values do |rooms|
+        pivot_table = Hash.new { |hash, key| hash[key] = Hash.new(nil) }
+        rooms.each do |room|
+          pivot_table[room.room_number][room.updated_at.to_date] = ["#{room.checkbox_value}  #{room.quantity_box_value}"]
+        end
+        pivot_table
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'common_attribute_states_report.csv', type: 'text/csv' }
     end
   end
 

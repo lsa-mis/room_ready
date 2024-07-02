@@ -2,15 +2,39 @@
   <h3><%= "#{description}: #{value}" %></h3>
 <% end %>
 
-<table class="table text-center mt-4">
-  <thead class="table-group-divider">
+<% if @grouped %>
+  <% @data.each do |group, pivot_table| %>
+    <h4><%= group %></h4>
+    <table class="table text-center mt-4">
+      <thead class="table-group-divider">
+      <tr>
+        <% @headers.each do |header| %>
+          <th scope="col"><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% pivot_table.each do |room, record| %>
+          <tr>
+            <td><%= room %></td>
+            <% @headers.each do |date| %>
+              <td><%= record[date] %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% else %>
+  <table class="table text-center mt-4">
+    <thead class="table-group-divider">
     <tr>
       <% @headers.each do |header| %>
         <th scope="col"><%= header %></th>
       <% end %>
     </tr>
-  </thead>
-  <tbody class="table-group-divider">
+    </thead>
+    <tbody class="table-group-divider">
     <% @data.each do |row| %>
       <tr>
         <% row.each do |cell| %>
@@ -18,5 +42,7 @@
         <% end %>
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+<% end %>
+
