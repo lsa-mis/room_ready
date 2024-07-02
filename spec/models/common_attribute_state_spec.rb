@@ -27,11 +27,9 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state without checkbox_value when common_attribute.need_checkbox is true" do
     it 'raises an error: Checkbox value can\'t be blank if checkbox is required' do
+      room_state = FactoryBot.create(:room_state)
       common_attribute = FactoryBot.create(:common_attribute, need_checkbox: true)
-      common_attribute_state = FactoryBot.build(:common_attribute_state, checkbox_value: nil, common_attribute: common_attribute)
-      # binding.pry
-      expect(common_attribute_state.valid?).to be_falsy
-      expect(common_attribute_state.errors.full_messages_for(:checkbox_value)).to include "can't be blank if checkbox is required"
+      expect { FactoryBot.create(:common_attribute_state, checkbox_value: nil, common_attribute: common_attribute, room_state: room_state) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Checkbox value can't be blank if checkbox is required")
     end
   end
 
