@@ -86,24 +86,31 @@ class BuildingsController < ApplicationController
   end
 
   def archive
+    session[:return_to] = request.referer
     authorize @building
     if @building.zone.present?
       @building.update(zone_id: nil)
     end
     if @building.update(archived: true)
       @buildings = Building.active.order(:name)
-      redirect_to buildings_path, notice: "The building was archived"
+      redirect_back_or_default(notice: "The building was archived")
     else
       @buildings = Building.active.order(:name)
     end
   end
 
   def unarchive
+    session[:return_to] = request.referer
     authorize @building
     @archived = true
     if @building.update(archived: false)
       @buildings = Building.archived.order(:name)
-      redirect_to buildings_path, notice: "The building was unarchived"
+      if request.path == "/buildings"
+        session[:return_to] = nil
+        redirect_back_or_default(notice: "The building was archived", default: building_url(:show_archived => "1"))
+      else
+        redirect_back_or_default(notice: "The building was archived")
+      end
     else
       @buildings = Building.archived.order(:name)
     end
