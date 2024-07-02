@@ -96,7 +96,7 @@ class ReportsController < ApplicationController
         'Total room checks' => @rooms.sum(&:room_check_count),
         'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",  
       }
-      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate (Checks/Days)']
+      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
       @data = @rooms.map do |room|
         [
           room.room_number,
