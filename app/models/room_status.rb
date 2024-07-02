@@ -2,7 +2,7 @@ class RoomStatus
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::NumberHelper
 
-  def initialize(room)
+  def initialize(room, selected_date = Date.one.day.ago.change(hour: 22))
       @room = room
   end
 

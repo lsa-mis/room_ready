@@ -19,10 +19,10 @@ class StaticPagesController < ApplicationController
   def dashboard
     authorize :static_page
     selected_date = if params[:dashboard_date].present?
-        Date.parse(params[:dashboard_date]).in_time_zone.change(hour: 22)
-      else
-        Time.zone.today
-      end
+      DateTime.parse(params[:dashboard_date]).change(hour: 22)
+    else
+      1.day.ago.change(hour: 22)
+    end
 
     @zones = Zone.all
 
@@ -76,7 +76,18 @@ class StaticPagesController < ApplicationController
             .where('room_states.created_at < ?', selected_date - 7.days)
       )
       .distinct.count
-}
+      }
+
+      @zones.each do |zone|
+        
+        zone.rooms_checked_today(selected_date)
+        
+      end
+
+    @latest_room_tickets = RoomTicket.includes(room: { floor: :building })
+                                   .where('created_at <= ?', selected_date)
+                                   .order(created_at: :desc)
+                                   .limit(@tdx_tickets_quantity_on_dashboard)
     
   end
 
