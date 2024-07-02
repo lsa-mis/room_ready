@@ -13,10 +13,11 @@
         turbo_frame: "all_buildings" 
       } do |form| %>
       <div class="">
+      <label for="search" aria-label="search" style="display: inline;"></label>
         <%= form.text_field :search, placeholder: "Search by Name, Nickname, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
       <div class="">
-        <label for="zone_id" aria-label="zone_id"></label>
+        <label for="zone_id" aria-label="zone_id" style="display: inline;"></label>
         <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "Select Zone ..."}, { :"data-action" => "change->autosubmit#submitForm" } %>
       </div>
       <div class="mt-2">
@@ -24,11 +25,9 @@
         <%= form.label :show_archived, "Show Archived Buildings" %>
       </div>
       <div class="mt-2">
-        <button type="button" data-action='click->autosubmit#clearFilters'>
-          <span class="link_to">Clear Filters
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </span>
-        </button>
+        <a class="link_to" data-action="autosubmit#clearFilters">
+          Clear Filters
+        </a>
       </div>
     <% end %>
     <h3>
