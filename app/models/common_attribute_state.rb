@@ -16,6 +16,7 @@ class CommonAttributeState < ApplicationRecord
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
+  validate :is_editable, on: :update
 
   private
 
@@ -30,4 +31,13 @@ class CommonAttributeState < ApplicationRecord
       errors.add(:quantity_box_value, "can't be blank if quantity box is required")
     end
   end
+
+  def readonly?
+    self.updated_at < Time.current.beginning_of_day
+  end
+  
+  def is_editable
+    errors.add(:base, 'Old common attribute state record cannot be edited') if readonly?
+  end
+
 end

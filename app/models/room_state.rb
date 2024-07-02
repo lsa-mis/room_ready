@@ -18,6 +18,7 @@ class RoomState < ApplicationRecord
   has_many :resource_states
 
   validate :unique_room_state_per_day
+  validate :is_editable, on: :update
 
   private
   def unique_room_state_per_day
@@ -28,4 +29,13 @@ class RoomState < ApplicationRecord
       errors.add(:base, 'There can only be one RoomState per room per day')
     end
   end
+
+  def readonly?
+    self.updated_at < Time.current.beginning_of_day
+  end
+  
+  def is_editable
+    errors.add(:base, 'Old room state record cannot be edited') if readonly?
+  end
+
 end
