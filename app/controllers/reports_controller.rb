@@ -4,6 +4,7 @@ class ReportsController < ApplicationController
 
     @reports_list = [
       {title: "Room Issues", url: room_issues_report_reports_path },
+      {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
     ]
   end
@@ -51,6 +52,70 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'room_issues_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def inspection_rate_report
+    authorize :report, :inspection_rate_report?
+    
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @buildings = Building.joins(floors: { rooms: :room_states })
+                          .distinct
+                          .order(:name)
+                          .map { |b| [b.name, b.id] }
+    
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
+
+      @rooms = Room.joins(floor: :building).joins(:room_states)
+                   .where(buildings: { id: building_id })
+                   .where(room_states: { updated_at: start_time..end_time })
+                   .group('rooms.id')
+                   .select('rooms.*')
+                   .select('COUNT(room_states.id) AS room_check_count')
+                   .order('room_check_count DESC')
+
+      @rooms_no_room_state = Room.left_outer_joins(:room_states)
+                                  .joins(floor: :building)
+                                  .where(buildings: { id: building_id })
+                                  .where(room_states: { id: nil })
+                                  .where.not(id: @rooms.map(&:id))
+                                  .select('rooms.*')
+                                  .select('0 AS room_check_count')
+                                  .order('rooms.room_number')
+
+
+      oldest_record = @rooms.min_by { |room| room.room_states.first.updated_at }
+      oldest_record_date = oldest_record.room_states.first.updated_at
+      start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+
+      days = (end_time - start_time).to_i
+
+      @rooms = @rooms + @rooms_no_room_state
+
+      @title = 'Inspection Rate Report'
+      @metrics = {
+        'Total room checks' => @rooms.sum(&:room_check_count),
+        'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",  
+      }
+      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
+      @data = @rooms.map do |room|
+        [
+          room.room_number,
+          room.floor.building.name,
+          room.floor.building.zone.nil? ? 'N/A' : room.floor.building.zone.name,
+          room.room_check_count,
+          "#{(room.room_check_count.to_f / days * 100).round(2)}%"
+        ]
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'inpection_rate_report.csv', type: 'text/csv' }
     end
   end
 
