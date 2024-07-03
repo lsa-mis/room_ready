@@ -3,7 +3,6 @@
 # Table name: resource_states
 #
 #  id            :bigint           not null, primary key
-#  status        :string
 #  is_checked    :boolean
 #  room_state_id :bigint           not null
 #  resource_id   :bigint           not null
