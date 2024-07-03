@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post '/common_attribute_states/update_common_attribute_states/:id', to: 'common_attribute_states#update_common_attribute_states', as: :update_common_attribute_states
 
   resources :common_attributes, except: [:show]
+  get 'unarchive_common_attribute/:id', to: 'common_attributes#unarchive', as: :unarchive_common_attribute
   resources :rovers
   
   resources :zones do

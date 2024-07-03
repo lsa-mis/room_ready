@@ -5,6 +5,13 @@
     <%= render 'form', common_attribute: @new_common_attribute %>
   <% end %>
 
+  <%= form_with(url: common_attributes_path, html: { class: 'mb-3' }, method: :get, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+    <div class="mt-2">
+      <%= form.check_box :show_archived, class: "form-check-input", checked: @show_archived, data: { action: "input->autosubmit#search" }  %>
+      <%= form.label :show_archived, "Show Archived Common Attributes" %>
+    </div>
+  <% end %>
+
   <table class="table text-center mt-4">
     <thead class="table-group-divider">
     <tr>
@@ -12,7 +19,7 @@
       <th scope="col">Needs Checkbox?</th>
       <th scope="col">Needs Quantity Box?</th>
       <th scope="col">Edit</th>
-      <th scope="col">Delete</th>
+      <th scope="col"><%= @option_header %></th>
     </tr>
     </thead>
     <tbody class="table-group-divider" id="common_attributes">

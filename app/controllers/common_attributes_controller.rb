@@ -4,7 +4,14 @@ class CommonAttributesController < ApplicationController
 
   # GET /common_attributes or /common_attributes.json
   def index
-    @common_attributes = CommonAttribute.all
+    @show_archived = params[:show_archived] == "1"
+    if @show_archived
+      @common_attributes = CommonAttribute.archived
+      @option_header = "Unarchive"
+    else
+      @common_attributes = CommonAttribute.active
+      @option_header = "Delete"
+    end
     @new_common_attribute = CommonAttribute.new
     authorize @common_attributes
   end
@@ -53,15 +60,27 @@ class CommonAttributesController < ApplicationController
 
   # DELETE /common_attributes/1 or /common_attributes/1.json
   def destroy
-    @common_attribute.destroy!
+    
+    if @common_attribute.has_state?
+      @common_attribute.update(archived: true)
+      notice = "Common attribute was successfully archived."
+    else
+      @common_attribute.destroy!
+      notice = "Common attribute was successfully deleted."
+    end
 
     respond_to do |format|
-      notice = "Common attribute was successfully deleted."
       format.turbo_stream do
         flash.now[:notice] = notice
       end
       format.html { redirect_to common_attributes_url, notice: notice }
     end
+  end
+
+  def unarchive
+    authorize :common_attribute, :unarchive?
+    CommonAttribute.find(params[:id]).update(archived: false)
+    redirect_to common_attributes_path, notice: "Common attribute was successfully unarchived."
   end
 
   private
