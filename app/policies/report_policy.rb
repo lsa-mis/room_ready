@@ -14,4 +14,12 @@ class ReportPolicy < ApplicationPolicy
   def no_access_report?
     is_admin?
   end
+
+  def common_attribute_states_report?
+    is_admin?
+  end
+
+  def resource_states_report?
+    is_admin?
+  end
 end
