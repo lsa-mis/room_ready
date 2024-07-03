@@ -12,11 +12,11 @@ class Zone < ApplicationRecord
   validates :name, presence: true
   has_many :buildings
 
-  def rooms_checked_today(selected_date)
+  def rooms_checked_today
     Room.joins(floor: { building: :zone })
         .includes(:room_states)
         .where(zones: { id: self.id })
-        .select { |room| RoomStatus.new(room, selected_date).room_checked_today? && RoomStatus.new(room, selected_date).calculate_percentage.to_f == 100.0 }
+        .select { |room| RoomStatus.new(room).room_checked_today? && RoomStatus.new(room).calculate_percentage.to_f == 100.0 }
         .count
   end
 
