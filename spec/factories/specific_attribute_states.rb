@@ -12,9 +12,15 @@
 #
 FactoryBot.define do
   factory :specific_attribute_state do
-    checkbox_value { false }
+    checkbox_value { true }
     quantity_box_value { 1 }
-    room_state { nil }
-    specific_attribute { nil }
+
+    # need to create a virtual attribute becuz room_state and resource need to have the SAME room,
+    # otherwise validations fail (and becuz of design). we can't use simple 'associations' here
+    transient do
+      room { create(:room) }
+    end
+    room_state { create(:room_state, room: room) }
+    specific_attribute { create(:specific_attribute, room: room) }
   end
 end
