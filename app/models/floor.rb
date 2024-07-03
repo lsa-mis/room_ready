@@ -11,4 +11,6 @@
 class Floor < ApplicationRecord
   belongs_to :building
   has_many :rooms
+
+  validates :name, presence: true
 end
