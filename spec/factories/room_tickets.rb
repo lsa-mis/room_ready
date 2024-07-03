@@ -12,9 +12,10 @@
 #
 FactoryBot.define do
   factory :room_ticket do
-    description { "MyString" }
-    submitted_by { "MyString" }
-    submitted_at { "2024-05-14 11:08:05" }
-    room { nil }
+    name { Faker::Name.name }
+    resource_type { "MyString" }
+    association :room
+
+    association :room
   end
 end
