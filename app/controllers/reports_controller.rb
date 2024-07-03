@@ -55,7 +55,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.tickets_count,
         ]
       end
@@ -118,7 +118,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.nil? ? 'N/A' : room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.room_check_count,
           "#{(room.room_check_count.to_f / days * 100).round(2)}%"
         ]
@@ -162,7 +162,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.na_states_count,
           room.na_states_dates.zip(room.na_states_reasons)
                           .sort_by { |date, _reason| date }
