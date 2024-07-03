@@ -9,7 +9,9 @@
         <th>Zone</th>
         <th>View</th>
         <th>Edit</th>
-        <th>Remove</th>
+        <% if @archived %>
+          <th>Unarchive</th>
+        <% end %>
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -41,11 +43,13 @@
             <i class="bi bi-pencil-square text-primary"></i>
             <% end %>
           </td>
-          <td class="building_tbody_td">
-            <%= link_to "#", 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Archive" do %>
-            <i class="bi bi-trash-fill text-danger"></i>
-            <% end %>
-          </td>
+          <% if @archived %>
+             <td class="building_tbody_td">
+              <%= link_to unarchive_building_index_path(building, "1"), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Unarchive", data: { turbo_confirm: "Are you sure you want to unarchive this building?" , turbo_method: :post }  do %>
+                <i class="bi bi-archive text-success"></i>
+              <% end %>
+            </td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
