@@ -19,7 +19,11 @@ class SpecificAttributeState < ApplicationRecord
   private
 
   def readonly?
-    self.updated_at < Time.current.beginning_of_day
+    if self.id.present?
+      self.updated_at < Time.current.beginning_of_day
+    else
+      false
+    end
   end
   
   def is_editable
