@@ -14,8 +14,8 @@ FactoryBot.define do
   factory :resource_state do
     is_checked { true }
 
-    # need to create a virtual attribute becuz room_state and resource need have the SAME room,
-    # otherwise validations fail (and becuz of design). we can't use typical 'associations' here
+    # need to create a virtual attribute becuz room_state and resource need to have the SAME room,
+    # otherwise validations fail (and becuz of design). we can't use simple 'associations' here
     transient do
       room { create(:room) }
     end
