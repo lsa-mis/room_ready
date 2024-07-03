@@ -106,7 +106,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.nil? ? 'N/A' : room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.room_check_count,
           "#{(room.room_check_count.to_f / days * 100).round(2)}%"
         ]

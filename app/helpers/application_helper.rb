@@ -103,7 +103,7 @@ module ApplicationHelper
     if building.zone.present?
       building.zone.name
     else
-      ""
+      "N/A"
     end
   end
 
