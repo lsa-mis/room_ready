@@ -199,10 +199,14 @@ class BuildingsController < ApplicationController
     end
 
     def delete_building(building)
-      Resource.where(room_id: building.rooms.ids).delete_all
-      SpecificAttribute.where(room_id: building.rooms.ids).delete_all
-      Room.where(floor_id: building.floors.ids).delete_all
-      Floor.where(building_id: building).delete_all
-      building.delete ? true : false
+      begin
+        Resource.where(room_id: building.rooms.ids).delete_all
+        SpecificAttribute.where(room_id: building.rooms.ids).delete_all
+        Room.where(floor_id: building.floors.ids).delete_all
+        Floor.where(building_id: building).delete_all
+        building.delete ? true : false
+      rescue StandardError => e
+        raise ActiveRecord::Rollback, "Error deleting building #{e.message}" 
+      end
     end
 end
