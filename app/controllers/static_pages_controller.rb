@@ -21,7 +21,7 @@ class StaticPagesController < ApplicationController
     selected_date = if params[:dashboard_date].present?
         Date.parse(params[:dashboard_date]).in_time_zone.change(hour: 22)
       else
-        Time.zone.today
+        Time.zone.yesterday.change(hour: 22)
       end
 
     @zones = Zone.all

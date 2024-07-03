@@ -24,15 +24,15 @@
           </div>
           <div class="card-body">
             <div class="progress mb-3">
-              <div class="progress-bar <%= room_check_progress_class(zone.rooms_checked_today, zone.total_rooms) %> text-white" role="progressbar" 
-              style="width: <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%" 
-              aria-valuenow="<%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>" 
+              <div class="progress-bar <%= room_check_progress_class(zone.rooms_checked_for_date(params[:dashboard_date]), zone.total_rooms) %> text-white" role="progressbar" 
+              style="width: <%= completion_percentage(zone.rooms_checked_for_date(params[:dashboard_date]), zone.total_rooms) %>%" 
+              aria-valuenow="<%= completion_percentage(zone.rooms_checked_for_date(params[:dashboard_date]), zone.total_rooms) %>" 
               aria-valuemin="0" aria-valuemax="100">
-              <%= completion_percentage(zone.rooms_checked_today, zone.total_rooms) %>%
+              <%= completion_percentage(zone.rooms_checked_for_date(params[:dashboard_date]), zone.total_rooms) %>%
               </div>
             </div>
 
-            <h6 class="card-text mb-4 <%= room_check_status_class(zone.rooms_checked_today, zone.total_rooms) %>"><%= zone.rooms_checked_today %>/<%= zone.total_rooms %> Classrooms Complete</h6>
+            <h6 class="card-text mb-4 <%= room_check_status_class(zone.rooms_checked_for_date(params[:dashboard_date]), zone.total_rooms) %>"><%= zone.rooms_checked_for_date(params[:dashboard_date]) %>/<%= zone.total_rooms %> Classrooms Complete</h6>
 
             <div class="mt-auto d-flex">
               <a href="" class="btn btn-primary btn-sm flex-fill">Details</a>

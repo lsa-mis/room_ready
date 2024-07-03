@@ -35,6 +35,7 @@ module DashboardHelper
 
   def latest_room_tickets
     RoomTicket.includes(room: { floor: :building })
+              # .where('created_at <= ?', selected_date.end_of_day)
               .order(created_at: :desc)
               .limit(recent_tickets_quantity)
   end

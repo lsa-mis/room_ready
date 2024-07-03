@@ -20,6 +20,16 @@ class Zone < ApplicationRecord
         .count
   end
 
+  def rooms_checked_for_date(selected_date)
+    date = Date.parse(selected_date)
+    RoomState.joins(room: { floor: { building: :zone } } )
+             .where(zones: { id: self.id })
+             .where(updated_at: date.beginning_of_day..date.end_of_day)
+             .select { |room_state| true } # RoomStatus calculate_percentage
+             .count
+
+  end
+
   def total_rooms
     Room.joins(floor: { building: :zone })
         .where(zones: { id: self.id })
