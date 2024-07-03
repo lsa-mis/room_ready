@@ -25,8 +25,8 @@ RSpec.describe ResourceState, type: :model do
   end
 
   context "create resource_state without an is_checked value" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Is checked can\'t be blank"' do
-      expect { FactoryBot.create(:resource_state, is_checked: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Is checked can't be blank")
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Is checked must be a present (either true or false)"' do
+      expect { FactoryBot.create(:resource_state, is_checked: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Is checked must be a present (either true or false)")
     end
   end
 end
