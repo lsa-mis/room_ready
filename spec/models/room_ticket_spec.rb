@@ -25,19 +25,19 @@ RSpec.describe RoomTicket, type: :model do
     end
   end
 
-  context "create zone without a description" do
+  context "create room_ticket without a description" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Description can\'t be blank"' do
       expect { FactoryBot.create(:room_ticket, description: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Description can't be blank")
     end
   end
 
-  context "create zone without a submitted_by" do
+  context "create room_ticket without a submitted_by" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Submitted by can\'t be blank"' do
       expect { FactoryBot.create(:room_ticket, submitted_by: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Submitted by can't be blank")
     end
   end
 
-  context "create zone without a tdx_email" do
+  context "create room_ticket without a tdx_email" do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Tdx email can\'t be blank"' do
       expect { FactoryBot.create(:room_ticket, tdx_email: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Tdx email can't be blank")
     end
