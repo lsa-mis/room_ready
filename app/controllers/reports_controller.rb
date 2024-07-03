@@ -43,7 +43,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.tickets_count,
         ]
       end
@@ -150,7 +150,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.na_states_count,
           room.na_states_dates.zip(room.na_states_reasons)
                           .sort_by { |date, _reason| date }
