@@ -28,7 +28,10 @@ Rails.application.routes.draw do
   resources :reports, only: [:index] do
     collection do
       get 'room_issues_report', to: 'reports#room_issues_report'
+      get 'inspection_rate_report', to: 'reports#inspection_rate_report'
       get 'no_access_report', to: 'reports#no_access_report'
+      get 'common_attribute_states_report', to: 'reports#common_attribute_states_report'
+      get 'resource_states_report', to: 'reports#resource_states_report'
     end
   end
 

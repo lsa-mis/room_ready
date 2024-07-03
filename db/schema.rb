@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_30_040657) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_03_042628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -101,11 +101,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_30_040657) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "dashboards", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "floors", force: :cascade do |t|
     t.string "name"
     t.bigint "building_id", null: false
@@ -124,7 +119,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_30_040657) do
   end
 
   create_table "resource_states", force: :cascade do |t|
-    t.string "status"
     t.boolean "is_checked"
     t.bigint "room_state_id", null: false
     t.bigint "resource_id", null: false

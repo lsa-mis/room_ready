@@ -4,7 +4,10 @@ class ReportsController < ApplicationController
 
     @reports_list = [
       {title: "Room Issues", url: room_issues_report_reports_path },
+      {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
+      {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
+      {title: "Resource States", url: resource_states_report_reports_path },
     ]
   end
 
@@ -12,8 +15,18 @@ class ReportsController < ApplicationController
   # 1) run the logic / activerecord query based on params
   # 2) define a title for the report: @title
   # 3) calculate summary metrics in a hash of description:value pairs : @metrics
-  # 4) define an array of headers/column titles: @headers
-  # 5) convert the query results into an array of arrays in order same as headers: @data
+  # 4) for a basic report:
+  #   a) define an array of headers/column titles: @headers
+  #   b) convert the query results into an array of arrays in order same as headers: @data
+  # 5) for a grouped pivot-table report (w/ dates as columns):
+  #   a) set @grouped = true
+  #   b) define an array of date headers: @date_headers
+  #   c) define an array of all headers (indluding date headers): @headers
+  #   d) convert the query results into a grouped hash of hashes: @data
+  #     i) the first key should be an array of 'grouped' keys, like for e.g [zone, building, room]
+  #     ii) the second key should be the date
+  #     iii) the value should be the cell value
+  #     iv) for e.g: @data[[Zone, Building, Room]][Date] = Value
 
   def room_issues_report
     authorize :report, :room_issues_report?
@@ -42,7 +55,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.tickets_count,
         ]
       end
@@ -51,6 +64,70 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'room_issues_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def inspection_rate_report
+    authorize :report, :inspection_rate_report?
+    
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @buildings = Building.joins(floors: { rooms: :room_states })
+                          .distinct
+                          .order(:name)
+                          .map { |b| [b.name, b.id] }
+    
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
+
+      @rooms = Room.joins(floor: :building).joins(:room_states)
+                   .where(buildings: { id: building_id })
+                   .where(room_states: { updated_at: start_time..end_time })
+                   .group('rooms.id')
+                   .select('rooms.*')
+                   .select('COUNT(room_states.id) AS room_check_count')
+                   .order('room_check_count DESC')
+
+      @rooms_no_room_state = Room.left_outer_joins(:room_states)
+                                  .joins(floor: :building)
+                                  .where(buildings: { id: building_id })
+                                  .where(room_states: { id: nil })
+                                  .where.not(id: @rooms.map(&:id))
+                                  .select('rooms.*')
+                                  .select('0 AS room_check_count')
+                                  .order('rooms.room_number')
+
+
+      oldest_record = @rooms.min_by { |room| room.room_states.first.updated_at }
+      oldest_record_date = oldest_record.room_states.first.updated_at
+      start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+
+      days = (end_time - start_time).to_i
+
+      @rooms = @rooms + @rooms_no_room_state
+
+      @title = 'Inspection Rate Report'
+      @metrics = {
+        'Total room checks' => @rooms.sum(&:room_check_count),
+        'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",  
+      }
+      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
+      @data = @rooms.map do |room|
+        [
+          room.room_number,
+          room.floor.building.name,
+          show_zone(room.floor.building),
+          room.room_check_count,
+          "#{(room.room_check_count.to_f / days * 100).round(2)}%"
+        ]
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'inpection_rate_report.csv', type: 'text/csv' }
     end
   end
 
@@ -85,7 +162,7 @@ class ReportsController < ApplicationController
         [
           room.room_number,
           room.floor.building.name,
-          room.floor.building.zone.name,
+          show_zone(room.floor.building),
           room.na_states_count,
           room.na_states_dates.zip(room.na_states_reasons)
                           .sort_by { |date, _reason| date }
@@ -103,19 +180,126 @@ class ReportsController < ApplicationController
     end
   end
 
+  def common_attribute_states_report
+    authorize :report, :common_attribute_states_report?
+
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+
+      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
+                   .where(buildings: { zone_id: zone_id })
+                   .where(room_states: { updated_at: start_time..end_time })
+                   .select('rooms.*')
+                   .select('room_states.updated_at')
+                   .select('common_attributes.description AS common_attribute_description')
+                   .select('common_attributes.need_checkbox as need_checkbox')
+                   .select('common_attribute_states.checkbox_value as checkbox_value')
+                   .select('common_attribute_states.quantity_box_value as quantity_box_value')
+                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
+
+      grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
+
+      @grouped = true
+
+      @title = 'Common Attribute States Report'
+      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+
+      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
+      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
+      @date_headers = (header_start..header_end).to_a
+      @headers = ['Zone', 'Building', 'Room'] + @date_headers
+
+      @data = grouped_rooms.transform_values do |rooms|
+        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+          key = [room.floor.building.zone.name, room.floor.building.name, room.room_number]
+          value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
+          pivot_table[key][room.updated_at.to_date] = value
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'common_attribute_states_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def resource_states_report
+    authorize :report, :resource_states_report?
+
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
+
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      resource_type = params[:resource_type].presence
+
+      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { resource_states: :resource })
+                  .where(buildings: { zone_id: zone_id })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .select('rooms.*')
+                  .select('resources.name AS resource_name')
+                  .select("resources.resource_type as resource_type")
+                  .select('room_states.updated_at')
+                  .select('resource_states.is_checked as check_value')
+                  .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
+                  .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
+
+      grouped_rooms = rooms.group_by { |room| "#{room.floor.building.zone.name} | #{room.floor.building.name} | #{room.room_number}" }
+
+      @grouped = true
+
+      @title = 'Resource States Report'
+      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+
+      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
+      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
+      @date_headers = (header_start..header_end).to_a
+
+      @headers = ['Resource'] + @date_headers
+
+      @data = grouped_rooms.transform_values do |rooms|
+        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+          key = ["#{room.resource_name} (#{room.resource_type})"]
+          value = room.check_value ? 'Yes' : 'No'
+          pivot_table[key][room.updated_at.to_date] = value
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'resource_states_report.csv', type: 'text/csv' }
+    end
+  end
+
   private
 
   def csv_data
     CSV.generate(headers: true) do |csv|
       csv << [@title]
       csv << []
-      @metrics.each do |description, value|
-        csv << [description, value]
-      end
-      csv << []
-      csv << @headers
-      @data.each do |row|
-        csv << row
+      @metrics && @metrics.each { |desc, value| csv << [desc, value] }
+
+      if @grouped
+        @data.each do |group, pivot_table|
+          csv << []
+          csv << [group]
+          csv << @headers
+          pivot_table.each { |keys, record| csv << keys + @date_headers.map { |date| record[date] } }
+        end
+      else
+        csv << []
+        csv << @headers
+        @data.each { |row| csv << row }
       end
     end
   end
