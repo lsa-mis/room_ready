@@ -73,4 +73,69 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_rover_to_correct_state(room:, room_state:, step:, mode: "new")
+    state_to_redirect_to = confirmation_rover_navigation_path(room_id: room.id)
+    steps = ["room", "common_attributes", "specific_attributes", "resources"]
+    index = steps.find_index(step) + 1
+    redirect = {}
+
+    CommonAttribute.all.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
+    room.specific_attributes.present? ? redirect["specific_attributes"] = true : redirect["specific_attributes"] = false
+    room.resources.present? ? redirect["resources"] = true : redirect["resources"] = false
+
+    new_path_to_redirect = {
+      "common_attributes" => new_common_attribute_state_path(room_state_id: room_state.id),
+      "specific_attributes" => new_specific_attribute_state_path(room_state_id: room_state.id), 
+      "resources" => new_resource_state_path(room_state_id: room_state.id)
+    }
+
+    edit_path_to_redirect = {
+      "common_attributes" => edit_common_attribute_state_path(room_state_id: room_state.id, id: room.id),
+      "specific_attributes" => edit_specific_attribute_state_path(room_state_id: room_state.id, id: room.id), 
+      "resources" => edit_resource_state_path(room_state_id: room_state.id, id: room.id)
+    }
+
+    while index < steps.count
+      unless redirect[steps[index]]
+        index += 1
+        next
+      end
+
+      if mode == "new"
+        state_to_redirect_to = new_path_to_redirect[steps[index]]
+        return state_to_redirect_to
+      end
+
+      if mode == "edit"
+        case steps[index]
+        when "common_attributes"
+          if room_state.common_attribute_states.any?
+            state_to_redirect_to = edit_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          else
+            state_to_redirect_to = new_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          end
+        when "specific_attributes"
+          if room_state.specific_attribute_states.any?
+            state_to_redirect_to = edit_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          else
+            state_to_redirect_to = new_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          end
+        when "resources"
+          if room_state.resource_states.any?
+            state_to_redirect_to = edit_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          else
+            state_to_redirect_to = new_path_to_redirect[steps[index]]
+            return state_to_redirect_to
+          end
+        end
+      end
+    end
+    state_to_redirect_to
+  end
+
 end

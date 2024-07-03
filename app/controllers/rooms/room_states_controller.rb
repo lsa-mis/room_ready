@@ -2,7 +2,7 @@ class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room
   before_action :set_room_state, only: %i[ show edit update destroy ]
-  before_action :set_notes_andannouncements, only: %i[new edit]
+  before_action :set_notes_andannouncements, only: %i[new edit create]
 
   # GET /room_states or /room_states.json
   def index
@@ -36,8 +36,9 @@ class Rooms::RoomStatesController < ApplicationController
           flash.now['alert'] = "Error updating room record"
           return
         end
+
         if @room_state.is_accessed?
-          format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
+          format.html { redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "room", mode: "new") }
           format.json { render json: { status: 'ok' }, status: :ok }
         else
           format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
@@ -59,16 +60,10 @@ class Rooms::RoomStatesController < ApplicationController
           return
         end
         if @room_state.is_accessed?
-          if @room_state.common_attribute_states.any?
-            format.html { redirect_to edit_common_attribute_state_path(room_state_id: @room_state.id) }
-            format.json { render json: { status: 'ok' }, status: :ok }
-          else
-            format.html { redirect_to new_common_attribute_state_path(room_state_id: @room_state.id) }
-            format.json { render json: { status: 'ok' }, status: :ok }
-          end
-        else 
-          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room state was successfully updated.' }
-          format.json { render :show, status: :ok, location: @room_state }
+          format.html { redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "room", mode: "edit") }
+        else
+          format.html { redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!' }
+          format.json { render json: { status: 'ok' }, status: :ok }
         end
       else
         format.html { render :edit, status: :unprocessable_entity }

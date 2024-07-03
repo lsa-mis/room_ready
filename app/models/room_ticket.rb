@@ -13,6 +13,6 @@
 class RoomTicket < ApplicationRecord
   belongs_to :room
   has_rich_text :description
-  validates :description, presence: true
-  validates :room_id, presence: true
+
+  validates :description, :submitted_by, :tdx_email, presence: true
 end

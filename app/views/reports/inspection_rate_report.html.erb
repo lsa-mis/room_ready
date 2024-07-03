@@ -1,15 +1,12 @@
-<h1>No Access Reports</h1>
-<h6>
-  This report shows information on Rooms that were not able to be accessed. It shows the 5 most recent
-  dates of no access, along with reasons the room was not able to be accessed.
-</h6>
+<h1>Inspection Rate Report</h1>
+<h5>Calculated by dividing the number of checks a given room has by the total amount of days for a given date rage</h5>
 
 <div class="py-3">
   <!-- turning off turbo for the form is necessary - otherwise the browser doesn't download the csv properly -->
-  <%= form_with url: no_access_report_reports_path, method: :get, data: { turbo: false }, class: "mb-3" do |form| %>
+  <%= form_with url: inspection_rate_report_reports_path, method: :get, data: { turbo: false }, class: "mb-3" do |form| %>
     <div>
-      <label for="zone_id" class="">Select a Zone</label>
-      <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, class: "form-select" %>
+      <label for="zone_id" class="fancy_label">Select a Zone</label>
+      <%= form.select :building_id, options_for_select(@buildings, selected: params[:building_id]), {include_blank: "All Buildings"}, class: "form-select" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
         <%= form.label :from, "From: "%>
         <%= form.date_field :from, value: params[:from], class: "form-control" %>
@@ -24,7 +21,7 @@
     </div>
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
       <%= form.submit "Run Report" %>
-      <%= link_to "Clear filters", no_access_report_reports_path, class: "text-primary cancel-button" %>
+      <%= link_to "Clear filters", inspection_rate_report_reports_path, class: "text-primary cancel-button" %>
     </div>
   <% end %>
   <% if params[:commit] && params[:format] == 'html' %>
