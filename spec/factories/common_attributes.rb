@@ -8,6 +8,7 @@
 #  need_quantity_box :boolean
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 FactoryBot.define do
   factory :common_attribute do

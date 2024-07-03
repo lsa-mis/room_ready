@@ -8,6 +8,7 @@
 #  need_quantity_box :boolean
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 class CommonAttribute < ApplicationRecord
   has_many :common_attribute_states
