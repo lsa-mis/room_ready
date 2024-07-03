@@ -7,6 +7,7 @@ class ReportsController < ApplicationController
       {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
+      {title: "Resource States", url: resource_states_report_reports_path },
     ]
   end
 
@@ -225,6 +226,58 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'common_attribute_states_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def resource_states_report
+    authorize :report, :resource_states_report?
+
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
+
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      resource_type = params[:resource_type].presence
+
+      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { resource_states: :resource })
+                  .where(buildings: { zone_id: zone_id })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .select('rooms.*')
+                  .select('resources.name AS resource_name')
+                  .select("resources.resource_type as resource_type")
+                  .select('room_states.updated_at')
+                  .select('resource_states.is_checked as check_value')
+                  .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
+                  .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
+
+      grouped_rooms = rooms.group_by { |room| "#{room.floor.building.zone.name} | #{room.floor.building.name} | #{room.room_number}" }
+
+      @grouped = true
+
+      @title = 'Resource States Report'
+      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+
+      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
+      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
+      @date_headers = (header_start..header_end).to_a
+
+      @headers = ['Resource'] + @date_headers
+
+      @data = grouped_rooms.transform_values do |rooms|
+        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+          key = ["#{room.resource_name} (#{room.resource_type})"]
+          value = room.check_value ? 'Yes' : 'No'
+          pivot_table[key][room.updated_at.to_date] = value
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'resource_states_report.csv', type: 'text/csv' }
     end
   end
 

@@ -18,4 +18,8 @@ class ReportPolicy < ApplicationPolicy
   def common_attribute_states_report?
     is_admin?
   end
+
+  def resource_states_report?
+    is_admin?
+  end
 end
