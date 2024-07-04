@@ -70,7 +70,7 @@ class RoomsController < ApplicationController
   def archive
     session[:return_to] = request.referer
     if @room.update(archived: true)
-      @rooms = Room.active.order(:name)
+      # @rooms = Room.active.order(:name)
       redirect_back_or_default(notice: "The room was archived")
     else
       @rooms = Room.active.order(:name)
@@ -81,7 +81,7 @@ class RoomsController < ApplicationController
     session[:return_to] = request.referer
     @archived = true
     if @room.update(archived: false)
-      @rooms = Room.archived.order(:name)
+      # @rooms = Room.archived.order(:name)
       redirect_back_or_default(notice: "The room was unarchived")
     else
       @rooms = Room.archived.order(:name)
