@@ -11,5 +11,21 @@
 require 'rails_helper'
 
 RSpec.describe Floor, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "the Factory" do
+    it 'is valid' do
+      expect(build(:floor)).to be_valid
+    end
+  end
+
+  context "create floor with all required fields present" do
+    it 'is valid' do
+      expect(create(:floor)).to be_valid
+    end
+  end
+
+  context "create floor without a name" do
+    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Name can\'t be blank"' do
+      expect { FactoryBot.create(:floor, name: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name can't be blank")
+    end
+  end
 end

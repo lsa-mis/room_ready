@@ -28,7 +28,10 @@ Rails.application.routes.draw do
   resources :reports, only: [:index] do
     collection do
       get 'room_issues_report', to: 'reports#room_issues_report'
+      get 'inspection_rate_report', to: 'reports#inspection_rate_report'
       get 'no_access_report', to: 'reports#no_access_report'
+      get 'common_attribute_states_report', to: 'reports#common_attribute_states_report'
+      get 'resource_states_report', to: 'reports#resource_states_report'
     end
   end
 
@@ -49,6 +52,9 @@ Rails.application.routes.draw do
       resources :rooms, module: :floors
     end
   end
+  post 'archive_building/:id', to: 'buildings#archive', as: :archive_building
+  post 'unarchive_building/:id', to: 'buildings#unarchive', as: :unarchive_building
+  post 'unarchive_building_index/:id/:show_archived', to: 'buildings#unarchive_index', as: :unarchive_building_index
 
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
