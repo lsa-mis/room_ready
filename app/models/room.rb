@@ -10,6 +10,7 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  last_time_checked :datetime
+#  archived          :boolean          default(FALSE)
 #
 class Room < ApplicationRecord
   belongs_to :floor
@@ -23,6 +24,9 @@ class Room < ApplicationRecord
   validates :room_number, :room_type, presence: true
 
   accepts_nested_attributes_for :specific_attributes
+
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
 
   def full_name
     [floor.building.nick_name, room_number].join(' ')
