@@ -41,8 +41,27 @@ class BuildingsController < ApplicationController
   end
 
   def show
+    floors_archived  = []
+    floors_active  = []
+    
+    @building.floors.each do |floor|
+      if floor.archived_rooms.present?
+        floors_archived << floor
+      end
+      if floor.active_rooms.present?
+        floors_active << floor
+      end
+    end
+    
+    if params["show_archived_rooms"] == "1"
+      floors = floors_archived
+      @archived = true
+    else
+      @archived = false
+      floors = floors_active
+    end
+
     authorize @building
-    floors = @building.floors
     floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
     @floors = floors.in_order_of(:name, floor_names_sorted)
   end
