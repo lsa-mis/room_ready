@@ -21,7 +21,7 @@ class Zone < ApplicationRecord
   end
 
   def rooms_checked_for_date(selected_date)
-    date = Date.parse(selected_date)
+    date = selected_date.present? ? Date.parse(selected_date) : Date.yesterday
     RoomState.joins(room: { floor: { building: :zone } } )
              .where(zones: { id: self.id })
              .where(updated_at: date.beginning_of_day..date.end_of_day)
