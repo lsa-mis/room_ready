@@ -18,11 +18,9 @@ class StaticPagesController < ApplicationController
 
   def dashboard
     authorize :static_page
-    selected_date = if params[:dashboard_date].present?
-        Date.parse(params[:dashboard_date]).in_time_zone.change(hour: 22)
-      else
-        Time.zone.yesterday.change(hour: 22)
-      end
+    selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
+
+    @latest_tickets = helpers.latest_room_tickets(selected_date)
 
     @zones = Zone.all
 
