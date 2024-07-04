@@ -43,26 +43,51 @@ class ResourceStatesController < ApplicationController
 
   def update_resource_states
     authorize ResourceState
+    @resource_states = []
     resource_state_params.each do |res_params|
+      params = res_params.except(:resource_state_id)
       resource_state = ResourceState.find(res_params[:resource_state_id])
-      # raise ActiveRecord::Rollback unless resource_state.update(res_params)
-      unless resource_state.update(res_params.except(:resource_state_id))
-        render :edit, status: :unprocessable_entity
-        return
+      record_to_update = {:record => resource_state, :params => params}
+      @resource_states.push(record_to_update)
+    end
+
+    ActiveRecord::Base.transaction do
+      @resource_states.each do |res|
+        raise ActiveRecord::Rollback unless res[:record].update(res[:params])
       end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
     end
 
-    unless @room.update(last_time_checked: DateTime.now)
-      flash.now['alert'] = "Error updating room record"
-      return
-    end
-
-    # if @resource_states.all?(&:persisted?)
+    if @room_state.resource_states.all?(&:persisted?)
       redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!'
-    # else
-    #   render :edit, status: :unprocessable_entity
-    # end
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
+
+
+  # def update_resource_states
+  #   authorize ResourceState
+  #   resource_state_params.each do |res_params|
+  #     resource_state = ResourceState.find(res_params[:resource_state_id])
+  #     # raise ActiveRecord::Rollback unless resource_state.update(res_params)
+  #     unless resource_state.update(res_params.except(:resource_state_id))
+  #       render :edit, status: :unprocessable_entity
+  #       return
+  #     end
+  #   end
+
+  #   unless @room.update(last_time_checked: DateTime.now)
+  #     flash.now['alert'] = "Error updating room record"
+  #     return
+  #   end
+
+  #   # if @resource_states.all?(&:persisted?)
+  #     redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!'
+  #   # else
+  #   #   render :edit, status: :unprocessable_entity
+  #   # end
+  # end
 
   private
 

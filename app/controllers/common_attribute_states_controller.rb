@@ -28,10 +28,7 @@ class CommonAttributeStatesController < ApplicationController
       @common_attribute_states.each do |cas|
         raise ActiveRecord::Rollback unless cas.save
       end
-      unless @room.update(last_time_checked: DateTime.now)
-        flash.now['alert'] = "Error updating room record"
-        return
-      end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
     end
 
     if @common_attribute_states.all?(&:persisted?)
@@ -43,25 +40,26 @@ class CommonAttributeStatesController < ApplicationController
 
   def update_common_attribute_states
     authorize CommonAttributeState
+    @common_attribute_states = []
     common_attribute_state_params.each do |cas_params|
+      params = cas_params.except(:common_attribute_state_id)
       common_attribute_state = CommonAttributeState.find(cas_params[:common_attribute_state_id])
-      # raise ActiveRecord::Rollback unless common_attribute_state.update(cas_params)
-      unless common_attribute_state.update(cas_params.except(:common_attribute_state_id))
-        render :edit, status: :unprocessable_entity
-        return
+      record_to_update = {:record => common_attribute_state, :params => params}
+      @common_attribute_states.push(record_to_update)
+    end
+
+    ActiveRecord::Base.transaction do
+      @common_attribute_states.each do |cas|
+        raise ActiveRecord::Rollback unless cas[:record].update(cas[:params])
       end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
     end
 
-    unless @room.update(last_time_checked: DateTime.now)
-      flash.now['alert'] = "Error updating room record"
-      return
+    if @room_state.common_attribute_states.all?(&:persisted?)
+      redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "common_attributes", mode: "edit")
+    else
+      render :edit, status: :unprocessable_entity
     end
-
-    # if @common_attribute_states.all?(&:persisted?)
-    redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "common_attributes", mode: "edit")
-    # else
-    #   render :edit, status: :unprocessable_entity
-    # end
   end
 
   private

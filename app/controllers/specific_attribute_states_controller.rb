@@ -54,26 +54,26 @@ class SpecificAttributeStatesController < ApplicationController
 
   def update_specific_attribute_states
     authorize SpecificAttributeState
+    @specific_attribute_states = []
+    specific_attribute_state_params.each do |sas_params|
+      params = sas_params.except(:specific_attribute_state_id)
+      specific_attribute_state = SpecificAttributeState.find(sas_params[:specific_attribute_state_id])
+      record_to_update = {:record => specific_attribute_state, :params => params}
+      @specific_attribute_states.push(record_to_update)
+    end
 
-    specific_attribute_state_params.each do |cas_params|
-      specific_attribute_state = SpecificAttributeState.find(cas_params[:specific_attribute_state_id])
-      # raise ActiveRecord::Rollback unless specific_attribute_state.update(cas_params)
-      unless specific_attribute_state.update(cas_params.except(:specific_attribute_state_id))
-        render :edit, status: :unprocessable_entity
-        return
+    ActiveRecord::Base.transaction do
+      @specific_attribute_states.each do |sas|
+        raise ActiveRecord::Rollback unless sas[:record].update(sas[:params])
       end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
     end
 
-    unless @room.update(last_time_checked: DateTime.now)
-      flash.now['alert'] = "Error updating room record"
-      return
+    if @room_state.specific_attribute_states.all?(&:persisted?)
+      redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "specific_attributes", mode: "edit")
+    else
+      render :edit, status: :unprocessable_entity
     end
-
-    # if @specific_attribute_states.all?(&:persisted?)
-    redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "specific_attributes", mode: "edit")
-    # else
-    #   render :edit, status: :unprocessable_entity
-    # end
   end
 
   # DELETE /specific_attribute_states/1 or /specific_attribute_states/1.json
