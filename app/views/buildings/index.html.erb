@@ -20,10 +20,12 @@
         <label for="zone_id" aria-label="zone_id" style="display: inline;"></label>
         <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "Select Zone ..."}, { :"data-action" => "change->autosubmit#submitForm" } %>
       </div>
-      <div class="mt-2">
-        <%= form.check_box :show_archived, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
-        <%= form.label :show_archived, "Show Archived Buildings" %>
-      </div>
+      <% if Building.archived.present? %>
+        <div class="mt-2">
+          <%= form.check_box :show_archived, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
+          <%= form.label :show_archived, "Show Archived Buildings" %>
+        </div>
+      <% end %>
       <div class="mt-2">
         <a class="link_to" data-action="autosubmit#clearFilters">
           Clear Filters
