@@ -1,11 +1,11 @@
 class RoomsController < ApplicationController
   before_action :auth_user
-  before_action :set_room, only: %i[ show destroy ]
+  before_action :set_room, only: %i[ show destroy archive unarchive ]
   include BuildingApi
 
   # GET /rooms or /rooms.json
   def index
-    @rooms = Room.all.order(:room_number)
+    @rooms = Room.active.order(:room_number)
     authorize @rooms
   end
 
@@ -54,11 +54,37 @@ class RoomsController < ApplicationController
 
   # DELETE /rooms/1 or /rooms/1.json
   def destroy
-    @room.destroy!
+    if @room.room_states.present?
+      flash.now['alert'] = "The rooms has checked states - archive this room instead"
+      @rooms = Room.active.order(:name)
+    else
+      @building = @room.floor.building
+      if delete_room(@room)
+        redirect_to building_path(@building), notice: "The room was deleted."
+      else
+        flash.now['alert'] = "error deleting room"
+      end
+    end
+  end
 
-    respond_to do |format|
-      format.html { redirect_to rooms_url, notice: "Room was successfully destroyed." }
-      format.json { head :no_content }
+  def archive
+    session[:return_to] = request.referer
+    if @room.update(archived: true)
+      @rooms = Room.active.order(:name)
+      redirect_back_or_default(notice: "The room was archived")
+    else
+      @rooms = Room.active.order(:name)
+    end
+  end
+
+  def unarchive
+    session[:return_to] = request.referer
+    @archived = true
+    if @room.update(archived: false)
+      @rooms = Room.archived.order(:name)
+      redirect_back_or_default(notice: "The room was unarchived")
+    else
+      @rooms = Room.archived.order(:name)
     end
   end
 
@@ -70,8 +96,28 @@ class RoomsController < ApplicationController
       authorize @room
     end
 
+    def delete_room(room)
+      begin
+        Resource.where(room_id: room.id).delete_all
+        SpecificAttribute.where(room_id: room.id).delete_all
+        Note.where(room_id: room.id).delete_all
+        floor = room.floor
+        if room.delete
+          unless floor.rooms.present?
+            floor.delete
+          end
+          return true
+        else
+          return false
+        end
+      rescue StandardError => e
+        raise ActiveRecord::Rollback
+        return false
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def room_params
-      params.require(:room).permit(:rmrecnbr, :room_number, :room_type, :floor_id)
+      params.require(:room).permit(:rmrecnbr, :room_number, :room_type, :floor_id, :archived)
     end
 end

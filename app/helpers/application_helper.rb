@@ -160,5 +160,14 @@ module ApplicationHelper
   def show_user_name_by_id(id)
     User.find(id).display_name
   end
+
+  def has_archived_rooms?(building)
+    building.floors.each do |floor|
+      if floor.archived_rooms.present?
+        return true
+      end
+    end
+    return false
+  end
   
 end

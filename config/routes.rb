@@ -44,6 +44,8 @@ Rails.application.routes.draw do
     resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
+  post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
+  post 'unarchive_room/:id', to: 'rooms#unarchive', as: :unarchive_room
   resources :notes, :except => [:index]
 
   resources :floors
