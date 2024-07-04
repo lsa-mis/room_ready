@@ -41,4 +41,20 @@ module DashboardHelper
               .limit(recent_tickets_quantity)
   end
 
+  def rooms_checked_for_date(zone, date)
+    date = Date.parse(selected_date) if date.is_a? String 
+    RoomState.joins(room: { floor: { building: :zone } } )
+             .where(zones: { id: zone.id })
+             .where(updated_at: date.beginning_of_day..date.end_of_day)
+             .select { |room_state| true } # RoomStatus calculate_percentage
+             .count
+
+  end
+
+  def total_rooms(zone)
+    Room.joins(floor: { building: :zone })
+        .where(zones: { id: zone.id })
+        .count
+  end
+
 end
