@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  include DashboardHelper
   before_action :auth_user, only: %i[ dashboard welcome_rovers ]
 
   def dashboard
@@ -20,7 +21,7 @@ class StaticPagesController < ApplicationController
     authorize :static_page
     @selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
 
-    @latest_tickets = helpers.latest_room_tickets(selected_date)
+    @latest_tickets = latest_room_tickets(@selected_date)
 
     @zones = Zone.all.order(:name)
 
