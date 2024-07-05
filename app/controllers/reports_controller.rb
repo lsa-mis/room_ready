@@ -7,6 +7,7 @@ class ReportsController < ApplicationController
       {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
+      {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
       {title: "Resource States", url: resource_states_report_reports_path },
     ]
   end
@@ -227,6 +228,10 @@ class ReportsController < ApplicationController
       format.html
       format.csv { send_data csv_data, filename: 'common_attribute_states_report.csv', type: 'text/csv' }
     end
+  end
+
+  def specific_attribute_states_report
+    authorize :report, :specific_attribute_states_report?
   end
 
   def resource_states_report
