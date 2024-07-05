@@ -22,10 +22,8 @@
       <th scope="col"><%= @option_header %></th>
     </tr>
     </thead>
-    <tbody class="table-group-divider" id="common_attributes">
-      <% @common_attributes.each do |common_attribute| %>
-        <%= render common_attribute %>
-      <% end %>
-    </tbody>
+    <%= turbo_frame_tag 'common_attributes_list' do %>
+      <%= render 'common_attributes_list' %>
+    <% end %>
   </table>
 </div>
