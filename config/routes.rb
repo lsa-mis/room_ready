@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :room_tickets, module: :rooms
   end
   resources :notes, :except => [:index]
+  get 'unarchive_specific_attribute/:room_id/:id', to: 'rooms/common_attributes#unarchive', as: :unarchive_specific_attribute
 
   resources :floors
   resources :buildings do

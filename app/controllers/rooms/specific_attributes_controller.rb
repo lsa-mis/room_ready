@@ -65,12 +65,23 @@ class Rooms::SpecificAttributesController < ApplicationController
     end
   end
 
+  def destroy
+    if @specific_attribute.specific_attribute_states.present?
+      @specific_attribute.update(archived: true)
+      notice = "specific attribute was successfully archived."
+    else
+      @specific_attribute.destroy!
+      specific_attributes = SpecificAttribute.where(room_id: @room)
+      notice = "specific attribute was successfully deleted."
+    end
+  end
+
   private
 
   def set_room
     @room = Room.find(params[:room_id])
   end
-    # Use callbacks to share common setup or constraints between actions.
+    # Use callbacks to share specific setup or constraints between actions.
   def set_specific_attribute
     @specific_attribute = SpecificAttribute.find(params[:id])
     authorize @specific_attribute
