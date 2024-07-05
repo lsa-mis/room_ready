@@ -16,6 +16,8 @@ class CommonAttributeState < ApplicationRecord
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
+  validate :checkbox_blank_if_not_required
+  validate :quantity_box_blank_if_not_required
   validate :unique_common_attribute_state_per_room_state, on: :create
 
   private
@@ -29,6 +31,18 @@ class CommonAttributeState < ApplicationRecord
   def quantity_box_presence_if_required
     if common_attribute.need_quantity_box && quantity_box_value.nil?
       errors.add(:quantity_box_value, "can't be blank if quantity box is required")
+    end
+  end
+
+  def checkbox_blank_if_not_required
+    if !common_attribute.need_checkbox && checkbox_value.present?
+      errors.add(:checkbox_value, "must be blank if checkbox is not required")
+    end
+  end
+
+  def quantity_box_blank_if_not_required
+    if !common_attribute.need_quantity_box && quantity_box_value.present?
+      errors.add(:quantity_box_value, "must be blank if quantity box is not required")
     end
   end
 
