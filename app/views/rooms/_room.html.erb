@@ -32,15 +32,15 @@
       <%= link_to room_path(room), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Delete", data: { turbo_confirm: "Are you sure you want to delete this room?" , turbo_method: :delete } do %>
         <i class="bi bi-trash-fill text-danger"></i>
       <% end %>
-    <% end %>
-
-    <% if room.archived %>
-      <%= link_to unarchive_room_path(room), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Unarchive", data: { turbo_confirm: "Are you sure you want to unarchive this room?" , turbo_method: :post }  do %>
-        <i class="bi bi-archive text-success"></i>
-      <% end %>
     <% else %>
-      <%= link_to archive_room_path(room), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Archive", data: { turbo_confirm: "Are you sure you want to archive this room?" , turbo_method: :post }  do %>
-        <i class="bi bi-archive-fill text-success"></i>
+      <% if room.archived %>
+        <%= link_to unarchive_room_path(room), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Unarchive", data: { turbo_confirm: "Are you sure you want to unarchive this room?" , turbo_method: :post }  do %>
+          <i class="bi bi-archive text-success"></i>
+        <% end %>
+      <% else %>
+        <%= link_to archive_room_path(room), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Archive", data: { turbo_confirm: "Are you sure you want to archive this room?" , turbo_method: :post }  do %>
+          <i class="bi bi-archive-fill text-success"></i>
+        <% end %>
       <% end %>
     <% end %>
   </div>
