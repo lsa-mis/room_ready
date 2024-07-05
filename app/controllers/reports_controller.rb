@@ -232,6 +232,52 @@ class ReportsController < ApplicationController
 
   def specific_attribute_states_report
     authorize :report, :specific_attribute_states_report?
+
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+
+    if params[:commit]
+      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+
+      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
+                  .where(buildings: { zone_id: zone_id })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .select('rooms.*')
+                  .select('specific_attributes.description AS specific_attribute_description')
+                  .select('room_states.updated_at')
+                  .select('specific_attributes.need_checkbox as need_checkbox')
+                  .select('specific_attribute_states.checkbox_value as checkbox_value')
+                  .select('specific_attribute_states.quantity_box_value as quantity_box_value')
+                  .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, specific_attributes.description ASC')
+
+      grouped_rooms = rooms.group_by { |room| "#{room.floor.building.zone.name} | #{room.floor.building.name} | #{room.room_number}" }
+
+      @grouped = true
+
+      @title = 'Specific Attribute States Report'
+      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+
+      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
+      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
+      @date_headers = (header_start..header_end).to_a
+
+      @headers = ['Specific Attribute'] + @date_headers
+
+      @data = grouped_rooms.transform_values do |rooms|
+        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+          key = ["#{room.specific_attribute_description}"]
+          value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
+          pivot_table[key][room.updated_at.to_date] = value
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'specific_attribute_states_report.csv', type: 'text/csv' }
+    end
   end
 
   def resource_states_report
