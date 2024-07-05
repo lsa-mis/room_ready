@@ -29,7 +29,8 @@ class Room < ApplicationRecord
   scope :archived, -> { where(archived: true) }
 
   def full_name
-    [floor.building.nick_name, room_number].join(' ')
+    archived = self.archived ? " - archived" : ""
+    [floor.building.nick_name, room_number, archived].join(' ')
   end
 
   def room_state?
