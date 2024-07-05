@@ -95,22 +95,19 @@ class RoomsController < ApplicationController
     end
 
     def delete_room(room)
-      begin
-        Resource.where(room_id: room.id).delete_all
-        SpecificAttribute.where(room_id: room.id).delete_all
-        Note.where(room_id: room.id).delete_all
-        floor = room.floor
-        if room.delete
-          unless floor.rooms.present?
-            floor.delete
-          end
-          return true
-        else
-          return false
+      ActiveRecord::Base.transaction do
+        begin
+          Resource.where(room_id: room.id).delete_all
+          SpecificAttribute.where(room_id: room.id).delete_all
+          Note.where(room_id: room.id).delete_all
+          floor = room.floor
+          room.delete
+          floor.delete unless floor.rooms.present?
+        rescue StandardError 
+          raise ActiveRecord::Rollback
+          false
         end
-      rescue StandardError => e
-        raise ActiveRecord::Rollback
-        return false
+        true
       end
     end
 
