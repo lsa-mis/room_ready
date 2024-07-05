@@ -31,7 +31,11 @@
   </div>
 
   <div>
-    <%= form.submit "Create Room State" %>
+    <% if action_name == "new" %>
+      <%= form.submit "Create Room State" %>
+    <% else %>
+      <%= form.submit "Update Room State" %>
+    <% end %>
     <%= link_to "Cancel", :back, class:"link_to" %>
   </div>
 
