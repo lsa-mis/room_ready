@@ -2,7 +2,9 @@
   <h3><%= "#{description}: #{value}" %></h3>
 <% end %>
 
-<% if @grouped %>
+<% if !@data %>
+  <h3>No data found</h3>
+<% elsif @grouped %>
   <% @data.each do |group, pivot_table| %>
     <h4><%= group %></h4>
     <table class="table text-center mt-4">

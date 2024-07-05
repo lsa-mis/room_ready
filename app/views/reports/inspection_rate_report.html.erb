@@ -7,8 +7,6 @@
     <div>
       <label for="building_id" class="fancy_label">Select a Building</label>
       <%= form.select :building_id, options_for_select(@buildings, selected: params[:building_id]), {include_blank: "All Buildings"}, class: "form-select" %>
-      <%# <label for="zone_id" class="fancy_label">Select a Zone</label>
-      <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, class: "form-select" %> %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
         <%= form.label :from, "From: "%>
         <%= form.date_field :from, value: params[:from], class: "form-control" %>
