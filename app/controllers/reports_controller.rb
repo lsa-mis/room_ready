@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  before_action :set_form_zones
+
   def index
     authorize :report, :index?
 
@@ -32,8 +34,6 @@ class ReportsController < ApplicationController
 
   def room_issues_report
     authorize :report, :room_issues_report?
-
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
 
     if params[:commit]
       zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
@@ -73,8 +73,7 @@ class ReportsController < ApplicationController
 
   def inspection_rate_report
     authorize :report, :inspection_rate_report?
-    
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+
     @buildings = Building.joins(floors: { rooms: :room_states })
                           .distinct
                           .order(:name)
@@ -138,8 +137,6 @@ class ReportsController < ApplicationController
   def no_access_report
     authorize :report, :no_access_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
       zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
@@ -189,8 +186,6 @@ class ReportsController < ApplicationController
   def common_attribute_states_report
     authorize :report, :common_attribute_states_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
       zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
@@ -238,8 +233,6 @@ class ReportsController < ApplicationController
 
   def specific_attribute_states_report
     authorize :report, :specific_attribute_states_report?
-
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
 
     if params[:commit]
       zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
@@ -289,7 +282,6 @@ class ReportsController < ApplicationController
   def resource_states_report
     authorize :report, :resource_states_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
     @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
 
     if params[:commit]
@@ -339,6 +331,10 @@ class ReportsController < ApplicationController
   end
 
   private
+
+  def set_form_zones
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+  end
 
   def csv_data
     CSV.generate(headers: true) do |csv|
