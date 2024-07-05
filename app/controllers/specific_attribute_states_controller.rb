@@ -35,17 +35,15 @@ class SpecificAttributeStatesController < ApplicationController
       @room_state.specific_attribute_states.new(sas_params)
     end
 
-    ActiveRecord::Base.transaction do
+    transaction = ActiveRecord::Base.transaction do
       @specific_attribute_states.each do |sas|
         raise ActiveRecord::Rollback unless sas.save
       end
-      unless @room.update(last_time_checked: DateTime.now)
-        flash.now['alert'] = "Error updating room record"
-        return
-      end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
+      true
     end
 
-    if @specific_attribute_states.all?(&:persisted?)
+    if transaction
       redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "specific_attributes", mode: "new")
     else
       render :new, status: :unprocessable_entity
@@ -54,22 +52,22 @@ class SpecificAttributeStatesController < ApplicationController
 
   def update_specific_attribute_states
     authorize SpecificAttributeState
-    @specific_attribute_states = []
-    specific_attribute_state_params.each do |sas_params|
-      params = sas_params.except(:specific_attribute_state_id)
-      specific_attribute_state = SpecificAttributeState.find(sas_params[:specific_attribute_state_id])
-      record_to_update = {:record => specific_attribute_state, :params => params}
-      @specific_attribute_states.push(record_to_update)
+    @specific_attribute_states = specific_attribute_state_params.map do |cas_params|
+      params = cas_params.except(:specific_attribute_state_id)
+      specific_attribute_state = SpecificAttributeState.find(cas_params[:specific_attribute_state_id])
+      specific_attribute_state.assign_attributes(params)
+      specific_attribute_state
     end
-
-    ActiveRecord::Base.transaction do
-      @specific_attribute_states.each do |sas|
-        raise ActiveRecord::Rollback unless sas[:record].update(sas[:params])
+  
+    transaction = ActiveRecord::Base.transaction do
+      @specific_attribute_states.each do |cas|
+        raise ActiveRecord::Rollback unless cas.save
       end
       raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
+      true
     end
-
-    if @room_state.specific_attribute_states.all?(&:persisted?)
+  
+    if transaction
       redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "specific_attributes", mode: "edit")
     else
       render :edit, status: :unprocessable_entity
