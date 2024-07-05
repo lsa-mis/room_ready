@@ -132,4 +132,13 @@ RSpec.describe CommonAttributeState, type: :model do
       expect(common_attribute_state).to be_valid
     end
   end
+
+  context "creat common_attribute_state with the same common_attribute_id and room_state_id" do
+    it 'raises an error: There can only be one Common Attribute State per Common Attribute per Room State' do
+      common_attribute = FactoryBot.create(:common_attribute)
+      room_state = FactoryBot.create(:room_state)
+      FactoryBot.create(:common_attribute_state, common_attribute: common_attribute, room_state: room_state)
+      expect { FactoryBot.create(:common_attribute_state, common_attribute: common_attribute, room_state: room_state) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: There can only be one Common Attribute State per Common Attribute per Room State")
+    end
+  end
 end
