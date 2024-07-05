@@ -81,12 +81,12 @@ class ReportsController < ApplicationController
     
     if params[:commit]
       zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
+      # building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
       start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
       end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
 
-      rooms = Room.joins(floor: :building).joins(:room_states)
-                   .where(buildings: { id: building_id })
+      rooms = Room.joins(floor: { building: :zone }).joins(:room_states)
+                   .where(zones: { id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*')
@@ -94,8 +94,8 @@ class ReportsController < ApplicationController
                    .order('room_check_count DESC')
 
       rooms_no_room_state = Room.left_outer_joins(:room_states)
-                                  .joins(floor: :building)
-                                  .where(buildings: { id: building_id })
+                                  .joins(floor: { building: :zone })
+                                  .where(zones: { id: zone_id })
                                   .where(room_states: { id: nil })
                                   .where.not(id: rooms.map(&:id))
                                   .select('rooms.*')
