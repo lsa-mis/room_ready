@@ -29,4 +29,26 @@ RSpec.describe CommonAttributeState, type: :system do
     end
   end
   
+  context 'edit a common attribute state' do
+    let!(:room) { FactoryBot.create(:room) }
+    let!(:common_attribute1) { FactoryBot.create(:common_attribute) }
+    let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
+    let!(:room_state) { FactoryBot.create(:room_state, room: room) }
+    let!(:common_attribute_state1) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute1) }
+    let!(:common_attribute_state2) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute2) }
+    let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
+
+    it 'fills out the form and submits it' do
+      VCR.use_cassette "common_attribute_state" do
+        visit "rooms/#{room.id}/room_states/#{room_state.id}/edit"
+        click_on "Update Room State"
+        expect(page).to have_content("Editing Common Room Questions")
+        find('label[for=common_attribute_states_0_checkbox_value_true]').click
+        find('label[for=common_attribute_states_1_checkbox_value_true]').click
+        click_on "Update Response"
+        expect(page).to have_content("Room Check Confirmation")
+      end
+    end
+  end
+
 end
