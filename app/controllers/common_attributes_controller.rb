@@ -10,7 +10,7 @@ class CommonAttributesController < ApplicationController
       @option_header = "Unarchive"
     else
       @common_attributes = CommonAttribute.active
-      @option_header = "Delete"
+      @option_header = "Delete/Archive"
     end
     @new_common_attribute = CommonAttribute.new
     authorize @common_attributes
