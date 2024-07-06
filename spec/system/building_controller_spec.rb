@@ -16,9 +16,10 @@ RSpec.describe Building, type: :system do
         result = {"success"=>false, "errorcode"=>"", "error"=>"Building record number 123456 is not valid. ", "data"=>{}}
         allow_any_instance_of(BuildingApi).to receive(:get_building_info_by_bldrecnbr).with(bldrecnbr).and_return(result)
         visit new_building_path
-        fill_in "Building Record Number", with: "1234567"
+        fill_in "Building Record Number", with: bldrecnbr
         click_on "Create Building"
         expect(page).to have_content("is not valid.")
+        expect(Building.find_by(bldrecnbr: bldrecnbr).present?).to be_falsy
       end
     end
   end
@@ -36,9 +37,10 @@ RSpec.describe Building, type: :system do
         allow_any_instance_of(BuildingApi).to receive(:get_building_info_by_bldrecnbr).with(bldrecnbr).and_return(result)
         allow_any_instance_of(BuildingApi).to receive(:get_classrooms_for_building).with(bldrecnbr).and_return({})
         visit new_building_path
-        fill_in "Building Record Number", with: "1234567"
+        fill_in "Building Record Number", with: bldrecnbr
         click_on "Create Building"
         expect(page).to have_content("New Building was added")
+        expect(Building.find_by(bldrecnbr: bldrecnbr).present?).to be_truthy
       end
     end
   end
