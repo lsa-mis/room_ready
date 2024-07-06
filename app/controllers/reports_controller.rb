@@ -71,11 +71,6 @@ class ReportsController < ApplicationController
 
   def inspection_rate_report
     authorize :report, :inspection_rate_report?
-
-    @buildings = Building.joins(floors: { rooms: :room_states })
-                          .distinct
-                          .order(:name)
-                          .map { |b| [b.name, b.id] }
     
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
@@ -101,7 +96,7 @@ class ReportsController < ApplicationController
         oldest_record = rooms.min_by { |room| room.room_states.first.updated_at }
         oldest_record_date = oldest_record.room_states.first.updated_at
         start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
-        days = (end_time - start_time).to_i
+        days = (end_time.to_date - start_time.to_date).to_i
 
         rooms = rooms + rooms_no_room_state
 
@@ -206,8 +201,8 @@ class ReportsController < ApplicationController
         @headers = ['Zone', 'Building', 'Room'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
-        @data = grouped_rooms.transform_values do |rooms|
-          rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = [show_zone(room.floor.building), room.floor.building.name, room.room_number]
             value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
             pivot_table[key][room.updated_at.to_date] = value
@@ -252,8 +247,8 @@ class ReportsController < ApplicationController
         @headers = ['Specific Attribute'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
-        @data = grouped_rooms.transform_values do |rooms|
-          rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.specific_attribute_description}"]
             value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
             pivot_table[key][room.updated_at.to_date] = value
@@ -301,8 +296,8 @@ class ReportsController < ApplicationController
         @headers = ['Resource'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
-        @data = grouped_rooms.transform_values do |rooms|
-          rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.resource_name} (#{room.resource_type})"]
             value = room.check_value ? 'Yes' : 'No'
             pivot_table[key][room.updated_at.to_date] = value
@@ -327,8 +322,8 @@ class ReportsController < ApplicationController
   def collect_form_params
     zone_id = params[:zone_id].presence || Zone.all.pluck(:id).push(nil)
     building_id = params[:building_id].presence || Building.all.pluck(:id).push(nil)
-    start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-    end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+    start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : DateTime.new(0)
+    end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : DateTime::Infinity.new
     [zone_id, building_id, start_time, end_time]
   end
 

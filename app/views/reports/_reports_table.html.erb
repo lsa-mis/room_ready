@@ -7,7 +7,7 @@
 <% elsif @grouped %>
   <% @data.each do |group, pivot_table| %>
     <h4><%= group %></h4>
-    <table class="table text-center mt-4">
+    <table class="table text-center table-striped mt-4">
       <thead class="table-group-divider">
       <tr>
         <% @headers.each do |header| %>
@@ -22,7 +22,10 @@
               <td><%= key %></td>
             <% end %>
             <% @date_headers.each do |date| %>
-              <td><%= record[date] %></td>
+              <td class="text-center <%= record[date] == 'Yes' ? 'bg-success' : (record[date] == 'No'? 'bg-danger' : '' ) %>
+              ">
+                <%= record[date] %>
+              </td>
             <% end %>
           </tr>
         <% end %>
@@ -30,7 +33,7 @@
     </table>
   <% end %>
 <% else %>
-  <table class="table text-center mt-4">
+  <table class="table text-center table-striped mt-4">
     <thead class="table-group-divider">
     <tr>
       <% @headers.each do |header| %>
