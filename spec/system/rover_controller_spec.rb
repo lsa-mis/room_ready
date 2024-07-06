@@ -19,6 +19,7 @@ RSpec.describe Rover, type: :system do
         fill_in "Create Rover by Uniqname", with: uniqname
         click_on "Create"
         expect(page).to have_content("is not valid.")
+        expect(Rover.find_by(uniqname: uniqname).present?).to be_falsy
       end
     end
   end
@@ -33,6 +34,7 @@ RSpec.describe Rover, type: :system do
         fill_in "Create Rover by Uniqname", with: uniqname
         click_on "Create"
         expect(page).to have_content("Rover was successfully created.")
+        expect(Rover.find_by(uniqname: uniqname).present?).to be_truthy
       end
     end
   end
@@ -52,21 +54,25 @@ RSpec.describe Rover, type: :system do
     let!(:rover) { FactoryBot.create(:rover) }
     it 'click on delete icon and cancel deleting' do
       VCR.use_cassette "rover" do
+        rover_id = rover.id
         visit rovers_path
         dismiss_confirm 'Are you sure you want to delete this rover?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to_not have_content("Rover was successfully deleted.")
+        expect(Rover.find(rover_id).present?).to be_truthy
       end
     end
 
-    it 'click on delete icon and update first name' do
+    it 'click on delete icon and delete rover' do
       VCR.use_cassette "rover" do
+        rover_id = rover.id
         visit rovers_path
         accept_confirm 'Are you sure you want to delete this rover?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to have_content("Rover was successfully deleted.")
+        expect { Rover.find(rover_id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
