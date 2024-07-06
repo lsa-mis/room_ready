@@ -16,9 +16,9 @@
     <%= tag.div data: { dynamic_building_select_target: "buildingsData", buildings: @buildings.to_json } %>
     <div class="d-flex flex-row justify-content-start align-items-center gap-3" >
       <%= form.label :from, "From: "%>
-      <%= form.date_field :from, value: params[:from], class: "form-control" %>
+      <%= form.date_field :from, value: params[:from] || 1.week.ago.to_date, max: Date.today, class: "form-control" %>
       <%= form.label :to, "To: "%>
-      <%= form.date_field :to, value: params[:to], class: "form-control" %>
+      <%= form.date_field :to, value: params[:to] || Date.today, max: Date.today, class: "form-control" %>
     </div>
     <!-- define additional specific fields inside a block when using render -->
     <%= yield form %>
