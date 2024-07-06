@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action :set_form_zones
+  before_action :set_form_values, :collect_form_params
 
   def index
     authorize :report, :index?
@@ -36,12 +36,10 @@ class ReportsController < ApplicationController
     authorize :report, :room_issues_report?
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: :building).joins(:room_tickets)
-                   .where(buildings: { zone_id: zone_id })
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_tickets: { created_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
@@ -80,13 +78,10 @@ class ReportsController < ApplicationController
                           .map { |b| [b.name, b.id] }
     
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      # building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: { building: :zone }).joins(:room_states)
-                   .where(zones: { id: zone_id })
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*')
@@ -95,7 +90,7 @@ class ReportsController < ApplicationController
 
       rooms_no_room_state = Room.left_outer_joins(:room_states)
                                   .joins(floor: { building: :zone })
-                                  .where(zones: { id: zone_id })
+                                  .where(buildings: { id: building_id, zone_id: zone_id })
                                   .where(room_states: { id: nil })
                                   .where.not(id: rooms.map(&:id))
                                   .select('rooms.*')
@@ -138,12 +133,10 @@ class ReportsController < ApplicationController
     authorize :report, :no_access_report?
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: :building).joins(:room_states)
-                   .where(buildings: { zone_id: zone_id })
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .where(room_states: { is_accessed: false })
                    .group('rooms.id')
@@ -187,12 +180,10 @@ class ReportsController < ApplicationController
     authorize :report, :common_attribute_states_report?
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
-                   .where(buildings: { zone_id: zone_id })
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .select('rooms.*')
                    .select('room_states.updated_at')
@@ -235,12 +226,10 @@ class ReportsController < ApplicationController
     authorize :report, :specific_attribute_states_report?
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
-                  .where(buildings: { zone_id: zone_id })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('specific_attributes.description AS specific_attribute_description')
@@ -285,13 +274,11 @@ class ReportsController < ApplicationController
     @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
       resource_type = params[:resource_type].presence
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { resource_states: :resource })
-                  .where(buildings: { zone_id: zone_id })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('resources.name AS resource_name')
@@ -332,8 +319,17 @@ class ReportsController < ApplicationController
 
   private
 
-  def set_form_zones
+  def set_form_values
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @buildings = Building.where.not(zone: nil).map { |building| [building.zone_id, building.name, building.id] }
+  end
+
+  def collect_form_params
+    zone_id = params[:zone_id].presence || Zone.all.pluck(:id).push(nil)
+    building_id = params[:building_id].presence || Building.all.pluck(:id).push(nil)
+    start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+    end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+    [zone_id, building_id, start_time, end_time]
   end
 
   def csv_data
