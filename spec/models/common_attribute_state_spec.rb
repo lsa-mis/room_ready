@@ -15,29 +15,20 @@ require 'rails_helper'
 RSpec.describe CommonAttributeState, type: :model do
   context "the Factory" do
     it 'is valid' do
-      expect(build(:common_attribute_states)).to be_valid
-    end
-  end
-
-  context "create common_attribute_states with all required fields present" do
-    it 'is valid' do
-      expect(create(:common_attribute_states)).to be_valid
-    end
-  end
-
-  context "create common_attribute_states without an is_checked value" do
-    it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Is checked must be a present (either true or false)"' do
-      expect { FactoryBot.create(:common_attribute_states, is_checked: nil) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Is checked must be a present (either true or false)")
-    end
-  end
-
-  context "edit old common_attribute_states record" do
-    it 'is not valid' do
-      common_attribute_states = FactoryBot.create(:common_attribute_states)
-      common_attribute_states.update(created_at: common_attribute_states.created_at - 1.day, updated_at: common_attribute_states.updated_at - 1.day)
-      expect(common_attribute_states.update(is_checked: false)).to be_falsy
-      expect(common_attribute_states.errors.full_messages_for(:base)).to include "Old state record cannot be edited"
       expect(build(:common_attribute_state)).to be_valid
+    end
+  end
+
+  context "create common_attribute_state with all required fields present" do
+    it 'is valid' do
+      expect(create(:common_attribute_state)).to be_valid
+    end
+  end
+
+  context "create common_attribute_state without checkbox_value when common_attribute.need_checkbox is true" do
+    it 'raises an error: Checkbox value can\'t be blank if checkbox is required' do
+      common_attribute = FactoryBot.create(:common_attribute, need_checkbox: true)
+      expect { FactoryBot.create(:common_attribute_state, checkbox_value: nil, common_attribute: common_attribute) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Checkbox value can't be blank if checkbox is required")
     end
   end
 
@@ -150,4 +141,14 @@ RSpec.describe CommonAttributeState, type: :model do
       expect { FactoryBot.create(:common_attribute_state, common_attribute: common_attribute, room_state: room_state) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: There can only be one Common Attribute State per Common Attribute per Room State")
     end
   end
+
+  context "edit old common_attribute_state record" do
+    it 'is not valid' do
+      common_attribute_state = FactoryBot.create(:common_attribute_state)
+      common_attribute_state.update(created_at: common_attribute_state.created_at - 1.day, updated_at: common_attribute_state.updated_at - 1.day)
+      expect(common_attribute_state.update(quantity_box_value: 4)).to be_falsy
+      expect(common_attribute_state.errors.full_messages_for(:base)).to include "Old state record cannot be edited"
+    end
+  end
+
 end
