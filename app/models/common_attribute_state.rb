@@ -18,6 +18,9 @@ class CommonAttributeState < ApplicationRecord
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
   validate :is_editable, on: :update
+  validate :checkbox_blank_if_not_required
+  validate :quantity_box_blank_if_not_required
+  validate :unique_common_attribute_state_per_room_state, on: :create
 
   private
 
@@ -33,16 +36,21 @@ class CommonAttributeState < ApplicationRecord
     end
   end
 
-  # def readonly?
-  #   if self.id.present?
-  #     self.updated_at < Time.current.beginning_of_day
-  #   else
-  #     false
-  #   end
-  # end
-  
-  # def is_editable
-  #   errors.add(:base, 'Old common attribute state record cannot be edited') if readonly?
-  # end
+  def checkbox_blank_if_not_required
+    if !common_attribute.need_checkbox && checkbox_value.present?
+      errors.add(:checkbox_value, "must be blank if checkbox is not required")
+    end
+  end
 
+  def quantity_box_blank_if_not_required
+    if !common_attribute.need_quantity_box && quantity_box_value.present?
+      errors.add(:quantity_box_value, "must be blank if quantity box is not required")
+    end
+  end
+
+  def unique_common_attribute_state_per_room_state
+    if room_state.common_attribute_states.where(common_attribute_id: common_attribute_id).any?
+      errors.add(:base, "There can only be one Common Attribute State per Common Attribute per Room State")
+    end
+  end
 end

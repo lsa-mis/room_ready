@@ -20,7 +20,7 @@ class RoverNavigationsController < ApplicationController
   def rooms
     authorize :rover_navigation, :rooms?
     @floor = Floor.find(params[:floor_id])
-    @rooms = @floor.rooms.order(:room_number)
+    @rooms = @floor.active_rooms.order(:room_number)
 
     if params[:search].present?
       @rooms = @rooms.where("room_number ILIKE :search", search: "%#{params[:search]}%")
