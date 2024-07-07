@@ -15,7 +15,7 @@ class SpecificAttributeStatesController < ApplicationController
 
   # GET /specific_attribute_states/new
   def new
-    @specific_attribute_states = @room.specific_attributes.all.map do |specific_attribute|
+    @specific_attribute_states = @room.active_specific_attributes.map do |specific_attribute|
       specific_attribute.specific_attribute_states.new
     end
 
