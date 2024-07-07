@@ -79,4 +79,54 @@ RSpec.describe Building, type: :system do
     end
   end
 
+  context 'delete a building' do
+    let!(:building) { FactoryBot.create(:building) }
+    let!(:floor) { FactoryBot.create(:floor, building: building) }
+    let!(:room1) { FactoryBot.create(:room, floor: floor) }
+    let!(:room2) { FactoryBot.create(:room, floor: floor) }
+    let!(:resource1) { FactoryBot.create(:resource, room: room1) }
+    let!(:resource2) { FactoryBot.create(:resource, room: room1) }
+    let!(:specific_attribute1) { FactoryBot.create(:specific_attribute, room: room1) }
+    let!(:specific_attribute2) { FactoryBot.create(:specific_attribute, room: room2) }
+
+    it 'and delete all rooms etc' do
+      VCR.use_cassette "building" do
+        building_id = building.id
+        visit "buildings/#{building_id}"
+        accept_confirm 'Are you sure you want to delete this building?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
+        expect(page).to have_content("The building was deleted")
+        expect { Building.find(building_id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    it 'fail deleting a building' do
+      allow(building).to receive(:delete).and_return(false)
+      allow(Building).to receive(:find).and_return(building)
+      VCR.use_cassette "building" do
+        building_id = building.id
+        visit "buildings/#{building_id}"
+        accept_confirm 'Are you sure you want to delete this building?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
+        expect(page).to have_content("Error deleting building.")
+      end
+    end
+
+    it 'fail deleting a building' do
+      allow_any_instance_of(BuildingsController).to receive(:delete_building).with(building).and_return(false)
+      allow(Building).to receive(:find).and_return(building)
+      VCR.use_cassette "building" do
+        building_id = building.id
+        visit "buildings/#{building_id}"
+        accept_confirm 'Are you sure you want to delete this building?' do
+          find(:css, 'i.bi.bi-trash-fill.text-danger').click
+        end
+        expect(page).to have_content("Error deleting building.")
+        expect(Building.find(building_id).present?).to be_truthy
+      end
+    end
+
+  end
 end
