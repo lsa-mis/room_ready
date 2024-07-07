@@ -67,9 +67,7 @@ class Rooms::SpecificAttributesController < ApplicationController
       @specific_attributes = SpecificAttribute.active.where(room_id: @room)
       @new_specific_attribute = SpecificAttribute.new
       @archived = true
-      flash.now["notice"] = "The specific_attributes was archived"
-      # @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
-      # render :index, notice: "The specific attribute was archived"
+      flash.now["notice"] = "The specific attribute was archived."
     else
       render :index, status: :unprocessable_entity 
     end
@@ -80,13 +78,12 @@ class Rooms::SpecificAttributesController < ApplicationController
     if @specific_attribute.update(archived: false)
       @room = Room.find(params[:room_id])
       @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
-      @new_specific_attribute = SpecificAttribute.new
+      # @new_specific_attribute = SpecificAttribute.new
       # @archived = params["show_archived_rooms"] == "1" ? true : false 
-      @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
-      render :index, notice: "The specific attribute was unarchived"
+      # @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+      flash.now["notice"] = "The specific attribute was unarchived."
     else
-      @room = Room.find(params[:room_id])
-      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+      render :index, status: :unprocessable_entity 
     end
   end
 
@@ -94,7 +91,7 @@ class Rooms::SpecificAttributesController < ApplicationController
     @specific_attribute.destroy!
     @room = Room.find(params[:room_id])
     @specific_attributes = SpecificAttribute.active.where(room_id: @room)
-    notice = "specific attribute was successfully deleted."
+    flash.now["notice"] = "Specific attribute was deleted."
   end
 
   private
