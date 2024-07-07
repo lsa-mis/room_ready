@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get 'inspection_rate_report', to: 'reports#inspection_rate_report'
       get 'no_access_report', to: 'reports#no_access_report'
       get 'common_attribute_states_report', to: 'reports#common_attribute_states_report'
+      get 'specific_attribute_states_report', to: 'reports#specific_attribute_states_report'
       get 'resource_states_report', to: 'reports#resource_states_report'
     end
   end
@@ -44,6 +45,8 @@ Rails.application.routes.draw do
     resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
+  post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
+  post 'unarchive_room/:id', to: 'rooms#unarchive', as: :unarchive_room
   resources :notes, :except => [:index]
   get 'unarchive_specific_attribute/:room_id/:id', to: 'rooms/common_attributes#unarchive', as: :unarchive_specific_attribute
 
