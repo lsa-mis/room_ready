@@ -48,7 +48,8 @@ Rails.application.routes.draw do
   post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
   post 'unarchive_room/:id', to: 'rooms#unarchive', as: :unarchive_room
   resources :notes, :except => [:index]
-  get 'unarchive_specific_attribute/:room_id/:id', to: 'rooms/common_attributes#unarchive', as: :unarchive_specific_attribute
+  post 'archive_specific_attribute/:room_id/:id', to: 'rooms/specific_attributes#archive', as: :archive_specific_attribute
+  post 'unarchive_specific_attribute/:room_id/:id', to: 'rooms/specific_attributes#unarchive', as: :unarchive_specific_attribute
 
   resources :floors
   resources :buildings do

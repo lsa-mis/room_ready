@@ -1,11 +1,18 @@
 class Rooms::SpecificAttributesController < ApplicationController
   before_action :auth_user
   before_action :set_room
-  before_action :set_specific_attribute, only: %i[edit update destroy ]
+  before_action :set_specific_attribute, only: %i[edit update destroy archive unarchive ]
 
   # GET /specific_attributes or /specific_attributes.json
   def index
-    @specific_attributes = SpecificAttribute.where(room_id: @room)
+    
+    if params["show_archived"] == "1"
+      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+    else
+      @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+    end
+    @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+  
     @new_specific_attribute = SpecificAttribute.new
     authorize @specific_attributes
   end
@@ -53,27 +60,41 @@ class Rooms::SpecificAttributesController < ApplicationController
   end
 
   # DELETE /specific_attributes/1 or /specific_attributes/1.json
-  def destroy
-    @specific_attribute.destroy!
+  def archive
+    session[:return_to] = request.referer
+    if @specific_attribute.update(archived: true)
+      @room = Room.find(params[:room_id])
+      @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+      @new_specific_attribute = SpecificAttribute.new
+      @archived = true
+      flash.now["notice"] = "The specific_attributes was archived"
+      # @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+      # render :index, notice: "The specific attribute was archived"
+    else
+      render :index, status: :unprocessable_entity 
+    end
+  end
 
-    respond_to do |format|
-      notice = "Specific attribute was successfully deleted."
-      format.turbo_stream do
-        flash.now[:notice] = notice
-      end
-      format.html { redirect_to room_specific_attributes_path(@room), notice: notice }
+  def unarchive
+    session[:return_to] = request.referer
+    if @specific_attribute.update(archived: false)
+      @room = Room.find(params[:room_id])
+      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+      @new_specific_attribute = SpecificAttribute.new
+      # @archived = params["show_archived_rooms"] == "1" ? true : false 
+      @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+      render :index, notice: "The specific attribute was unarchived"
+    else
+      @room = Room.find(params[:room_id])
+      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
     end
   end
 
   def destroy
-    if @specific_attribute.specific_attribute_states.present?
-      @specific_attribute.update(archived: true)
-      notice = "specific attribute was successfully archived."
-    else
-      @specific_attribute.destroy!
-      specific_attributes = SpecificAttribute.where(room_id: @room)
-      notice = "specific attribute was successfully deleted."
-    end
+    @specific_attribute.destroy!
+    @room = Room.find(params[:room_id])
+    @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+    notice = "specific attribute was successfully deleted."
   end
 
   private

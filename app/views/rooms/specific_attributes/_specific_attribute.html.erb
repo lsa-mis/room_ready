@@ -17,12 +17,12 @@
   </td>
   <td>
     <% if specific_attribute.archived %> 
-      <%= link_to unarchive_specific_attribute_path(specific_attribute), 'aria-label': "unarchive_#{specific_attribute.id}" do %> 
+      <%= link_to unarchive_specific_attribute_path(@room, specific_attribute), 'aria-label': "unarchive_#{specific_attribute.id}", data: { turbo_confirm: "Are you sure you want to unarchive this specific attribute?" , turbo_method: :post } do %> 
         <i class="bi bi-archive text-success"></i> 
       <% end %> 
     <% else %> 
       <% if specific_attribute.specific_attribute_states.present? %> 
-        <%= link_to unarchive_specific_attribute_path(@room, specific_attribute), 'aria-label': "delete_#{specific_attribute.id}", data: { turbo_confirm: "Are you sure you want to archive this specific attribute?" , turbo_method: :delete } do %> 
+        <%= link_to archive_specific_attribute_path(@room, specific_attribute), 'aria-label': "archive_#{specific_attribute.id}", data: { turbo_confirm: "Are you sure you want to archive this specific attribute?" , turbo_method: :post } do %> 
           <i class="bi bi-archive-fill text-success"></i> 
         <% end %> 
       <% else %> 
