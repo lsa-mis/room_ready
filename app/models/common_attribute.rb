@@ -13,12 +13,13 @@ class CommonAttribute < ApplicationRecord
   has_many :common_attribute_states
 
   validates :description, presence: true, uniqueness: true
-  validate :needs_either_checkbox_or_quantity_box
+  validate :needs_checkbox_or_quantity_box
 
   private
 
-  def needs_either_checkbox_or_quantity_box
-    errors.add(:base, 'Needs to have either a checkbox or a quantity box, or both.') unless need_checkbox || need_quantity_box
+  def needs_checkbox_or_quantity_box
+    return if need_checkbox.blank? ^ need_quantity_box.blank?
+    errors.add(:base, 'Needs to have a checkbox or a quantity box, but not both.') 
   end
 
   def state_exist?
