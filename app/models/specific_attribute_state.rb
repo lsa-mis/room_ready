@@ -11,6 +11,7 @@
 #  updated_at            :datetime         not null
 #
 class SpecificAttributeState < ApplicationRecord
+  include Editable
   belongs_to :room_state
   belongs_to :specific_attribute
 
@@ -32,15 +33,15 @@ class SpecificAttributeState < ApplicationRecord
     end
   end
 
-  def readonly?
-    if self.id.present?
-      self.updated_at < Time.current.beginning_of_day
-    else
-      false
-    end
-  end
+  # def readonly?
+  #   if self.id.present?
+  #     self.updated_at < Time.current.beginning_of_day
+  #   else
+  #     false
+  #   end
+  # end
   
-  def is_editable
-    errors.add(:base, 'Old specific attribute state record cannot be edited') if readonly?
-  end
+  # def is_editable
+  #   errors.add(:base, 'Old specific attribute state record cannot be edited') if readonly?
+  # end
 end

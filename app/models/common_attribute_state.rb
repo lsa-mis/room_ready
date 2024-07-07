@@ -11,6 +11,7 @@
 #  updated_at          :datetime         not null
 #
 class CommonAttributeState < ApplicationRecord
+  include Editable
   belongs_to :room_state
   belongs_to :common_attribute
 
@@ -32,16 +33,16 @@ class CommonAttributeState < ApplicationRecord
     end
   end
 
-  def readonly?
-    if self.id.present?
-      self.updated_at < Time.current.beginning_of_day
-    else
-      false
-    end
-  end
+  # def readonly?
+  #   if self.id.present?
+  #     self.updated_at < Time.current.beginning_of_day
+  #   else
+  #     false
+  #   end
+  # end
   
-  def is_editable
-    errors.add(:base, 'Old common attribute state record cannot be edited') if readonly?
-  end
+  # def is_editable
+  #   errors.add(:base, 'Old common attribute state record cannot be edited') if readonly?
+  # end
 
 end

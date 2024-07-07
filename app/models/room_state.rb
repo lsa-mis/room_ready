@@ -12,6 +12,7 @@
 #  no_access_reason     :string
 #
 class RoomState < ApplicationRecord
+  include Editable
   belongs_to :room
   has_many :common_attribute_states
   has_many :specific_attribute_states
@@ -30,16 +31,16 @@ class RoomState < ApplicationRecord
     end
   end
 
-  def readonly?
-    if self.id.present?
-      self.updated_at < Time.current.beginning_of_day
-    else
-      false
-    end
-  end
+  # def readonly?
+  #   if self.id.present?
+  #     self.updated_at < Time.current.beginning_of_day
+  #   else
+  #     false
+  #   end
+  # end
   
-  def is_editable
-    errors.add(:base, 'Old room state record cannot be edited') if readonly?
-  end
+  # def is_editable
+  #   errors.add(:base, 'Old room state record cannot be edited') if readonly?
+  # end
 
 end
