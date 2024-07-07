@@ -19,7 +19,7 @@ class CommonAttribute < ApplicationRecord
 
   def needs_checkbox_or_quantity_box
     return if need_checkbox.blank? ^ need_quantity_box.blank?
-    errors.add(:base, 'Needs to have a checkbox or a quantity box, but not both.') 
+    errors.add(:base, 'Needs to have either a checkbox or a quantity box, but not both.') 
   end
 
   def state_exist?
