@@ -5,11 +5,12 @@ class Rooms::SpecificAttributesController < ApplicationController
 
   # GET /specific_attributes or /specific_attributes.json
   def index
-    
     if params["show_archived"] == "1"
       @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+      @action_title = "Unarchived"
     else
       @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+      @action_title = "Delete/Archive"
     end
     @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
   

@@ -6,11 +6,7 @@
       <th scope="col">Needs Checkbox?</th>
       <th scope="col">Needs Quantity Box?</th>
       <th scope="col">Edit</th>
-      <% if @archived %>
-        <th scope="col">Unarchive</th>
-      <% else %>
-        <th scope="col">Delete/Archive</th>
-      <% end %>
+      <th scope="col"><%= @action_title %></th>
     </tr>
     </thead>
     <tbody class="table-group-divider" id="specific_attributes">
