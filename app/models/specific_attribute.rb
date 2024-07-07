@@ -21,7 +21,7 @@ class SpecificAttribute < ApplicationRecord
   private
 
   def needs_either_checkbox_or_quantity_box
-    return if need_checkbox.blank? ^ need_quantity_box.blank?
+    return if need_checkbox.present? ^ need_quantity_box.present?
     errors.add(:base, 'Needs to have either a checkbox or a quantity box, but not both.')
   end
 
