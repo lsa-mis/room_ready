@@ -16,19 +16,5 @@ class ResourceState < ApplicationRecord
 
   validates :is_checked, inclusion: { in: [true, false], message: 'must be a present (either true or false)' }
   validate :is_editable, on: :update
-
-  private
-
-  # def readonly?
-  #   if self.id.present?
-  #     self.updated_at < Time.current.beginning_of_day
-  #   else
-  #     false
-  #   end
-  # end
-  
-  # def is_editable
-  #   errors.add(:base, 'Old resource state record cannot be edited') if readonly?
-  # end
   
 end
