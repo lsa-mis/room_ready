@@ -42,4 +42,14 @@ RSpec.describe RoomState, type: :model do
       expect(room_state1).to be_valid
     end
   end
+
+  context "edit old room_state record" do
+    it 'is not valid' do
+      room_state = FactoryBot.create(:room_state)
+      room_state.update(created_at: room_state.created_at - 1.day, updated_at: room_state.updated_at - 1.day)
+      expect(room_state.update(report_to_supervisor: true)).to be_falsy
+      expect(room_state.errors.full_messages_for(:base)).to include "Old state record cannot be edited"
+    end
+  end
+
 end

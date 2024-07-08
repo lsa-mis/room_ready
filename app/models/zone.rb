@@ -10,6 +10,6 @@
 class Zone < ApplicationRecord
   validates :name, uniqueness: true
   validates :name, presence: true
-  has_many :buildings
+  has_many :buildings, -> { active }, class_name: 'Building'
 
 end

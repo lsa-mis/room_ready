@@ -14,7 +14,7 @@ RSpec.describe CommonAttribute, type: :system do
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "room" do
         visit "rooms/new?building_id=#{building.id}"
-        sleep 2
+        visit "rooms/new?building_id=#{building.id}"
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
@@ -25,7 +25,7 @@ RSpec.describe CommonAttribute, type: :system do
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "room" do
         visit "rooms/#{room.id}"
-        sleep 2
+        visit "rooms/#{room.id}"
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
