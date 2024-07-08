@@ -1,11 +1,19 @@
 class Rooms::SpecificAttributesController < ApplicationController
   before_action :auth_user
   before_action :set_room
-  before_action :set_specific_attribute, only: %i[edit update destroy ]
+  before_action :set_specific_attribute, only: %i[edit update destroy archive unarchive ]
 
   # GET /specific_attributes or /specific_attributes.json
   def index
-    @specific_attributes = SpecificAttribute.where(room_id: @room)
+    if params["show_archived"] == "1"
+      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+      @action_title = "Unarchive"
+    else
+      @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+      @action_title = "Delete/Archive"
+    end
+    @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+  
     @new_specific_attribute = SpecificAttribute.new
     authorize @specific_attributes
   end
@@ -53,16 +61,35 @@ class Rooms::SpecificAttributesController < ApplicationController
   end
 
   # DELETE /specific_attributes/1 or /specific_attributes/1.json
+  def archive
+    if @specific_attribute.update(archived: true)
+      @room = Room.find(params[:room_id])
+      @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+      @new_specific_attribute = SpecificAttribute.new
+      @archived = true
+      @action_title = "Delete/Archive"
+      flash.now["notice"] = "The specific attribute was archived."
+    else
+      render :index, status: :unprocessable_entity 
+    end
+  end
+
+  def unarchive
+    if @specific_attribute.update(archived: false)
+      @room = Room.find(params[:room_id])
+      @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
+      @action_title = "Unarchive"
+      flash.now["notice"] = "The specific attribute was unarchived."
+    else
+      render :index, status: :unprocessable_entity 
+    end
+  end
+
   def destroy
     @specific_attribute.destroy!
-
-    respond_to do |format|
-      notice = "Specific attribute was successfully deleted."
-      format.turbo_stream do
-        flash.now[:notice] = notice
-      end
-      format.html { redirect_to room_specific_attributes_path(@room), notice: notice }
-    end
+    @room = Room.find(params[:room_id])
+    @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+    flash.now["notice"] = "Specific attribute was deleted."
   end
 
   private
@@ -70,7 +97,7 @@ class Rooms::SpecificAttributesController < ApplicationController
   def set_room
     @room = Room.find(params[:room_id])
   end
-    # Use callbacks to share common setup or constraints between actions.
+    # Use callbacks to share specific setup or constraints between actions.
   def set_specific_attribute
     @specific_attribute = SpecificAttribute.find(params[:id])
     authorize @specific_attribute

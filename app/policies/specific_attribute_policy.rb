@@ -22,4 +22,12 @@ class SpecificAttributePolicy < ApplicationPolicy
   def destroy?
     is_admin?
   end
+
+  def archive?
+    is_admin?
+  end
+
+  def unarchive?
+    is_admin?
+  end
 end

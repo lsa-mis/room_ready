@@ -1,0 +1,18 @@
+<%= turbo_frame_tag 'specific_attributes_list' do %>
+  <table class="table text-center mt-4">
+    <thead class="table-group-divider">
+    <tr>
+      <th scope="col" class="text-start">Description</th>
+      <th scope="col">Needs Checkbox?</th>
+      <th scope="col">Needs Quantity Box?</th>
+      <th scope="col">Edit</th>
+      <th scope="col"><%= @action_title %></th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider" id="specific_attributes">
+    <% @specific_attributes.each do |specific_attribute| %>
+      <%= render specific_attribute %>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -16,15 +16,17 @@
     <%= form.text_field :description, class: "form-control form-control-sm", required: true %>
   </div>
 
-  <div class="form-check mb-3">
-    <%= form.check_box :need_checkbox, class: "form-check-input" %>
-    <%= form.label :need_checkbox, "Needs Checkbox?", class: "form-check-label" %>
-  </div>
+  <% unless specific_attribute.specific_attribute_states.present? %>
+    <div class="form-check mb-3">
+      <%= form.check_box :need_checkbox, class: "form-check-input" %>
+      <%= form.label :need_checkbox, "Needs Checkbox?", class: "form-check-label" %>
+    </div>
 
-  <div class="form-check mb-3">
-    <%= form.check_box :need_quantity_box, class: "form-check-input" %>
-    <%= form.label :need_quantity_box, "Needs Quantity Box?", class: "form-check-label" %>
-  </div>
+    <div class="form-check mb-3">
+      <%= form.check_box :need_quantity_box, class: "form-check-input" %>
+      <%= form.label :need_quantity_box, "Needs Quantity Box?", class: "form-check-label" %>
+    </div>
+  <% end %>
 
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit specific_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
