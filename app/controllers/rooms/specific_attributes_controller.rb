@@ -68,6 +68,7 @@ class Rooms::SpecificAttributesController < ApplicationController
       @specific_attributes = SpecificAttribute.active.where(room_id: @room)
       @new_specific_attribute = SpecificAttribute.new
       @archived = true
+      @action_title = "Delete/Archive"
       flash.now["notice"] = "The specific attribute was archived."
     else
       render :index, status: :unprocessable_entity 
