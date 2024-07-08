@@ -11,8 +11,10 @@
     <% end %>
   </td>
   <td>
-    <%= link_to edit_room_specific_attribute_path(@room, specific_attribute), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Edit", data: { turbo_frame: "_top" } do %>
-      <i class="bi bi-pencil-square text-primary"></i>
+    <% unless specific_attribute.archived %>
+      <%= link_to edit_room_specific_attribute_path(@room, specific_attribute), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Edit", data: { turbo_frame: "_top" } do %>
+        <i class="bi bi-pencil-square text-primary"></i>
+      <% end %>
     <% end %>
   </td>
   <td>

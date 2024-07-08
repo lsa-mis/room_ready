@@ -7,7 +7,7 @@ class Rooms::SpecificAttributesController < ApplicationController
   def index
     if params["show_archived"] == "1"
       @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
-      @action_title = "Unarchived"
+      @action_title = "Unarchive"
     else
       @specific_attributes = SpecificAttribute.active.where(room_id: @room)
       @action_title = "Delete/Archive"
@@ -79,9 +79,7 @@ class Rooms::SpecificAttributesController < ApplicationController
     if @specific_attribute.update(archived: false)
       @room = Room.find(params[:room_id])
       @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
-      # @new_specific_attribute = SpecificAttribute.new
-      # @archived = params["show_archived_rooms"] == "1" ? true : false 
-      # @archived = SpecificAttribute.archived.where(room_id: @room).present? ? true : false
+      @action_title = "Unarchive"
       flash.now["notice"] = "The specific attribute was unarchived."
     else
       render :index, status: :unprocessable_entity 
