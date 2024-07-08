@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get 'inspection_rate_report', to: 'reports#inspection_rate_report'
       get 'no_access_report', to: 'reports#no_access_report'
       get 'common_attribute_states_report', to: 'reports#common_attribute_states_report'
+      get 'specific_attribute_states_report', to: 'reports#specific_attribute_states_report'
       get 'resource_states_report', to: 'reports#resource_states_report'
     end
   end
@@ -45,7 +46,11 @@ Rails.application.routes.draw do
     resources :room_states, module: :rooms
     resources :room_tickets, module: :rooms
   end
+  post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
+  post 'unarchive_room/:id', to: 'rooms#unarchive', as: :unarchive_room
   resources :notes, :except => [:index]
+  post 'archive_specific_attribute/:room_id/:id', to: 'rooms/specific_attributes#archive', as: :archive_specific_attribute
+  post 'unarchive_specific_attribute/:room_id/:id', to: 'rooms/specific_attributes#unarchive', as: :unarchive_specific_attribute
 
   resources :floors
   resources :buildings do
@@ -53,6 +58,9 @@ Rails.application.routes.draw do
       resources :rooms, module: :floors
     end
   end
+  post 'archive_building/:id', to: 'buildings#archive', as: :archive_building
+  post 'unarchive_building/:id', to: 'buildings#unarchive', as: :unarchive_building
+  post 'unarchive_building_index/:id/:show_archived', to: 'buildings#unarchive_index', as: :unarchive_building_index
 
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session

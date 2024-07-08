@@ -13,7 +13,7 @@ RSpec.describe Rover, type: :system do
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "rover" do
         visit rovers_path
-        sleep 2
+        visit rovers_path
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end
@@ -24,7 +24,7 @@ RSpec.describe Rover, type: :system do
     it 'returns a "You are not authorized to perform this action." message' do
       VCR.use_cassette "rover" do
         visit edit_rover_path(rover)
-        sleep 2
+        visit edit_rover_path(rover)
         expect(page).to have_content("You are not authorized to perform this action.")
       end
     end

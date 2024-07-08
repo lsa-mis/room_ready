@@ -38,7 +38,7 @@
           </td>
           <td class="building_tbody_td">
             <%= link_to remove_building_path(@zone, building), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Remove", data: { turbo_confirm: 'Are you sure you want to remove this building?', turbo_method: :delete} do %>
-            <i class="bi bi-trash-fill text-danger"></i>
+            <i class="bi bi-trash-fill text-primary"></i>
             <% end %>
           </td>
         </tr>

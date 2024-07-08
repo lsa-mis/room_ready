@@ -17,6 +17,7 @@ RSpec.describe CommonAttribute, type: :system do
         check "Needs Checkbox?"
         click_on "Create"
         expect(page).to have_content("Common attribute was successfully created.")
+        expect(CommonAttribute.find_by(description: "common attribute one").present?).to be_truthy
       end
     end
   end
@@ -27,7 +28,7 @@ RSpec.describe CommonAttribute, type: :system do
         visit common_attributes_path
         fill_in "Description", with: "common attribute one"
         click_on "Create"
-        expect(page).to have_content("Needs to have either a checkbox or a quantity box, or both.")
+        expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
       end
     end
   end
@@ -66,21 +67,25 @@ RSpec.describe CommonAttribute, type: :system do
 
     it 'click on delete icon and cancel the alert messege' do
       VCR.use_cassette "common_attribute" do
+        common_attribute_id = common_attribute.id
         visit common_attributes_path
         dismiss_confirm 'Are you sure you want to delete this common attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to_not have_content("Common attribute was successfully deleted.")
+        expect(CommonAttribute.find(common_attribute_id).present?).to be_truthy
       end
     end
 
     it 'click on delete icon and accept the alert message' do
       VCR.use_cassette "common_attribute" do
+        common_attribute_id = common_attribute.id
         visit common_attributes_path
         accept_confirm 'Are you sure you want to delete this common attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to have_content("Common attribute was successfully deleted.")
+        expect { CommonAttribute.find(common_attribute_id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

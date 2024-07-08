@@ -44,7 +44,15 @@ RSpec.describe CommonAttribute, type: :model do
     it 'raises an error: Needs to have either a checkbox or a quantity box, or both.' do
       common_attribute =  FactoryBot.build(:common_attribute, need_checkbox: false, need_quantity_box: false)
       expect(common_attribute.valid?).to be_falsy
-      expect(common_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, or both."
+      expect(common_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, but not both."
+    end
+  end
+
+  context "create common_attribute with both need_checkbox and need_quantity_box selected" do
+    it 'raises an error: Needs to have either a checkbox or a quantity box, or both.' do
+      common_attribute =  FactoryBot.build(:common_attribute, need_checkbox: true, need_quantity_box: true)
+      expect(common_attribute.valid?).to be_falsy
+      expect(common_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, but not both."
     end
   end
 end

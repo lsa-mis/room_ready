@@ -96,7 +96,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
+    Building.active.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
   end
 
   def show_zone(building)
@@ -159,6 +159,15 @@ module ApplicationHelper
 
   def show_user_name_by_id(id)
     User.find(id).display_name
+  end
+
+  def has_archived_rooms?(building)
+    building.floors.each do |floor|
+      if floor.archived_rooms.present?
+        return true
+      end
+    end
+    return false
   end
   
 end

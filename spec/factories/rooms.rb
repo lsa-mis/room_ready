@@ -10,6 +10,7 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  last_time_checked :datetime
+#  archived          :boolean          default(FALSE)
 #
 FactoryBot.define do
   factory :room do

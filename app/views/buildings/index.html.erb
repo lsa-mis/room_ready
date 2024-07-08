@@ -4,23 +4,36 @@
     <div class="mb-auto mt-auto">
       <%= link_to "Add Building", new_building_path, class: "btn btn-primary" %>
     </div>
-    </div>
+  </div>
+  <div>
     <%= form_with url: buildings_path, method: :get, class: "", 
       data: { 
         controller: "autosubmit", 
         autosubmit_target: "form", 
         turbo_frame: "all_buildings" 
       } do |form| %>
-      <div>
+      <div class="">
+      <label for="search" aria-label="search" style="display: inline;"></label>
         <%= form.text_field :search, placeholder: "Search by Name, Nickname, Address, or Record Number", value: @search_query, data: { action: "input->autosubmit#search" } %>
       </div>
-      <div>
-        <label for="zone_id" class="">Select a Zone</label>
-        <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "All Zones"}, { :"data-action" => "change->autosubmit#submitForm" } %>
+      <div class="">
+        <label for="zone_id" aria-label="zone_id" style="display: inline;"></label>
+        <%= form.select "zone_id", options_for_select(@zones, selected: params[:zone_id]), {include_blank: "Select Zone ..."}, { :"data-action" => "change->autosubmit#submitForm" } %>
+      </div>
+      <% if Building.archived.present? %>
+        <div class="mt-2">
+          <%= form.check_box :show_archived, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
+          <%= form.label :show_archived, "Show Archived Buildings" %>
+        </div>
+      <% end %>
+      <div class="mt-2">
+        <a class="link_to" data-action="autosubmit#clearFilters">
+          Clear Filters
+        </a>
       </div>
     <% end %>
     <h3>
-      <%= if @zone.nil? then nil else @zone.name end %> Buildings (<%= @buildings.count %>)
+      <%= @zone.name if @zone.present?  %> Buildings (<%= @buildings.count %>)
     </h3>
     <%= render "listing" %>
   </div>

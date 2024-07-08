@@ -10,15 +10,7 @@
 class Zone < ApplicationRecord
   validates :name, uniqueness: true
   validates :name, presence: true
-  has_many :buildings
-
-  def rooms_checked_today
-    Room.joins(floor: { building: :zone })
-        .includes(:room_states)
-        .where(zones: { id: self.id })
-        .select { |room| RoomStatus.new(room).room_checked_today? && RoomStatus.new(room).calculate_percentage.to_f == 100.0 }
-        .count
-  end
+  has_many :buildings, -> { active }, class_name: 'Building'
 
   def total_rooms
     Room.joins(floor: { building: :zone })

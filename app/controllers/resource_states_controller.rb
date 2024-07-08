@@ -24,17 +24,15 @@ class ResourceStatesController < ApplicationController
       @room_state.resource_states.new(res_params)
     end
 
-    ActiveRecord::Base.transaction do
+    transaction = ActiveRecord::Base.transaction do
       @resource_states.each do |res|
         raise ActiveRecord::Rollback unless res.save
       end
-      unless @room.update(last_time_checked: DateTime.now)
-        flash.now['alert'] = "Error updating room record"
-        return
-      end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
+      true
     end
 
-    if @resource_states.all?(&:persisted?)
+    if transaction
       redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!'
     else
       render :new, status: :unprocessable_entity
@@ -43,25 +41,26 @@ class ResourceStatesController < ApplicationController
 
   def update_resource_states
     authorize ResourceState
-    resource_state_params.each do |res_params|
-      resource_state = ResourceState.find(res_params[:resource_state_id])
-      # raise ActiveRecord::Rollback unless resource_state.update(res_params)
-      unless resource_state.update(res_params.except(:resource_state_id))
-        render :edit, status: :unprocessable_entity
-        return
+    @resource_states = resource_state_params.map do |cas_params|
+      params = cas_params.except(:resource_state_id)
+      resource_state = ResourceState.find(cas_params[:resource_state_id])
+      resource_state.assign_attributes(params)
+      resource_state
+    end
+  
+    transaction = ActiveRecord::Base.transaction do
+      @resource_states.each do |cas|
+        raise ActiveRecord::Rollback unless cas.save
       end
+      raise ActiveRecord::Rollback unless @room.update(last_time_checked: DateTime.now)
+      true
     end
-
-    unless @room.update(last_time_checked: DateTime.now)
-      flash.now['alert'] = "Error updating room record"
-      return
-    end
-
-    # if @resource_states.all?(&:persisted?)
+  
+    if transaction
       redirect_to confirmation_rover_navigation_path(room_id: @room.id), notice: 'Room was successfully checked!'
-    # else
-    #   render :edit, status: :unprocessable_entity
-    # end
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private

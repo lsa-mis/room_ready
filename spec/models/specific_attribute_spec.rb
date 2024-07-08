@@ -9,6 +9,7 @@
 #  room_id           :bigint           not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 require 'rails_helper'
 
@@ -54,7 +55,16 @@ RSpec.describe SpecificAttribute, type: :model do
     it 'raises an error: Needs to have either a checkbox or a quantity box, or both.' do
       specific_attribute =  FactoryBot.build(:specific_attribute, need_checkbox: false, need_quantity_box: false)
       expect(specific_attribute.valid?).to be_falsy
-      expect(specific_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, or both."
+      expect(specific_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, but not both."
     end
   end
+
+  context "create specific_attribute without need_checkbox and need_quantity_box selected" do
+    it 'raises an error: Needs to have either a checkbox or a quantity box, or both.' do
+      specific_attribute =  FactoryBot.build(:specific_attribute, need_checkbox: true, need_quantity_box: true)
+      expect(specific_attribute.valid?).to be_falsy
+      expect(specific_attribute.errors.full_messages_for(:base)).to include "Needs to have either a checkbox or a quantity box, but not both."
+    end
+  end
+
 end

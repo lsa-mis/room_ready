@@ -1,26 +1,31 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
-  before_action :set_building, only: %i[ show edit update ]
-  before_action :set_zone, only: %i[ new show create edit update index ]
+  before_action :set_building, only: %i[ show edit update destroy archive unarchive unarchive_index] 
+  # before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
   def index
-    @zone_id = params[:zone_id]
-    @search_query = params[:search]
-
-    zone_id_exists = !(@zone_id.nil? || @zone_id.strip.empty?)
-    search_query_exists = !(@search_query.nil? || @search_query.strip.empty?)
-
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
-    if zone_id_exists
-      @buildings = Building.where(zone_id: @zone_id)
+    @zones << ["No Zone", 0]
+    if params[:show_archived] == "1" 
+      @buildings = Building.archived
+      @archived = true
     else
-      @buildings = Building.all
+      @buildings = Building.active
+      @archived = false
     end
 
-    if search_query_exists
-      search_term = "%#{@search_query}%"
+    if params[:zone_id].present?
+      zone_id = params[:zone_id]
+      if zone_id == "0"
+        @buildings = Building.active.where(zone_id: nil)
+      else
+        @buildings = Building.active.where(zone_id: zone_id)
+      end
+    end
+    
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
       @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ? OR nick_name ILIKE ?', search_term, search_term, search_term, search_term)
     end
 
@@ -41,6 +46,9 @@ class BuildingsController < ApplicationController
   end
 
   def show
+    # to show/hide 'Show Archived Rooms' checkbox and show active or archived rooms on floors on Buiding show page
+    @archived = params["show_archived_rooms"] == "1" ? true : false 
+
     authorize @building
     floors = @building.floors
     floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
@@ -66,6 +74,64 @@ class BuildingsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize @building
+    if @building.has_checked_rooms?
+      flash.now['alert'] = "The buildings has checked rooms - archive this building instead"
+      @buildings = Building.active.order(:name)
+    else
+      if delete_building(@building)
+        redirect_to buildings_path, notice: "The building was deleted."
+      else
+        @buildings = Building.active.order(:name)
+        flash.now["alert"] = "Error deleting building."
+      end
+    end
+  end
+
+  def archive
+    session[:return_to] = request.referer
+    authorize @building
+    if @building.zone.present?
+      @building.update(zone_id: nil)
+    end
+    if @building.update(archived: true)
+      change_rooms_archived_mode(@building, true)
+      @buildings = Building.active.order(:name)
+      redirect_back_or_default(notice: "The building was archived")
+    else
+      @buildings = Building.active.order(:name)
+    end
+  end
+
+  def unarchive
+    session[:return_to] = request.referer
+    authorize @building
+    @archived = true
+    if @building.update(archived: false)
+      change_rooms_archived_mode(@building, false)
+      @buildings = Building.archived.order(:name)
+      redirect_back_or_default(notice: "The building was unarchived")
+    else
+      @buildings = Building.archived.order(:name)
+    end
+  end
+
+  def unarchive_index
+    session[:return_to] = request.referer
+    authorize @building
+    @archived = true
+    if @building.update(archived: false)
+      change_rooms_archived_mode(@building, false)
+      @buildings = Building.archived.order(:name)
+      @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+      @zones << ["No Zone", 0]
+      render :index, notice: "The building was unarchived"
+    else
+      @buildings = Building.archived.order(:name)
+    end
+  end
+
 
   private
     # Only allow a list of trusted parameters through.
@@ -76,12 +142,6 @@ class BuildingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
-    end
-
-    def set_zone
-      if params[:zone_id].present?
-        @zone = Zone.find(params[:zone_id])
-      end
     end
 
     def add_from_bldrecnbr
@@ -104,7 +164,7 @@ class BuildingsController < ApplicationController
             if @building.save
               add_classrooms_for_building(bldrecnbr)
               notice = "New Building was added." + note
-              @buildings = Building.where(zone: @zone)
+              @buildings = Building.active.where(zone: @zone)
               format.turbo_stream do
                 @new_building = Building.new
                 if @zone.present?
@@ -142,6 +202,27 @@ class BuildingsController < ApplicationController
         end
       else
         note = " API returned bo data about classrooms for the building"
+      end
+    end
+
+    def change_rooms_archived_mode(building, archived_mode)
+      Room.where(floor_id: building.floors.ids).update_all(archived: archived_mode)
+    end
+
+    def delete_building(building)
+      begin
+        Resource.where(room_id: building.rooms.ids).delete_all
+        SpecificAttribute.where(room_id: building.rooms.ids).delete_all
+        Room.where(floor_id: building.floors.ids).delete_all
+        Floor.where(building_id: building).delete_all
+        if building.delete 
+          return true
+        else
+          return false
+        end
+      rescue StandardError => e
+        raise ActiveRecord::Rollback
+        return false
       end
     end
 end
