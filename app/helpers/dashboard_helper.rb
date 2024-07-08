@@ -33,10 +33,8 @@ module DashboardHelper
   end
 
 
-  def latest_room_tickets(selected_date = Date.today)
-    selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
+  def latest_room_tickets
     RoomTicket.includes(room: { floor: :building })
-              .where('created_at <= ?', selected_date.end_of_day)
               .order(created_at: :desc)
               .limit(recent_tickets_quantity)
   end
