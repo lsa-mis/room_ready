@@ -7,7 +7,7 @@ class RoomStatus
   end
 
   def common_attributes_exist?
-      CommonAttribute.count > 0
+      CommonAttribute.active.count > 0
   end
 
   def specific_attributes_exist?

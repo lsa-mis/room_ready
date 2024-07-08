@@ -7,7 +7,7 @@ class CommonAttributeStatesController < ApplicationController
     
     authorize CommonAttributeState
 
-    @common_attribute_states = CommonAttribute.all.map do |common_attribute|
+    @common_attribute_states = CommonAttribute.active.map do |common_attribute|
       common_attribute.common_attribute_states.new
     end
   end

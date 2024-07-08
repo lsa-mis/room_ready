@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
     index = steps.find_index(step) + 1
     redirect = {}
 
-    CommonAttribute.all.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
+    CommonAttribute.active.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
     room.active_specific_attributes.present? ? redirect["specific_attributes"] = true : redirect["specific_attributes"] = false
     room.resources.present? ? redirect["resources"] = true : redirect["resources"] = false
 
