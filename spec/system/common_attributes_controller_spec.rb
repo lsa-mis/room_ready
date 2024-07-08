@@ -28,7 +28,7 @@ RSpec.describe CommonAttribute, type: :system do
         visit common_attributes_path
         fill_in "Description", with: "common attribute one"
         click_on "Create"
-        expect(page).to have_content("Needs to have either a checkbox or a quantity box, or both.")
+        expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
       end
     end
   end

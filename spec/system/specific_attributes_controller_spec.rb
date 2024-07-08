@@ -30,7 +30,7 @@ RSpec.describe SpecificAttribute, type: :system do
         visit "rooms/#{room.id}/specific_attributes"
         fill_in "Description", with: "specific attribute one"
         click_on "Create"
-        expect(page).to have_content("Needs to have either a checkbox or a quantity box, or both.")
+        expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
       end
     end
   end
