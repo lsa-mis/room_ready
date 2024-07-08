@@ -22,8 +22,6 @@
       <th scope="col"><%= @option_header %></th>
     </tr>
     </thead>
-    <%= turbo_frame_tag 'common_attributes_list' do %>
-      <%= render 'common_attributes_list' %>
-    <% end %>
+    <%= render 'common_attributes_list' %>
   </table>
 </div>
