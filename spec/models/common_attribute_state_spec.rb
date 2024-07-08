@@ -141,4 +141,14 @@ RSpec.describe CommonAttributeState, type: :model do
       expect { FactoryBot.create(:common_attribute_state, common_attribute: common_attribute, room_state: room_state) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: There can only be one Common Attribute State per Common Attribute per Room State")
     end
   end
+
+  context "edit old common_attribute_state record" do
+    it 'is not valid' do
+      common_attribute_state = FactoryBot.create(:common_attribute_state)
+      common_attribute_state.update(created_at: common_attribute_state.created_at - 1.day, updated_at: common_attribute_state.updated_at - 1.day)
+      expect(common_attribute_state.update(quantity_box_value: 4)).to be_falsy
+      expect(common_attribute_state.errors.full_messages_for(:base)).to include "Old state record cannot be edited"
+    end
+  end
+
 end

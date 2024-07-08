@@ -11,11 +11,13 @@
 #  updated_at          :datetime         not null
 #
 class CommonAttributeState < ApplicationRecord
+  include Editable
   belongs_to :room_state
   belongs_to :common_attribute
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
+  validate :is_editable, on: :update
   validate :checkbox_blank_if_not_required
   validate :quantity_box_blank_if_not_required
   validate :unique_common_attribute_state_per_room_state, on: :create

@@ -12,12 +12,14 @@
 #  no_access_reason     :string
 #
 class RoomState < ApplicationRecord
+  include Editable
   belongs_to :room
   has_many :common_attribute_states
   has_many :specific_attribute_states
   has_many :resource_states
 
   validate :unique_room_state_per_day
+  validate :is_editable, on: :update
 
   private
   def unique_room_state_per_day
@@ -28,4 +30,5 @@ class RoomState < ApplicationRecord
       errors.add(:base, 'There can only be one RoomState per room per day')
     end
   end
+
 end

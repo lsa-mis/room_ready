@@ -11,11 +11,13 @@
 #  updated_at            :datetime         not null
 #
 class SpecificAttributeState < ApplicationRecord
+  include Editable
   belongs_to :room_state
   belongs_to :specific_attribute
 
   validate :checkbox_presence_if_required
   validate :quantity_box_presence_if_required
+  validate :is_editable, on: :update
 
   private
 
