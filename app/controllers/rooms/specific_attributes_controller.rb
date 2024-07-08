@@ -62,7 +62,6 @@ class Rooms::SpecificAttributesController < ApplicationController
 
   # DELETE /specific_attributes/1 or /specific_attributes/1.json
   def archive
-    session[:return_to] = request.referer
     if @specific_attribute.update(archived: true)
       @room = Room.find(params[:room_id])
       @specific_attributes = SpecificAttribute.active.where(room_id: @room)
@@ -76,7 +75,6 @@ class Rooms::SpecificAttributesController < ApplicationController
   end
 
   def unarchive
-    session[:return_to] = request.referer
     if @specific_attribute.update(archived: false)
       @room = Room.find(params[:room_id])
       @specific_attributes = SpecificAttribute.archived.where(room_id: @room)
