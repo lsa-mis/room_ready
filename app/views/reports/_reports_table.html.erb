@@ -22,7 +22,7 @@
               <td><%= key %></td>
             <% end %>
             <% @date_headers.each do |date| %>
-              <td class="text-center <%= record[date] == 'Yes' ? 'bg-success' : (record[date] == 'No'? 'bg-danger' : '' ) %>
+              <td class="text-center <%= record[date] == 'Yes' ? 'text-success' : (record[date] == 'No'? 'text-danger' : '' ) %>
               ">
                 <%= record[date] %>
               </td>
