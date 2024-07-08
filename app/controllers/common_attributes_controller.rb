@@ -12,13 +12,6 @@ class CommonAttributesController < ApplicationController
       @common_attributes = CommonAttribute.active
       @option_header = "Delete/Archive"
     end
-
-    respond_to do |format|
-      format.html
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace('common_attributes', partial: 'common_attributes_list', locals: { common_attributes: @common_attributes })
-      end
-    end
     
     @new_common_attribute = CommonAttribute.new
     authorize @common_attributes
