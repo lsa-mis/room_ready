@@ -1,6 +1,6 @@
 class CommonAttributesController < ApplicationController
   before_action :auth_user
-  before_action :set_common_attribute, only: %i[edit update destroy ]
+  before_action :set_common_attribute, only: %i[edit update destroy unarchive]
 
   # GET /common_attributes or /common_attributes.json
   def index
@@ -68,27 +68,27 @@ class CommonAttributesController < ApplicationController
 
   # DELETE /common_attributes/1 or /common_attributes/1.json
   def destroy
-    
     if @common_attribute.has_state?
-      @common_attribute.update(archived: true)
-      notice = "Common attribute was successfully archived."
-    else
-      @common_attribute.destroy!
-      notice = "Common attribute was successfully deleted."
-    end
-
-    respond_to do |format|
-      format.turbo_stream do
-        flash.now[:notice] = notice
+      if @common_attribute.update(archived: true)
+        @common_attributes = CommonAttribute.active
+        @option_header = "Delete/Archive"
       end
-      format.html { redirect_to common_attributes_url, notice: notice }
+      flash.now[:notice] = "Common attribute was successfully archived."
+    else
+      if @common_attribute.destroy
+        @common_attributes = CommonAttribute.active
+        @option_header = "Delete/Archive"
+      end
+      flash.now[:notice] = "Common attribute was successfully deleted."
     end
   end
 
   def unarchive
-    authorize :common_attribute, :unarchive?
-    CommonAttribute.find(params[:id]).update(archived: false)
-    redirect_to common_attributes_path, notice: "Common attribute was successfully unarchived."
+    if @common_attribute.update(archived: false)
+      @common_attributes = CommonAttribute.archived
+      flash.now[:notice] = "Common attribute was successfully unarchived."
+      @option_header = "Unarchive"
+    end
   end
 
   private

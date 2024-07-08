@@ -11,13 +11,15 @@
     <% end %>
   </td>
   <td>
-    <%= link_to edit_common_attribute_path(common_attribute), 'aria-label': "edit_#{common_attribute.id}" do %>
-      <i class="bi bi-pencil-square text-primary"></i>
+    <% unless common_attribute.archived %>
+      <%= link_to edit_common_attribute_path(common_attribute), 'aria-label': "edit_#{common_attribute.id}" do %>
+        <i class="bi bi-pencil-square text-primary"></i>
+      <% end %>
     <% end %>
   </td>
   <td>
     <% if common_attribute.archived %>
-      <%= link_to unarchive_common_attribute_path(common_attribute), 'aria-label': "unarchive_#{common_attribute.id}" do %>
+      <%= link_to unarchive_common_attribute_path(common_attribute), data: { turbo_confirm: "Are you sure you want to unarchive this common attribute?" , turbo_method: :post }, 'aria-label': "unarchive_#{common_attribute.id}" do %>
         <i class="bi bi-archive text-success"></i>
       <% end %>
     <% else %>

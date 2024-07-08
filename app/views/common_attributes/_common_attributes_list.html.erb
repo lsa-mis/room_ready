@@ -1,5 +1,16 @@
-<tbody class="table-group-divider" id="common_attributes">
-  <% @common_attributes.each do |common_attribute| %>
-    <%= render common_attribute %>
-  <% end %>
-</tbody>
+<table class="table text-center mt-4">
+  <thead class="table-group-divider">
+  <tr>
+    <th scope="col" class="text-start">Description</th>
+    <th scope="col">Needs Checkbox?</th>
+    <th scope="col">Needs Quantity Box?</th>
+    <th scope="col">Edit</th>
+    <th scope="col"><%= @option_header %></th>
+  </tr>
+  </thead>
+  <tbody class="table-group-divider" id="common_attributes">
+    <% @common_attributes.each do |common_attribute| %>
+      <%= render common_attribute %>
+    <% end %>
+  </tbody>
+</table>

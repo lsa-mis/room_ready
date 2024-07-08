@@ -24,7 +24,7 @@ class Room < ApplicationRecord
   validates :rmrecnbr, presence: true, uniqueness: true
   validates :room_number, :room_type, presence: true
 
-  accepts_nested_attributes_for :specific_attributes
+  accepts_nested_attributes_for :active_specific_attributes
 
   scope :active, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
