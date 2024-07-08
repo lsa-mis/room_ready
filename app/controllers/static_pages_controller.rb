@@ -40,12 +40,12 @@ class StaticPagesController < ApplicationController
     @room_check_in_data = {
     "Not checked for 3 days": Room.joins(floor: :building)
       .left_outer_joins(:room_states)
-      .where(buildings: { zone_id: !nil })
+      .where.not(buildings: { zone_id: nil })
       .where(room_states: { id: nil })
       .or(
         Room.joins(floor: :building)
             .left_outer_joins(:room_states)
-            .where(buildings: { zone_id: !nil })
+            .where.not(buildings: { zone_id: nil })
             .where('room_states.created_at >= ?', Date.today - 3.days)
             .where('room_states.created_at < ?', Date.today - 2.days)
       )
@@ -53,12 +53,12 @@ class StaticPagesController < ApplicationController
 
     "Not checked for 4 to 7 days": Room.joins(floor: :building)
       .left_outer_joins(:room_states)
-      .where(buildings: { zone_id: !nil })
+      .where.not(buildings: { zone_id: nil })
       .where(room_states: { id: nil })
       .or(
         Room.joins(floor: :building)
             .left_outer_joins(:room_states)
-            .where(buildings: { zone_id: !nil })
+            .where.not(buildings: { zone_id: nil })
             .where('room_states.created_at < ?', Date.today - 4.days)
             .where('room_states.created_at >= ?', Date.today - 7.days)
       )
@@ -66,12 +66,12 @@ class StaticPagesController < ApplicationController
 
     "Not checked for over 7 days": Room.joins(floor: :building)
       .left_outer_joins(:room_states)
-      .where(buildings: { zone_id: !nil })
+      .where.not(buildings: { zone_id: nil })
       .where(room_states: { id: nil })
       .or(
         Room.joins(floor: :building)
             .left_outer_joins(:room_states)
-            .where(buildings: { zone_id: !nil })
+            .where.not(buildings: { zone_id: nil })
             .where('room_states.created_at < ?', Date.today - 7.days)
       )
       .distinct.count
