@@ -48,7 +48,7 @@ RSpec.describe Room, type: :system do
 
   context 'archive a room' do
     let!(:room) { FactoryBot.create(:room) }
-
+    let!(:room_state) { FactoryBot.create(:room_state, room: room) }
     it 'shows a message that room was archived' do
       VCR.use_cassette "room" do
         room_id = room.id
@@ -64,7 +64,7 @@ RSpec.describe Room, type: :system do
 
   context 'cancel archiving a room' do
     let!(:room) { FactoryBot.create(:room) }
-
+    let!(:room_state) { FactoryBot.create(:room_state, room: room) }
     it 'do not shows a message that room was archived' do
       VCR.use_cassette "room" do
         visit "rooms/#{room.id}"

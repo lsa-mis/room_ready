@@ -34,7 +34,7 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state without quantity_box_value when common_attribute.need_quantity_box is true" do
     it 'raises an error: Quantity box value can\'t be blank if quantity box is required' do
-      common_attribute = FactoryBot.create(:common_attribute, need_quantity_box: true)
+      common_attribute = FactoryBot.create(:common_attribute, need_quantity_box: true, need_checkbox: false)
       expect { FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: common_attribute) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Quantity box value can't be blank if quantity box is required")
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state with quantity_box_value when common_attribute.need_quantity_box is false" do
     it 'raises an error: Quantity box value must be blank if quantity box is not required' do
-      common_attribute = FactoryBot.create(:common_attribute, need_quantity_box: false)
+      common_attribute = FactoryBot.create(:common_attribute, need_quantity_box: false, need_checkbox: true)
       expect { FactoryBot.create(:common_attribute_state, checkbox_value: true, quantity_box_value: 1, common_attribute: common_attribute) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Quantity box value must be blank if quantity box is not required")
     end
   end
@@ -76,7 +76,7 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "create common_attribute_state with quantity_box_value when common_attribute.need_quantity_box is true" do
     it 'is valid' do
-      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: 1, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true))
+      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: 1, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true, need_checkbox: false))
       expect(common_attribute_state).to be_valid
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "update common_attribute_state with quantity_box_value when common_attribute.need_quantity_box is false" do
     it 'raises an error: Quantity box value must be blank if quantity box is not required' do
-      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: false))
+      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: nil, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: false, need_checkbox: true))
       common_attribute_state.update(quantity_box_value: 1)
       expect(common_attribute_state.valid?).to be_falsy
       expect(common_attribute_state.errors.full_messages_for(:quantity_box_value)).to include "Quantity box value must be blank if quantity box is not required"
@@ -110,7 +110,7 @@ RSpec.describe CommonAttributeState, type: :model do
 
   context "update common_attribute_state without quantity_box_value when common_attribute.need_quantity_box is true" do
     it 'raises an error: Quantity box value can\'t be blank if quantity box is required' do
-      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: 1, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true))
+      common_attribute_state = FactoryBot.create(:common_attribute_state, quantity_box_value: 1, common_attribute: FactoryBot.create(:common_attribute, need_quantity_box: true, need_checkbox: false))
       common_attribute_state.update(quantity_box_value: nil)
       expect(common_attribute_state.valid?).to be_falsy
       expect(common_attribute_state.errors.full_messages_for(:quantity_box_value)).to include "Quantity box value can't be blank if quantity box is required"

@@ -44,7 +44,7 @@ RSpec.describe SpecificAttributeState, type: :model do
     it 'raise error "ActiveRecord::RecordInvalid: Validation failed: Quantity box value can\'t be blank if quantity box is required"' do
       room = FactoryBot.create(:room)
       room_state = FactoryBot.create(:room_state, room: room)
-      specific_attribute = FactoryBot.create(:specific_attribute, room: room, need_quantity_box: true)
+      specific_attribute = FactoryBot.create(:specific_attribute, room: room, need_quantity_box: true, need_checkbox: false)
       state = FactoryBot.build(:specific_attribute_state,
                                room_state: room_state,
                                specific_attribute: specific_attribute,
