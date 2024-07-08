@@ -3,9 +3,6 @@
     <h1>Room: <%= @room.full_name  %></h1>
     <div class="d-flex flex-column gap-1">
       <%= link_to 'Back to Building', building_path(@room.floor.building), class: "link_to" %>
-      <%= link_to room_path(@room), class: 'btn btn-danger' do %>
-        Archive <i class="bi bi-archive-fill"></i>
-      <% end %>
     </div>
   </div>
 

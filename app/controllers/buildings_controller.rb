@@ -46,6 +46,9 @@ class BuildingsController < ApplicationController
   end
 
   def show
+    # to show/hide 'Show Archived Rooms' checkbox and show active or archived rooms on floors on Buiding show page
+    @archived = params["show_archived_rooms"] == "1" ? true : false 
+
     authorize @building
     floors = @building.floors
     floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
@@ -81,6 +84,7 @@ class BuildingsController < ApplicationController
         redirect_to buildings_path, notice: "The building was deleted."
       else
         @buildings = Building.active.order(:name)
+        flash.now["alert"] = "Error deleting building."
       end
     end
   end
@@ -92,6 +96,7 @@ class BuildingsController < ApplicationController
       @building.update(zone_id: nil)
     end
     if @building.update(archived: true)
+      change_rooms_archived_mode(@building, true)
       @buildings = Building.active.order(:name)
       redirect_back_or_default(notice: "The building was archived")
     else
@@ -104,6 +109,7 @@ class BuildingsController < ApplicationController
     authorize @building
     @archived = true
     if @building.update(archived: false)
+      change_rooms_archived_mode(@building, false)
       @buildings = Building.archived.order(:name)
       redirect_back_or_default(notice: "The building was unarchived")
     else
@@ -116,6 +122,7 @@ class BuildingsController < ApplicationController
     authorize @building
     @archived = true
     if @building.update(archived: false)
+      change_rooms_archived_mode(@building, false)
       @buildings = Building.archived.order(:name)
       @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
       @zones << ["No Zone", 0]
@@ -196,6 +203,10 @@ class BuildingsController < ApplicationController
       else
         note = " API returned bo data about classrooms for the building"
       end
+    end
+
+    def change_rooms_archived_mode(building, archived_mode)
+      Room.where(floor_id: building.floors.ids).update_all(archived: archived_mode)
     end
 
     def delete_building(building)
