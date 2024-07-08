@@ -16,6 +16,7 @@ class Room < ApplicationRecord
   belongs_to :floor
   has_many :resources
   has_many :room_tickets
+  has_many :specific_attributes
   has_many :active_specific_attributes, -> { active }, class_name: 'SpecificAttribute'
   has_many :archived_specific_attributes, -> { archived }, class_name: 'SpecificAttribute'
   has_many :room_states
@@ -24,7 +25,7 @@ class Room < ApplicationRecord
   validates :rmrecnbr, presence: true, uniqueness: true
   validates :room_number, :room_type, presence: true
 
-  accepts_nested_attributes_for :active_specific_attributes
+  accepts_nested_attributes_for :specific_attributes
 
   scope :active, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }

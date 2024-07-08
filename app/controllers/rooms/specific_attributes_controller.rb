@@ -89,6 +89,7 @@ class Rooms::SpecificAttributesController < ApplicationController
     @specific_attribute.destroy!
     @room = Room.find(params[:room_id])
     @specific_attributes = SpecificAttribute.active.where(room_id: @room)
+    @action_title = "Delete/Archive"
     flash.now["notice"] = "Specific attribute was deleted."
   end
 
