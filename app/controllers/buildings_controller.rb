@@ -84,6 +84,7 @@ class BuildingsController < ApplicationController
         redirect_to buildings_path, notice: "The building was deleted."
       else
         @buildings = Building.active.order(:name)
+        flash.now["alert"] = "Error deleting building."
       end
     end
   end

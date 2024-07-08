@@ -18,6 +18,7 @@ RSpec.describe SpecificAttribute, type: :system do
         check "Needs Checkbox?"
         click_on "Create"
         expect(page).to have_content("Specific attribute was successfully created.")
+        expect(SpecificAttribute.find_by(description: "specific attribute one").present?).to be_truthy
       end
     end
   end
@@ -29,7 +30,7 @@ RSpec.describe SpecificAttribute, type: :system do
         visit "rooms/#{room.id}/specific_attributes"
         fill_in "Description", with: "specific attribute one"
         click_on "Create"
-        expect(page).to have_content("Needs to have either a checkbox or a quantity box, or both.")
+        expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
       end
     end
   end
@@ -68,21 +69,25 @@ RSpec.describe SpecificAttribute, type: :system do
 
     it 'click on delete icon and cancel the alert messege' do
       VCR.use_cassette "specific_attribute" do
+        specific_attribute_id = specific_attribute.id
         visit "rooms/#{room_id}/specific_attributes"
         dismiss_confirm 'Are you sure you want to delete this specific attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to_not have_content("Specific attribute was successfully deleted.")
+        expect(SpecificAttribute.find(specific_attribute_id).present?).to be_truthy
       end
     end
 
     it 'click on delete icon and accept the alert message' do
       VCR.use_cassette "specific_attribute" do
+        specific_attribute_id = specific_attribute.id
         visit "rooms/#{room_id}/specific_attributes"
         accept_confirm 'Are you sure you want to delete this specific attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(page).to have_content("Specific attribute was successfully deleted.")
+        expect { SpecificAttribute.find(specific_attribute_id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

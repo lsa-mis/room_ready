@@ -16,8 +16,8 @@ RSpec.describe Note, type: :system do
         visit "rooms/#{room.id}"
         fill_in_trix_editor("note_content", with: "Hello world!")
         click_on "Add Note"
-        expect(page).to have_content("Hello world!")
         expect(page).to have_content("Updated on")
+        expect(Note.find_by(room_id: room.id).content.body.to_s.include?("Hello world!")).to be_truthy
       end
     end
   end
