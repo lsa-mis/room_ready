@@ -16,7 +16,7 @@ class CommonAttributesController < ApplicationController
     respond_to do |format|
       format.html
       format.turbo_stream do
-        render turbo_stream: turbo_stream.replace('common_attributes_list', partial: 'common_attributes_list', locals: { common_attributes: @common_attributes })
+        render turbo_stream: turbo_stream.replace('common_attributes', partial: 'common_attributes_list', locals: { common_attributes: @common_attributes })
       end
     end
     
