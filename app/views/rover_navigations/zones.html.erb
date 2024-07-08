@@ -13,7 +13,7 @@
               zone.buildings.order(:name).pluck(:name).join(', '),
               length: 60, omission: '...') %>
       </p>
-      <%= link_to "Zone Details", buildings_rover_navigation_path(zone_id: zone.id), class: "btn btn-primary" %>
+      <%= link_to "#{zone.name} Details", buildings_rover_navigation_path(zone_id: zone.id), class: "btn btn-primary" %>
     </div>
   </div>
 <% end %>
