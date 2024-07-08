@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  before_action :set_form_values, :collect_form_params
+
   def index
     authorize :report, :index?
 
@@ -14,12 +16,13 @@ class ReportsController < ApplicationController
 
   # Design - For each new report:
   # 1) run the logic / activerecord query based on params
-  # 2) define a title for the report: @title
-  # 3) calculate summary metrics in a hash of description:value pairs : @metrics
-  # 4) for a basic report:
+  # 2) if there is no record returned, do none of the below
+  # 3) define a title for the report: @title
+  # 4) calculate summary metrics in a hash of description:value pairs : @metrics
+  # 5) for a basic report:
   #   a) define an array of headers/column titles: @headers
   #   b) convert the query results into an array of arrays in order same as headers: @data
-  # 5) for a grouped pivot-table report (w/ dates as columns):
+  # 6) for a grouped pivot-table report (w/ dates as columns):
   #   a) set @grouped = true
   #   b) define an array of date headers: @date_headers
   #   c) define an array of all headers (indluding date headers): @headers
@@ -32,33 +35,31 @@ class ReportsController < ApplicationController
   def room_issues_report
     authorize :report, :room_issues_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
-      @rooms = Room.joins(floor: :building).joins(:room_tickets)
-                   .where(buildings: { zone_id: zone_id })
+      rooms = Room.joins(floor: :building).joins(:room_tickets)
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_tickets: { created_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
                    .having('COUNT(room_tickets.id) > 0')
                    .order('tickets_count DESC')
 
-      @title = 'Room Issues Report'
-      @metrics = {
-        'Total Tickets Count' => @rooms.sum(&:tickets_count),
-      }
-      @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
-      @data = @rooms.map do |room|
-        [
-          room.room_number,
-          room.floor.building.name,
-          show_zone(room.floor.building),
-          room.tickets_count,
-        ]
+      if rooms.any?
+        @title = 'Room Issues Report'
+        @metrics = {
+          'Total Tickets Count' => rooms.sum(&:tickets_count),
+        }
+        @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+        @data = rooms.map do |room|
+          [
+            room.room_number,
+            room.floor.building.name,
+            show_zone(room.floor.building),
+            room.tickets_count,
+          ]
+        end
       end
     end
 
@@ -71,58 +72,49 @@ class ReportsController < ApplicationController
   def inspection_rate_report
     authorize :report, :inspection_rate_report?
     
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-    @buildings = Building.joins(floors: { rooms: :room_states })
-                          .distinct
-                          .order(:name)
-                          .map { |b| [b.name, b.id] }
-    
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      building_id = params[:building_id].present? ? params[:building_id] : Building.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day.to_date : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day.to_date : Date.today
+      zone_id, building_id, start_time, end_time = collect_form_params
 
-      @rooms = Room.joins(floor: :building).joins(:room_states)
-                   .where(buildings: { id: building_id })
+      rooms = Room.joins(floor: { building: :zone }).joins(:room_states)
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .group('rooms.id')
                    .select('rooms.*')
                    .select('COUNT(room_states.id) AS room_check_count')
                    .order('room_check_count DESC')
 
-      @rooms_no_room_state = Room.left_outer_joins(:room_states)
-                                  .joins(floor: :building)
-                                  .where(buildings: { id: building_id })
+      rooms_no_room_state = Room.left_outer_joins(:room_states)
+                                  .joins(floor: { building: :zone })
+                                  .where(buildings: { id: building_id, zone_id: zone_id })
                                   .where(room_states: { id: nil })
-                                  .where.not(id: @rooms.map(&:id))
+                                  .where.not(id: rooms.map(&:id))
                                   .select('rooms.*')
                                   .select('0 AS room_check_count')
                                   .order('rooms.room_number')
 
+      if rooms.any?
+        oldest_record = rooms.min_by { |room| room.room_states.first.updated_at }
+        oldest_record_date = oldest_record.room_states.first.updated_at
+        start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+        days = (end_time.to_date - start_time.to_date).to_i
 
-      oldest_record = @rooms.min_by { |room| room.room_states.first.updated_at }
-      oldest_record_date = oldest_record.room_states.first.updated_at
-      start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+        rooms = rooms + rooms_no_room_state
 
-      days = (end_time - start_time).to_i
-
-      @rooms = @rooms + @rooms_no_room_state
-
-      @title = 'Inspection Rate Report'
-      @metrics = {
-        'Total room checks' => @rooms.sum(&:room_check_count),
-        'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",  
-      }
-      @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
-      @data = @rooms.map do |room|
-        [
-          room.room_number,
-          room.floor.building.name,
-          show_zone(room.floor.building),
-          room.room_check_count,
-          "#{(room.room_check_count.to_f / days * 100).round(2)}%"
-        ]
+        @title = 'Inspection Rate Report'
+        @metrics = {
+          'Total room checks' => rooms.sum(&:room_check_count),
+          'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",
+        }
+        @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
+        @data = rooms.map do |room|
+          [
+            room.room_number,
+            room.floor.building.name,
+            show_zone(room.floor.building),
+            room.room_check_count,
+            "#{(room.room_check_count.to_f / days * 100).round(2)}%"
+          ]
+        end
       end
     end
 
@@ -135,15 +127,11 @@ class ReportsController < ApplicationController
   def no_access_report
     authorize :report, :no_access_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
-      @rooms = Room.joins(floor: :building).joins(:room_states)
-                   .where(buildings: { zone_id: zone_id })
+      rooms = Room.joins(floor: :building).joins(:room_states)
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .where(room_states: { is_accessed: false })
                    .group('rooms.id')
@@ -154,24 +142,26 @@ class ReportsController < ApplicationController
                    .having('COUNT(room_states.id) > 0')
                    .order('na_states_count DESC')
 
-      @title = 'No Access Report'
-      @metrics = {
-        'Total No Access Count' => @rooms.sum(&:na_states_count)
-      }
-      @headers = ['Room Number', 'Building', 'Zone', 'No Access Count', 'Dates and Reasons for No Access (Most Recent 5)']
-      @data = @rooms.map do |room|
-        [
-          room.room_number,
-          room.floor.building.name,
-          show_zone(room.floor.building),
-          room.na_states_count,
-          room.na_states_dates.zip(room.na_states_reasons)
-                          .sort_by { |date, _reason| date }
-                          .reverse
-                          .first(5)
-                          .map { |date, reason| "#{date.strftime('%m/%d/%y')} (#{reason})" }
-                          .join(', ')
-        ]
+      if rooms.any?
+        @title = 'No Access Report'
+        @metrics = {
+          'Total No Access Count' => rooms.sum(&:na_states_count)
+        }
+        @headers = ['Room Number', 'Building', 'Zone', 'No Access Count', 'Dates and Reasons for No Access (Most Recent 5)']
+        @data = rooms.map do |room|
+          [
+            room.room_number,
+            room.floor.building.name,
+            show_zone(room.floor.building),
+            room.na_states_count,
+            room.na_states_dates.zip(room.na_states_reasons)
+                .sort_by { |date, _reason| date }
+                .reverse
+                .first(5)
+                .map { |date, reason| "#{date.strftime('%m/%d/%y')} (#{reason})" }
+                .join(', ')
+          ]
+        end
       end
     end
 
@@ -184,15 +174,11 @@ class ReportsController < ApplicationController
   def common_attribute_states_report
     authorize :report, :common_attribute_states_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
-                   .where(buildings: { zone_id: zone_id })
+                   .where(buildings: { id: building_id, zone_id: zone_id })
                    .where(room_states: { updated_at: start_time..end_time })
                    .select('rooms.*')
                    .select('room_states.updated_at')
@@ -202,24 +188,25 @@ class ReportsController < ApplicationController
                    .select('common_attribute_states.quantity_box_value as quantity_box_value')
                    .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
 
-      grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
+      if rooms.any?
+        @grouped = true
+        @title = 'Common Attribute States Report'
 
-      @grouped = true
+        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        header_start = start_time == Date.new(0) ? earliest_date : start_time
+        header_end = end_time == Date::Infinity.new ? latest_date : end_time
 
-      @title = 'Common Attribute States Report'
-      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        @date_headers = (header_start.to_date..header_end.to_date).to_a
+        @headers = ['Zone', 'Building', 'Room'] + @date_headers
 
-      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
-      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
-      @date_headers = (header_start..header_end).to_a
-      @headers = ['Zone', 'Building', 'Room'] + @date_headers
-
-      @data = grouped_rooms.transform_values do |rooms|
-        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-          key = [room.floor.building.zone.name, room.floor.building.name, room.room_number]
-          value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
-          pivot_table[key][room.updated_at.to_date] = value
+        grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+            key = [show_zone(room.floor.building), room.floor.building.name, room.room_number]
+            value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
+            pivot_table[key][room.updated_at.to_date] = value
+          end
         end
       end
     end
@@ -233,15 +220,11 @@ class ReportsController < ApplicationController
   def specific_attribute_states_report
     authorize :report, :specific_attribute_states_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
-                  .where(buildings: { zone_id: zone_id })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('specific_attributes.description AS specific_attribute_description')
@@ -251,25 +234,25 @@ class ReportsController < ApplicationController
                   .select('specific_attribute_states.quantity_box_value as quantity_box_value')
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, specific_attributes.description ASC')
 
-      grouped_rooms = rooms.group_by { |room| "#{room.floor.building.zone.name} | #{room.floor.building.name} | #{room.room_number}" }
+      if rooms.any?
+        @grouped = true
+        @title = 'Specific Attribute States Report'
 
-      @grouped = true
+        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        header_start = start_time == Date.new(0) ? earliest_date : start_time
+        header_end = end_time == Date::Infinity.new ? latest_date : end_time
 
-      @title = 'Specific Attribute States Report'
-      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        @date_headers = (header_start.to_date..header_end.to_date).to_a
+        @headers = ['Specific Attribute'] + @date_headers
 
-      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
-      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
-      @date_headers = (header_start..header_end).to_a
-
-      @headers = ['Specific Attribute'] + @date_headers
-
-      @data = grouped_rooms.transform_values do |rooms|
-        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-          key = ["#{room.specific_attribute_description}"]
-          value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
-          pivot_table[key][room.updated_at.to_date] = value
+        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+            key = ["#{room.specific_attribute_description}"]
+            value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
+            pivot_table[key][room.updated_at.to_date] = value
+          end
         end
       end
     end
@@ -283,17 +266,14 @@ class ReportsController < ApplicationController
   def resource_states_report
     authorize :report, :resource_states_report?
 
-    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
     @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
 
     if params[:commit]
-      zone_id = params[:zone_id].present? ? params[:zone_id] : Zone.all.pluck(:id).push(nil)
-      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
-      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date::Infinity.new
+      zone_id, building_id, start_time, end_time = collect_form_params
       resource_type = params[:resource_type].presence
 
       rooms = Room.joins(floor: { building: :zone }).joins(room_states: { resource_states: :resource })
-                  .where(buildings: { zone_id: zone_id })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('resources.name AS resource_name')
@@ -303,25 +283,25 @@ class ReportsController < ApplicationController
                   .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
 
-      grouped_rooms = rooms.group_by { |room| "#{room.floor.building.zone.name} | #{room.floor.building.name} | #{room.room_number}" }
+      if rooms.any?
+        @grouped = true
+        @title = 'Resource States Report'
 
-      @grouped = true
+        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
+        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        header_start = start_time == Date.new(0) ? earliest_date : start_time
+        header_end = end_time == Date::Infinity.new ? latest_date : end_time
 
-      @title = 'Resource States Report'
-      earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-      latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
+        @date_headers = (header_start.to_date..header_end.to_date).to_a
+        @headers = ['Resource'] + @date_headers
 
-      header_start = start_time == Date.new(0) ? earliest_date.to_date : start_time.to_date
-      header_end = end_time == Date::Infinity.new ? latest_date.to_date : end_time.to_date
-      @date_headers = (header_start..header_end).to_a
-
-      @headers = ['Resource'] + @date_headers
-
-      @data = grouped_rooms.transform_values do |rooms|
-        rooms.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-          key = ["#{room.resource_name} (#{room.resource_type})"]
-          value = room.check_value ? 'Yes' : 'No'
-          pivot_table[key][room.updated_at.to_date] = value
+        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        @data = grouped_rooms.transform_values do |room_group|
+          room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
+            key = ["#{room.resource_name} (#{room.resource_type})"]
+            value = room.check_value ? 'Yes' : 'No'
+            pivot_table[key][room.updated_at.to_date] = value
+          end
         end
       end
     end
@@ -334,8 +314,23 @@ class ReportsController < ApplicationController
 
   private
 
+  def set_form_values
+    @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
+    @buildings = Building.where.not(zone: nil).map { |building| [building.zone_id, building.name, building.id] }
+  end
+
+  def collect_form_params
+    zone_id = params[:zone_id].presence || Zone.all.pluck(:id).push(nil)
+    building_id = params[:building_id].presence || Building.all.pluck(:id).push(nil)
+    start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : DateTime.new(0)
+    end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : DateTime::Infinity.new
+    [zone_id, building_id, start_time, end_time]
+  end
+
   def csv_data
     CSV.generate(headers: true) do |csv|
+      next csv << ["No data found"] if !@data
+
       csv << [@title]
       csv << []
       @metrics && @metrics.each { |desc, value| csv << [desc, value] }
