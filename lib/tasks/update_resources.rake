@@ -11,7 +11,7 @@ task update_resources: :environment do
   end
 
   begin
-    rooms = Room.all.pluck(:rmrecnbr)
+    rooms = Room.active.pluck(:rmrecnbr)
 
     #=============================
     #   get oids from api        #
@@ -41,7 +41,7 @@ task update_resources: :environment do
     #=============================
     #   update the database      #
     #=============================
-    rooms_to_update = Room.all.pluck(:rmrecnbr)
+    rooms_to_update = Room.active.pluck(:rmrecnbr)
 
     # convert wco_resources to hash of arrays: array of resources for every room
     resources = wco_resources

@@ -40,7 +40,7 @@ class ReportsController < ApplicationController
 
       rooms = Room.active
                   .joins(floor: :building).joins(:room_tickets)
-                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_tickets: { created_at: start_time..end_time })
                   .group('rooms.id')
                   .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
@@ -78,7 +78,7 @@ class ReportsController < ApplicationController
 
       rooms = Room.active
                   .joins(floor: { building: :zone }).joins(:room_states)
-                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .group('rooms.id')
                   .select('rooms.*')
@@ -88,7 +88,7 @@ class ReportsController < ApplicationController
       rooms_no_room_state = Room.active
                                 .left_outer_joins(:room_states)
                                 .joins(floor: { building: :zone })
-                                .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                                .where(buildings: { id: building_id, zone_id: zone_id })
                                 .where(room_states: { id: nil })
                                 .where.not(id: rooms.map(&:id))
                                 .select('rooms.*')
@@ -135,7 +135,7 @@ class ReportsController < ApplicationController
 
       rooms = Room.active
                   .joins(floor: :building).joins(:room_states)
-                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .where(room_states: { is_accessed: false })
                   .group('rooms.id')
@@ -183,7 +183,7 @@ class ReportsController < ApplicationController
 
       rooms = Room.active
                   .joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
-                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('room_states.updated_at')
@@ -231,7 +231,7 @@ class ReportsController < ApplicationController
 
       rooms = Room.active
                   .joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
-                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('specific_attributes.description AS specific_attribute_description')
