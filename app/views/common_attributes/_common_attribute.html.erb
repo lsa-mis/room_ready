@@ -12,7 +12,7 @@
   </td>
   <td>
     <% unless common_attribute.archived %>
-      <%= link_to edit_common_attribute_path(common_attribute), 'aria-label': "edit_#{common_attribute.id}" do %>
+      <%= link_to edit_common_attribute_path(common_attribute), 'aria-label': "edit_#{common_attribute.id}", data: { turbo_frame: "_top" } do %>
         <i class="bi bi-pencil-square text-primary"></i>
       <% end %>
     <% end %>
