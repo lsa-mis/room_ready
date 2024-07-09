@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
 
     CommonAttribute.active.present? ? redirect["common_attributes"] = true : redirect["common_attributes"] = false
     room.active_specific_attributes.present? ? redirect["specific_attributes"] = true : redirect["specific_attributes"] = false
-    room.resources.present? ? redirect["resources"] = true : redirect["resources"] = false
+    room.active_resources.present? ? redirect["resources"] = true : redirect["resources"] = false
 
     new_path_to_redirect = {
       "common_attributes" => new_common_attribute_state_path(room_state_id: room_state.id),

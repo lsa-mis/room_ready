@@ -8,6 +8,7 @@
 #  room_id       :bigint           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  archived      :boolean          default(FALSE)
 #
 class Resource < ApplicationRecord
   belongs_to :room
@@ -16,6 +17,9 @@ class Resource < ApplicationRecord
   validates :name, presence: true
   validates :resource_type, presence: true
   validates :room_id, presence: true
+
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
 
   def display_name
     "#{self.name} - #{self.resource_type}"

@@ -11,7 +11,7 @@ task update_resources: :environment do
   end
 
   begin
-    rooms = Room.all.pluck(:rmrecnbr)
+    rooms = Room.active.pluck(:rmrecnbr)
 
     #=============================
     #   get oids from api        #
@@ -41,7 +41,7 @@ task update_resources: :environment do
     #=============================
     #   update the database      #
     #=============================
-    rooms_to_update = Room.all.pluck(:rmrecnbr)
+    rooms_to_update = Room.active.pluck(:rmrecnbr)
 
     # convert wco_resources to hash of arrays: array of resources for every room
     resources = wco_resources
@@ -80,24 +80,36 @@ def update_resources_in_db(resources, room_location, type_names, rooms_to_update
     room_rmrecnbr = room_location[oid]
     room = Room.find_by(rmrecnbr: room_rmrecnbr)
     if room.present?
-      # hash of resources for the room that exist in db {name => id}
-      resources_in_db = room.resources.pluck(:name, :id).to_h
+      # hashes of resources for the room that exist in db {name => id}
+      active_resources_in_db = room.active_resources.pluck(:name, :id).to_h
+      archived_resources_in_db = room.archived_resources.pluck(:name, :id).to_h
 
       room_resources.each do |resource_name, resource_type|
-        if resources_in_db.key?(resource_name)
+        next unless type_names.include?(resource_type)
+
+        if active_resources_in_db.key?(resource_name)
           # wco resource exist in db, delete from array
-          resources_in_db.delete(resource_name)
+          active_resources_in_db.delete(resource_name)
+        elsif archived_resources_in_db.key?(resource_name)
+          # wco resource is archived in db, so unarchive it
+          id = archived_resources_in_db[resource_name]
+          room.resources.find(id).update(archived: false)
         else
           # create a wco resource that was not present in db
-          if type_names.include?(resource_type)
-            room.resources.create(name: resource_name, resource_type: resource_type)
-          end
+          room.resources.create(name: resource_name, resource_type: resource_type)
         end
       end
-      if resources_in_db.present?
-        # these resoursces are not present in sco any more - delete from db
-        Resource.where(id: resources_in_db.values).delete_all
+
+      active_resources_in_db.each do |_, id|
+        # these resoursces are not present in sco any more, so archive or delete appropriately
+        resource = room.resources.find(id)
+        if resource.resource_states.any?
+          resource.update(archived: true)
+        else
+          resource.destroy
+        end
       end
+
       # room updated by wco - delete from list
       rooms_to_update.delete(room_rmrecnbr)
     end
