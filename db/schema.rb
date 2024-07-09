@@ -99,6 +99,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_143456) do
     t.boolean "need_quantity_box"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "archived", default: false
   end
 
   create_table "floors", force: :cascade do |t|
@@ -204,6 +205,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_143456) do
     t.bigint "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "archived", default: false
     t.index ["room_id"], name: "index_specific_attributes_on_room_id"
   end
 
