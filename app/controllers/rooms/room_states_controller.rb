@@ -6,7 +6,7 @@ class Rooms::RoomStatesController < ApplicationController
 
   # GET /room_states or /room_states.json
   def index
-    @room_states = RoomState.all.where(room_id: @room.id)
+    @room_states = room_states_by_period
     authorize @room_states
   end
 
@@ -104,5 +104,16 @@ class Rooms::RoomStatesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def room_state_params
       params.require(:room_state).permit(:checked_by, :is_accessed, :report_to_supervisor, :no_access_reason, :room_id)
+    end
+
+    def room_states_by_period
+      start_time = params[:from].present? ? Date.parse(params[:from]).beginning_of_day : Date.new(0)
+      end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : Date.today.end_of_day
+      @room_states = RoomState.where(room_id: @room.id)
+                          .where(created_at: start_time..end_time)
+                          .order(updated_at: :desc)
+                          .page(params[:page])
+                          .per(5)
+      return @room_states
     end
 end
