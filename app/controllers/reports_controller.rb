@@ -38,13 +38,14 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
 
-      rooms = Room.joins(floor: :building).joins(:room_tickets)
-                   .where(buildings: { id: building_id, zone_id: zone_id })
-                   .where(room_tickets: { created_at: start_time..end_time })
-                   .group('rooms.id')
-                   .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
-                   .having('COUNT(room_tickets.id) > 0')
-                   .order('tickets_count DESC')
+      rooms = Room.active
+                  .joins(floor: :building).joins(:room_tickets)
+                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(room_tickets: { created_at: start_time..end_time })
+                  .group('rooms.id')
+                  .select('rooms.*, COUNT(room_tickets.id) AS tickets_count')
+                  .having('COUNT(room_tickets.id) > 0')
+                  .order('tickets_count DESC')
 
       if rooms.any?
         @title = 'Room Issues Report'
@@ -75,22 +76,24 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
 
-      rooms = Room.joins(floor: { building: :zone }).joins(:room_states)
-                   .where(buildings: { id: building_id, zone_id: zone_id })
-                   .where(room_states: { updated_at: start_time..end_time })
-                   .group('rooms.id')
-                   .select('rooms.*')
-                   .select('COUNT(room_states.id) AS room_check_count')
-                   .order('room_check_count DESC')
+      rooms = Room.active
+                  .joins(floor: { building: :zone }).joins(:room_states)
+                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .group('rooms.id')
+                  .select('rooms.*')
+                  .select('COUNT(room_states.id) AS room_check_count')
+                  .order('room_check_count DESC')
 
-      rooms_no_room_state = Room.left_outer_joins(:room_states)
-                                  .joins(floor: { building: :zone })
-                                  .where(buildings: { id: building_id, zone_id: zone_id })
-                                  .where(room_states: { id: nil })
-                                  .where.not(id: rooms.map(&:id))
-                                  .select('rooms.*')
-                                  .select('0 AS room_check_count')
-                                  .order('rooms.room_number')
+      rooms_no_room_state = Room.active
+                                .left_outer_joins(:room_states)
+                                .joins(floor: { building: :zone })
+                                .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                                .where(room_states: { id: nil })
+                                .where.not(id: rooms.map(&:id))
+                                .select('rooms.*')
+                                .select('0 AS room_check_count')
+                                .order('rooms.room_number')
 
       if rooms.any?
         oldest_record = rooms.min_by { |room| room.room_states.first.updated_at }
@@ -130,17 +133,18 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
 
-      rooms = Room.joins(floor: :building).joins(:room_states)
-                   .where(buildings: { id: building_id, zone_id: zone_id })
-                   .where(room_states: { updated_at: start_time..end_time })
-                   .where(room_states: { is_accessed: false })
-                   .group('rooms.id')
-                   .select('rooms.*')
-                   .select('COUNT(room_states.id) AS na_states_count')
-                   .select('array_agg(room_states.updated_at) as na_states_dates')
-                   .select('array_agg(room_states.no_access_reason) as na_states_reasons')
-                   .having('COUNT(room_states.id) > 0')
-                   .order('na_states_count DESC')
+      rooms = Room.active
+                  .joins(floor: :building).joins(:room_states)
+                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .where(room_states: { is_accessed: false })
+                  .group('rooms.id')
+                  .select('rooms.*')
+                  .select('COUNT(room_states.id) AS na_states_count')
+                  .select('array_agg(room_states.updated_at) as na_states_dates')
+                  .select('array_agg(room_states.no_access_reason) as na_states_reasons')
+                  .having('COUNT(room_states.id) > 0')
+                  .order('na_states_count DESC')
 
       if rooms.any?
         @title = 'No Access Report'
@@ -177,16 +181,18 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
 
-      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
-                   .where(buildings: { id: building_id, zone_id: zone_id })
-                   .where(room_states: { updated_at: start_time..end_time })
-                   .select('rooms.*')
-                   .select('room_states.updated_at')
-                   .select('common_attributes.description AS common_attribute_description')
-                   .select('common_attributes.need_checkbox as need_checkbox')
-                   .select('common_attribute_states.checkbox_value as checkbox_value')
-                   .select('common_attribute_states.quantity_box_value as quantity_box_value')
-                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
+      rooms = Room.active
+                  .joins(floor: { building: :zone }).joins(room_states: { common_attribute_states: :common_attribute })
+                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
+                  .where(room_states: { updated_at: start_time..end_time })
+                  .select('rooms.*')
+                  .select('room_states.updated_at')
+                  .select('common_attributes.description AS common_attribute_description')
+                  .select('common_attributes.need_checkbox as need_checkbox')
+                  .select('common_attribute_states.checkbox_value as checkbox_value')
+                  .select('common_attribute_states.quantity_box_value as quantity_box_value')
+                  .where('common_attributes.archived = FALSE')
+                  .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
 
       if rooms.any?
         @grouped = true
@@ -223,8 +229,9 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
 
-      rooms = Room.joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
-                  .where(buildings: { id: building_id, zone_id: zone_id })
+      rooms = Room.active
+                  .joins(floor: { building: :zone }).joins(room_states: { specific_attribute_states: :specific_attribute })
+                  .where(buildings: { id: building_id, zone_id: zone_id, archived: false })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
                   .select('specific_attributes.description AS specific_attribute_description')
@@ -232,6 +239,7 @@ class ReportsController < ApplicationController
                   .select('specific_attributes.need_checkbox as need_checkbox')
                   .select('specific_attribute_states.checkbox_value as checkbox_value')
                   .select('specific_attribute_states.quantity_box_value as quantity_box_value')
+                  .where('specific_attributes.archived = FALSE')
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, specific_attributes.description ASC')
 
       if rooms.any?
@@ -280,6 +288,7 @@ class ReportsController < ApplicationController
                   .select("resources.resource_type as resource_type")
                   .select('room_states.updated_at')
                   .select('resource_states.is_checked as check_value')
+                  .where('resources.archived = FALSE')
                   .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
 
@@ -316,7 +325,7 @@ class ReportsController < ApplicationController
 
   def set_form_values
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
-    @buildings = Building.where.not(zone: nil).map { |building| [building.zone_id, building.name, building.id] }
+    @buildings = Building.active.where.not(zone: nil).map { |building| [building.zone_id, building.name, building.id] }
   end
 
   def collect_form_params
