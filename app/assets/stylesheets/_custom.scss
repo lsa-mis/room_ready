@@ -33,6 +33,18 @@ $theme-colors: (
    // Add more custom colors or override existing ones here
 );
 
+$pagination-color: $um_blue; // Text color
+$pagination-bg: $body-bg; // Background color
+$pagination-border-color: $border-color; // Slightly darker border color
+
+$pagination-hover-color: white;
+$pagination-hover-bg: $um_blue; 
+$pagination-hover-border-color: $border-color;
+
+$pagination-active-color:           white;
+$pagination-active-bg:              $um_blue;
+$pagination-active-border-color:    $border-color;
+
 // Optionally, override other Bootstrap variables here
 // Extend the $spacers map
 $spacers: map-merge(
