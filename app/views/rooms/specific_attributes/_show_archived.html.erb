@@ -1,0 +1,15 @@
+<%= turbo_frame_tag 'show_archived' do %>
+  <% if @archived %>
+    <%= form_with url: room_specific_attributes_path, method: :get, class: "", 
+      data: { 
+        controller: "autosubmit", 
+        autosubmit_target: "form", 
+        turbo_frame: "specific_attributes_list"
+      } do |form| %>
+      <div class="mt-2">
+        <%= check_box_tag :show_archived, 1, params["show_archived"], class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
+        <%= form.label :show_archived, "Show Archived Specific Atributes" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

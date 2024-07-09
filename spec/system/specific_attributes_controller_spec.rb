@@ -78,7 +78,11 @@ RSpec.describe SpecificAttribute, type: :system do
         expect(SpecificAttribute.find(specific_attribute_id).present?).to be_truthy
       end
     end
+  end
 
+  context 'edit a specific attribute' do
+    let!(:specific_attribute) { FactoryBot.create(:specific_attribute) }
+    let!(:room_id) { specific_attribute.room.id }
     it 'click on delete icon and accept the alert message' do
       VCR.use_cassette "specific_attribute" do
         specific_attribute_id = specific_attribute.id
@@ -86,7 +90,7 @@ RSpec.describe SpecificAttribute, type: :system do
         accept_confirm 'Are you sure you want to delete this specific attribute?' do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
-        expect(page).to have_content("Specific attribute was successfully deleted.")
+        expect(page).to have_content("Specific attribute was deleted.")
         expect { SpecificAttribute.find(specific_attribute_id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

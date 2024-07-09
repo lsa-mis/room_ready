@@ -9,6 +9,7 @@
 #  room_id           :bigint           not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 FactoryBot.define do
   factory :specific_attribute do

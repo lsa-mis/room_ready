@@ -9,6 +9,7 @@
 #  room_id           :bigint           not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 class SpecificAttribute < ApplicationRecord
   belongs_to :room
@@ -17,6 +18,9 @@ class SpecificAttribute < ApplicationRecord
   validates :description, presence: true
   validates :description, uniqueness: { scope: [:room_id], message: "has already been taken for this room" }
   validate :needs_either_checkbox_or_quantity_box
+
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
 
   private
 

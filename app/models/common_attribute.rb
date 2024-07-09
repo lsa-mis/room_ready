@@ -8,6 +8,7 @@
 #  need_quantity_box :boolean
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  archived          :boolean          default(FALSE)
 #
 class CommonAttribute < ApplicationRecord
   has_many :common_attribute_states
@@ -15,6 +16,13 @@ class CommonAttribute < ApplicationRecord
   validates :description, presence: true, uniqueness: true
   validate :needs_checkbox_or_quantity_box
 
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
+
+  def has_state?
+    self.common_attribute_states.present?
+  end
+  
   private
 
   def needs_checkbox_or_quantity_box
