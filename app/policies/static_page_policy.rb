@@ -5,7 +5,7 @@ class StaticPagePolicy < ApplicationPolicy
   end
 
   def dashboard?
-    is_admin?
+    is_admin? || is_readonly?
   end
 
   def welcome_rovers?

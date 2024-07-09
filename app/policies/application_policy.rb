@@ -46,6 +46,10 @@ class ApplicationPolicy
     @role == "developer"
   end
 
+  def is_readonly?
+    @role == "readonly"
+  end
+
   def is_rover?
     @role == "rover"
   end

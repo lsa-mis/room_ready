@@ -95,6 +95,10 @@ module ApplicationHelper
     session[:role] == "developer" || session[:role] == "admin"
   end
 
+  def is_readonly?
+    session[:role] == "readonly"
+  end
+
   def choose_buildings_for_zone
     Building.active.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
   end
