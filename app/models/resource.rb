@@ -18,6 +18,9 @@ class Resource < ApplicationRecord
   validates :resource_type, presence: true
   validates :room_id, presence: true
 
+  scope :active, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
+
   def display_name
     "#{self.name} - #{self.resource_type}"
   end

@@ -19,6 +19,8 @@ class Room < ApplicationRecord
   has_many :specific_attributes
   has_many :active_specific_attributes, -> { active }, class_name: 'SpecificAttribute'
   has_many :archived_specific_attributes, -> { archived }, class_name: 'SpecificAttribute'
+  has_many :active_resources, -> { active }, class_name: 'Resource'
+  has_many :archived_resources, -> { archived }, class_name: 'Resource'
   has_many :room_states
   has_many :notes
 
