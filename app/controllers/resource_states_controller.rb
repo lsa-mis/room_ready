@@ -6,7 +6,7 @@ class ResourceStatesController < ApplicationController
   def new
     authorize ResourceState
 
-    @resource_states = @room.resources.all.map do |resource|
+    @resource_states = @room.active_resources.all.map do |resource|
       resource.resource_states.new
     end
   end

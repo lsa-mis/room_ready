@@ -15,7 +15,7 @@ class RoomStatus
   end
 
   def resources_exist?
-      @room.resources.count > 0
+      @room.active_resources.count > 0
   end
 
   def status_weight
