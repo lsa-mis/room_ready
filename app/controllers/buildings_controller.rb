@@ -199,7 +199,7 @@ class BuildingsController < ApplicationController
       ActiveRecord::Base.transaction do
         raise ActiveRecord::Rollback unless building.update(archived: archived)
         raise ActiveRecord::Rollback unless Room.where(floor_id: building.floors.ids).update_all(archived: archived)
-        rooms = archived ? Room.archived : Room.active
+        rooms = archived ? Room.archived.where(floor_id: building.floors.ids) : Room.active.where(floor_id: building.floors.ids)
         rooms.each do |room|
           raise ActiveRecord::Rollback unless room.specific_attributes.update(archived: archived)
           raise ActiveRecord::Rollback unless room.resources.update(archived: archived)
