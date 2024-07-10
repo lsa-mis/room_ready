@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = ["access", "noaccess"];
 
   noReasonField =  document.getElementById("no-reason").style;
+  noAccessReasonField = document.getElementById("no-access-reason");
 
   connect() {
     const isBothOptionsEmpty = !this.accessTarget.checked && !this.noaccessTarget.checked;
@@ -20,8 +21,10 @@ export default class extends Controller {
     const roverHasAccess = this.accessTarget.checked;
     if (!roverHasAccess){
       this.noReasonField.display = "block";
+      this.noAccessReasonField.required = true;
     } else {
       this.noReasonField.display = "none";
+      this.noAccessReasonField.required = false;
     }
   }
 }
