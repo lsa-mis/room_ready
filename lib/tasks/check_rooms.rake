@@ -1,4 +1,4 @@
-desc "Print all active rooms"
+desc "Automatically check all rooms that have not been checked today."
 task check_rooms: :environment do
   rooms = get_all_unchecked_rooms
   puts rooms.first.id
