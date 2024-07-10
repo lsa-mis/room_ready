@@ -46,7 +46,7 @@ def set_user
       session[:role] = "developer"
     elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-admins')
       session[:role] = "admin"
-    elsif LdapLookup.is_member_of_group?(@user.uniqname, ' lsa-roomready-admins-readonly')
+    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-admins-readonly')
       session[:role] = "readonly"
     elsif  Rover.exists?(uniqname: @user.uniqname)
       session[:role] = "rover"

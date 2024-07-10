@@ -69,7 +69,7 @@ class RoomsController < ApplicationController
 
   def archive
     session[:return_to] = request.referer
-    if @room.update(archived: true)
+    if change_room_archived_mode(room: @room, archived: true)
       redirect_back_or_default(notice: "The room was archived")
     else
       @rooms = Room.active.order(:name)
@@ -79,7 +79,7 @@ class RoomsController < ApplicationController
   def unarchive
     session[:return_to] = request.referer
     @archived = true
-    if @room.update(archived: false)
+    if change_room_archived_mode(room: @room, archived: false)
       redirect_back_or_default(notice: "The room was unarchived")
     else
       @rooms = Room.archived.order(:name)
@@ -109,6 +109,15 @@ class RoomsController < ApplicationController
         end
         true
       end
+    end
+
+    def change_room_archived_mode(room:, archived:)
+      ActiveRecord::Base.transaction do
+        raise ActiveRecord::Rollback unless room.update(archived: archived)
+        raise ActiveRecord::Rollback unless room.specific_attributes.update(archived: archived)
+        raise ActiveRecord::Rollback unless room.resources.update(archived: archived)
+      end
+      true
     end
 
     # Only allow a list of trusted parameters through.

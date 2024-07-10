@@ -1,7 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ show edit update destroy archive unarchive unarchive_index] 
-  # before_action :set_zone, only: %i[ new show create edit update index ]
   include BuildingApi
 
   def index
@@ -48,8 +47,6 @@ class BuildingsController < ApplicationController
   def show
     # to show/hide 'Show Archived Rooms' checkbox and show active or archived rooms on floors on Buiding show page
     @archived = params["show_archived_rooms"] == "1" ? true : false 
-
-    authorize @building
     floors = @building.floors
     floor_names_sorted = sort_floors(floors.pluck(:name).uniq)
     @floors = floors.in_order_of(:name, floor_names_sorted)
@@ -57,12 +54,10 @@ class BuildingsController < ApplicationController
 
   def edit
     @zones = Zone.all.map { |z| [z.name, z.id] }
-    authorize @building
   end
     
   # PATCH/PUT /buildings/1 or /buildings/1.json
   def update
-    authorize @building
     if @building.update(building_params)
       if @zone.present?
         redirect_to zone_buildings_path(@zone), notice: notice
@@ -75,7 +70,6 @@ class BuildingsController < ApplicationController
   end
 
   def destroy
-    authorize @building
     if @building.has_checked_rooms?
       flash.now['alert'] = "The buildings has checked rooms - archive this building instead"
       @buildings = Building.active.order(:name)
@@ -91,12 +85,10 @@ class BuildingsController < ApplicationController
 
   def archive
     session[:return_to] = request.referer
-    authorize @building
     if @building.zone.present?
       @building.update(zone_id: nil)
     end
-    if @building.update(archived: true)
-      change_rooms_archived_mode(@building, true)
+    if change_building_archived_mode(building: @building, archived: true)
       @buildings = Building.active.order(:name)
       redirect_back_or_default(notice: "The building was archived")
     else
@@ -106,10 +98,8 @@ class BuildingsController < ApplicationController
 
   def unarchive
     session[:return_to] = request.referer
-    authorize @building
     @archived = true
-    if @building.update(archived: false)
-      change_rooms_archived_mode(@building, false)
+    if change_building_archived_mode(building: @building, archived: false)
       @buildings = Building.archived.order(:name)
       redirect_back_or_default(notice: "The building was unarchived")
     else
@@ -121,8 +111,7 @@ class BuildingsController < ApplicationController
     session[:return_to] = request.referer
     authorize @building
     @archived = true
-    if @building.update(archived: false)
-      change_rooms_archived_mode(@building, false)
+    if change_building_archived_mode(building: @building, archived: false)
       @buildings = Building.archived.order(:name)
       @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
       @zones << ["No Zone", 0]
@@ -142,6 +131,7 @@ class BuildingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
+      authorize @building
     end
 
     def add_from_bldrecnbr
@@ -205,8 +195,17 @@ class BuildingsController < ApplicationController
       end
     end
 
-    def change_rooms_archived_mode(building, archived_mode)
-      Room.where(floor_id: building.floors.ids).update_all(archived: archived_mode)
+    def change_building_archived_mode(building:, archived:)
+      ActiveRecord::Base.transaction do
+        raise ActiveRecord::Rollback unless building.update(archived: archived)
+        raise ActiveRecord::Rollback unless Room.where(floor_id: building.floors.ids).update_all(archived: archived)
+        rooms = archived ? Room.archived.where(floor_id: building.floors.ids) : Room.active.where(floor_id: building.floors.ids)
+        rooms.each do |room|
+          raise ActiveRecord::Rollback unless room.specific_attributes.update(archived: archived)
+          raise ActiveRecord::Rollback unless room.resources.update(archived: archived)
+        end
+      end
+      true
     end
 
     def delete_building(building)

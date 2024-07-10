@@ -37,10 +37,6 @@
             </div>
 
             <h6 class="card-text mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>"><%= rooms_checked_for_date(zone, @selected_date) %>/<%= total_rooms(zone) %> Classrooms Complete</h6>
-
-            <div class="mt-auto d-flex">
-              <a href="" class="btn btn-primary btn-sm flex-fill">Details</a>
-            </div>
           </div>
         </div>
       </div>
@@ -79,9 +75,9 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Room <%= ticket.room.room_number %> - <%= ticket.room.floor.building.name.titleize %></h5>
+            <p class="card-text">Send to: <%= ticket.tdx_email %></p>
             <p class="card-text"><%= ticket.description %></p>
-            <p class="card-text">Submitted on: <%= show_date_with_time(ticket.created_at) %></p>
-            <p class="card-text">by: <%= ticket.submitted_by %></p>
+            <p class="card-text">Submitted on: <%= show_date_with_time(ticket.created_at) %> by: <%= ticket.submitted_by %></p>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ RSpec.describe SpecificAttribute, type: :system do
 		user = FactoryBot.create(:user)
     allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
     allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins-readonly').and_return(false)
     mock_login(user)
   end
 
