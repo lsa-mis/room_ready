@@ -225,3 +225,39 @@ svg.wh6 {
   background-color: $um_blue;
   color: $um_maize;
 }
+
+.nav-item.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+//hide name of user on mobile
+@media (max-width: 950px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 701px) {
+  .navbar .nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+
+  .burger-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar-toggler {
+    display: block;
+  }
+
+  .username-display {
+    display: none; 
+  }
+
+  .navbar-collapse {
+    display: none; 
+  }
+
+}
