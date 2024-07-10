@@ -16,7 +16,7 @@
       </div>
     <% end %>
 
-  
+
   <h2>Zone Overview</h2>
   <div class="row">    
     <% @zones.each do |zone| %>
@@ -83,5 +83,9 @@
       </div>
     <% end %>
   </div>
-<hr>
+  <hr>
+  <h2>Daily Resource Update Script</h2>
+  <% if @room_update_log %>
+    <%= render 'last_room_update_log', last_room_update_log: @room_update_log %>
+  <% end %>
 </div>

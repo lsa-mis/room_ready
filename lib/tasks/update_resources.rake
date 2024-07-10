@@ -59,18 +59,18 @@ task update_resources: :environment do
       end
     end
 
-    raise "Transaction failed, error updating resources: #{transaction_error.message}" unless transaction_succeeded
+    raise "Transaction failed, error updating resources: #{transaction_error}" unless transaction_succeeded
 
     if rooms_to_update.any?
       # these rooms were not updated because they don't eexist in wco
       list = Room.where(rmrecnbr: rooms_to_update).pluck(:rmrecnbr).join(", ")
       note = "Resources updated successfully for rooms. The following rooms don't exist in WebCheckout database: #{list}"
-      RoomUpdateLog.create(date: Date.today, note: note)
+      RoomUpdateLog.create(date: Date.today, note: "success-partial | #{note}")
     else
-      RoomUpdateLog.create(date: Date.today, note: "Resources updated successfully for all rooms")
+      RoomUpdateLog.create(date: Date.today, note: "success | Resources updated successfully for all rooms")
     end
   rescue StandardError => e
-    RoomUpdateLog.create(date: Date.today, note: e)
+    RoomUpdateLog.create(date: Date.today, note: "error | #{e}")
   end
 end
 

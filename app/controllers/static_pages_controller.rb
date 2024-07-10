@@ -19,6 +19,8 @@ class StaticPagesController < ApplicationController
 
   def dashboard
     authorize :static_page
+    @room_update_log = RoomUpdateLog.last
+
     @selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
 
     @latest_tickets = latest_room_tickets
