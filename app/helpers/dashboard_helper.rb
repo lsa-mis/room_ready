@@ -55,4 +55,7 @@ module DashboardHelper
         .count
   end
 
+  def room_update_log_status(log_note)
+    log_note.split("|").first.strip
+  end
 end
