@@ -173,16 +173,5 @@ module ApplicationHelper
     end
     return false
   end
-
-  def show_building_status(building)
-    return "Never checked" unless building.has_checked_rooms?
-    rooms = Room.active.where(floor_id: building.floors.ids)
-    statuses = rooms.map { |r| RoomStatus.new(r).calculate_percentage.to_i }
-    if statuses.present?
-      "Checked #{statuses.sum(0.0) / statuses.size}%"
-    else
-      "Not checked"
-    end
-  end
   
 end
