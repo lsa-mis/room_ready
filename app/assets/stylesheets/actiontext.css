@@ -29,3 +29,27 @@
   padding: 0 !important;
   max-width: 100% !important;
 }
+
+.trix-button--icon-decrease-nesting-level {
+  display: none;
+}
+
+.trix-button--icon-increase-nesting-level {
+  display: none;
+}
+
+.trix-button--icon-attach {
+  display: none;
+}
+
+.trix-button-group--file-tools {
+  display: none !important;
+}
+
+.trix-button--icon-quote {
+  display: none !important;
+}
+
+.trix-button--icon-code {
+  display: none !important;
+}
