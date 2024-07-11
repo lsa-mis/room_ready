@@ -11,12 +11,15 @@ RSpec.describe CommonAttributeState, type: :system do
 	end
 
 	context 'create a new common attribute state' do
-    let!(:room) { FactoryBot.create(:room) }
-    let!(:common_attribute1) { FactoryBot.create(:common_attribute) }
-    let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
+    # let!(:room) { FactoryBot.create(:room) }
+    # let!(:common_attribute1) { FactoryBot.create(:common_attribute) }
+    # let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
 
     it 'fills out the form and submits it' do
       VCR.use_cassette "common_attribute_state" do
+        room = FactoryBot.create(:room)
+        common_attribute1 = FactoryBot.create(:common_attribute)
+        common_attribute2 = FactoryBot.create(:common_attribute)
         visit "rooms/#{room.id}/room_states/new"
         find(:label, 'Yes').click
         click_on "Create Room State"
@@ -30,16 +33,24 @@ RSpec.describe CommonAttributeState, type: :system do
   end
   
   context 'edit a common attribute state' do
-    let!(:room) { FactoryBot.create(:room) }
-    let!(:common_attribute1) { FactoryBot.create(:common_attribute) }
-    let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
-    let!(:room_state) { FactoryBot.create(:room_state, room: room) }
-    let!(:common_attribute_state1) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute1) }
-    let!(:common_attribute_state2) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute2) }
-    let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
+    # let!(:room) { FactoryBot.create(:room) }
+    # let!(:common_attribute1) { FactoryBot.create(:common_attribute) }
+    # let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
+    # let!(:room_state) { FactoryBot.create(:room_state, room: room) }
+    # let!(:common_attribute_state1) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute1) }
+    # let!(:common_attribute_state2) { FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute2) }
+    # let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
 
     it 'fills out the form and submits it' do
       VCR.use_cassette "common_attribute_state" do
+        room = FactoryBot.create(:room)
+        common_attribute1 = FactoryBot.create(:common_attribute)
+        common_attribute2 = FactoryBot.create(:common_attribute)
+        room_state = FactoryBot.create(:room_state, room: room)
+        common_attribute_state1 = FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute1)
+        common_attribute_state2 = FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute2)
+        common_attribute2 = FactoryBot.create(:common_attribute)
+
         visit "rooms/#{room.id}/room_states/#{room_state.id}/edit"
         click_on "Update Room State"
         expect(page).to have_content("Editing Common Room Questions")
