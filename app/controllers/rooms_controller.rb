@@ -1,6 +1,6 @@
 class RoomsController < ApplicationController
   before_action :auth_user
-  before_action :set_room, only: %i[ show destroy archive unarchive ]
+  before_action :set_room, only: %i[ show destroy archive unarchive redirect_to_unchecked_form ]
   include BuildingApi
 
   # GET /rooms or /rooms.json
@@ -83,6 +83,22 @@ class RoomsController < ApplicationController
       redirect_back_or_default(notice: "The room was unarchived")
     else
       @rooms = Room.archived.order(:name)
+    end
+  end
+
+  def redirect_to_unchecked_form
+    room_state = RoomStatus.new(@room).room_state_today
+    if room_state.common_attribute_states.any?
+      if room_state.specific_attribute_states.any?
+        if room_state.resource_states.any?
+        else
+          redirect_to redirect_rover_to_correct_state(room: @room, room_state: room_state, step: "specific_attributes", mode: "new") 
+        end 
+      else 
+        redirect_to redirect_rover_to_correct_state(room: @room, room_state: room_state, step: "common_attributes", mode: "new")
+      end
+    else
+      redirect_to redirect_rover_to_correct_state(room: @room, room_state: room_state, step: "room", mode: "new")
     end
   end
 

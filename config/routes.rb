@@ -91,6 +91,8 @@ Rails.application.routes.draw do
 
   post '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
 
+  get '/redirect_to_unchecked_form/:id', to: 'rooms#redirect_to_unchecked_form', as: :redirect_to_unchecked_form
+
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
   # Place this at the very end of the file to catch all undefined routes

@@ -37,7 +37,11 @@
       </p>
       <p style="color:red">Last Time Checked: <%= show_date_with_time(room.last_time_checked) %> </p>
       <% if RoomStatus.new(room).room_checked_today? %>
-        <%= link_to "Edit Today's #{room.room_number}", edit_room_room_state_path(room, RoomStatus.new(room).room_state_today.id), class: "btn btn-primary" %>
+        <% if RoomStatus.new(room).calculate_percentage.to_f < 100.00 %>
+          <%= link_to "Continue Checking #{room.room_number}", redirect_to_unchecked_form_path(room), class: "btn btn-primary" %>
+        <% else %>
+          <%= link_to "Edit Today's #{room.room_number}", edit_room_room_state_path(room, RoomStatus.new(room).room_state_today.id), class: "btn btn-primary" %>
+        <% end %>
       <% else %>
         <%= link_to "Start Checking #{room.room_number}", new_room_room_state_path(room), class: "btn btn-primary" %>
       <% end %>
