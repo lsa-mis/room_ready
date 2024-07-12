@@ -44,46 +44,16 @@ class StaticPagesController < ApplicationController
 
     #   "Not accessed for over 7 days": RoomState.where(is_accessed: false).where.not(no_access_reason: [nil, ""]).where('updated_at < ?', Date.today - 7.days).count
     # }
+    # 
+    @rooms_not_checked_in_3_days = Room.where('DATE(last_time_checked) = ?', 3.days.ago.to_date)
+    @rooms_not_checked_4_to_7_days = Room.where('DATE(last_time_checked) >= ? AND DATE(last_time_checked) < ?', 7.days.ago.to_date, 3.days.ago.to_date)
+    @rooms_not_checked_7_plus_days = Room.where('DATE(last_time_checked) < ?', 7.days.ago.to_date)
 
     @room_check_in_data = {
-    "Not checked for 3 days": Room.joins(floor: :building)
-      .left_outer_joins(:room_states)
-      .where.not(buildings: { zone_id: nil })
-      .where(room_states: { id: nil })
-      .or(
-        Room.joins(floor: :building)
-            .left_outer_joins(:room_states)
-            .where.not(buildings: { zone_id: nil })
-            .where('room_states.created_at >= ?', Date.today - 3.days)
-            .where('room_states.created_at < ?', Date.today - 2.days)
-      )
-      .distinct.count,
-
-    "Not checked for 4 to 7 days": Room.joins(floor: :building)
-      .left_outer_joins(:room_states)
-      .where.not(buildings: { zone_id: nil })
-      .where(room_states: { id: nil })
-      .or(
-        Room.joins(floor: :building)
-            .left_outer_joins(:room_states)
-            .where.not(buildings: { zone_id: nil })
-            .where('room_states.created_at < ?', Date.today - 4.days)
-            .where('room_states.created_at >= ?', Date.today - 7.days)
-      )
-      .distinct.count,
-
-    "Not checked for over 7 days": Room.joins(floor: :building)
-      .left_outer_joins(:room_states)
-      .where.not(buildings: { zone_id: nil })
-      .where(room_states: { id: nil })
-      .or(
-        Room.joins(floor: :building)
-            .left_outer_joins(:room_states)
-            .where.not(buildings: { zone_id: nil })
-            .where('room_states.created_at < ?', Date.today - 7.days)
-      )
-      .distinct.count
-}
+      "Not checked for 3 days" => @rooms_not_checked_in_3_days.count,
+      "Not checked for 4 to 7 days" => @rooms_not_checked_4_to_7_days.count,
+      "Not checked for over 7 days" => @rooms_not_checked_7_plus_days.count
+    }
     
   end
 
