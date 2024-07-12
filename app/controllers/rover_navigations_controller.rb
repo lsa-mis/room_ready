@@ -27,6 +27,24 @@ class RoverNavigationsController < ApplicationController
     end
   end
 
+  def redirect_to_unchecked_form
+    room = Room.find(params[:id])
+    authorize :rover_navigation
+    room_state = RoomStatus.new(room).room_state_today
+    if room_state.common_attribute_states.any?
+      if room_state.specific_attribute_states.any?
+        if room_state.resource_states.any?
+        else
+          redirect_to redirect_rover_to_correct_state(room: room, room_state: room_state, step: "specific_attributes", mode: "new") 
+        end 
+      else 
+        redirect_to redirect_rover_to_correct_state(room: room, room_state: room_state, step: "common_attributes", mode: "new")
+      end
+    else
+      redirect_to redirect_rover_to_correct_state(room: room, room_state: room_state, step: "room", mode: "new")
+    end
+  end
+
   def confirmation
     authorize :rover_navigation, :confirmation?
     @room = Room.find(params[:room_id])

@@ -75,6 +75,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'redirect_to_unchecked_form/:id', to: 'rover_navigations#redirect_to_unchecked_form', as: :redirect_to_unchecked_form
+
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -90,8 +93,6 @@ Rails.application.routes.draw do
   get 'welcome_rovers', to: 'static_pages#welcome_rovers', as: :welcome_rovers
 
   post '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
-
-  get '/redirect_to_unchecked_form/:id', to: 'rooms#redirect_to_unchecked_form', as: :redirect_to_unchecked_form
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 

@@ -27,7 +27,4 @@ class RoomPolicy < ApplicationPolicy
     is_admin?
   end
 
-  def redirect_to_unchecked_form?
-    is_admin? || is_rover?
-  end
 end

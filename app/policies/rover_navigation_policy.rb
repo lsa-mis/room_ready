@@ -14,4 +14,9 @@ class RoverNavigationPolicy < ApplicationPolicy
   def confirmation?
     is_rover? || is_admin?
   end
+
+  def redirect_to_unchecked_form?
+    is_rover? || is_admin?
+  end
+
 end
