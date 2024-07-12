@@ -94,10 +94,11 @@ class StaticPagesController < ApplicationController
       .where.not(buildings: { zone_id: nil })
     rooms.each do |room|
 
-      states = room.room_states.reverse.pluck(:is_accessed, :updated_at)[..number]
-      if states.length == number
+      # states = room.room_states.reverse.pluck(:is_accessed, :updated_at)[..number]
+      states = room.room_states.order('updated_at DESC').limit(number + 1).pluck(:is_accessed, :updated_at)
+      if states.length == number + 1
         result = Array.new(number, false) + [true]
-        if states.map { |item| item[0] } == result  && s[number][1].to_date == Date.today - number.day
+        if states.map { |item| item[0] } == result  && states[number][1].to_date == Date.today - number.day
           result_rooms << room
         end
       end
