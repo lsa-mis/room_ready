@@ -96,9 +96,9 @@ class ReportsController < ApplicationController
                                 .order('rooms.room_number')
 
       if rooms.any?
-        oldest_record = rooms.min_by { |room| room.room_states.first.updated_at }
-        oldest_record_date = oldest_record.room_states.first.updated_at
-        start_time = oldest_record_date.to_date if oldest_record_date < start_time || start_time == Date.new(0)
+        # oldest_record = rooms.min_by { |room| room.room_states.first.updated_at }
+        # oldest_record_date = oldest_record.room_states.first.updated_at
+        # start_time = oldest_record_date.to_date if oldest_record_date > start_time || start_time == Date.new(0)
         days = (end_time.to_date - start_time.to_date).to_i
 
         rooms = rooms + rooms_no_room_state
