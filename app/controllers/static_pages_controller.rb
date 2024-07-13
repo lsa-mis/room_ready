@@ -28,9 +28,9 @@ class StaticPagesController < ApplicationController
     @zones = Zone.all.order(:name)
 
     @room_access_data = {
-      "Not accessed for 3 days": rooms_not_accessed_for_number_of_days(3).count,
-      "Not accessed for 4 days": rooms_not_accessed_for_number_of_days(4).count,
-      "Not accessed for 5 days": rooms_not_accessed_for_number_of_days(5).count
+      "Not accessed 3 times": rooms_not_accessed_for_number_of_days(3).count,
+      "Not accessed 5 times": rooms_not_accessed_for_number_of_days(5).count,
+      "Not accessed 7 times": rooms_not_accessed_for_number_of_days(7).count
     }
 
     @rooms_not_checked_in_3_days = Room.active.where('DATE(last_time_checked) = ?', 3.days.ago.to_date)
@@ -54,17 +54,9 @@ class StaticPagesController < ApplicationController
     rooms = Room.active.joins(floor: :building)
       .where.not(buildings: { zone_id: nil })
     rooms.each do |room|
-      states = room.room_states.order('updated_at DESC').limit(number + 1).pluck(:is_accessed, :updated_at)
-      if states.length == number + 1
-        result = Array.new(number, false) + [true]
-        if states[0][1].to_date == Date.today
-          date_to_compare = Date.today - number.day
-        else 
-          date_to_compare = Date.today - (number + 1).day
-        end
-        if states.map { |item| item[0] } == result  && states[number][1].to_date == date_to_compare
-          result_rooms << room
-        end
+      states = room.room_states.order('updated_at DESC').limit(number).pluck(:is_accessed)
+      if states.length == number && (states.all? false)
+        result_rooms << room
       end
     end
     return result_rooms
