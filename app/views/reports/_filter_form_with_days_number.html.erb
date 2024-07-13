@@ -1,6 +1,6 @@
 <!-- turning off turbo for the form is necessary - otherwise the browser doesn't download the csv properly -->
 <%= form_with url: report_url, method: :get, data: { turbo: false, controller: "dynamic-building-select" }, class: "mb-3" do |form| %>
-  <div>
+  <div class="nowrap">
     <div class="d-flex flex-row justify-content-start align-items-center gap-3" >
       <%= form.label :zone, "Select a Zone: ", class: "form-label" %>
       <%= form.select :zone_id, options_for_select(@zones, selected: params[:zone_id]),
@@ -15,12 +15,12 @@
     </div>
     <%= tag.div data: { dynamic_building_select_target: "buildingsData", buildings: @buildings.to_json } %>
     <div class="d-flex flex-row justify-content-start align-items-center gap-3" >
-      <%= form.label :number, "Number of Days: "%>
+      <%= form.label :number, "Last Checks Number: "%>
       <%= form.number_field :number, value: params[:number] || 1, class: "form-control" %>
     </div>
     <!-- define additional specific fields inside a block when using render -->
     <%= yield form %>
-    <div class="d-flex flex-row justify-content-start align-items-center" >
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3" >
       <%= form.label :format, "Report Type: ", class: "form-label" %>
       <%= form.select :format, options_for_select([["Display in Browser", "html"], ["Export to CSV", "csv"]],
                                                   selected: params[:format]), {}, class: "form-select" %>

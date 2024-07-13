@@ -1,0 +1,15 @@
+<div class="d-flex flex-row align-items-center justify-content-between">
+  <h1>No Access for Several Last Checks</h1>
+  <%= link_to 'Back to Reports', reports_path, class: "link_to" %>
+</div>
+<h6>
+  This report shows information on Rooms that were not able to be accessed during several last checks.
+</h6>
+
+<div class="py-3">
+  <%= render 'filter_form_with_days_number', report_url: no_access_for_n_days_report_reports_path %>
+
+  <% if params[:commit] && params[:format] == 'html' %>
+    <%= render 'reports_table' %>
+  <% end %>
+</div>
