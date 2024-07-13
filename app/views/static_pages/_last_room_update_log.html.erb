@@ -20,9 +20,9 @@
         <% elsif room_update_log_status(last_room_update_log.note) == 'success-partial' %>
           Resources updated successfully for rooms.
           <a class="text-primary" data-bs-toggle="collapse" href="#nonExistingRooms" role="button" aria-expanded="false" aria-controls="nonExistingRooms">
-            These
+            These rooms
           </a>
-          rooms (rmrecnbr) don't exist in WebCheckout.
+          don't exist in WebCheckout.
           <div class="collapse" id="nonExistingRooms">
             <div class="card card-body">
               <%= last_room_update_log.note.split(':').last.strip %>
