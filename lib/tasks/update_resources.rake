@@ -63,7 +63,7 @@ task update_resources: :environment do
 
     if rooms_to_update.any?
       # these rooms were not updated because they don't eexist in wco
-      list = Room.where(rmrecnbr: rooms_to_update).pluck(:rmrecnbr).join(", ")
+      list = Room.where(rmrecnbr: rooms_to_update).map { |r| r.floor.building.nick_name.present? ? [r.floor.building.nick_name, r.room_number].join(' ') : [r.floor.building.name,  r.room_number].join(' ')  }
       note = "Resources updated successfully for rooms. The following rooms don't exist in WebCheckout database: #{list}"
       RoomUpdateLog.create(date: Date.today, note: "success-partial | #{note}")
     else
