@@ -8,10 +8,11 @@ class ReportsController < ApplicationController
       {title: "Room Issues", url: room_issues_report_reports_path },
       {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
+      {title: "No Access During Last Checks", url: no_access_for_n_days_report_reports_path },
+      {title: "Not Checked Rooms", url: not_checked_rooms_report_reports_path },
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
       {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
       {title: "Resource States", url: resource_states_report_reports_path },
-      {title: "No Access for Several Days", url: no_access_in_n_days_report_reports_path },
     ]
   end
 
@@ -173,8 +174,8 @@ class ReportsController < ApplicationController
     end
   end
 
-  def no_access_in_n_days_report
-    authorize :report, :no_access_in_n_days_report?
+  def no_access_for_n_days_report
+    authorize :report, :no_access_for_n_days_report?
 
     if params[:commit]
       zone_id, building_id, number = collect_form_with_number_params
@@ -186,21 +187,16 @@ class ReportsController < ApplicationController
       if rooms.any?
         result_rooms = []
         rooms.each do |room|
-          states = room.room_states.order('updated_at DESC').limit(number).pluck(:is_accessed, :updated_at)
-          if states.length == number
-            result = Array.new(number, false)
-            if states[0][1].to_date == Date.today
-              date_to_compare = Date.today - (number - 1).day
-            else 
-              date_to_compare = Date.today - number.day
-            end
-            if states.map { |item| item[0] } == result  && states[number -1][1].to_date == date_to_compare
-              result_rooms << room
-            end
+          states = room.room_states.order('updated_at DESC').limit(number).pluck(:is_accessed)
+          if states.length == number && (states.all? false)
+            result_rooms << room
           end
         end
         if result_rooms.present?
-          @title = 'No Access in' + number.to_s + 'Days Report'
+          @metrics = {
+            'Total Rooms Count' => result_rooms.count,
+          }
+          @title = 'No Access for ' + number.to_s + ' Days Report'
           @headers = ['Room Number', 'Building', 'Zone']
           @data = result_rooms.map do |room|
             [
@@ -212,10 +208,42 @@ class ReportsController < ApplicationController
         end
       end
     end
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'no_access_for_n_days_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def not_checked_rooms_report
+    authorize :report, :not_checked_rooms_report?
+
+    if params[:commit]
+      zone_id, building_id, number = collect_form_with_number_params
+
+      rooms = Room.active
+                  .joins(floor: :building)
+                  .where(buildings: { id: building_id, zone_id: zone_id })
+                  .where('DATE(last_time_checked) = ?', number.days.ago.to_date)
+      if rooms.any?
+        @metrics = {
+          'Total Rooms Count' => rooms.count,
+        }
+        @title = 'Not Checked for ' + number.to_s + ' Days Report'
+
+        @headers = ['Room Number', 'Building', 'Zone']
+        @data = rooms.map do |room|
+          [
+            room.room_number,
+            room.floor.building.name,
+            show_zone(room.floor.building),
+          ]
+        end
+      end
+    end
 
     respond_to do |format|
       format.html
-      format.csv { send_data csv_data, filename: 'no_access_in_n_days_report.csv', type: 'text/csv' }
+      format.csv { send_data csv_data, filename: 'not_checked_rooms_report.csv', type: 'text/csv' }
     end
   end
 
