@@ -11,6 +11,7 @@ class ReportsController < ApplicationController
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
       {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
       {title: "Resource States", url: resource_states_report_reports_path },
+      {title: "No Access for Several Days", url: no_access_in_n_days_report_reports_path },
     ]
   end
 
@@ -169,6 +170,52 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'no_access_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def no_access_in_n_days_report
+    authorize :report, :no_access_in_n_days_report?
+
+    if params[:commit]
+      zone_id, building_id, number = collect_form_with_number_params
+
+      rooms = Room.active
+                  .joins(floor: :building)
+                  .where(buildings: { id: building_id, zone_id: zone_id })
+
+      if rooms.any?
+        result_rooms = []
+        rooms.each do |room|
+          states = room.room_states.order('updated_at DESC').limit(number).pluck(:is_accessed, :updated_at)
+          if states.length == number
+            result = Array.new(number, false)
+            if states[0][1].to_date == Date.today
+              date_to_compare = Date.today - (number - 1).day
+            else 
+              date_to_compare = Date.today - number.day
+            end
+            if states.map { |item| item[0] } == result  && states[number -1][1].to_date == date_to_compare
+              result_rooms << room
+            end
+          end
+        end
+        if result_rooms.present?
+          @title = 'No Access in' + number.to_s + 'Days Report'
+          @headers = ['Room Number', 'Building', 'Zone']
+          @data = result_rooms.map do |room|
+            [
+              room.room_number,
+              room.floor.building.name,
+              show_zone(room.floor.building)
+            ]
+          end
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'no_access_in_n_days_report.csv', type: 'text/csv' }
     end
   end
 
@@ -332,6 +379,14 @@ class ReportsController < ApplicationController
     end_time = params[:to].present? ? Date.parse(params[:to]).end_of_day : DateTime::Infinity.new
     [zone_id, building_id, start_time, end_time]
   end
+
+  def collect_form_with_number_params
+    zone_id = params[:zone_id].presence || Zone.all.pluck(:id).push(nil)
+    building_id = params[:building_id].presence || Building.all.pluck(:id).push(nil)
+    number = params[:number].presence.to_i || 1
+    [zone_id, building_id, number]
+  end
+
 
   def csv_data
     CSV.generate(headers: true) do |csv|

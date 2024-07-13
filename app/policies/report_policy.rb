@@ -26,4 +26,8 @@ class ReportPolicy < ApplicationPolicy
   def resource_states_report?
     is_admin? || is_readonly?
   end
+
+  def no_access_in_n_days_report?
+    is_admin? || is_readonly?
+  end
 end
