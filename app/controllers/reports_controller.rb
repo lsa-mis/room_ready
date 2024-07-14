@@ -441,7 +441,12 @@ class ReportsController < ApplicationController
       else
         csv << []
         csv << @headers
-        @data.each { |row| csv << row }
+        @data.each do |row|
+          if @room_link
+            row[0] = row[0].room_number
+          end
+          csv << row
+        end
       end
     end
   end
