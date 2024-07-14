@@ -44,6 +44,12 @@
     <tbody class="table-group-divider">
     <% @data.each do |row| %>
       <tr>
+        <% if @room_link %>
+          <td><%= link_to row[0].room_number, room_path(row[0]), class: "link_to" %> </td>
+        <% else %>
+          <td><%= row[0] %></td>
+        <% end %>
+        <% row.shift(1) %>
         <% row.each do |cell| %>
           <td><%= cell %></td>
         <% end %>

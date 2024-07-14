@@ -55,9 +55,10 @@ class ReportsController < ApplicationController
           'Total Tickets Count' => rooms.sum(&:tickets_count),
         }
         @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.tickets_count,
@@ -108,9 +109,10 @@ class ReportsController < ApplicationController
           'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",
         }
         @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.room_check_count,
@@ -151,9 +153,10 @@ class ReportsController < ApplicationController
           'Total No Access Count' => rooms.sum(&:na_states_count)
         }
         @headers = ['Room Number', 'Building', 'Zone', 'No Access Count', 'Dates and Reasons for No Access (Most Recent 5)']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.na_states_count,
@@ -177,6 +180,7 @@ class ReportsController < ApplicationController
   def no_access_for_n_days_report
     authorize :report, :no_access_for_n_days_report?
 
+    @number_label = "Number of Last Checks:"
     if params[:commit]
       zone_id, building_id, number = collect_form_with_number_params
 
@@ -198,9 +202,10 @@ class ReportsController < ApplicationController
           }
           @title = 'No Access for ' + number.to_s + ' Days Report'
           @headers = ['Room Number', 'Building', 'Zone']
+          @room_link = true
           @data = result_rooms.map do |room|
             [
-              room.room_number,
+              room,
               room.floor.building.name,
               show_zone(room.floor.building)
             ]
@@ -217,13 +222,14 @@ class ReportsController < ApplicationController
   def not_checked_rooms_report
     authorize :report, :not_checked_rooms_report?
 
+    @number_label = "Number of Days:"
     if params[:commit]
       zone_id, building_id, number = collect_form_with_number_params
 
       rooms = Room.active
                   .joins(floor: :building)
                   .where(buildings: { id: building_id, zone_id: zone_id })
-                  .where('DATE(last_time_checked) = ?', number.days.ago.to_date)
+                  .where('DATE(last_time_checked) < ?', number.days.ago.to_date)
       if rooms.any?
         @metrics = {
           'Total Rooms Count' => rooms.count,
@@ -231,9 +237,10 @@ class ReportsController < ApplicationController
         @title = 'Not Checked for ' + number.to_s + ' Days Report'
 
         @headers = ['Room Number', 'Building', 'Zone']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
           ]
