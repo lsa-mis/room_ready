@@ -33,7 +33,7 @@ class StaticPagesController < ApplicationController
       "Not accessed 7 times": rooms_not_accessed_for_number_of_days(7).count
     }
 
-    @rooms_not_checked_in_3_days = Room.active.where('DATE(last_time_checked) = ?', 3.days.ago.to_date)
+    @rooms_not_checked_in_3_days = Room.active.where('DATE(last_time_checked) < ?', 3.days.ago.to_date)
     @rooms_not_checked_4_to_7_days = Room.active.where('DATE(last_time_checked) >= ? AND DATE(last_time_checked) < ?', 7.days.ago.to_date, 3.days.ago.to_date)
     @rooms_not_checked_7_plus_days = Room.active.where('DATE(last_time_checked) < ?', 7.days.ago.to_date)
     @rooms_never_checked = Room.active.where(last_time_checked: nil)
