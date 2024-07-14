@@ -11,25 +11,27 @@
 </div>
 <%= render @building %>
 
-<% if has_archived_rooms?(@building) %>
-  <%= form_with url: building_path(@building), method: :get, class: "", 
-        data: { 
-          controller: "autosubmit", 
-          autosubmit_target: "form", 
-          turbo_frame: "all_floors" 
-        } do |form| %>
+<% unless @building.archived %>
+  <% if has_archived_rooms?(@building) %>
+    <%= form_with url: building_path(@building), method: :get, class: "", 
+          data: { 
+            controller: "autosubmit", 
+            autosubmit_target: "form", 
+            turbo_frame: "all_floors" 
+          } do |form| %>
 
-    <div class="mt-2">
-      <%= form.check_box :show_archived_rooms, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
-      <%= form.label :show_archived_rooms, "Show Archived Rooms" %>
-    </div>
+      <div class="mt-2">
+        <%= form.check_box :show_archived_rooms, class: "form-check-input", data: { action: "input->autosubmit#search" }  %>
+        <%= form.label :show_archived_rooms, "Show Archived Rooms" %>
+      </div>
+    <% end %>
   <% end %>
+
+
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <h2>Rooms </h2>
+    <%= link_to "Add Room", new_room_path(:building_id => @building.id), class: "mt-3 link_to" %>
+  </div>
+
+  <%= render 'floors' %>
 <% end %>
-
-
-<div class="d-flex flex-row justify-content-start align-items-center gap-3">
-  <h2>Rooms </h2>
-  <%= link_to "Add Room", new_room_path(:building_id => @building.id), class: "mt-3 link_to" %>
-</div>
-
-<%= render 'floors' %>
