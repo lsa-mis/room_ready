@@ -275,6 +275,7 @@ class ReportsController < ApplicationController
 
       if rooms.any?
         @grouped = true
+        @room_link = true
         @title = 'Common Attribute States Report'
 
         earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
@@ -283,12 +284,12 @@ class ReportsController < ApplicationController
         header_end = end_time == Date::Infinity.new ? latest_date : end_time
 
         @date_headers = (header_start.to_date..header_end.to_date).to_a
-        @headers = ['Zone', 'Building', 'Room'] + @date_headers
+        @headers = [ 'Room', 'Building', 'Zone'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-            key = [show_zone(room.floor.building), room.floor.building.name, room.room_number]
+            key = [[room.room_number, room.id], room.floor.building.name, show_zone(room.floor.building)]
             value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
             pivot_table[key][room.updated_at.to_date] = value
           end
@@ -333,7 +334,8 @@ class ReportsController < ApplicationController
         @date_headers = (header_start.to_date..header_end.to_date).to_a
         @headers = ['Specific Attribute'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |",  room] }
+        @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.specific_attribute_description}"]
@@ -383,7 +385,8 @@ class ReportsController < ApplicationController
         @date_headers = (header_start.to_date..header_end.to_date).to_a
         @headers = ['Resource'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |", room] }
+        @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.resource_name} (#{room.resource_type})"]
