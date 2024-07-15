@@ -8,6 +8,8 @@ class ReportsController < ApplicationController
       {title: "Room Issues", url: room_issues_report_reports_path },
       {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
+      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path },
+      {title: "Not Checked Rooms", url: not_checked_rooms_report_reports_path },
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
       {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
       {title: "Resource States", url: resource_states_report_reports_path },
@@ -53,9 +55,10 @@ class ReportsController < ApplicationController
           'Total Tickets Count' => rooms.sum(&:tickets_count),
         }
         @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.tickets_count,
@@ -106,9 +109,10 @@ class ReportsController < ApplicationController
           'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",
         }
         @headers = ['Room Number', 'Building', 'Zone', '# Checks', 'Inspection Rate']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.room_check_count,
@@ -149,9 +153,10 @@ class ReportsController < ApplicationController
           'Total No Access Count' => rooms.sum(&:na_states_count)
         }
         @headers = ['Room Number', 'Building', 'Zone', 'No Access Count', 'Dates and Reasons for No Access (Most Recent 5)']
+        @room_link = true
         @data = rooms.map do |room|
           [
-            room.room_number,
+            room,
             room.floor.building.name,
             show_zone(room.floor.building),
             room.na_states_count,
@@ -169,6 +174,83 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data csv_data, filename: 'no_access_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def no_access_for_n_times_report
+    authorize :report, :no_access_for_n_times_report?
+
+    @number_label = "Number of Last Checks:"
+    if params[:commit]
+      zone_id, building_id, number = collect_form_with_number_params
+
+      rooms = Room.active
+                  .joins(floor: :building)
+                  .where(buildings: { id: building_id, zone_id: zone_id })
+
+      if rooms.any?
+        result_rooms = []
+        rooms.each do |room|
+          states = room.room_states.order('updated_at DESC').limit(number).pluck(:is_accessed)
+          if states.length == number && (states.all? false)
+            result_rooms << room
+          end
+        end
+        if result_rooms.present?
+          @metrics = {
+            'Total Rooms Count' => result_rooms.count,
+          }
+          @title = 'No Access for ' + number.to_s + ' Days Report'
+          @headers = ['Room Number', 'Building', 'Zone']
+          @room_link = true
+          @data = result_rooms.map do |room|
+            [
+              room,
+              room.floor.building.name,
+              show_zone(room.floor.building)
+            ]
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'no_access_for_n_times_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def not_checked_rooms_report
+    authorize :report, :not_checked_rooms_report?
+
+    @number_label = "Number of Days:"
+    if params[:commit]
+      zone_id, building_id, number = collect_form_with_number_params
+
+      rooms = Room.active
+                  .joins(floor: :building)
+                  .where(buildings: { id: building_id, zone_id: zone_id })
+                  .where('DATE(last_time_checked) < ?', number.days.ago.to_date)
+      if rooms.any?
+        @metrics = {
+          'Total Rooms Count' => rooms.count,
+        }
+        @title = 'Not Checked for ' + number.to_s + ' Days Report'
+
+        @headers = ['Room Number', 'Building', 'Zone']
+        @room_link = true
+        @data = rooms.map do |room|
+          [
+            room,
+            room.floor.building.name,
+            show_zone(room.floor.building),
+          ]
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'not_checked_rooms_report.csv', type: 'text/csv' }
     end
   end
 
@@ -193,6 +275,7 @@ class ReportsController < ApplicationController
 
       if rooms.any?
         @grouped = true
+        @room_link = true
         @title = 'Common Attribute States Report'
 
         earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
@@ -201,12 +284,12 @@ class ReportsController < ApplicationController
         header_end = end_time == Date::Infinity.new ? latest_date : end_time
 
         @date_headers = (header_start.to_date..header_end.to_date).to_a
-        @headers = ['Zone', 'Building', 'Room'] + @date_headers
+        @headers = [ 'Room', 'Building', 'Zone'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-            key = [show_zone(room.floor.building), room.floor.building.name, room.room_number]
+            key = [[room.room_number, room.id], room.floor.building.name, show_zone(room.floor.building)]
             value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
             pivot_table[key][room.updated_at.to_date] = value
           end
@@ -251,7 +334,8 @@ class ReportsController < ApplicationController
         @date_headers = (header_start.to_date..header_end.to_date).to_a
         @headers = ['Specific Attribute'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |",  room] }
+        @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.specific_attribute_description}"]
@@ -301,7 +385,8 @@ class ReportsController < ApplicationController
         @date_headers = (header_start.to_date..header_end.to_date).to_a
         @headers = ['Resource'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| "#{show_zone(room.floor.building)} | #{room.floor.building.name} | #{room.room_number}" }
+        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |", room] }
+        @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
             key = ["#{room.resource_name} (#{room.resource_type})"]
@@ -333,6 +418,14 @@ class ReportsController < ApplicationController
     [zone_id, building_id, start_time, end_time]
   end
 
+  def collect_form_with_number_params
+    zone_id = params[:zone_id].presence || Zone.all.pluck(:id).push(nil)
+    building_id = params[:building_id].presence || Building.all.pluck(:id).push(nil)
+    number = params[:number].presence.to_i || 1
+    [zone_id, building_id, number]
+  end
+
+
   def csv_data
     CSV.generate(headers: true) do |csv|
       next csv << ["No data found"] if !@data
@@ -344,14 +437,22 @@ class ReportsController < ApplicationController
       if @grouped
         @data.each do |group, pivot_table|
           csv << []
-          csv << [group]
+          csv << (@group_link && group.is_a?(Array) ? ["#{group[0]} #{group[1].room_number}"] : [group])
           csv << @headers
-          pivot_table.each { |keys, record| csv << keys + @date_headers.map { |date| record[date] } }
+          pivot_table.each do |keys, record|
+            keys = [keys[0][0]] + keys[1..] if @room_link && keys[0].is_a?(Array)
+            csv << keys + @date_headers.map { |date| record[date] }
+          end          
         end
       else
         csv << []
         csv << @headers
-        @data.each { |row| csv << row }
+        @data.each do |row|
+          if @room_link
+            row[0] = row[0].room_number
+          end
+          csv << row
+        end
       end
     end
   end

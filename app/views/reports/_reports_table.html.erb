@@ -6,7 +6,11 @@
   <h3>No data found</h3>
 <% elsif @grouped %>
   <% @data.each do |group, pivot_table| %>
-    <h4><%= group %></h4>
+    <% if @group_link %>
+      <h4><%= group[0] %> <%= link_to group[1].room_number, room_path(group[1]), class: "link_to" %></h4>
+    <% else %>
+       <h4><%= group %></h4>
+    <% end %>
     <table class="table text-center table-striped mt-4">
       <thead class="table-group-divider">
       <tr>
@@ -18,6 +22,12 @@
       <tbody class="table-group-divider">
         <% pivot_table.each do |keys, record| %>
           <tr>
+            <% if @room_link %>
+              <td><%= link_to keys[0][0], room_path(keys[0][1]), class: "link_to" %> </td>
+            <% else %>
+              <td><%= keys[0] %></td>
+            <% end %>
+            <% keys.shift(1) %>
             <% keys.each do |key| %>
               <td><%= key %></td>
             <% end %>
@@ -44,6 +54,12 @@
     <tbody class="table-group-divider">
     <% @data.each do |row| %>
       <tr>
+        <% if @room_link %>
+          <td><%= link_to row[0].room_number, room_path(row[0]), class: "link_to" %> </td>
+        <% else %>
+          <td><%= row[0] %></td>
+        <% end %>
+        <% row.shift(1) %>
         <% row.each do |cell| %>
           <td><%= cell %></td>
         <% end %>

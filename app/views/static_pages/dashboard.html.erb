@@ -43,12 +43,12 @@
     <% end %>
   </div>
 <hr>
-  <h2>Reports</h2>
+  <h2>Reports for Last Checks</h2>
   <div class="row">
     <div class="col-md-6 col-lg-4 mb-3">
       <div class="card">
         <div class="card-header">
-          <h4>No Room Access for Various Reasons</h4>
+          <h4>Rooms were not Accessable</h4>
         </div>
         <div class="card-body">
           <%= pie_chart @room_access_data %>
@@ -59,7 +59,7 @@
     <div class="col-md-6 col-lg-4 mb-3">
       <div class="card">
         <div class="card-header">
-          <h4>Rooms Were Not Checked by Rovers</h4>
+          <h4>Rooms were not Checked</h4>
         </div>
         <div class="card-body">
           <%= pie_chart @room_check_in_data %>
