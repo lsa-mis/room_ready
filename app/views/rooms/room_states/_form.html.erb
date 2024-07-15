@@ -29,6 +29,7 @@
     <%= form.label :no_access_reason, "Can not access the room because: ", style: "display: block" %>
     <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason"}, { class: "input_text_field", id: "no-access-reason" } %>
   </div>
+  <%= form.hidden_field :checked_by, value: current_user.uniqname %>
 
   <div>
     <% if action_name == "new" %>
