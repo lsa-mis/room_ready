@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       get 'common_attribute_states_report', to: 'reports#common_attribute_states_report'
       get 'specific_attribute_states_report', to: 'reports#specific_attribute_states_report'
       get 'resource_states_report', to: 'reports#resource_states_report'
-      get 'no_access_for_n_days_report', to: 'reports#no_access_for_n_days_report'
+      get 'no_access_for_n_times_report', to: 'reports#no_access_for_n_times_report'
       get 'not_checked_rooms_report', to: 'reports#not_checked_rooms_report'
     end
   end

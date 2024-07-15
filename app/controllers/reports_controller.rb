@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
       {title: "Room Issues", url: room_issues_report_reports_path },
       {title: "Inspection Rate", url: inspection_rate_report_reports_path },
       {title: "No Access", url: no_access_report_reports_path },
-      {title: "No Access During Last Checks", url: no_access_for_n_days_report_reports_path },
+      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path },
       {title: "Not Checked Rooms", url: not_checked_rooms_report_reports_path },
       {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
       {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
@@ -177,8 +177,8 @@ class ReportsController < ApplicationController
     end
   end
 
-  def no_access_for_n_days_report
-    authorize :report, :no_access_for_n_days_report?
+  def no_access_for_n_times_report
+    authorize :report, :no_access_for_n_times_report?
 
     @number_label = "Number of Last Checks:"
     if params[:commit]
@@ -215,7 +215,7 @@ class ReportsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.csv { send_data csv_data, filename: 'no_access_for_n_days_report.csv', type: 'text/csv' }
+      format.csv { send_data csv_data, filename: 'no_access_for_n_times_report.csv', type: 'text/csv' }
     end
   end
 

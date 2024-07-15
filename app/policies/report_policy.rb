@@ -27,7 +27,7 @@ class ReportPolicy < ApplicationPolicy
     is_admin? || is_readonly?
   end
 
-  def no_access_for_n_days_report?
+  def no_access_for_n_times_report?
     is_admin? || is_readonly?
   end
 

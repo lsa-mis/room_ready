@@ -28,9 +28,9 @@ class StaticPagesController < ApplicationController
     @zones = Zone.all.order(:name)
 
     @room_access_data = {
-      "Not accessed 3 times": rooms_not_accessed_for_number_of_days(3).count,
-      "Not accessed 5 times": rooms_not_accessed_for_number_of_days(5).count,
-      "Not accessed 7 times": rooms_not_accessed_for_number_of_days(7).count
+      "Not accessed 3 times": rooms_not_accessed_for_number_of_times(3).count,
+      "Not accessed 5 times": rooms_not_accessed_for_number_of_times(5).count,
+      "Not accessed 7 times": rooms_not_accessed_for_number_of_times(7).count
     }
 
     @rooms_not_checked_in_3_days = Room.active.where('DATE(last_time_checked) < ?', 3.days.ago.to_date)
@@ -49,7 +49,7 @@ class StaticPagesController < ApplicationController
 
   private
 
-  def rooms_not_accessed_for_number_of_days(number)
+  def rooms_not_accessed_for_number_of_times(number)
     result_rooms = []
     rooms = Room.active.joins(floor: :building)
       .where.not(buildings: { zone_id: nil })
