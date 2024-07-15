@@ -86,10 +86,12 @@
                 <%= link_to "Start Checking", new_room_room_state_path(room_id: @recommended_room.id), class: "btn btn-success w-100"%>
               </div>
             </div>
+            <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
             <% else %>
             <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
+            <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>
             <% end %>
-            <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
+            
           </div>
         </div>
       </div>
