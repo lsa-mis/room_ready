@@ -7,7 +7,12 @@
 </h6>
 
 <div class="py-3">
-  <%= render 'filter_form_with_days_number', report_url: not_checked_rooms_report_reports_path %>
+  <%= render 'filter_form', report_url: no_access_for_n_days_report_reports_path do |form| %>
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3" >
+      <%= form.label :number, @number_label, class: 'form-label' %>
+      <%= form.number_field :number, value: params[:number] || 1, class: "form-control form-control-sm" %>
+    </div>
+  <% end %>
 
   <% if params[:commit] && params[:format] == 'html' %>
     <%= render 'reports_table' %>
