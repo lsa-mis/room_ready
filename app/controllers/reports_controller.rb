@@ -437,9 +437,12 @@ class ReportsController < ApplicationController
       if @grouped
         @data.each do |group, pivot_table|
           csv << []
-          csv << [group]
+          csv << (@group_link && group.is_a?(Array) ? ["#{group[0]} #{group[1].room_number}"] : [group])
           csv << @headers
-          pivot_table.each { |keys, record| csv << keys + @date_headers.map { |date| record[date] } }
+          pivot_table.each do |keys, record|
+            keys = [keys[0][0]] + keys[1..] if @room_link && keys[0].is_a?(Array)
+            csv << keys + @date_headers.map { |date| record[date] }
+          end          
         end
       else
         csv << []
