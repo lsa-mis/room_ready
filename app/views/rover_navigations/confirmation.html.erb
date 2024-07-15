@@ -1,5 +1,6 @@
 <style>
-  @media (min-width: 1025px) {
+
+@media (min-width: 1025px) {
   .h-custom {
   height: 100vh !important;
   }
@@ -30,7 +31,7 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-lg-8 col-xl-6">
         <div class="card border-top border-bottom border-3 border-primary">
-          <div class="card-body p-5">
+          <div class="card-body p-2">
             <p class="lead fw-bold mb-5 text-primary">Room Check Confirmation</p>
             <div class="row">
               <div class="col mb-3">
@@ -53,12 +54,12 @@
               </div>
             </div>
             <hr />
-            <p class="lead fw-bold mb-4 pb-2 text-primary">Room Check Process</p>
+            <p class="lead fw-bold pb-2 text-primary">Room Check Process</p>
             <div class="row">
               <div class="col-lg-12">
                 <div class="horizontal-timeline">
                   <div class="progress-bar bg-primary"></div>
-                  <ul class="list-inline items border-primary d-flex justify-content-between">
+                  <ul class="list-inline items border-primary d-flex justify-content-center">
                     <li class="list-inline-item items-list">
                       <p class="py-1 px-2 rounded text-white bg-primary">Common</p>
                     </li>
@@ -86,10 +87,12 @@
                 <%= link_to "Start Checking", new_room_room_state_path(room_id: @recommended_room.id), class: "btn btn-success w-100"%>
               </div>
             </div>
+            <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
             <% else %>
             <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
+            <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>
             <% end %>
-            <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
+            
           </div>
         </div>
       </div>
