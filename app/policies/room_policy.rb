@@ -26,4 +26,5 @@ class RoomPolicy < ApplicationPolicy
   def unarchive?
     is_admin?
   end
+
 end
