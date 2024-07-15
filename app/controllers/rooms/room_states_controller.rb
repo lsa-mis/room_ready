@@ -28,7 +28,6 @@ class Rooms::RoomStatesController < ApplicationController
   # POST /room_states or /room_states.json
   def create
     @room_state = @room.room_states.new(room_state_params)
-    @room_state.checked_by = current_user.uniqname
     authorize @room_state
     respond_to do |format|
       if @room_state.save
