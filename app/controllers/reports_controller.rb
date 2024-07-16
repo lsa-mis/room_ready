@@ -180,6 +180,7 @@ class ReportsController < ApplicationController
   def no_access_for_n_times_report
     authorize :report, :no_access_for_n_times_report?
 
+    @need_dates = false
     @number_label = "Number of Last Checks:"
     if params[:commit]
       zone_id, building_id, number = collect_form_with_number_params
@@ -222,6 +223,7 @@ class ReportsController < ApplicationController
   def not_checked_rooms_report
     authorize :report, :not_checked_rooms_report?
 
+    @need_dates = false
     @number_label = "Number of Days:"
     if params[:commit]
       zone_id, building_id, number = collect_form_with_number_params
@@ -408,6 +410,7 @@ class ReportsController < ApplicationController
   def set_form_values
     @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
     @buildings = Building.active.where.not(zone: nil).map { |building| [building.zone_id, building.name, building.id] }
+    @need_dates = true
   end
 
   def collect_form_params
