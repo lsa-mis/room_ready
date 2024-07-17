@@ -42,13 +42,13 @@
         
         <% if room_state.is_accessed %>
           <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="<%= (index + 1) %>common" autocomplete="off" data-bs-toggle="collapse" href="#common-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="common-answer-<%=(index + 1) %>">
+            <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>common" autocomplete="off" data-bs-toggle="collapse" href="#common-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="common-answer-<%=(index + 1) %>">
             <label class="btn btn-outline-primary" for="<%= (index + 1) %>common">Common Questions</label>
 
-            <input type="radio" class="btn-check" name="btnradio" id="<%= (index + 1) %>specific" autocomplete="off" data-bs-toggle="collapse" href="#spec-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="spec-answer-<%=(index + 1) %>">
+            <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>specific" autocomplete="off" data-bs-toggle="collapse" href="#spec-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="spec-answer-<%=(index + 1) %>">
             <label class="btn btn-outline-primary" for="<%= (index + 1) %>specific">Specific Questions</label>
 
-            <input type="radio" class="btn-check" name="btnradio" id="<%= (index + 1) %>resource" autocomplete="off" data-bs-toggle="collapse" href="#res-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="res-answer-<%=(index + 1) %>">
+            <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>resource" autocomplete="off" data-bs-toggle="collapse" href="#res-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="res-answer-<%=(index + 1) %>">
             <label class="btn btn-outline-primary" for="<%= (index + 1) %>resource">Resources</label>
           </div>
 
@@ -68,7 +68,12 @@
                           <%= common_attribute_state.common_attribute.description %>
                         </td>
                         <td class="rover_tbody_td">
-                          <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                          <% if common_attribute_state.checkbox_value.present? %>
+                            <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                          <% elsif common_attribute_state.quantity_box_value.present? %>
+                            <%= common_attribute_state.quantity_box_value %>
+                          <% else %>
+                          <% end %>
                         </td>
                       </tr>
                     <% end %>
@@ -93,7 +98,13 @@
                           <%= specific_attribute_state.specific_attribute.description %>
                         </td>
                         <td class="rover_tbody_td">
-                          <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                          <% if specific_attribute_state.checkbox_value.present? %>
+                            <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                          <% elsif specific_attribute_state.quantity_box_value.present?%>
+                            <%= specific_attribute_state.quantity_box_value %>
+                          <% else %>
+                          Not Checked
+                          <% end %>
                         </td>
                       </tr>
                     <% end %>
