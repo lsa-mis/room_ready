@@ -1,6 +1,6 @@
 <%= form_with(model: [@room, @room_ticket], url: send_email_for_tdx_ticket_path(@room.id), method: :get) do |form| %>
   <% if room_ticket.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
 
       <ul>

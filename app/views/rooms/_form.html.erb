@@ -1,7 +1,7 @@
 <%= turbo_frame_tag 'new_room' do %>  
   <%= form_with model: @room do |form| %>
     <% if room.errors.any? %>
-      <div style="color: red">
+      <div class="text-danger">
         <h2><%= pluralize(room.errors.count, "error") %></h2>
 
         <ul>
@@ -12,7 +12,7 @@
       </div>
     <% end %>
     <div>
-      <%= form.label :rmrecnbr, 'Room Record Number (Barcode) *', style: "display: block" %>
+      <%= form.label :rmrecnbr, 'Room Record Number (Barcode) *', class: "nowrap" %>
       <%= form.text_field :rmrecnbr, required: true %>
     </div>
 

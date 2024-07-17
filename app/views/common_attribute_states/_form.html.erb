@@ -13,7 +13,7 @@
     <%= fields_for "common_attribute_states[#{index}]", common_attribute_state do |f| %>
       <div>
         <% if common_attribute_state.errors.any? %>
-          <div style="color: red">
+          <div class="text-danger">
             <h2><%= pluralize(common_attribute_state.errors.count, "error") %></h2>
 
             <ul>

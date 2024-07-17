@@ -17,7 +17,7 @@
 
 <%= form_with model: [building], data: { controller: "building" } do |form| %>
   <% if building.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(building.errors.count, "error") %></h2>
 
       <ul>

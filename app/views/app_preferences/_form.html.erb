@@ -2,7 +2,7 @@
 
 <%= form_with(model: app_preference) do |form| %>
   <% if app_preference.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(app_preference.errors.count, "error") %></h2>
       <ul>
         <% app_preference.errors.each do |error| %>

@@ -1,6 +1,6 @@
 <%= form_with(model: zone) do |form| %>
   <% if zone.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(zone.errors.count, "error") %></h2>
 
       <ul>

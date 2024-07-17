@@ -1,6 +1,6 @@
 <%= form_with(model: common_attribute, html: { class: 'mb-3' }) do |form| %>
   <% if common_attribute.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(common_attribute.errors.count, "error") %></h2>
 
       <ul>

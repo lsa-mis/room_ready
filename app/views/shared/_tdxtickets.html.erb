@@ -14,7 +14,7 @@
       <div data-controller="room-tickets" class="modal-body">
         <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room), data: {room_tickets_target: "form", action: "room-tickets#check"}) do |form| %>
           <% if room_ticket.errors.any? %>
-            <div style="color: red">
+            <div class="text-danger">
             <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
             <ul>
               <% room_ticket.errors.each do |error| %>

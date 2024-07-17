@@ -1,6 +1,6 @@
 <%= form_with model: building do |form| %>
   <% if building.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(building.errors.count, "error") %></h2>
       <ul>
         <% building.errors.each do |error| %>
@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div>
-    <%= form.label :bldrecnbr, 'Building Record Number', style: "display: block" %>
+    <%= form.label :bldrecnbr, 'Building Record Number', class: "nowrap" %>
     <%= form.text_field :bldrecnbr, required: true %>
   </div>
 
