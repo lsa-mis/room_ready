@@ -84,6 +84,15 @@
       <div class="collapse navbar-collapse d-md-none" id="navbarBurgerMenu">
           <% if user_signed_in? %>
           <div class="nav-section">
+            <br>
+            <div class="text-white body-md-text pb-1">Welcome
+            <%= current_user.display_name %>
+
+            <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+                <span>Log Out</span>
+            <% end %>
+            <br>
+            </div>
             <% if is_admin? || is_readonly? %>
               
                 <p style="font-weight: bold;">Main</p>
@@ -115,9 +124,15 @@
       </div>
     </div>
 
-
     <% if user_signed_in? %>
-      <div class="text-white body-md-text pb-1 hide-on-mobile"><%= current_user.display_name %></div>
+      <div class="text-white body-md-text pb-1 hide-on-mobile nav-user">
+        <%= current_user.display_name %>
+        <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+            <span>Log Out</span>
+          <% end %>
+        
+      </div>
+          
     <% end %>
 
   </div>
