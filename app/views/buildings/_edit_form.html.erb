@@ -29,12 +29,12 @@
   <% end %>
 
   <div>
-    <%= form.label :nick_name, 'Nickname', style: "display: block" %>
+    <%= form.label :nick_name, 'Nickname', class: "nowrap" %>
     <%= form.text_field :nick_name, data: { building_target: "nickName" } %>
   </div>
 
   <div>
-    <%= form.label :zone_id, style: "display: block" %>
+    <%= form.label :zone_id, class: "nowrap" %>
     <%= form.select(:zone_id, options_for_select(@zones, building.zone ? building.zone.id : nil ), { include_blank: "Select ..." } ) %>
   </div>
 
