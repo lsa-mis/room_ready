@@ -28,7 +28,7 @@
             <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building))) %>
           </div>
           <div>
-            <%= form.label :description,'Email Message *' %>
+            <div>Email Message *</div>
             <%= form.rich_text_area :description, data: { room_tickets_target: "description"} %>
           </div>
           <div class="mt-1 gap-1 d-flex flex-row justify-content-start align-items-center">

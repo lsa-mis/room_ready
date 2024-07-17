@@ -21,7 +21,9 @@
             <%= building.bldrecnbr %>
           </td>
           <td class="building_tbody_td">
-            <%= building.name %>
+            <%= link_to building_path(building), data: { turbo_frame: "_top" }, class: "link_to" do%>
+              <%= building.name %>
+            <% end %>
           </td>
           <td class="building_tbody_td">
             <%= building.nick_name %>
