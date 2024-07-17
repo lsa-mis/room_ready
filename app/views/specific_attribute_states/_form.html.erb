@@ -26,7 +26,13 @@
 
         <div class="card w-100 mb-3">
           <div class="card-body p-4">
-            <h5 class="card-title mb-3"><%= specific_attribute_state.specific_attribute.description %></h5>
+            <h5 class="card-title mb-3">
+              <% if specific_attribute_state.specific_attribute.need_checkbox %>
+                <%= specific_attribute_state.specific_attribute.description %>
+              <% else %>
+                <%= f.label :quantity_box_value, specific_attribute_state.specific_attribute.description %>
+              <% end %>
+            </h5>
             <% if specific_attribute_state.specific_attribute.need_checkbox %>
               <div class="d-flex flex-row mb-1 gap-2">
                 <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>

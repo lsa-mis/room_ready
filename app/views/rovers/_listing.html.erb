@@ -27,17 +27,17 @@
               <%= rover.last_name %>
             </td>
             <td class="rover_tbody_td">
-              <%= link_to rover_path(rover), data: { turbo_frame: "_top" } do%>
+              <%= link_to rover_path(rover), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(rover)}" } do%>
               <i class="bi bi-eye-fill text-primary"></i>
               <%end%>
             </td>
             <td class="rover_tbody_td">
-              <%= link_to edit_rover_path(rover), data: { turbo_frame: "_top" } do%>
+              <%= link_to edit_rover_path(rover), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(rover)}_edit" } do%>
               <i class="bi bi-pencil-square text-primary"></i>
               <%end%>
             </td>
             <td class="rover_tbody_td">
-              <%= link_to rover_path(rover), data: { turbo_confirm: 'Are you sure you want to delete this rover?', turbo_method: :delete} do %>
+              <%= link_to rover_path(rover), data: { turbo_confirm: 'Are you sure you want to delete this rover?', turbo_method: :delete}, aria: { label: "#{dom_id(rover)}_delete" }  do %>
               <i class="bi bi-trash-fill text-danger"></i>
               <%end%>
             </td>

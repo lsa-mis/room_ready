@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["access", "noaccess"];
 
   noReasonField =  document.getElementById("no-reason").style;
-  noAccessReasonField = document.getElementById("no-access-reason");
+  noAccessReasonField = document.getElementById("room_state_no_access_reason");
 
   connect() {
     const isBothOptionsEmpty = !this.accessTarget.checked && !this.noaccessTarget.checked;
