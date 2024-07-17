@@ -2,28 +2,33 @@
 
 @media (min-width: 1025px) {
   .h-custom {
-  height: 100vh !important;
+    height: 100vh !important;
   }
   }
+
   .horizontal-timeline .items {
-  border-top: 3px solid;
+    border-top: 3px solid;
   }
+  
   .horizontal-timeline .items .items-list {
-  position: relative;
-  margin-right: 0;
+    position: relative;
+    margin-right: 0;
+    padding-top: 15px;
   }
+
+  .horizontal-timeline .items .items-list p {
+    font-size: 14px;
+  }
+
   .horizontal-timeline .items .items-list:before {
-  content: "";
-  position: absolute;
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: var(--bs-primary);
-  top: 0;
-  margin-top: -5px;
-  }
-  .horizontal-timeline .items .items-list {
-  padding-top: 15px;
+    content: "";
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    top: 0;
+    margin-top: -5px;
   }
 </style>
 <section>
@@ -54,7 +59,7 @@
               </div>
             </div>
             <hr />
-            <p class="lead fw-bold pb-2 text-primary">Room Check Process</p>
+            <p class="lead fw-bold pb-2 text-primary">Room Check Progress</p>
             <div class="row">
               <div class="col-lg-12">
                 <div class="horizontal-timeline">
