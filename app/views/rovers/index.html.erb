@@ -2,9 +2,9 @@
 <h1>Rover List</h1>
 <div id="search bar">
   <%= form_with url: rovers_path, method: :get, local: true do |form| %>
-    <%= form.label :search, class: "invisible" %>
+    <%= form.label :search, "Search Rover by Uniqname:", style: "display: block"%>
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-    <%= form.text_field :search, value: params[:search], placeholder: "Search by Name or Uniqname", class: "w-50" %>
+    <%= form.text_field :search, value: params[:search], placeholder: "Name or Uniqname", class: "w-50" %>
     <%= form.submit "Search" %>
     </div>
   <% end %>
