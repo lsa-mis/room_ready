@@ -16,7 +16,7 @@
     <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
   </div>
   <div>
-    <%= form.label :is_accessed, "Can you access the room? *"%>
+    <div class="py-2">Can you access the room?</div>
   </div>
   <div class="d-flex flex-row mb-1 gap-2">
     <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true %>
@@ -27,7 +27,7 @@
 
   <div id="no-reason" style="display:none">
     <%= form.label :no_access_reason, "Can not access the room because: ", style: "display: block" %>
-    <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason"}, { class: "input_text_field", id: "no-access-reason" } %>
+    <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason"}, { class: "input_text_field", id: "room_state_no_access_reason" } %>
   </div>
   <%= form.hidden_field :checked_by, value: current_user.uniqname %>
 
