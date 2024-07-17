@@ -13,10 +13,10 @@
               </div>
             <% elsif pref.pref_type == "string" %>
               <!--we dont have fancy label here yet-->
-              <label for=<%= "configure_pref#{pref.name}" %> class="bold-label"><%= pref.description %></label>
+              <label for=<%= "configure_pref_#{pref.name}" %> class="bold-label"><%= pref.description %></label>
                 <%= text_field_tag("configure_pref[#{pref.name}]", pref.value, {class: "ms-2"}) %>
             <% elsif pref.pref_type == "integer" %>
-              <label for=<%= "configure_pref#{pref.name}" %> class="bold-label"><%= pref.description %></label>
+              <label for=<%= "configure_pref_#{pref.name}" %> class="bold-label"><%= pref.description %></label>
                 <%= number_field_tag("configure_pref[#{pref.name}]", pref.value, {class: "ms-2"}) %>
             <% end %>
           </div>
