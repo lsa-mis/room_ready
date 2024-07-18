@@ -5,7 +5,8 @@ class ReportsController < ApplicationController
     authorize :report, :index?
 
     @reports_list = [
-      {title: "Room Issues", url: room_issues_report_reports_path, description: "This report shows information on Room Issues." },
+      {title: "Number of Room Issues", url: number_of_room_issues_report_reports_path, description: "This report shows information on number of Room Issues." },
+      {title: "Room Issues", url: room_issues_report_reports_path, description: "This report shows list of Room Issues." },
       {title: "Inspection Rate", url: inspection_rate_report_reports_path, description: "Calculated by dividing the number of checks a given room has by the total amount of days for a given date rage" },
       {title: "No Access", url: no_access_report_reports_path, description: "This report shows information on Rooms that were not able to be accessed. It shows the 5 most recent
         dates of no access, along with reasons the room was not able to be accessed." },
@@ -35,8 +36,8 @@ class ReportsController < ApplicationController
   #     iii) the value should be the cell value
   #     iv) for e.g: @data[[Zone, Building, Room]][Date] = Value
 
-  def room_issues_report
-    authorize :report, :room_issues_report?
+  def number_of_room_issues_report
+    authorize :report, :number_of_room_issues_report?
 
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
@@ -51,11 +52,11 @@ class ReportsController < ApplicationController
                   .order('tickets_count DESC')
 
       if rooms.any?
-        @title = 'Room Issues Report'
+        @title = 'Number of Room Issues Report'
         @metrics = {
-          'Total Tickets Count' => rooms.sum(&:tickets_count),
+          'Total Issues Count' => rooms.sum(&:tickets_count),
         }
-        @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+        @headers = ['Room Number', 'Building', 'Zone', 'Issues Count']
         @room_link = true
         @data = rooms.map do |room|
           [
@@ -63,6 +64,42 @@ class ReportsController < ApplicationController
             room.floor.building.name,
             show_zone(room.floor.building),
             room.tickets_count,
+          ]
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'room_issues_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def room_issues_report
+    authorize :report, :room_issues_report?
+
+    if params[:commit]
+      zone_id, building_id, start_time, end_time = collect_form_params
+
+      tickets = RoomTicket.includes(room: { floor: :building }).where(created_at: start_time..end_time).where(room: { archived: false })
+              .where(buildings: { id: building_id, zone_id: zone_id })
+              .order(created_at: :desc)
+
+      if tickets.any?
+        @title = 'Room Issues Report'
+        @metrics = {
+          'Total Issues Count' => tickets.count
+        }
+        @headers = ['Submitted On', 'Room Number', 'Building', 'Zone', 'Send to', 'Description', 'Submitted By']
+        @data = tickets.map do |ticket|
+          [
+            show_date_with_time(ticket.created_at),
+            ticket.room.room_number,
+            ticket.room.floor.building.name,
+            ticket.room.floor.building.zone.present? ? ticket.room.floor.building.zone.name : "",
+            ticket.tdx_email,
+            ticket.description,
+            ticket.submitted_by
           ]
         end
       end
