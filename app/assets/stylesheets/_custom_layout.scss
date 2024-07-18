@@ -217,14 +217,19 @@ svg.wh6 {
   cursor: pointer;
 }
 
-
 .navbar_dropdown_item {
   color: white;
 }
 
 .navbar_dropdown_item:hover {
-  background-color: $um_blue;
   color: $um_maize;
+}
+
+.navbar_dropdown_item:focus {
+  background-color: $um_blue;
+  // color: $um_maize;
+  outline: none; 
+  border: 1px solid $um_maize;
 }
 
 .nav-item.dropdown:hover > .dropdown-menu {
