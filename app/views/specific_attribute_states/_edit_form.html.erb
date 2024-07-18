@@ -14,7 +14,7 @@
     <%= fields_for "specific_attribute_states[#{index}]", specific_attribute_state do |f| %>
       <div>
         <% if specific_attribute_state.errors.any? %>
-          <div style="color: red">
+          <div class="text-danger">
             <h2><%= pluralize(specific_attribute_state.errors.count, "error") %></h2>
 
             <ul>

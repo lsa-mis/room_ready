@@ -3,7 +3,7 @@
 
 <%= form_with(model: rover=@rover) do |form| %>
   <% if rover.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(rover.errors.count, "error") %></h2>
       <ul>
         <% rover.errors.each do |error| %>
@@ -17,11 +17,11 @@
     <%= rover.uniqname %>
   </p>
   <div>
-    <%= form.label :first_name, "First Name:", style: "display: block" %>
+    <%= form.label :first_name, "First Name:", class: "nowrap" %>
     <%= form.text_field :first_name %>
   </div>
   <div>
-    <%= form.label :last_name, "Last Name:", style: "display: block" %>
+    <%= form.label :last_name, "Last Name:", class: "nowrap" %>
     <%= form.text_field :last_name %>
   </div>
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">

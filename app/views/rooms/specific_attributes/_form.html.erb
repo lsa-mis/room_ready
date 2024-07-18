@@ -1,6 +1,6 @@
 <%= form_for [@room, specific_attribute] do |form| %>
   <% if specific_attribute.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(specific_attribute.errors.count, "error") %></h2>
 
       <ul>

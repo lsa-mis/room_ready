@@ -1,6 +1,6 @@
 <%= form_with(model: note) do |form| %>
   <% if note.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h3><%= pluralize(note.errors.count, "error") %></h3>
       <ul>
         <% note.errors.each do |error| %>

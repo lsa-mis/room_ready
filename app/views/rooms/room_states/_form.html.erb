@@ -1,6 +1,6 @@
 <%= form_with(model: [@room, room_state], data: { controller: "render" }) do |form| %>
   <% if room_state.errors.any? %>
-    <div style="color: red">
+    <div class="text-danger">
       <h2><%= pluralize(room_state.errors.count, "error") %></h2>
       <ul>
         <% room_state.errors.each do |error| %>
@@ -26,7 +26,7 @@
   </div>
 
   <div id="no-reason" style="display:none">
-    <%= form.label :no_access_reason, "Can not access the room because: ", style: "display: block" %>
+    <%= form.label :no_access_reason, "Can not access the room because: ", class: "nowrap" %>
     <%= form.select :no_access_reason, options_for_select(@no_access_reasons, selected: @room_state.no_access_reason), { include_blank: "Select Reason"}, { class: "input_text_field", id: "room_state_no_access_reason" } %>
   </div>
   <%= form.hidden_field :checked_by, value: current_user.uniqname %>
