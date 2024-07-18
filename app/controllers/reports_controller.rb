@@ -5,14 +5,15 @@ class ReportsController < ApplicationController
     authorize :report, :index?
 
     @reports_list = [
-      {title: "Room Issues", url: room_issues_report_reports_path },
-      {title: "Inspection Rate", url: inspection_rate_report_reports_path },
-      {title: "No Access", url: no_access_report_reports_path },
-      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path },
-      {title: "Not Checked Rooms", url: not_checked_rooms_report_reports_path },
-      {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
-      {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
-      {title: "Resource States", url: resource_states_report_reports_path },
+      {title: "Room Issues", url: room_issues_report_reports_path, description: "This report shows information on Room Issues." },
+      {title: "Inspection Rate", url: inspection_rate_report_reports_path, description: "Calculated by dividing the number of checks a given room has by the total amount of days for a given date rage" },
+      {title: "No Access", url: no_access_report_reports_path, description: "This report shows information on Rooms that were not able to be accessed. It shows the 5 most recent
+        dates of no access, along with reasons the room was not able to be accessed." },
+      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path, description: "This report shows information on Rooms that were not able to be accessed during several last checks." },
+      {title: "Rooms not Checked during Last Days", url: not_checked_rooms_report_reports_path, description: "This report shows information on Rooms that were not checked during last days." },
+      {title: "Common Attribute States", url: common_attribute_states_report_reports_path, description: "This report shows the repsonses to the Common Questions in the Rover form." },
+      {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path, description: "This report shows the repsonses to the Specific Questions in the Rover form." },
+      {title: "Resource States", url: resource_states_report_reports_path, description: "This report shows the repsonses to the Resource Questions in the Rover form." },
     ]
   end
 
