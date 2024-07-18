@@ -101,7 +101,7 @@ class ReportsController < ApplicationController
             ticket.room.floor.building.name,
             ticket.room.floor.building.zone.present? ? ticket.room.floor.building.zone.name : "",
             ticket.tdx_email,
-            ticket.description,
+            ticket.description.to_plain_text,
             ticket.submitted_by
           ]
         end
