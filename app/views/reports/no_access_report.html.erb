@@ -2,10 +2,10 @@
   <h1>No Access Report</h1>
   <%= link_to 'Back to Reports', reports_path, class: "link_to" %>
 </div>
-<h6>
+<p>
   This report shows information on Rooms that were not able to be accessed. It shows the 5 most recent
   dates of no access, along with reasons the room was not able to be accessed.
-</h6>
+</p>
 
 <div class="py-3">
   <%= render 'filter_form', report_url: no_access_report_reports_path %>
