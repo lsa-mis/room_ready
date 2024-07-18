@@ -5,14 +5,15 @@ class ReportsController < ApplicationController
     authorize :report, :index?
 
     @reports_list = [
-      {title: "Room Issues", url: room_issues_report_reports_path },
-      {title: "Inspection Rate", url: inspection_rate_report_reports_path },
-      {title: "No Access", url: no_access_report_reports_path },
-      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path },
-      {title: "Not Checked Rooms", url: not_checked_rooms_report_reports_path },
-      {title: "Common Attribute States", url: common_attribute_states_report_reports_path },
-      {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path },
-      {title: "Resource States", url: resource_states_report_reports_path },
+      {title: "Number of Room Issues", url: number_of_room_issues_report_reports_path, description: "This report shows information on number of Room Issues" },
+      {title: "Room Issues", url: room_issues_report_reports_path, description: "This report shows list of Room Issues" },
+      {title: "Inspection Rate", url: inspection_rate_report_reports_path, description: "Calculated by dividing the number of checks a given room has by the total amount of days for a given date rage" },
+      {title: "No Access", url: no_access_report_reports_path, description: "This report shows information on Rooms that were not able to be accessed" },
+      {title: "No Access During Last Checks", url: no_access_for_n_times_report_reports_path, description: "This report shows information on Rooms that were not able to be accessed during several last checks" },
+      {title: "Rooms not Checked during Last Days", url: not_checked_rooms_report_reports_path, description: "This report shows information on Rooms that were not checked during last days" },
+      {title: "Common Attribute States", url: common_attribute_states_report_reports_path, description: "This report shows the repsonses to the Common Questions in the Rover form" },
+      {title: "Specific Attribute States", url: specific_attribute_states_report_reports_path, description: "This report shows the repsonses to the Specific Questions in the Rover form" },
+      {title: "Resource States", url: resource_states_report_reports_path, description: "This report shows the repsonses to the Resource Questions in the Rover form" },
     ]
   end
 
@@ -34,8 +35,8 @@ class ReportsController < ApplicationController
   #     iii) the value should be the cell value
   #     iv) for e.g: @data[[Zone, Building, Room]][Date] = Value
 
-  def room_issues_report
-    authorize :report, :room_issues_report?
+  def number_of_room_issues_report
+    authorize :report, :number_of_room_issues_report?
 
     if params[:commit]
       zone_id, building_id, start_time, end_time = collect_form_params
@@ -50,11 +51,13 @@ class ReportsController < ApplicationController
                   .order('tickets_count DESC')
 
       if rooms.any?
-        @title = 'Room Issues Report'
+        days = (end_time.to_date - start_time.to_date).to_i + 1
+        @title = 'Number of Room Issues Report'
         @metrics = {
-          'Total Tickets Count' => rooms.sum(&:tickets_count),
+          'Total Issues' => rooms.sum(&:tickets_count),
+          'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)",
         }
-        @headers = ['Room Number', 'Building', 'Zone', 'Tickets Count']
+        @headers = ['Room Number', 'Building', 'Zone', 'Issues Count']
         @room_link = true
         @data = rooms.map do |room|
           [
@@ -62,6 +65,44 @@ class ReportsController < ApplicationController
             room.floor.building.name,
             show_zone(room.floor.building),
             room.tickets_count,
+          ]
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_data, filename: 'room_issues_report.csv', type: 'text/csv' }
+    end
+  end
+
+  def room_issues_report
+    authorize :report, :room_issues_report?
+
+    if params[:commit]
+      zone_id, building_id, start_time, end_time = collect_form_params
+
+      tickets = RoomTicket.includes(room: { floor: :building }).where(created_at: start_time..end_time).where(room: { archived: false })
+              .where(buildings: { id: building_id, zone_id: zone_id })
+              .order(created_at: :desc)
+
+      if tickets.any?
+        days = (end_time.to_date - start_time.to_date).to_i + 1
+        @title = 'Room Issues Report'
+        @metrics = {
+          'Total Issues' => tickets.count,
+          'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)"
+        }
+        @headers = ['Submitted On', 'Room Number', 'Building', 'Zone', 'Send to', 'Description', 'Submitted By']
+        @data = tickets.map do |ticket|
+          [
+            show_date_with_time(ticket.created_at),
+            ticket.room.room_number,
+            ticket.room.floor.building.name,
+            ticket.room.floor.building.zone.present? ? ticket.room.floor.building.zone.name : "",
+            ticket.tdx_email,
+            ticket.description.to_plain_text,
+            ticket.submitted_by
           ]
         end
       end
@@ -148,6 +189,7 @@ class ReportsController < ApplicationController
                   .order('na_states_count DESC')
 
       if rooms.any?
+        days = (end_time.to_date - start_time.to_date).to_i + 1
         @title = 'No Access Report'
         @metrics = {
           'Total No Access Count' => rooms.sum(&:na_states_count)
@@ -199,7 +241,7 @@ class ReportsController < ApplicationController
         end
         if result_rooms.present?
           @metrics = {
-            'Total Rooms Count' => result_rooms.count,
+            'Total Rooms' => result_rooms.count,
           }
           @title = 'No Access for ' + number.to_s + ' Days Report'
           @headers = ['Room Number', 'Building', 'Zone']
@@ -234,7 +276,7 @@ class ReportsController < ApplicationController
                   .where('DATE(last_time_checked) < ?', number.days.ago.to_date)
       if rooms.any?
         @metrics = {
-          'Total Rooms Count' => rooms.count,
+          'Total Rooms' => rooms.count,
         }
         @title = 'Not Checked for ' + number.to_s + ' Days Report'
 

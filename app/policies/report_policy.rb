@@ -3,6 +3,10 @@ class ReportPolicy < ApplicationPolicy
     is_admin? || is_readonly?
   end
 
+  def number_of_room_issues_report?
+    is_admin? || is_readonly?
+  end
+
   def room_issues_report?
     is_admin? || is_readonly?
   end

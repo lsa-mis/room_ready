@@ -1,10 +1,10 @@
 <div class="d-flex flex-row align-items-center justify-content-between">
-  <h1>Rooms not Checked during Last Days</h1>
+  <h1>Rooms not Checked during Last Days Report</h1>
   <%= link_to 'Back to Reports', reports_path, class: "link_to" %>
 </div>
-<h6>
+<p>
   This report shows information on Rooms that were not checked during last days.
-</h6>
+</p>
 
 <div class="py-3">
   <%= render 'filter_form', report_url: not_checked_rooms_report_reports_path do |form| %>
