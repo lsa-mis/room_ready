@@ -18,13 +18,15 @@
 
 <% @buildings.each_with_index do |building, i| %>
   <div class="card mt-3">
-    <h5 class="card-header">
-      <%= building.name %>
-      <span class="fs-5 fw-bold text-success">
-        <%= show_building_status(building) %>
-      </span>
-      <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(building.full_address) %>"></i>
-    </h5>
+    <div class="card-header">
+      <div class="fs-5 fw-bold">
+        <%= building.name %>
+        <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(building.full_address) %>"></i>
+      </div>
+        <div class="text-success">
+          <%= show_building_status(building) %>
+        </div>
+      </div>
     <div class="card-body">
       <p class="card-text">
         <%= building.full_address %>
