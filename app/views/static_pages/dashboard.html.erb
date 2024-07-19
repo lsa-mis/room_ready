@@ -36,7 +36,10 @@
               </div>
             </div>
 
-            <h6 class="card-text mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>"><%= rooms_checked_for_date(zone, @selected_date) %>/<%= total_rooms(zone) %> Classrooms Complete</h6>
+            <span class="card-text mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>">
+              <%= rooms_checked_for_date(zone, @selected_date) %>/<%= total_rooms(zone) %> 
+              Classrooms Complete
+            </span>
           </div>
         </div>
       </div>
