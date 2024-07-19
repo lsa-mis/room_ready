@@ -227,9 +227,9 @@ svg.wh6 {
 
 .navbar_dropdown_item:focus {
   background-color: $um_blue;
-  // color: $um_maize;
   outline: none; 
-  border: 1px solid $um_maize;
+  border: 2px solid white;
+  border-radius: .25rem;
 }
 
 .nav-item.dropdown:hover > .dropdown-menu {

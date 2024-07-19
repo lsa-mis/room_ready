@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-um-blue">
-  <div class="container-fluid">
-    <%= link_to root_path, class: "a-nav" do %>
+  <div class="container-fluid" style="--bs-focus-ring-color:white;" >
+    <%= link_to root_path, class: "a-nav focus-ring border-0 rounded-2" do %>
     <div id="LSAlogo">
       <div class="navbar-brand">
         <%= image_tag 'LSA_Logo.svg', alt: 'LSA Logo' %>
@@ -18,7 +18,7 @@
       <% if user_signed_in? %>
       <% if is_admin? || is_readonly? %>
         <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:white; --bs-focus-ring-width:0.25rem; --bs-focus-ring-x: 10px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Main
           </a>
           <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
@@ -34,7 +34,7 @@
           </ul>
         </div>
         <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:white;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Admin
           </a>
           <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
@@ -60,8 +60,8 @@
         </div>
       <% end %>
       <% if is_rover? || is_admin? %>
-      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0" style="--bs-focus-ring-color:red;">
-        <%= link_to "Rover Form", zones_rover_navigation_path, class: 'nav-link h-100 d-flex align-items-center fs-5 focus-ring' if policy(:rover_navigation).zones? %>
+      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0" style="--bs-focus-ring-color:white;">
+        <%= link_to "Rover Form", zones_rover_navigation_path, class: 'nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2' if policy(:rover_navigation).zones? %>
       </div>
         Rover Form
       </a>
@@ -88,7 +88,7 @@
             </div>
             <div class="d-flex flex-row justify-content-center align-items-center"><span><%= current_user.principal_name %></span> </div>
             <div class="d-flex flex-row justify-content-center align-items-center mt-2">
-              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#00274c;" do %>
                 <span>Log Out</span>
               <% end %> 
             </div>
@@ -120,8 +120,8 @@
     <% end %>
   </div>
   <% if user_signed_in? %>
-    <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-      <a class="nav-link h-100 d-flex align-items-center focus-ring body-md-text pb-1 hide-on-mobile nav-user" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 mr-2 rounded-0 border-0 hide-on-mobile">
+      <a class="nav-link h-50 d-flex align-items-center focus-ring border-0 rounded-2 body-md-text p-2 mt-3 hide-on-mobile nav-user" style="--bs-focus-ring-color:white;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <%= current_user.display_name %>
       </a>
       <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
@@ -133,8 +133,8 @@
               </span>
             </div>
             <div class="d-flex flex-row justify-content-center align-items-center"><span><%= current_user.principal_name %></span> </div>
-            <div class="d-flex flex-row justify-content-center align-items-center mt-2 focus-ring" style="--bs-focus-ring-color:red;">
-              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:red;" do %>
+            <div class="d-flex flex-row justify-content-center align-items-center mt-2">
+              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#00274c;" do %>
                 Log Out
               <% end %> 
             </div>
