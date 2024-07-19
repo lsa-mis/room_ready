@@ -129,9 +129,9 @@ class ReportsController < ApplicationController
                   .select('COUNT(room_states.id) AS room_check_count')
                   .order('room_check_count DESC')
 
-      rooms_no_room_state = Room.active
-                                .left_outer_joins(:room_states)
+      rooms_no_room_state = Room.left_outer_joins(:room_states)
                                 .joins(floor: { building: :zone })
+                                .where(archived: archived)
                                 .where(buildings: { id: building_id, zone_id: zone_id })
                                 .where(room_states: { id: nil })
                                 .where.not(id: rooms.map(&:id))
