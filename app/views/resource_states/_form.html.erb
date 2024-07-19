@@ -1,0 +1,51 @@
+<div data-controller='autosubmit'>
+  <%= form_with(model: [@room, @room_state],
+    data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+    <div class="d-inline-flex gap-1 mt-1 mb-1 p-2 bg-um-blue border rounded">
+      <%= form.check_box :report_to_supervisor, class: "form-check-input", data: { action: "change->autosubmit#check" }  %>
+      <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
+    </div>
+    <% end %>
+</div>
+<%= form_with url: resource_states_path, method: :post do |form|%>
+  <%= hidden_field_tag :room_state_id, @room_state.id %>
+  <% @resource_states.each_with_index do |resource_state, index| %>
+    <%= fields_for "resource_states[#{index}]", resource_state do |f| %>
+      <div>
+        <% if resource_state.errors.any? %>
+          <div class="text-danger">
+            <h2><%= pluralize(resource_state.errors.count, "error") %></h2>
+            <ul>
+              <% resource_state.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="card w-100 mb-3">
+          <div class="card-body p-4">
+            <h5 class="card-title mb-3">
+              <%= resource_state.resource.display_name %>
+            </h5>
+            <div class="d-flex flex-row mb-1 gap-2">
+              <%= f.radio_button :is_checked, true, class: "btn-check", required: true %>
+              <%= f.label :is_checked_true, "Yes", class: "btn btn-outline-success w-50" %>
+              <%= f.radio_button :is_checked, false, class: "btn-check" %>
+              <%= f.label :is_checked_false, "No", class: "btn btn-outline-secondary w-50" %>
+            </div>
+          </div>
+        </div>
+        <%=f.hidden_field :resource_id, value: resource_state.resource_id %> 
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <%= link_to rooms_rover_navigation_path(floor_id: @room.floor.id), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" do %>
+      <i class="bi bi-arrow-left-circle-fill"></i>
+      Back to Rooms
+    <% end %>
+    <%= submit_tag "Save Response" %>
+  </div>
+
+<% end %>

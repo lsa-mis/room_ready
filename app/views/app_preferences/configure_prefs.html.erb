@@ -1,0 +1,30 @@
+<div class="mx-auto w-100">
+  <div class="px-5 py-3">
+    <h1>Configure App Preferences</h1>
+    <%= form_tag save_configured_prefs_app_preferences_path, method: :post do %>
+      <% @configure_prefs.each do |pref| %>
+        <%= fields_for 'configure_prefs[]' do %>
+          <div>
+            <% if pref.pref_type == "boolean" %>
+              <div class="my-3 py-3">
+                <%= hidden_field_tag "configure_pref[#{pref.name}]", 0 %>
+                <%= check_box_tag "configure_pref[#{pref.name}]", 1, pref.value == 't', class: "check_box" %>
+                <span class="check_box_text"><%= pref.description %></span>
+              </div>
+            <% elsif pref.pref_type == "string" %>
+              <!--we dont have fancy label here yet-->
+              <label for=<%= "configure_pref_#{pref.name}" %> class="bold-label"><%= pref.description %></label>
+                <%= text_field_tag("configure_pref[#{pref.name}]", pref.value, {class: "ms-2"}) %>
+            <% elsif pref.pref_type == "integer" %>
+              <label for=<%= "configure_pref_#{pref.name}" %> class="bold-label"><%= pref.description %></label>
+                <%= number_field_tag("configure_pref[#{pref.name}]", pref.value, {class: "ms-2"}) %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="inline">
+        <%= submit_tag 'Update your preferences' %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-lg-6 w-100">
+      <!-- Heading -->
+      <h1 class="text-start mt-6">Welcome Rovers</h1>
+      <p class="text-start mt-6 ms-6">
+        <% unless @rovers_welcome_page_announcement.nil? %>
+          <%= @rovers_welcome_page_announcement.content %>
+        <% end %>
+      </p>
+  </div>
+
+  <div>
+    <div class="d-grid w-25 ms-6 mt-6 mb-8">
+      <% if user_signed_in? %>
+        <div>
+          <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+            <span>Log Out</span>
+          <% end %>
+        </div>
+      <% else %> 
+        <div>
+          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+        </div>
+      <% end %>
+  </div>
+</div>

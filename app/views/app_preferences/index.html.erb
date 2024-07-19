@@ -1,0 +1,32 @@
+<div class="px-5 py-3">
+  <h1 class="mb-3">App Preferences</h1>
+
+  <div>
+    <% unless @preference_page_announcement.nil? %>
+      <%= @preference_page_announcement.content %>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag 'new_app_preference_form' do %>
+    <%= render 'form', app_preference: @new_app_preference %>
+  <% end %>
+
+  <table class="table">
+    <thead class="table-group-divider">
+      <tr>
+        <th scope="col" class="text-start">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col" class="text-center">Type</th>
+        <th scope="col" class="text-center">Edit</th>
+        <th scope="col" class="text-center">Delete</th>
+      </tr>
+    </thead>
+    
+    <tbody class="table-group-divider" id="app_preferences">
+      <% @app_preferences.each do |app_preference| %>
+        <%= render app_preference %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+  

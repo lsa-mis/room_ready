@@ -1,0 +1,13 @@
+<h1>New rover</h1>
+<% flash.each do |key, value| %>
+    <% if key == 'alert' %>
+      <%= content_tag(:div, value, class: "flash #{key}", id: "#{key}") %>
+    <% end %>
+<% end %>
+<%= render "form", rover: @rover %>
+
+<br>
+
+<div>
+  <%= link_to "Back to rovers", rovers_path, class: "link_to" %>
+</div>

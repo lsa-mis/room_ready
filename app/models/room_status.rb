@@ -1,0 +1,115 @@
+class RoomStatus
+  include ActionView::Helpers::DateHelper
+  include ActionView::Helpers::NumberHelper
+
+  def initialize(room)
+      @room = room
+  end
+
+  def common_attributes_exist?
+      CommonAttribute.active.count > 0
+  end
+
+  def specific_attributes_exist?
+      @room.active_specific_attributes.count > 0
+  end
+
+  def resources_exist?
+      @room.active_resources.count > 0
+  end
+
+  def status_weight
+    ca = common_attributes_exist? ? 1 : 0
+    sa = specific_attributes_exist? ? 1 : 0
+    res = resources_exist? ? 1 : 0
+    w = 1.to_f / (1 + ca + sa + res) * 100
+    return w
+  end
+
+  def room_checked_once?
+    @room.last_time_checked.present?
+  end
+
+  def last_time_checked
+    if room_checked_once?
+        @room.last_time_checked.to_date
+    else
+        ""
+    end
+  end
+
+  def tomorrow
+    Date.today + 1.day
+  end
+
+  def yesterday
+    Date.today - 1.day
+  end
+
+  def room_checked_today?
+    if room_checked_once?
+        yesterday < last_time_checked && last_time_checked < tomorrow
+    else
+        false
+    end
+  end
+
+  def room_state
+    @room.room_states.last
+  end
+
+  def room_state_today
+    if room_checked_today?
+      room_state
+    else 
+      nil
+    end
+  end
+
+  def common_attribute_checked?
+    room_state.common_attribute_states.last.present? && (yesterday..tomorrow).include?(room_state.common_attribute_states.last.updated_at.to_date)
+  end
+
+  def specific_attribute_checked?
+    room_state.specific_attribute_states.last.present? && (yesterday..tomorrow).include?(room_state.specific_attribute_states.last.updated_at.to_date)
+  end
+
+  def resources_checked?
+    room_state.resource_states.last.present? && (yesterday..tomorrow).include?(room_state.resource_states.last.updated_at.to_date)
+  end
+
+  def calculate_percentage
+    return "100.00" if room_state_today&.is_accessed == false
+
+    w = status_weight
+    percentage = w
+    if common_attributes_exist?
+      percentage += w if common_attribute_checked?
+    end
+    if specific_attributes_exist?
+      percentage += w if specific_attribute_checked?
+    end
+    if resources_exist?
+      percentage += w if resources_checked?
+    end
+    number_with_precision(percentage, precision: 2)
+  end
+
+  def show_status
+    if room_checked_once?
+      if room_checked_today?
+        if room_state_today&.is_accessed
+          checked = "Checked #{calculate_percentage}% by #{room_state_today.checked_by}"
+        else
+          checked = "Checked #{calculate_percentage}% - no access by #{room_state_today.checked_by}"
+        end
+      else
+        checked = "Checked #{time_ago_in_words(last_time_checked)} ago by #{room_state.checked_by}"
+      end
+    else
+      checked = "Never checked"
+    end
+    return checked
+  end
+
+end

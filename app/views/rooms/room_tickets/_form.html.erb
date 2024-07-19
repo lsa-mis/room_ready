@@ -1,0 +1,22 @@
+<%= form_with(model: [@room, @room_ticket], url: send_email_for_tdx_ticket_path(@room.id), method: :get) do |form| %>
+  <% if room_ticket.errors.any? %>
+    <div class="text-danger">
+      <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
+
+      <ul>
+        <% room_ticket.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, class: "nowrap" %>
+    <%= form.rich_text_area :description %>
+  </div>
+
+  <div>
+    <%= form.submit 'Submit' %>
+  </div>
+<% end %>

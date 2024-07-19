@@ -1,0 +1,8 @@
+<div class="progress mb-3 w-50" role="progressbar" style="height: 20px;"
+     aria-label="Rover form progress"
+     aria-valuenow="<%= show_room_percentage(room) %>>"
+     aria-valuemin="0" aria-valuemax="100">
+  <div class="progress-bar bg-success" style="width: <%= show_room_percentage(room) %>%">
+    <%= show_room_percentage(room) %>%
+  </div>
+</div>

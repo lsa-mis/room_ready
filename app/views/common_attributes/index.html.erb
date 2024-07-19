@@ -1,0 +1,18 @@
+<div class="px-5 py-3">
+  <h1 class="mb-3">Common Attributes</h1>
+
+  <%= turbo_frame_tag 'new_common_attribute_form' do %>
+    <%= render 'form', common_attribute: @new_common_attribute %>
+  <% end %>
+
+  <%= form_with(url: common_attributes_path, html: { class: 'mb-3' }, method: :get, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+    <div class="mt-2">
+      <%= check_box_tag :show_archived, 1, @show_archived, data: { action: "input->autosubmit#search" } %>
+      <%= form.label :show_archived, "Show Archived Common Attributes" %>
+    </div>
+  <% end %>
+
+  <%= turbo_frame_tag 'common_attributes_list' do %>
+    <%= render 'common_attributes_list' %>
+  <% end %>
+</div>

@@ -1,0 +1,13 @@
+<div class="d-flex flex-row align-items-center justify-content-between">
+  <h1>Inspection Rate Report</h1>
+  <%= link_to 'Back to Reports', reports_path, class: "link_to" %>
+</div>
+<p>Calculated by dividing the number of checks a given room has by the total amount of days for a given date rage.</p>
+
+<div class="py-3">
+  <%= render 'filter_form', report_url: inspection_rate_report_reports_path %>
+
+  <% if params[:commit] && params[:format] == 'html' %>
+    <%= render 'reports_table' %>
+  <% end %>
+</div>

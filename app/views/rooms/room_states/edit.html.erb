@@ -1,0 +1,43 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path, class: 'link_to' %></li>
+    <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: 'link_to' %></li>
+    <li class="breadcrumb-item"><%= link_to "Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: 'link_to' %></li>
+    <li class="breadcrumb-item active" aria-current="page">Begin Check</li>
+  </ol>
+</nav>
+<h1>Edit Room Check for Room <%= @room.room_number %> </h1>
+<h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
+
+<div data-controller='hideelement'>
+  <a class="link_to mb-1 d-block d-md-none" data-hideelement-target="more_button" data-action="hideelement#showElement">
+    Show Announcement
+    <i class="bi bi-caret-up-fill"></i>
+  </a>
+  <a class="link_to mb-1 d-none d-md-none" data-hideelement-target="less_button" data-action="hideelement#hideElement">
+    Hide Announcement
+    <i class="bi bi-caret-down-fill"></i>
+  </a>
+  <div class="d-none d-md-block" data-hideelement-target="hide_section">
+    <% if @rovers_form_announcement.content.present? %>
+      <div class="bg-accordion">
+        <p><%= @rovers_form_announcement.content %></p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @notes.present? %>
+  <div class="bg-accordion">
+    <h4>Notes</h4>
+    <% @notes.each do |note| %>
+      <p>
+        <%= note.content %>
+        Updated on
+        <%= note.updated_at.strftime('%m/%d/%Y') %>
+      <p>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render "form", room_state: @room_state, user: @user %>

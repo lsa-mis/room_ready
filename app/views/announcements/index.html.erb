@@ -1,0 +1,32 @@
+<h1>Announcements</h1>
+<div class="row row-cols-1 row-cols-md-3">
+  <% @announcements.each do |announcement| %>
+    <div class="col mb-4">
+      <div class="card">
+        <div class="card-header">
+          <%= announcement.location.titleize %> Announcement
+        </div>
+        <div class="card-body">
+          <div class="card-text mb-4">
+            <%= announcement.content %>
+          </div>
+          <div>
+            <%= link_to 'Edit', edit_announcement_path(announcement), class:"btn btn-primary" %>
+            <% if announcement.location == "rovers_form" || 
+                  announcement.location == "common_form" ||
+                  announcement.location == "specific_form" ||
+                  announcement.location == "resource_form"%>
+              To preview, start to check a room
+            <% end %>
+            <%= link_to 'Preview', app_preferences_path, class:"btn btn-primary" if announcement.location == "preference_page"%>
+            <%= link_to 'Preview', static_pages_about_path, class:"btn btn-primary" if announcement.location == "about_page"%>
+            <%= link_to 'Preview', welcome_rovers_path, class:"btn btn-primary" if announcement.location == "rovers_welcome_page"%>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          Last Time Updated: <%= show_date_with_month_name(announcement.updated_at) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

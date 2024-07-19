@@ -1,0 +1,36 @@
+<!--This is an empty preferences form for filling out-->
+
+<%= form_with(model: app_preference) do |form| %>
+  <% if app_preference.errors.any? %>
+    <div class="text-danger">
+      <h2><%= pluralize(app_preference.errors.count, "error") %></h2>
+      <ul>
+        <% app_preference.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3"> 
+    <%= form.label :name,  "Name *", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control form-control-sm", required: true  %>
+  </div>
+    
+  <div class="mb-3">
+    <%= form.label :description, "Description *", class: "form-label" %>
+    <%= form.text_field :description, class: "form-control form-control-sm", required: true  %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :pref_type, "Type *", class: "form-label" %>
+    <%= form.select :pref_type,  @pref_types, { include_blank: "Select ...", required: true }, { class: "input_text_field" } %>
+  </div>
+
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.submit app_preference.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
+      <% if app_preference.persisted? %>
+        <%= link_to "Cancel", app_preferences_path, class: "link_to" %>
+      <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,26 @@
+<%= form_with(model: note) do |form| %>
+  <% if note.errors.any? %>
+    <div class="text-danger">
+      <h3><%= pluralize(note.errors.count, "error") %></h3>
+      <ul>
+        <% note.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-2">
+    <%= form.rich_text_area :content, required: true, class: "" %>
+  </div>
+  <%= form.hidden_field :room_id, value: note.room_id %>
+
+  <% if note.new_record? %>
+    <%= form.submit "Add Note", class: "btn btn-primary" %>
+  <% else %>
+    <div>
+      <%= form.submit "Update", class: "btn btn-primary" %>
+      <%= link_to "Cancel", @note, class: "link_to" %>
+    </div>
+  <% end %>
+<% end %>

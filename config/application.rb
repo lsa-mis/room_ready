@@ -12,6 +12,7 @@ require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
+require "csv"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -35,6 +36,8 @@ module RoomReady
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.default_timezone = :local
 
     # Don't generate system test files.
     config.generators.system_tests = nil

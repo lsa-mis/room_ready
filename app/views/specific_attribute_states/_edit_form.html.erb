@@ -1,0 +1,66 @@
+<div data-controller='autosubmit'>
+  <%= form_with(model: [@room, @room_state],
+  data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+  <div class="d-inline-flex gap-1 mt-1 mb-1 p-2 bg-um-blue border rounded">
+    <%= form.check_box :report_to_supervisor, class: "form-check-input", data: { action: "change->autosubmit#check" }  %>
+    <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
+  </div>
+  <%end%>
+</div>
+<%= form_with url: update_specific_attribute_states_path, method: :post do %>
+  <%= hidden_field_tag :room_state_id, @room_state.id %>
+
+  <% @specific_attribute_states.each_with_index do |specific_attribute_state, index| %>
+    <%= fields_for "specific_attribute_states[#{index}]", specific_attribute_state do |f| %>
+      <div>
+        <% if specific_attribute_state.errors.any? %>
+          <div class="text-danger">
+            <h2><%= pluralize(specific_attribute_state.errors.count, "error") %></h2>
+
+            <ul>
+              <% specific_attribute_state.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="card w-100 mb-3">
+          <div class="card-body p-4">
+            <% if specific_attribute_state.specific_attribute.need_checkbox %>
+              <h5 class="card-title mb-3"><%= specific_attribute_state.specific_attribute.description %></h5>
+            <% else %>
+              <h5 class="card-title mb-3">
+                <%= f.label :quantity_box_value, specific_attribute_state.specific_attribute.description %>
+              </h5>
+            <% end %>
+            <% if specific_attribute_state.specific_attribute.need_checkbox %>
+              <div class="d-flex flex-row mb-1 gap-2">
+                <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
+                <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
+                <%= f.radio_button :checkbox_value, false, class: "btn-check", required: true %>
+                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
+              </div>
+            <% end %>
+            <% if specific_attribute_state.specific_attribute.need_quantity_box %>
+              <div>
+                <%= f.number_field :quantity_box_value, class: "form-control form-control-sm", required: true %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%#= f.hidden_field :specific_attribute_id, value: specific_attribute_state.specific_attribute_id %>
+        <%= f.hidden_field :specific_attribute_state_id, value: specific_attribute_state.id %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <%= link_to rooms_rover_navigation_path(floor_id: @room.floor.id), class: "text-primary link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" do %>
+      <i class="bi bi-arrow-left-circle-fill"></i>
+      Back to Rooms
+    <% end %>
+    <%= submit_tag "Update Response" %>
+  </div>
+<% end %>

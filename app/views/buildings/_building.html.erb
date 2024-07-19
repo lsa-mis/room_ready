@@ -1,0 +1,46 @@
+<div id="<%= dom_id building %>">
+
+  <p>
+    <strong>Building Record Number:</strong>
+    <%= building.bldrecnbr %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= building.name %>
+  </p>
+
+  <p>
+    <strong>Nickname:</strong>
+    <%= building.nick_name %>
+  </p>
+  
+  <p>
+    <strong>Address:</strong>
+    <%= "#{building.address}, #{building.city}, #{building.state} #{building.zip}"%>
+  </p>
+  
+  <p>
+    <strong>Zone:</strong>
+    <%= show_zone(building) %>
+  </p>
+
+</div>
+
+<div>
+  <% unless building.has_checked_rooms? %>
+    <%= link_to building_path(building), class: "link_to", data: { turbo_confirm: "Are you sure you want to delete this building?", turbo_method: :delete } do %>
+      Delete the Building <i class="bi bi-trash-fill text-danger"></i>
+    <% end %>
+  <% else %>
+    <% if building.archived %>
+      <%= link_to unarchive_building_path(building), class: "link_to", data: { turbo_confirm: "Are you sure you want to unarchive this building?", turbo_method: :post }  do %>
+        Unarchive the Building <i class="bi bi-archive text-success"></i>
+      <% end %>
+      <% else %>
+      <%= link_to archive_building_path(building), class: "link_to", data: { turbo_confirm: "Are you sure you want to archive this building?", turbo_method: :post }  do %>
+        Archive the Building <i class="bi bi-archive-fill text-success"></i>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

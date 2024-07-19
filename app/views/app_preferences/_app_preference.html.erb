@@ -1,0 +1,21 @@
+<tr id="<%= dom_id(app_preference) %>">
+  <td class="text-start">
+    <%= app_preference.name %>
+  </td>
+  <td>
+    <%= app_preference.description %>
+  </td>
+  <td class="text-center">
+    <%= app_preference.pref_type %>
+  </td>
+  <td class="text-center">
+    <%= link_to edit_app_preference_path(app_preference), title: "Edit #{app_preference.name}" do %>
+      <i class="bi bi-pencil-square text-primary"></i>
+    <% end %>
+  </td>
+  <td class="text-center">
+    <%= link_to app_preference_path(app_preference), 'aria-label': "delete_#{app_preference.id}", data: { turbo_confirm: "Are you sure you want to delete this preference?" , turbo_method: :delete } do %>
+      <i class="bi bi-trash-fill text-danger"></i>
+    <% end %>
+  </td>
+</tr>

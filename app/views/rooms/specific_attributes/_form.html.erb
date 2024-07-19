@@ -1,0 +1,38 @@
+<%= form_for [@room, specific_attribute] do |form| %>
+  <% if specific_attribute.errors.any? %>
+    <div class="text-danger">
+      <h2><%= pluralize(specific_attribute.errors.count, "error") %></h2>
+
+      <ul>
+        <% specific_attribute.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :description, "Description *", class: "form-label" %>
+    <%= form.text_field :description, class: "form-control form-control-sm", required: true %>
+  </div>
+
+  <% unless specific_attribute.specific_attribute_states.present? %>
+    <div class="form-check mb-3">
+      <%= form.check_box :need_checkbox, class: "form-check-input" %>
+      <%= form.label :need_checkbox, "Needs Checkbox?", class: "form-check-label" %>
+    </div>
+
+    <div class="form-check mb-3">
+      <%= form.check_box :need_quantity_box, class: "form-check-input" %>
+      <%= form.label :need_quantity_box, "Needs Quantity Box?", class: "form-check-label" %>
+    </div>
+  <% end %>
+
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <%= form.submit specific_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
+
+    <% if specific_attribute.persisted? %>
+      <%= link_to "Cancel", room_specific_attributes_path(@room), class: "ink_to" %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,24 @@
+<%= turbo_frame_tag 'new_rover' do %>  
+  <%= form_with(model: rover, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+    <% if rover.errors.any? %>
+      <div class="text-danger">
+        <h2><%= pluralize(rover.errors.count, "error") %></h2>
+        <ul>
+          <% rover.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :uniqname, "Create Rover by Uniqname:", class: "nowrap" %>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+        <%= form.text_field :uniqname, placeholder: "Uniqname", class: "w-50" %>
+        <%= form.submit "Create" %>
+        <a class="link_to" data-action="autosubmit#clearFilters">
+          Cancel
+        </a>
+      </div>
+    </div>
+  <% end %>
+<% end %>

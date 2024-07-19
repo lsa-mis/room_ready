@@ -1,0 +1,36 @@
+<%= form_with(model: common_attribute, html: { class: 'mb-3' }) do |form| %>
+  <% if common_attribute.errors.any? %>
+    <div class="text-danger">
+      <h2><%= pluralize(common_attribute.errors.count, "error") %></h2>
+
+      <ul>
+        <% common_attribute.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :description, "Description *", class: "form-label" %>
+    <%= form.text_field :description, class: "form-control form-control-sm", required: true %>
+  </div>
+
+  <div class="form-check mb-3">
+    <%= form.check_box :need_checkbox, class: "form-check-input" %>
+    <%= form.label :need_checkbox, "Needs Checkbox?", class: "form-check-label" %>
+  </div>
+
+  <div class="form-check mb-3">
+    <%= form.check_box :need_quantity_box, class: "form-check-input" %>
+    <%= form.label :need_quantity_box, "Needs Quantity Box?", class: "form-check-label" %>
+  </div>
+
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <%= form.submit common_attribute.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
+
+    <% if common_attribute.persisted? %>
+      <%= link_to "Cancel", common_attributes_path, class: "link_to" %>
+    <% end %>
+  </div>
+<% end %>

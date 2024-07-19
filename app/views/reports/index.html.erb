@@ -1,0 +1,15 @@
+<h1>Reports</h1>
+<div class="row">
+  <% @reports_list.each do |report| %>
+    <div class="m-2" style="width: 18rem;">
+      <div class="card">
+        <div class="card-header">
+          <%= link_to report[:title], report[:url], class: "link_to" %>
+        </div>
+        <div class="card-body">
+          <%= report[:description] %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
