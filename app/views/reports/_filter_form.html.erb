@@ -23,7 +23,7 @@
       </div>
     <% end %>
     <div class="d-flex flex-row justify-content-start gap-3 mt-3" >
-      <%= form.label :archived, "Include Archived Records? ", class: 'form-label'%>
+      <%= form.label :archived, "Show Archived Records? ", class: 'form-label'%>
       <%= form.check_box :archived, checked: params[:archived].to_s == "1", class: "form-check-input" %>
     </div>
 
