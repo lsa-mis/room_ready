@@ -17,51 +17,51 @@
     <div class="collapse navbar-collapse d-none d-md-block">
       <% if user_signed_in? %>
       <% if is_admin? || is_readonly? %>
-      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-        <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Main
-        </a>
-        <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
-          <li>
-            <%= link_to "Dashboard", dashboard_path, class: 'dropdown-item navbar_dropdown_item' if policy(:static_page).dashboard? %>
-          </li>
-          <li>
-            <%= link_to "Zones", zones_path, class: 'dropdown-item navbar_dropdown_item' if policy(Zone).index? %>
-          </li>
-          <li>
-            <%= link_to "Buildings", buildings_path, class: 'dropdown-item navbar_dropdown_item' if policy(Building).index?%>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-        <a class="nav-link h-100 d-flex align-items-center fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Admin
-        </a>
-        <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
-          <li>
-            <%= link_to "Common Attributes", common_attributes_path, class: 'dropdown-item navbar_dropdown_item' if policy(CommonAttribute).index? %>
-          </li>
-          <li>
-            <%= link_to "Create Preferences", app_preferences_path, class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).index? %>
-          </li>
-          <li>
-            <%= link_to "App Preferences", configure_prefs_app_preferences_path, class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).configure_prefs? %>
-          </li>
-          <li>
-            <%= link_to "Announcements", announcements_path, class: 'dropdown-item navbar_dropdown_item' if policy(Announcement).update? %>
-          </li>
-          <li>
-            <%= link_to "Rovers", rovers_path, class: 'dropdown-item navbar_dropdown_item'if policy(Rover).index? %>
-          </li>
-          <li>
-            <%= link_to "Reports", reports_path, class: 'dropdown-item navbar_dropdown_item'if policy(:report).index? %>
-          </li>
-        </ul>
-      </div>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Main
+          </a>
+          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+            <li>
+              <%= link_to "Dashboard", dashboard_path, class: 'dropdown-item navbar_dropdown_item' if policy(:static_page).dashboard? %>
+            </li>
+            <li>
+              <%= link_to "Zones", zones_path, class: 'dropdown-item navbar_dropdown_item' if policy(Zone).index? %>
+            </li>
+            <li>
+              <%= link_to "Buildings", buildings_path, class: 'dropdown-item navbar_dropdown_item' if policy(Building).index?%>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Admin
+          </a>
+          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+            <li>
+              <%= link_to "Common Attributes", common_attributes_path, class: 'dropdown-item navbar_dropdown_item' if policy(CommonAttribute).index? %>
+            </li>
+            <li>
+              <%= link_to "Create Preferences", app_preferences_path, class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).index? %>
+            </li>
+            <li>
+              <%= link_to "App Preferences", configure_prefs_app_preferences_path, class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).configure_prefs? %>
+            </li>
+            <li>
+              <%= link_to "Announcements", announcements_path, class: 'dropdown-item navbar_dropdown_item' if policy(Announcement).update? %>
+            </li>
+            <li>
+              <%= link_to "Rovers", rovers_path, class: 'dropdown-item navbar_dropdown_item'if policy(Rover).index? %>
+            </li>
+            <li>
+              <%= link_to "Reports", reports_path, class: 'dropdown-item navbar_dropdown_item'if policy(:report).index? %>
+            </li>
+          </ul>
+        </div>
       <% end %>
       <% if is_rover? || is_admin? %>
-      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-        <%= link_to "Rover Form", zones_rover_navigation_path, class: 'nav-link h-100 d-flex align-items-center fs-5' if policy(:rover_navigation).zones? %>
+      <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0" style="--bs-focus-ring-color:red;">
+        <%= link_to "Rover Form", zones_rover_navigation_path, class: 'nav-link h-100 d-flex align-items-center fs-5 focus-ring' if policy(:rover_navigation).zones? %>
       </div>
         Rover Form
       </a>
@@ -87,8 +87,9 @@
               </span>
             </div>
             <div class="d-flex flex-row justify-content-center align-items-center"><span><%= current_user.principal_name %></span> </div>
-            <div class="d-flex flex-row justify-content-center align-items-center mt-2"> <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
-              <span>Log Out</span>
+            <div class="d-flex flex-row justify-content-center align-items-center mt-2">
+              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+                <span>Log Out</span>
               <% end %> 
             </div>
           </div>
@@ -119,14 +120,10 @@
     <% end %>
   </div>
   <% if user_signed_in? %>
-    <div style="cursor: pointer" class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-      <span class="nav-link h-100 d-flex align-items-center fs-5", aria-expanded="false">
-        <div class="text-white body-md-text pb-1 hide-on-mobile nav-user">
-        <a class="nav-link h-100 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <%= current_user.display_name %>
-        </a>
-        </div>
-      </span>
+    <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+      <a class="nav-link h-100 d-flex align-items-center focus-ring body-md-text pb-1 hide-on-mobile nav-user" style="--bs-focus-ring-color:red;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <%= current_user.display_name %>
+      </a>
       <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
         <div class="container d-flex justify-content-center" style="position: absolute; top:0; right:0; width:400px;">
           <div class="card p-4">
@@ -136,8 +133,9 @@
               </span>
             </div>
             <div class="d-flex flex-row justify-content-center align-items-center"><span><%= current_user.principal_name %></span> </div>
-            <div class="d-flex flex-row justify-content-center align-items-center mt-2"> <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
-              <span>Log Out</span>
+            <div class="d-flex flex-row justify-content-center align-items-center mt-2 focus-ring" style="--bs-focus-ring-color:red;">
+              <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:red;" do %>
+                Log Out
               <% end %> 
             </div>
           </div>
