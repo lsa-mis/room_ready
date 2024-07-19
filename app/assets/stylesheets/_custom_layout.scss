@@ -326,3 +326,13 @@ svg.wh6 {
   font-size: 0.875rem; 
   width: 150px; 
 }
+
+.card-header p {
+  font-size: 1.25em;
+  margin-top: 1em;
+  font-family: roboto;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--bs-heading-color);
+}
