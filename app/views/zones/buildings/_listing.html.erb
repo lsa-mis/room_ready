@@ -18,7 +18,9 @@
             <%= building.bldrecnbr %>
           </td>
           <td class="building_tbody_td">
+          <%= link_to building_path(building), data: { turbo_frame: "_top" }, class: "link_to" do%>
             <%= building.name %>
+          <% end %>
           </td>
           <td class="building_tbody_td">
             <%= building.nick_name %>
@@ -27,7 +29,7 @@
             <%= building.full_address %>
           </td>
           <td class="building_tbody_td">
-            <%= link_to building_path(building, zone_id: @zone.id), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "View", data: { turbo_frame: "_top" } do %>
+            <%= link_to building_path(building), 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "View", data: { turbo_frame: "_top" } do %>
             <i class="bi bi-eye-fill text-primary"></i>
             <% end %>
           </td>
