@@ -74,16 +74,6 @@ class SpecificAttributeStatesController < ApplicationController
     end
   end
 
-  # DELETE /specific_attribute_states/1 or /specific_attribute_states/1.json
-  def destroy
-    @specific_attribute_state.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to specific_attribute_states_url, notice: "Specific attribute state was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
 
