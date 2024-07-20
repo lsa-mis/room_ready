@@ -10,7 +10,7 @@ RSpec.describe ResourceStatePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, resource_state) }
 
-    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_resource_states ]) }
+    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_resource_states]) }
     it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly]) }
 
   end
@@ -25,15 +25,15 @@ RSpec.describe ResourceStatePolicy, type: :policy do
   context 'with admin role' do
     subject { described_class.new({ user: user, role: "admin" }, resource_state) }
 
-    it { is_expected.to forbid_actions(%i[is_rover is_developer]) }
-    it { is_expected.to permit_only_actions(%i[is_admin new create edit update_resource_states ]) }
+    it { is_expected.to forbid_actions(%i[is_rover is_developer is_readonly]) }
+    it { is_expected.to permit_only_actions(%i[is_admin new create edit update_resource_states]) }
   end
 
   context 'with developer role' do
     subject { described_class.new({ user: user, role: "developer" }, resource_state) }
 
     it { is_expected.to forbid_actions(%i[is_rover is_readonly]) }
-    it { is_expected.to permit_only_actions(%i[is_developer is_admin new create edit update_resource_states ]) }
+    it { is_expected.to permit_only_actions(%i[is_developer is_admin new create edit update_resource_states]) }
   end
 
   context 'with no role' do
