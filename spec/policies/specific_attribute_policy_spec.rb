@@ -7,19 +7,29 @@ RSpec.describe SpecificAttributePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, specific_attribute) }
 
+    it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly index create new update edit archive unarchive destroy]) }
     it { is_expected.to permit_only_actions(%i[is_rover]) }
+  end
+
+  context 'with readonly role' do
+    subject { described_class.new({ user: user, role: "readonly" }, specific_attribute) }
+
+    it { is_expected.to forbid_actions(%i[is_rover is_developer is_admin index new create edit update archive unarchive destroy]) }
+    it { is_expected.to permit_only_actions(%i[is_readonly]) }
   end
 
   context 'with admin role' do
     subject { described_class.new({ user: user, role: "admin" }, specific_attribute) }
 
-    it { is_expected.to forbid_actions(%i[is_rover is_developer]) }
+    it { is_expected.to forbid_actions(%i[is_rover is_developer is_readonly]) }
+    it { is_expected.to permit_only_actions(%i[is_admin index create new update edit archive unarchive destroy]) }
   end
 
   context 'with developer role' do
     subject { described_class.new({ user: user, role: "developer" }, specific_attribute) }
 
-    it { is_expected.to forbid_action(:is_rover) }
+    it { is_expected.to forbid_actions(%i[is_rover is_readonly]) }
+    it { is_expected.to permit_only_actions(%i[is_admin is_developer index create new update edit archive unarchive destroy]) }
   end
 
   context 'with no role' do

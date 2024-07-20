@@ -10,9 +10,8 @@ RSpec.describe SpecificAttributeStatePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, specific_attribute_state) }
 
-    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_specific_attribute_states]) }
     it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly index]) }
-
+    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_specific_attribute_states]) }
   end
 
   context 'with readonly role' do

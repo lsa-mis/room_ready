@@ -8,9 +8,8 @@ RSpec.describe RoomStatePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, room_state) }
 
-    it { is_expected.to permit_only_actions(%i[is_rover show new create edit update]) }
     it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly index]) }
-
+    it { is_expected.to permit_only_actions(%i[is_rover show new create edit update]) }
   end
 
   context 'with readonly role' do

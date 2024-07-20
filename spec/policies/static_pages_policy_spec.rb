@@ -6,8 +6,8 @@ RSpec.describe StaticPagePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, :static_page) }
 
-    it { is_expected.to permit_only_actions(%i[is_rover welcome_rovers about]) }
     it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly dashboard]) }
+    it { is_expected.to permit_only_actions(%i[is_rover welcome_rovers about]) }
   end
 
   context 'with readonly role' do

@@ -10,9 +10,8 @@ RSpec.describe ResourceStatePolicy, type: :policy do
   context 'with rover role' do
     subject { described_class.new({ user: user, role: "rover" }, resource_state) }
 
-    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_resource_states]) }
     it { is_expected.to forbid_actions(%i[is_admin is_developer is_readonly]) }
-
+    it { is_expected.to permit_only_actions(%i[is_rover new create edit update_resource_states]) }
   end
 
   context 'with readonly role' do
