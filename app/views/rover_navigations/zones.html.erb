@@ -4,9 +4,11 @@
 
 <% @zones.each do |zone| %>
   <div class="card mt-3">
-    <h5 class="card-header">
-      <%= zone.name %>
-    </h5>
+    <div class="card-header">
+      <p>
+        <%= zone.name %>
+      </p>
+    </div>
     <div class="card-body">
       <p class="card-text">
         <%= truncate(
