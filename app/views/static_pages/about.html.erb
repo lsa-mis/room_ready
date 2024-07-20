@@ -13,13 +13,13 @@
     <div class="d-grid w-25 mt-6 mb-8">
       <% if user_signed_in? %>
         <div>
-          <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+          <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#00274c;" do %>
             <span>Log Out</span>
           <% end %>
         </div>
       <% else %> 
         <div>
-          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#00274c;" %>
         </div>
       <% end %>
   </div>

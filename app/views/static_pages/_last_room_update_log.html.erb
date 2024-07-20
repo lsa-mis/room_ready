@@ -4,16 +4,16 @@
       <h3>Resources Script</h3>
     </div>
     <div class="card-body">
-      <h6 class="card-text mb-4">Last Run at: <%= show_date_with_time(last_room_update_log.created_at) %></h6>
-      <h6 class="card-text mb-4">
+      <div class="card-text mb-4">Last Run at: <%= show_date_with_time(last_room_update_log.created_at) %></div>
+      <div class="card-text mb-4">
         Status:
         <span
           class="<%= room_update_log_status(last_room_update_log.note) == 'error' ? 'text-danger' : 'text-success' %>">
           <%= last_room_update_log.note.include?('success') ? 'SUCCESS' : 'ERROR' %>
         </span>
-      </h6>
+      </div>
 
-      <h6 class="card-text mb-4">
+      <div class="card-text mb-4">
         Note:
         <% if room_update_log_status(last_room_update_log.note) == 'success' %>
           Resources updated successfully for rooms.
@@ -31,7 +31,7 @@
         <% elsif room_update_log_status(last_room_update_log.note) == 'error' %>
           An error occurred while updating resources for rooms. Please report an issue.
         <% end %>
-      </h6>
+      </div>
     </div>
   </div>
 </div>
