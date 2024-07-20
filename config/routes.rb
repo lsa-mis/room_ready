@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   resources :rooms, :except => [:edit, :update]
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
-    resources :room_states, module: :rooms
+    resources :room_states, module: :rooms, except: [:destroy]
     resources :room_tickets, module: :rooms
   end
   post 'archive_room/:id', to: 'rooms#archive', as: :archive_room

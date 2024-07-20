@@ -1,7 +1,7 @@
 class Rooms::RoomStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room
-  before_action :set_room_state, only: %i[ show edit update destroy ]
+  before_action :set_room_state, only: %i[ show edit update ]
   before_action :set_notes_andannouncements, only: %i[new edit create]
 
   # GET /room_states or /room_states.json
@@ -67,16 +67,6 @@ class Rooms::RoomStatesController < ApplicationController
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /room_states/1 or /room_states/1.json
-  def destroy
-    @room_state.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to room_states_url, notice: "Room state was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 
