@@ -41,7 +41,6 @@ Rails.application.routes.draw do
   end
 
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
-  resources :resources
 
   resources :rooms, :except => [:edit, :update]
   resources :rooms do
