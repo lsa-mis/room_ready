@@ -8,8 +8,16 @@ class NotePolicy < ApplicationPolicy
     is_admin?
   end
 
+  def new?
+    create?
+  end
+
   def create?
     is_admin?
+  end
+
+  def edit?
+    update?
   end
 
   def update?
