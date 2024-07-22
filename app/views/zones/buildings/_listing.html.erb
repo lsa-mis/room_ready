@@ -18,7 +18,7 @@
             <%= building.bldrecnbr %>
           </td>
           <td class="building_tbody_td">
-          <%= link_to building_path(building), data: { turbo_frame: "_top" }, class: "link_to" do%>
+          <%= link_to building_path(building, zone_id: @zone.id), data: { turbo_frame: "_top" }, class: "link_to" do%>
             <%= building.name %>
           <% end %>
           </td>
