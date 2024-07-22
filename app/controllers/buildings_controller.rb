@@ -131,7 +131,8 @@ class BuildingsController < ApplicationController
     end
 
     def set_zone
-      if params[:zone_id].present?
+      # params[:zone_id] == 0 for "No Zones" option
+      if params[:zone_id].present? && params[:zone_id] != "0"
         @zone_id = params[:zone_id]
         @zone = Zone.find(params[:zone_id])
       end
