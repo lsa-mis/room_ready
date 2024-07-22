@@ -33,3 +33,5 @@ preferences.each do |pref|
     AppPreference.create!(pref)
   end
 end
+
+AppPreference.find_by(name: "no_access_reason").update(value: "reason one, reason two")

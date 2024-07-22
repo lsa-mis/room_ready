@@ -15,15 +15,15 @@
     <%= form.check_box :report_to_supervisor, class: "form-check-input" %>
     <%= form.label :report_to_supervisor, "Reported to supervisor #{show_supervisor_phone}", class: "form-check-label text-white" %>
   </div>
-  <div>
-    <div class="py-2">Can you access the room?</div>
-  </div>
-  <div class="d-flex flex-row mb-1 gap-2">
-    <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true %>
-    <%= form.label :is_accessed_true, "Yes", class: "btn btn-outline-success w-50" %>
-    <%= form.radio_button :is_accessed, false, class: "btn-check", data: { render_target: "noaccess" }, "data-action" => "change->render#renderNoAccessReasonField" %>
-    <%= form.label :is_accessed_false, "No", class: "btn btn-outline-secondary w-50" %>
-  </div>
+  <fieldset>
+    <legend class="py-2 body-md-text">Can you access the room?</legend>
+    <div class="d-flex flex-row mb-1 gap-2">
+      <%= form.radio_button :is_accessed, true, class: "btn-check", data: { render_target: "access" }, "data-action" => "change->render#renderNoAccessReasonField", required: true %>
+      <%= form.label :is_accessed_true, "Yes", class: "btn btn-outline-secondary w-50" %>
+      <%= form.radio_button :is_accessed, false, class: "btn-check", data: { render_target: "noaccess" }, "data-action" => "change->render#renderNoAccessReasonField" %>
+      <%= form.label :is_accessed_false, "No", class: "btn btn-outline-secondary w-50" %>
+    </div>
+  </fieldset>
 
   <div id="no-reason" style="display:none">
     <%= form.label :no_access_reason, "Can not access the room because: ", class: "nowrap" %>
