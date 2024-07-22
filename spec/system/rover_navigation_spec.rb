@@ -6,9 +6,9 @@ RSpec.describe Rover, type: :system do
     load "#{Rails.root}/spec/support/test_seeds.rb" 
     rover = FactoryBot.create(:rover)
     user = FactoryBot.create(:user, uniqname: rover.uniqname)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(false)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins-readonly').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-admins').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-admins-readonly').and_return(false)
     mock_login(user)
   end
 
