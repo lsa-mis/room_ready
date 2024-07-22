@@ -7,15 +7,11 @@ class CommonAttributeStatePolicy < ApplicationPolicy
     create?
   end
 
-  def update?
-    is_rover? || is_admin?
-   end
-
   def update_common_attribute_states?
     is_rover? || is_admin?
   end
 
   def edit?
-    update?
+    update_common_attribute_states?
   end
 end

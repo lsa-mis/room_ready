@@ -1,6 +1,6 @@
 class RoomStatePolicy < ApplicationPolicy
     def index?
-      is_rover? || is_admin?
+      is_admin?
     end
 
     def show?
@@ -23,7 +23,4 @@ class RoomStatePolicy < ApplicationPolicy
       update?
     end
   
-    def destroy?
-      is_admin?
-    end
   end

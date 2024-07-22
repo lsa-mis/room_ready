@@ -1,6 +1,7 @@
 class BuildingsController < ApplicationController
   before_action :auth_user
   before_action :set_building, only: %i[ show edit update destroy archive unarchive unarchive_index] 
+  before_action :set_zone
   include BuildingApi
 
   def index
@@ -59,11 +60,7 @@ class BuildingsController < ApplicationController
   # PATCH/PUT /buildings/1 or /buildings/1.json
   def update
     if @building.update(building_params)
-      if @zone.present?
-        redirect_to zone_buildings_path(@zone), notice: notice
-      else 
-        redirect_to buildings_path, notice: notice
-      end
+        redirect_to building_path(@building), notice: notice
     else 
       render :edit, status: :unprocessable_entity
     end
@@ -131,6 +128,13 @@ class BuildingsController < ApplicationController
     def set_building
       @building = Building.find(params[:id])
       authorize @building
+    end
+
+    def set_zone
+      if params[:zone_id].present?
+        @zone_id = params[:zone_id]
+        @zone = Zone.find(params[:zone_id])
+      end
     end
 
     def add_from_bldrecnbr

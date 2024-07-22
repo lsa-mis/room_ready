@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :resource_states
   post '/resource_states/update_resource_states/:id', to: 'resource_states#update_resource_states', as: :update_resource_states
   
-  resources :specific_attribute_states
+  resources :specific_attribute_states, except: [:destroy]
   post '/specific_attribute_states/update_specific_attribute_states/:id', to: 'specific_attribute_states#update_specific_attribute_states', as: :update_specific_attribute_states
 
   resources :common_attribute_states
@@ -41,12 +41,11 @@ Rails.application.routes.draw do
   end
 
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
-  resources :resources
 
   resources :rooms, :except => [:edit, :update]
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
-    resources :room_states, module: :rooms
+    resources :room_states, module: :rooms, except: [:destroy]
     resources :room_tickets, module: :rooms
   end
   post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
