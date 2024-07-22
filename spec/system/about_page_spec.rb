@@ -5,7 +5,7 @@ RSpec.describe 'About page', type: :system do
     it 'shows the right content' do
       VCR.use_cassette "about" do
         visit all_root_path
-        expect(page).to have_content('About LSA Space Ready Application')
+        expect(page).to have_content('About LSA SpaceReady Application')
       end
     end
   end
