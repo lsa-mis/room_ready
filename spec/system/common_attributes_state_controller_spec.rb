@@ -5,8 +5,8 @@ RSpec.describe CommonAttributeState, type: :system do
   before do
     load "#{Rails.root}/spec/support/test_seeds.rb" 
 		user = FactoryBot.create(:user)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-admins').and_return(true)
     mock_login(user)
 	end
 
