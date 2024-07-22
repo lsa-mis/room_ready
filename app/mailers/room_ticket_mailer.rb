@@ -7,6 +7,7 @@ class RoomTicketMailer < ApplicationMailer
     @building = @room.floor.building
     tdx_email = params[:tdx_email]
     from = issue_email_from_address
+    @forward_to_lsa_ts_group = AppPreference.find_by(name: 'tdx_lsa_ts_email').value.include?(tdx_email) ? "Please forward this ticket to LSA-TS-Classrooms-UrgentSupport." : ""
 
     subject = "Issue for Room " + @room.room_number + " in " + @building.name + ", "  + @date
     

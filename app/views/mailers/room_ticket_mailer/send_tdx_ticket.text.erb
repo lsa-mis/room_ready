@@ -1,12 +1,10 @@
+<%= @forward_to_lsa_ts_group %>
+
 Room Number: <%= @room.room_number %>
-
 Building: <%= @building.name %>
-
 Submitted by (uniqname): <%= @submitter.uniqname %>
 
-Message: <%= strip_tags(@message) %>
+<%= strip_tags(@message) %>
 
 Thank you,
-<%= @submitter.display_name %>, from the LSA SpaceReady team
-
-For further questions, you can email me at <%= @submitter.email %> or call the LSA SpaceReady office at: ENTER PHONE NUMBER HERE.
+from LSA TS Rover Team
