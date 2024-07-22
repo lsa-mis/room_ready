@@ -120,7 +120,8 @@ class ReportsController < ApplicationController
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
 
-      rooms = Room.joins(floor: { building: :zone }).joins(:room_states)
+      rooms = Room.left_outer_joins(floor: { building: :zone })
+                  .joins(:room_states)
                   .where(archived: archived)
                   .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
@@ -129,8 +130,8 @@ class ReportsController < ApplicationController
                   .select('COUNT(room_states.id) AS room_check_count')
                   .order('room_check_count DESC')
 
-      rooms_no_room_state = Room.left_outer_joins(:room_states)
-                                .joins(floor: { building: :zone })
+      rooms_no_room_state = Room.left_outer_joins(floor: { building: :zone })
+                                .joins(:room_states)
                                 .where(archived: archived)
                                 .where(buildings: { id: building_id, zone_id: zone_id })
                                 .where(room_states: { id: nil })
