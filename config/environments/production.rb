@@ -84,6 +84,20 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  host = 'https://spaceready.lsa.umich.edu/'
+  config.action_mailer.default_url_options = { host: host }
+  ActionMailer::Base.smtp_settings = {
+    :address        => 'smtp.sendgrid.net',
+    :port           => '587',
+    :authentication => :plain,
+    :user_name      => 'apikey',
+    :password       => ENV['SENDGRID_API_KEY'],
+    :domain         => 'umich.edu',
+    :enable_starttls_auto => true
+  }
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
