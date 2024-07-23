@@ -50,7 +50,7 @@ module DashboardHelper
   end
 
   def total_rooms(zone)
-    Room.joins(floor: { building: :zone })
+    Room.active.joins(floor: { building: :zone })
         .where(zones: { id: zone.id })
         .count
   end
