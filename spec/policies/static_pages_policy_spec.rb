@@ -20,15 +20,15 @@ RSpec.describe StaticPagePolicy, type: :policy do
   context 'with admin role' do
     subject { described_class.new({ user: user, role: "admin" }, :static_page) }
 
-    it { is_expected.to forbid_actions(%i[is_rover is_developer is_readonly]) }
-    it { is_expected.to permit_only_actions(%i[is_admin about dashboard welcome_rovers]) }
+    it { is_expected.to forbid_actions(%i[is_rover is_developer is_readonly welcome_rovers]) }
+    it { is_expected.to permit_only_actions(%i[is_admin about dashboard]) }
   end
 
   context 'with developer role' do
     subject { described_class.new({ user: user, role: "developer" }, :static_page) }
 
-    it { is_expected.to forbid_actions(%i[is_rover is_readonly]) }
-    it { is_expected.to permit_only_actions(%i[is_admin is_developer about dashboard welcome_rovers]) }
+    it { is_expected.to forbid_actions(%i[is_rover is_readonly welcome_rovers]) }
+    it { is_expected.to permit_only_actions(%i[is_admin is_developer about dashboard]) }
   end
 
   context 'with no role' do
