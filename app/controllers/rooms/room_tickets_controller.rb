@@ -1,26 +1,13 @@
 class Rooms::RoomTicketsController < ApplicationController
   before_action :auth_user
-  before_action :set_room_ticket, only: %i[ show ]
-  before_action :set_room, only: %i[ new send_email_for_tdx_ticket index ]
-
-  # GET /room_tickets or /room_tickets.json
-  def index
-    @room_tickets = RoomTicket.where(room_id: @room.id).order(created_at: :desc)
-    authorize @room_tickets
-  end
-
-  # GET /room_tickets/new
-  def new
-    @room_ticket = RoomTicket.new
-    authorize @room_ticket
-  end
+  before_action :set_room, only: %i[ send_email_for_tdx_ticket ]
 
   def send_email_for_tdx_ticket
     message = room_ticket_params[:description]
     tdx_email = room_ticket_params[:tdx_email]
 
     if tdx_emails(@room.floor.building).none? { |_, email| email == tdx_email }
-      render json: { errors: ['Invalid TDX email.'] }, status: :unprocessable_entity and return
+      render json: { errors: ['Invalid email address.'] }, status: :unprocessable_entity and return
     end
 
     @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: current_user.uniqname, tdx_email: tdx_email )
