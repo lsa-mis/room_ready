@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Create a TDX Ticket
+  Email to Report Issues
 </button>
 
 <!-- Modal -->
@@ -8,7 +8,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Create a TDX Ticket</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div data-controller="room-tickets" class="modal-body">
@@ -24,7 +24,7 @@
             </div>
           <% end %>
           <div>
-            <%= form.label :tdx_email, "Select TDX ticket email *" %>
+            <%= form.label :tdx_email, "Select the Email Address *" %>
             <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building))) %>
           </div>
           <div>
