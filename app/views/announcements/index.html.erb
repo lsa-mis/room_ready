@@ -4,12 +4,14 @@
     <div class="col mb-4">
       <div class="card">
         <div class="card-header">
-          <%= announcement.location.titleize %> Announcement
+          <p>
+            <%= announcement.location.titleize %> Announcement
+          </p>
         </div>
         <div class="card-body">
-          <div class="card-text mb-4">
+          <p>
             <%= announcement.content %>
-          </div>
+          </p>
           <div>
             <%= link_to 'Edit', edit_announcement_path(announcement), class:"btn btn-primary" %>
             <% if announcement.location == "rovers_form" || 

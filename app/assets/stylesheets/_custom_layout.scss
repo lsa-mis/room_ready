@@ -217,14 +217,19 @@ svg.wh6 {
   cursor: pointer;
 }
 
-
 .navbar_dropdown_item {
   color: white;
 }
 
 .navbar_dropdown_item:hover {
-  background-color: $um_blue;
   color: $um_maize;
+}
+
+.navbar_dropdown_item:focus {
+  background-color: $um_blue;
+  outline: none; 
+  border: 2px solid #E5E5E5;
+  border-radius: .25rem;
 }
 
 .nav-item.dropdown:hover > .dropdown-menu {
@@ -320,4 +325,23 @@ svg.wh6 {
 .nav-user {
   font-size: 0.875rem; 
   width: 150px; 
+}
+
+.card-header p {
+  font-size: 1.25em;
+  margin-top: 1em;
+  font-family: roboto;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--bs-heading-color);
+}
+
+.card-title p {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  font-family: roboto;
+  margin-bottom: 1rem;
+  color: var(--bs-heading-color);
 }

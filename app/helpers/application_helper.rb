@@ -130,7 +130,7 @@ module ApplicationHelper
     if statuses.present?
       "Checked #{(statuses.sum(0.0) / rooms.size).round}%"
     else
-      "Not checked"
+      "Not checked today"
     end
   end
   

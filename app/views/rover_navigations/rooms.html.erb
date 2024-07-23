@@ -22,16 +22,15 @@
 
 <% @rooms.each do |room| %>
   <div class="card mt-3">
-    <h5 class="card-header">
-      Room: <%= room.room_number %> 
-      <span class="fs-5 fw-bold text-success">
-        <%= RoomStatus.new(room).show_status %>
-      </span>
-    </h5>
-    <div class="card-body">
-      <p class="card-text">
-        Room Record Number (Barcode): <%= room.rmrecnbr %>
+    <div class="card-header">
+      <p>
+        Room: <%= room.room_number %>
       </p>
+      <p class="text-success">
+        <%= RoomStatus.new(room).show_status %>
+      </p>
+    </div>
+    <div class="card-body">
       <p class="card-text">
         Room Type: <%= room.room_type %>
       </p>

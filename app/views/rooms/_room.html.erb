@@ -30,16 +30,16 @@
   <div class="py-1 d-flex flex-row align-items-center gap-3">
     <% unless room.room_states.present? %>
       <%= link_to room_path(room), class: "link_to", data: { turbo_confirm: "Are you sure you want to delete this room?" , turbo_method: :delete } do %>
-        Delete the Room <i class="bi bi-trash-fill text-danger"></i>
+        Delete Room <i class="bi bi-trash-fill text-danger"></i>
       <% end %>
     <% else %>
       <% if room.archived %>
         <%= link_to unarchive_room_path(room), class: "link_to", data: { turbo_confirm: "Are you sure you want to unarchive this room?" , turbo_method: :post }  do %>
-          Unarchive the Room <i class="bi bi-archive text-success"></i>
+          Unarchive Room <i class="bi bi-archive text-success"></i>
         <% end %>
       <% else %>
         <%= link_to archive_room_path(room), class: "link_to", data: { turbo_confirm: "Are you sure you want to archive this room?" , turbo_method: :post }  do %>
-          Archive the Room <i class="bi bi-archive-fill text-success"></i>
+          Archive Room <i class="bi bi-archive-fill text-success"></i>
         <% end %>
       <% end %>
     <% end %>

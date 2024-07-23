@@ -24,33 +24,36 @@
             </ul>
           </div>
         <% end %>
-
-        <div class="card w-100 mb-3">
-          <div class="card-body p-4">
-            <% if specific_attribute_state.specific_attribute.need_checkbox %>
-              <h5 class="card-title mb-3"><%= specific_attribute_state.specific_attribute.description %></h5>
-            <% else %>
-              <h5 class="card-title mb-3">
-                <%= f.label :quantity_box_value, specific_attribute_state.specific_attribute.description %>
-              </h5>
-            <% end %>
-            <% if specific_attribute_state.specific_attribute.need_checkbox %>
-              <div class="d-flex flex-row mb-1 gap-2">
-                <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
-                <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
-                <%= f.radio_button :checkbox_value, false, class: "btn-check", required: true %>
-                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
-              </div>
-            <% end %>
-            <% if specific_attribute_state.specific_attribute.need_quantity_box %>
-              <div>
-                <%= f.number_field :quantity_box_value, class: "form-control form-control-sm", required: true %>
-              </div>
-            <% end %>
+        <fieldset>
+          <div class="card w-100 mb-3">
+            <div class="card-body p-4">
+              <legend>
+                <div class="card-title">
+                  <p>
+                    <% if specific_attribute_state.specific_attribute.need_checkbox %>
+                      <%= specific_attribute_state.specific_attribute.description %>
+                    <% else %>
+                      <%= f.label :quantity_box_value, specific_attribute_state.specific_attribute.description %>
+                    <% end %>
+                  </p>
+                </div>
+              <legend>
+              <% if specific_attribute_state.specific_attribute.need_checkbox %>
+                <div class="d-flex flex-row mb-1 gap-2">
+                  <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
+                  <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-secondary w-50" %>
+                  <%= f.radio_button :checkbox_value, false, class: "btn-check", required: true %>
+                  <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
+                </div>
+              <% end %>
+              <% if specific_attribute_state.specific_attribute.need_quantity_box %>
+                <div>
+                  <%= f.number_field :quantity_box_value, class: "form-control form-control-sm", required: true %>
+                </div>
+              <% end %>
+            </div>
           </div>
-        </div>
-
-        <%#= f.hidden_field :specific_attribute_id, value: specific_attribute_state.specific_attribute_id %>
+        </fieldset>
         <%= f.hidden_field :specific_attribute_state_id, value: specific_attribute_state.id %>
       </div>
     <% end %>

@@ -42,11 +42,11 @@ def set_user
   if @user
     session[:user_email] = @user.email
 
-    if LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-developers')
+    if LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-spaceready-developers')
       session[:role] = "developer"
-    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-admins')
+    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-spaceready-admins')
       session[:role] = "admin"
-    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-roomready-admins-readonly')
+    elsif LdapLookup.is_member_of_group?(@user.uniqname, 'lsa-spaceready-admins-readonly')
       session[:role] = "readonly"
     elsif  Rover.exists?(uniqname: @user.uniqname)
       session[:role] = "rover"
