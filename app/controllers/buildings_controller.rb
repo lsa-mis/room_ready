@@ -141,34 +141,41 @@ class BuildingsController < ApplicationController
     def add_from_bldrecnbr
       note = ""
       bldrecnbr = building_params[:bldrecnbr]
-      @building = Building.new(bldrecnbr: bldrecnbr, zone_id: params[:zone_id])
+      @building = Building.new
       authorize @building
       result = get_building_info_by_bldrecnbr(bldrecnbr)
       if result['success']
         if result['data'].present?
-          data = result['data'].first
-          @building.name = data['BuildingLongDescription'].titleize
-          address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
-          @building.address = address.titleize
-          @building.city = data['BuildingCity'].titleize
-          @building.state = data['BuildingState']
-          @building.zip = data['BuildingPostal']
-    
-          respond_to do |format|
-            if @building.save
-              add_classrooms_for_building(bldrecnbr)
-              notice = "New Building was added." + note
-              @buildings = Building.active.where(zone: @zone)
-              format.turbo_stream do
-                @new_building = Building.new
-                if @zone.present?
-                redirect_to zone_buildings_path(@zone), notice: notice
-                else 
-                  redirect_to buildings_path, notice: notice
+          if result['data'].count > 1
+            flash.now[:alert] = "The API returned multiple buildings for the #{bldrecnbr} number. Please change it."
+            render :new, status: :unprocessable_entity
+          else
+            data = result['data'].first
+            @building.zone_id = params[:zone_id]
+            @building.bldrecnbr = data['BuildingRecordNumber']
+            @building.name = data['BuildingLongDescription'].titleize
+            address = "#{data['BuildingStreetNumber']}  #{data['BuildingStreetDirection']}  #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+            @building.address = address.titleize
+            @building.city = data['BuildingCity'].titleize
+            @building.state = data['BuildingState']
+            @building.zip = data['BuildingPostal']
+            authorize @building
+            respond_to do |format|
+              if @building.save
+                add_classrooms_for_building(bldrecnbr)
+                notice = "New Building was added." + note
+                @buildings = Building.active.where(zone: @zone)
+                format.turbo_stream do
+                  @new_building = Building.new
+                  if @zone.present?
+                  redirect_to zone_buildings_path(@zone), notice: notice
+                  else 
+                    redirect_to buildings_path, notice: notice
+                  end
                 end
+              else
+                format.html { render :new, status: :unprocessable_entity }
               end
-            else
-              format.html { render :new, status: :unprocessable_entity }
             end
           end
         end
