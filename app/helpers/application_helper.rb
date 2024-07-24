@@ -133,5 +133,9 @@ module ApplicationHelper
       "Not checked today"
     end
   end
+
+  def room_tickets(room, day)
+    RoomTicket.where('room_id = ? AND DATE(updated_at) = ?', room.id, day.to_date)
+  end
   
 end
