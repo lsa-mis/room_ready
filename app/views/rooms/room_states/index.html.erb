@@ -33,7 +33,7 @@
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse<%= (index + 1) %>" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
       <strong><%= show_date_with_time(room_state.updated_at) %>, Checked by <%= room_state.checked_by %>, 
       <span class="text-danger"><%= 'Issue Reported to Supervisor' if room_state.report_to_supervisor%></span>
-      <span class="text-success"><%= 'No Issue Reported' if room_state.report_to_supervisor==false %></span>
+      <span class="text-danger"><%= 'Issue Emails Sent' if RoomTicket.where('room_id = ? AND DATE(updated_at) = ?', @room.id, room_state.updated_at.to_date).count > 0 %></span>
       </strong>
       </button>
     <div id="panelsStayOpen-collapse<%= (index + 1) %>" class="accordion-collapse collapse">
