@@ -36,9 +36,9 @@
         <div class="accordion-item mb-2">
           <button class="accordion-button collapsed bg-accordion"" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse<%= (index + 1) %>" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
             <%= show_date_with_time(room_state.updated_at) %>, Checked by <%= room_state.checked_by %>
-            <span class="text-success"><%= ' | No access' unless room_state.is_accessed %></span>
-            <span class="text-danger"><%= ' | Issue Reported to Supervisor' if room_state.report_to_supervisor%></span>
-            <span class="text-danger"><%= ' | Issue Emails Sent' if room_tickets(@room, room_state.updated_at).count > 0 %></span>
+            <span class="text-success"><%= ', No access' unless room_state.is_accessed %></span>
+            <span class="text-danger"><%= ', Issue Reported to Supervisor' if room_state.report_to_supervisor%></span>
+            <span class="text-danger"><%= ', Issue Emails Sent' if room_tickets(@room, room_state.updated_at).count > 0 %></span>
           </button>
           <div id="panelsStayOpen-collapse<%= (index + 1) %>" class="accordion-collapse collapse">
             <div class="accordion-body">  
@@ -48,7 +48,7 @@
                   <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
                     <% if room_tickets(@room, room_state.updated_at).count > 0 %>
                       <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>ticket" autocomplete="off" data-bs-toggle="collapse" href="#ticket-list-<%=(index + 1) %>" aria-expanded="false" aria-controls="ticket-list-<%=(index + 1) %>">
-                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>ticket">Room Tickets</label>
+                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>ticket">Room Issues</label>
                     <% end %>
 
                     <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>common" autocomplete="off" data-bs-toggle="collapse" href="#common-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="common-answer-<%=(index + 1) %>">
@@ -65,7 +65,7 @@
                     <table class="table text-center">
                       <thead class="table-group-divider">
                         <tr>
-                          <th>Send to</th>
+                          <th>Sent To</th>
                           <th>Description</th>
                           <th>Submitted By</th>
                         </tr>
