@@ -3,7 +3,7 @@
     <h1>Room: <%= @room.full_name  %></h1>
     <div class="d-flex align-items-end flex-column gap-1">
       <%= link_to 'Back to Building', building_path(@room.floor.building), class: "link_to" %>
-      <%= link_to 'Show Room States', room_room_states_path(@room), class: 'btn btn-primary h-50 mt-auto mb-auto' %>
+      <%= link_to 'Show Room Checks', room_room_states_path(@room), class: 'btn btn-primary h-50 mt-auto mb-auto' %>
     </div>
   </div>
 
