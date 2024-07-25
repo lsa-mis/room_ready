@@ -10,7 +10,7 @@ class RoomTicketMailer < ApplicationMailer
 
     subject = "Issue for Room " + @room.room_number + " in " + @building.name + ", "  + @date
     
-    mail(to: tdx_email, subject: subject, from: from)
+    mail(to: tdx_email, subject: subject)
   end
 
 end
