@@ -13,7 +13,7 @@
     <% end %>
     <div>
       <%= form.label :rmrecnbr, 'Room Record Number (Barcode) *', class: "nowrap" %>
-      <%= form.text_field :rmrecnbr, required: true %>
+      <%= form.text_field :rmrecnbr, required: true, placeholder: "Room Record Number" %>
     </div>
 
     <%= hidden_field_tag 'building_id', @building.id %>

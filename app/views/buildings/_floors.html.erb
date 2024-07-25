@@ -14,9 +14,9 @@
               <table class="table text-center">
                 <thead class="table-group-divider">
                   <tr>
-                    <th>Room Record Number</th>
                     <th>Number</th>
                     <th>Room Type</th>
+                    <th>Room Record Number</th>
                     <td>View</td>
                   </tr>
                 </thead>
@@ -29,15 +29,14 @@
                   <% rooms.order(:room_number).each do |room| %>
                     <tr class="building_tbody_tr">
                       <td class="building_tbody_td">
-                        <%#= link_to room.room_number, room_path(room), class: "link_to" %>
-                        <%= room.rmrecnbr %>
-                      </td>
-                      <td class="building_tbody_td">
                         <%= link_to room.room_number, room_path(room), data: { turbo_frame: "_top" }, class: "link_to" %>
                       </td>
                       <td class="building_tbody_td">
-                      <%= room.room_type %>
-                    </td>
+                        <%= room.room_type %>
+                      </td>
+                      <td class="building_tbody_td">
+                        <%= room.rmrecnbr %>
+                      </td>
                       <td class="building_tbody_td">
                         <%= link_to room_path(room), class: "link_to", 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "View", data: { turbo_frame: "_top" } do %>
                         <i class="bi bi-eye-fill text-primary"></i>

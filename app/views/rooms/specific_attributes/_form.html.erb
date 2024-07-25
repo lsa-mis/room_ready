@@ -13,7 +13,7 @@
 
   <div class="mb-3">
     <%= form.label :description, "Description *", class: "form-label" %>
-    <%= form.text_field :description, class: "form-control form-control-sm", required: true %>
+    <%= form.text_field :description, class: "form-control form-control-sm", required: true, placeholder: "Description" %>
   </div>
 
   <% unless specific_attribute.specific_attribute_states.present? %>
