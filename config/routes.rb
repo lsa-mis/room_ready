@@ -8,13 +8,13 @@ Rails.application.routes.draw do
   end
   resources :announcements, only: [ :index, :show, :edit, :update ]
 
-  resources :resource_states
+  resources :resource_states, except: [:index, :destroy]
   post '/resource_states/update_resource_states/:id', to: 'resource_states#update_resource_states', as: :update_resource_states
   
-  resources :specific_attribute_states, except: [:destroy]
+  resources :specific_attribute_states, except: [:index, :destroy]
   post '/specific_attribute_states/update_specific_attribute_states/:id', to: 'specific_attribute_states#update_specific_attribute_states', as: :update_specific_attribute_states
 
-  resources :common_attribute_states
+  resources :common_attribute_states, except: [:index, :destroy]
   post '/common_attribute_states/update_common_attribute_states/:id', to: 'common_attribute_states#update_common_attribute_states', as: :update_common_attribute_states
 
   resources :common_attributes, except: [:show]
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
 
-  resources :rooms, :except => [:edit, :update]
+  resources :rooms, :except => [:index, :edit, :update]
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
     resources :room_states, module: :rooms, except: [:destroy]
