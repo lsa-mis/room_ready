@@ -9,7 +9,6 @@
           <th>Uniqname</th>
           <th>First name</th>
           <th>Last name</th>
-          <td>View</td>
           <td>Edit</td>
           <td>Delete</td>
         </tr>
@@ -25,11 +24,6 @@
             </td>
             <td class="rover_tbody_td">
               <%= rover.last_name %>
-            </td>
-            <td class="rover_tbody_td">
-              <%= link_to rover_path(rover), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(rover)}" } do%>
-              <i class="bi bi-eye-fill text-primary"></i>
-              <%end%>
             </td>
             <td class="rover_tbody_td">
               <%= link_to edit_rover_path(rover), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(rover)}_edit" } do%>

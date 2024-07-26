@@ -2,10 +2,6 @@ class SpecificAttributeStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room, only: %i[ new create edit update_specific_attribute_states ]
 
-  # GET /specific_attribute_states/1 or /specific_attribute_states/1.json
-  def show
-  end
-
   # GET /specific_attribute_states/new
   def new
     @specific_attribute_states = @room.active_specific_attributes.map do |specific_attribute|
