@@ -1,48 +1,49 @@
-<div class="mt-3"></div>
+<div class="container-fluid mt-3">
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path, class: 'link_to' %></li>
-    <li class="breadcrumb-item active" aria-current="page">Buildings</li>
-  </ol>
-</nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path, class: 'link_to' %></li>
+      <li class="breadcrumb-item active" aria-current="page">Buildings</li>
+    </ol>
+  </nav>
 
-<h1>Buildings for <%= @zone.name %></h1>
+  <h1>Buildings for <%= @zone.name %></h1>
 
-<%= form_with url: buildings_rover_navigation_path, method: :get, local: true do |form| %>
-  <%= form.hidden_field :zone_id, value: @zone.id %>
-  <%= form.text_field :search, value: params[:search], placeholder: "Enter name, address, state, or zip", aria: { label: "search" } %>
-  <%= form.submit "Search" %>
-  <%= link_to 'Clear Filter', buildings_rover_navigation_path(zone_id: @zone.id), class: 'link_to' %>
-<% end %>
+  <%= form_with url: buildings_rover_navigation_path, method: :get, local: true do |form| %>
+    <%= form.hidden_field :zone_id, value: @zone.id %>
+    <%= form.text_field :search, value: params[:search], placeholder: "Enter name, address, state, or zip", aria: { label: "search" } %>
+    <%= form.submit "Search" %>
+    <%= link_to 'Clear Filter', buildings_rover_navigation_path(zone_id: @zone.id), class: 'link_to' %>
+  <% end %>
 
-<% @buildings.each_with_index do |building, i| %>
-  <div class="card mt-3">
-    <div class="card-header">
-      <p>
-        <%= building.name %>
-        <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(building.full_address) %>"></i>
-      </p>
-      <p class="text-success">
-        <%= show_building_status(building) %>
-      </p>
-      </div>
-    <div class="card-body">
-      <p class="card-text">
-        <%= building.full_address %>
-      </p>
-      <div class="dropdown border-0">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="floorDropdownButton<%= i %>" data-bs-toggle="dropdown" aria-expanded="false">
-          Select Floor
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="floorDropdownButton<%= i %>">
-          <% building.floors.order(:name).each do |floor| %>
-            <% if floor.rooms.active.any? %>
-              <li><%= link_to "Floor #{floor.name}", rooms_rover_navigation_path(floor_id: floor.id), class: "dropdown-item btn-primary" %></li>
+  <% @buildings.each_with_index do |building, i| %>
+    <div class="card mt-3">
+      <div class="card-header">
+        <p>
+          <%= building.name %>
+          <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(building.full_address) %>"></i>
+        </p>
+        <p class="text-success">
+          <%= show_building_status(building) %>
+        </p>
+        </div>
+      <div class="card-body">
+        <p class="card-text">
+          <%= building.full_address %>
+        </p>
+        <div class="dropdown border-0">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="floorDropdownButton<%= i %>" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Floor
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="floorDropdownButton<%= i %>">
+            <% building.floors.order(:name).each do |floor| %>
+              <% if floor.rooms.active.any? %>
+                <li><%= link_to "Floor #{floor.name}", rooms_rover_navigation_path(floor_id: floor.id), class: "dropdown-item btn-primary" %></li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

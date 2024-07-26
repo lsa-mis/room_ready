@@ -1,6 +1,6 @@
 class RoversController < ApplicationController
   before_action :auth_user
-  before_action :set_rover, only: %i[ show edit update destroy ]
+  before_action :set_rover, only: %i[ edit update destroy ]
 
   # GET /rovers or /rovers.json
   def index
@@ -12,10 +12,6 @@ class RoversController < ApplicationController
       @rovers = Rover.all
       authorize @rovers
     end
-  end
-
-  # GET /rovers/1 or /rovers/1.json
-  def show
   end
 
   # GET /rovers/new
