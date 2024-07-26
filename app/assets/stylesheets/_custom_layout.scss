@@ -322,6 +322,12 @@ svg.wh6 {
   white-space: nowrap;
 }
 
+@media (min-width: 1400px) {
+  .nowrap-card {
+    white-space: nowrap;
+  }
+}
+
 .nav-user {
   font-size: 0.875rem; 
   width: 150px; 
