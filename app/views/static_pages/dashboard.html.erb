@@ -1,27 +1,26 @@
 <div class="container">
   <h1>Admin Dashboard - <%= show_date_with_month_name(@selected_date) %></h1>
 
+  <div class="d-flex flex-row justify-content-start align-items-center gap-4">
+    <h2>Zone Overview for</h2>
     <%= form_with url: dashboard_path, method: :get,
-      data: { 
-        controller: "autosubmit", 
-        autosubmit_target: "form"
-      }  do |form| %>
-      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <div>
-          <%= form.label :dashboard_date, "Change Date to Update Zone Overview" %>
+        data: { 
+          controller: "autosubmit", 
+          autosubmit_target: "form"
+        }  do |form| %>
+        <div class="mt-2">
+          <div>
+            <label for="dashboard_date" aria-label="dashboard_date">
+            <%= form.date_field :dashboard_date, value: @selected_date, max: Date.today.to_s, :"data-action" => "change->autosubmit#submitForm" %>
+          </div>
         </div>
-        <div>
-          <%= form.date_field :dashboard_date, value: @selected_date, max: Date.today.to_s, :"data-action" => "change->autosubmit#submitForm" %>
-        </div>
-      </div>
     <% end %>
-
-
-  <h2>Zone Overview</h2>
-  <div class="row">    
+  </div>
+  <div class="row row-cols-1 row-cols-lg-4 row-cols-md-1 rows-sm-1 m-2">
+  
     <% @zones.each do |zone| %>
-      <div class="col-lg-4 col-md-6 col-sm-12 m-2">
-        <div class="card">
+      <div class="col mb-2">
+        <div class="card" style="max-width: 260px;">
           <div class="card-header">
             <p><%= zone.name %></p>
           </div>
@@ -35,7 +34,7 @@
               </div>
             </div>
 
-            <span class="card-text mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>">
+            <span class="card-text nowrap-card mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>">
               <%= rooms_checked_for_date(zone, @selected_date) %>/<%= total_rooms(zone) %> 
               Classrooms Complete
             </span>
@@ -46,8 +45,8 @@
   </div>
   <hr>  
   <h2>Reports for Last Checks</h2>
-  <div class="row">
-    <div class="col-md-6 col-lg-4 m-2">
+  <div class="row m-2">
+    <div class="col-md-6 col-lg-4">
       <div class="card">
         <div class="card-header">
           <p>Rooms were not Accessable</p>
@@ -58,7 +57,7 @@
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-4 m-2">
+    <div class="col-md-6 col-lg-4">
       <div class="card">
         <div class="card-header">
           <p>Rooms were not Checked</p>
@@ -72,9 +71,9 @@
 
   <hr>
   <h2>Recent Room Issues</h2>
-  <div class="row">
+  <div class="row m-2">
     <% latest_room_tickets.each do |ticket| %>
-      <div class="m-2">
+      <div class="mb-2">
         <div class="card">
           <div class="card-header">
             <p>
@@ -92,7 +91,9 @@
   </div>
   <hr>
   <h2>Daily Resource Update Script</h2>
-  <% if @room_update_log %>
-    <%= render 'last_room_update_log', last_room_update_log: @room_update_log %>
-  <% end %>
+  <div class="m-2">
+    <% if @room_update_log %>
+      <%= render 'last_room_update_log', last_room_update_log: @room_update_log %>
+    <% end %>
+  </div>
 </div>

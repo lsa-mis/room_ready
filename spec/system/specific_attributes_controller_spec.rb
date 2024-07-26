@@ -15,7 +15,7 @@ RSpec.describe SpecificAttribute, type: :system do
       VCR.use_cassette "specific_attribute" do
         visit "rooms/#{room.id}/specific_attributes"
         fill_in "Description", with: "specific attribute one"
-        check "Needs Checkbox?"
+        check "Include Yes/No Buttons"
         click_on "Create"
         expect(page).to have_content("Specific attribute was successfully created.")
         expect(SpecificAttribute.find_by(description: "specific attribute one").present?).to be_truthy

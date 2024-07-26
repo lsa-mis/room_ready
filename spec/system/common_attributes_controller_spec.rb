@@ -14,7 +14,7 @@ RSpec.describe CommonAttribute, type: :system do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         fill_in "Description", with: "common attribute one"
-        check "Needs Checkbox?"
+        check "Include Yes/No Buttons"
         click_on "Create"
         expect(page).to have_content("Common attribute was successfully created.")
         expect(CommonAttribute.find_by(description: "common attribute one").present?).to be_truthy

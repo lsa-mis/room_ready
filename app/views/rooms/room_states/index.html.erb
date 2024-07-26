@@ -9,7 +9,7 @@
 <%# Filter to get recent states %>
 <div class="body-md-text">
   <p>
-   Enter a Time Period to Filter Room States
+   Enter a Time Period to Filter Room Checks
   </p>
 </div>
 <%= form_with url: room_room_states_path(@room), method: :get,
@@ -23,7 +23,7 @@
         <%= form.label :to, "To: "%>
         <%= form.date_field :to, value: params[:to], class: "form-control" %>
   </div>
-  <%= form.submit "Filter Room States" %>
+  <%= form.submit "Filter Room Checks" %>
 <a class="link_to" data-action="autosubmit#clearFilters">Clear Filters</a>
 <%end%>
 <br>
