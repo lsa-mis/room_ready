@@ -1,49 +1,50 @@
-<div class="mt-3"></div>
+<div class="container-fluid mt-3">
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path, class: 'link_to' %></li>
-    <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @floor.building.zone.id), class: 'link_to' %></li>
-    <li class="breadcrumb-item active" aria-current="page">Rooms</li>
-  </ol>
-</nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Zones", zones_rover_navigation_path, class: 'link_to' %></li>
+      <li class="breadcrumb-item"><%= link_to "Buildings", buildings_rover_navigation_path(zone_id: @floor.building.zone.id), class: 'link_to' %></li>
+      <li class="breadcrumb-item active" aria-current="page">Rooms</li>
+    </ol>
+  </nav>
 
-<h1>
-  Rooms for <%= @floor.building.name %> (Floor <%= @floor.name %>)
-  <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(@floor.building.full_address) %>"></i>
-</h1>
+  <h1>
+    Rooms for <%= @floor.building.name %> (Floor <%= @floor.name %>)
+    <i id="redirect-to-maps" data-controller="redirect" data-action="click->redirect#onMapClick" role="button" class="bi bi-geo-alt text-success cursor-pointer" aria-label="open building on maps" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Open Google Maps" data-url="<%= google_map_navigation_path(@floor.building.full_address) %>"></i>
+  </h1>
 
-<%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
-  <%= form.hidden_field :floor_id, value: @floor.id %>
-  <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number", aria: { label: "search" } %>
-  <%= form.submit "Search" %>
-  <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'link_to' %>
-<% end %>
+  <%= form_with url: rooms_rover_navigation_path, method: :get, local: true do |form| %>
+    <%= form.hidden_field :floor_id, value: @floor.id %>
+    <%= form.text_field :search, value: params[:search], placeholder: "Enter a room number", aria: { label: "search" } %>
+    <%= form.submit "Search" %>
+    <%= link_to 'Clear Filter', rooms_rover_navigation_path(floor_id: @floor.id), class: 'link_to' %>
+  <% end %>
 
-<% @rooms.each do |room| %>
-  <div class="card mt-3">
-    <div class="card-header">
-      <p>
-        Room: <%= room.room_number %>
-      </p>
-      <p class="text-success">
-        <%= RoomStatus.new(room).show_status %>
-      </p>
-    </div>
-    <div class="card-body">
-      <p class="card-text">
-        Room Type: <%= room.room_type %>
-      </p>
-      <p class="text-danger">Last Time Checked: <%= show_date_with_time(room.last_time_checked) %> </p>
-      <% if RoomStatus.new(room).room_checked_today? %>
-        <% if RoomStatus.new(room).calculate_percentage.to_f < 100.00 %>
-          <%= link_to "Continue Checking #{room.room_number}", redirect_to_unchecked_form_path(room), class: "btn btn-primary" %>
+  <% @rooms.each do |room| %>
+    <div class="card mt-3">
+      <div class="card-header">
+        <p>
+          Room: <%= room.room_number %>
+        </p>
+        <p class="text-success">
+          <%= RoomStatus.new(room).show_status %>
+        </p>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          Room Type: <%= room.room_type %>
+        </p>
+        <p class="text-danger">Last Time Checked: <%= show_date_with_time(room.last_time_checked) %> </p>
+        <% if RoomStatus.new(room).room_checked_today? %>
+          <% if RoomStatus.new(room).calculate_percentage.to_f < 100.00 %>
+            <%= link_to "Continue Checking #{room.room_number}", redirect_to_unchecked_form_path(room), class: "btn btn-primary" %>
+          <% else %>
+            <%= link_to "Edit Today's #{room.room_number}", edit_room_room_state_path(room, RoomStatus.new(room).room_state_today.id), class: "btn btn-primary" %>
+          <% end %>
         <% else %>
-          <%= link_to "Edit Today's #{room.room_number}", edit_room_room_state_path(room, RoomStatus.new(room).room_state_today.id), class: "btn btn-primary" %>
+          <%= link_to "Start Checking #{room.room_number}", new_room_room_state_path(room), class: "btn btn-primary" %>
         <% end %>
-      <% else %>
-        <%= link_to "Start Checking #{room.room_number}", new_room_room_state_path(room), class: "btn btn-primary" %>
-      <% end %>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

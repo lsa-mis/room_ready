@@ -1,17 +1,15 @@
-<div class="p-5 m-5">
-  <div class="container-fluid" id="zones">
-    <div class="d-flex justify-content-between">
-      <h1>All Zones</h1>
-      <%= link_to "Add New Zone", new_zone_path, class: "btn btn-primary focus-ring h-50 mt-auto mb-auto", style: "--bs-focus-ring-color:#ffcb05;" %>
-    </div>
-    <div class="row">
-      <% @zones.each do |zone| %>
-        <div class="m-2" style="width: 18rem;">
-          <div>
-            <%= render zone %>
-          </div>
+<div class="container-fluid" id="zones">
+  <div class="d-flex justify-content-between">
+    <h1>All Zones</h1>
+    <%= link_to "Add New Zone", new_zone_path, class: "btn btn-primary focus-ring h-50 mt-auto mb-auto", style: "--bs-focus-ring-color:#ffcb05;" %>
+  </div>
+  <div class="row">
+    <% @zones.each do |zone| %>
+      <div class="m-2" style="width: 18rem;">
+        <div>
+          <%= render zone %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>

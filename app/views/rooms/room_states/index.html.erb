@@ -1,190 +1,191 @@
-<p></p>
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Room States <%= @room.rmrecnbr? ? "for #{@room.room_number}" : '' %></h1>
-  <div class="d-flex flex-column gap-1">
-    <%= link_to "Back to Room", room_path(@room), class: "link_to" %>
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Room States <%= @room.rmrecnbr? ? "for #{@room.room_number}" : '' %></h1>
+    <div class="d-flex flex-column gap-1">
+      <%= link_to "Back to Room", room_path(@room), class: "link_to" %>
+    </div>
   </div>
-</div>
-<h2>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h2>
-<%# Filter to get recent states %>
-<div class="body-md-text">
-  <p>
-   Enter a Time Period to Filter Room Checks
-  </p>
-</div>
-<%= form_with url: room_room_states_path(@room), method: :get,
-      data: { 
-        controller: "autosubmit", 
-        autosubmit_target: "form"
-      } do |form| %>
-  <div class="d-flex flex-row justify-content-start align-items-center gap-3 mb-2">
-        <%= form.label :from, "From: "%>
-        <%= form.date_field :from, value: params[:from], class: "form-control" %>
-        <%= form.label :to, "To: "%>
-        <%= form.date_field :to, value: params[:to], class: "form-control" %>
+  <h2>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h2>
+  <%# Filter to get recent states %>
+  <div class="body-md-text">
+    <p>
+    Enter a Time Period to Filter Room Checks
+    </p>
   </div>
-  <%= form.submit "Filter Room Checks" %>
-<a class="link_to" data-action="autosubmit#clearFilters">Clear Filters</a>
-<%end%>
-<br>
-<div id="room_states">
-  <% if @room_states.empty? %>
-    No room states found
-  <% else %>
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-      <% @room_states.each_with_index do |room_state, index| %>
-        <div class="accordion-item mb-2">
-          <button class="accordion-button collapsed bg-accordion"" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse<%= (index + 1) %>" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-            <%= show_date_with_time(room_state.updated_at) %>, Checked by <%= room_state.checked_by %>
-            <span class="text-success"><%= ', No access' unless room_state.is_accessed %></span>
-            <span class="text-danger"><%= ', Issue Reported to Supervisor' if room_state.report_to_supervisor%></span>
-            <span class="text-danger"><%= ', Issue Emails Sent' if room_tickets(@room, room_state.updated_at).count > 0 %></span>
-          </button>
-          <div id="panelsStayOpen-collapse<%= (index + 1) %>" class="accordion-collapse collapse">
-            <div class="accordion-body">  
-              <% if room_state.is_accessed %>
-                <fieldset>
-                  <legend style="display: none;">Tabs to display states</legend>
-                  <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
-                    <% if room_tickets(@room, room_state.updated_at).count > 0 %>
-                      <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>ticket" autocomplete="off" data-bs-toggle="collapse" href="#ticket-list-<%=(index + 1) %>" aria-expanded="false" aria-controls="ticket-list-<%=(index + 1) %>">
-                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>ticket">Room Issues</label>
-                    <% end %>
-
-                    <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>common" autocomplete="off" data-bs-toggle="collapse" href="#common-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="common-answer-<%=(index + 1) %>">
-                    <label class="btn btn-outline-primary" for="<%= (index + 1) %>common">Common Questions</label>
-
-                    <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>specific" autocomplete="off" data-bs-toggle="collapse" href="#spec-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="spec-answer-<%=(index + 1) %>">
-                    <label class="btn btn-outline-primary" for="<%= (index + 1) %>specific">Specific Questions</label>
-
-                    <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>resource" autocomplete="off" data-bs-toggle="collapse" href="#res-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="res-answer-<%=(index + 1) %>">
-                    <label class="btn btn-outline-primary" for="<%= (index + 1) %>resource">Resources</label>
-                  </div>
-                  <div class="collapse multi-collapse" id="ticket-list-<%=(index + 1) %>">
-                    <h3>Room Issues</h3>
-                    <table class="table text-center">
-                      <thead class="table-group-divider">
-                        <tr>
-                          <th>Sent To</th>
-                          <th>Description</th>
-                          <th>Submitted By</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                      <% room_tickets(@room, room_state.updated_at).each_with_index do |ticket, index| %>
-                        <tr class="rover_tbody_tr">
-                          <td class="rover_tbody_td">
-                            <%= ticket.tdx_email %>
-                          </td>
-                          <td class="rover_tbody_td">
-                            <%= ticket.description %>
-                          </td>
-                          <td class="rover_tbody_td">
-                            <%= ticket.submitted_by %>
-                          </td>
-                        </tr>
+  <%= form_with url: room_room_states_path(@room), method: :get,
+        data: { 
+          controller: "autosubmit", 
+          autosubmit_target: "form"
+        } do |form| %>
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3 mb-2">
+          <%= form.label :from, "From: "%>
+          <%= form.date_field :from, value: params[:from], class: "form-control" %>
+          <%= form.label :to, "To: "%>
+          <%= form.date_field :to, value: params[:to], class: "form-control" %>
+    </div>
+    <%= form.submit "Filter Room Checks" %>
+  <a class="link_to" data-action="autosubmit#clearFilters">Clear Filters</a>
+  <%end%>
+  <br>
+  <div id="room_states">
+    <% if @room_states.empty? %>
+      No room states found
+    <% else %>
+      <div class="accordion" id="accordionPanelsStayOpenExample">
+        <% @room_states.each_with_index do |room_state, index| %>
+          <div class="accordion-item mb-2">
+            <button class="accordion-button collapsed bg-accordion"" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse<%= (index + 1) %>" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+              <%= show_date_with_time(room_state.updated_at) %>, Checked by <%= room_state.checked_by %>
+              <span class="text-success"><%= ', No access' unless room_state.is_accessed %></span>
+              <span class="text-danger"><%= ', Issue Reported to Supervisor' if room_state.report_to_supervisor%></span>
+              <span class="text-danger"><%= ', Issue Emails Sent' if room_tickets(@room, room_state.updated_at).count > 0 %></span>
+            </button>
+            <div id="panelsStayOpen-collapse<%= (index + 1) %>" class="accordion-collapse collapse">
+              <div class="accordion-body">  
+                <% if room_state.is_accessed %>
+                  <fieldset>
+                    <legend style="display: none;">Tabs to display states</legend>
+                    <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
+                      <% if room_tickets(@room, room_state.updated_at).count > 0 %>
+                        <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>ticket" autocomplete="off" data-bs-toggle="collapse" href="#ticket-list-<%=(index + 1) %>" aria-expanded="false" aria-controls="ticket-list-<%=(index + 1) %>">
+                        <label class="btn btn-outline-primary" for="<%= (index + 1) %>ticket">Room Issues</label>
                       <% end %>
-                      </tbody>
-                    </table>
-                  </div>
 
-                  <div class="collapse multi-collapse" id="common-answer-<%=(index + 1) %>">
-                    <h3>Common Questions</h3>
-                    <table class="table text-center">
-                      <thead class="table-group-divider">
-                        <tr>
-                          <th>Question</th>
-                          <th>Response</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                      <% room_state.common_attribute_states.each_with_index do |common_attribute_state, index| %>
-                        <tr class="rover_tbody_tr">
-                          <td class="rover_tbody_td">
-                            <%= common_attribute_state.common_attribute.description %>
-                          </td>
-                          <td class="rover_tbody_td">
-                            <% if common_attribute_state.checkbox_value.present? %>
-                              <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
-                            <% elsif common_attribute_state.quantity_box_value.present? %>
-                              <%= common_attribute_state.quantity_box_value %>
-                            <% else %>
-                            <% end %>
-                          </td>
-                        </tr>
-                      <% end %>
-                      </tbody>
-                    </table>
-                  </div>
+                      <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>common" autocomplete="off" data-bs-toggle="collapse" href="#common-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="common-answer-<%=(index + 1) %>">
+                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>common">Common Questions</label>
 
-                  <div class="collapse multi-collapse" id="spec-answer-<%=(index + 1) %>">
-                    <h3>Specific Questions</h3>
-                    <table class="table text-center">
-                      <thead class="table-group-divider">
-                        <tr>
-                          <th>Question</th>
-                          <th>Response</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                      <% room_state.specific_attribute_states.each_with_index do |specific_attribute_state, index| %>
-                        <tr class="rover_tbody_tr">
-                          <td class="rover_tbody_td">
-                            <%= specific_attribute_state.specific_attribute.description %>
-                          </td>
-                          <td class="rover_tbody_td">
-                            <% if specific_attribute_state.checkbox_value.present? %>
-                              <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
-                            <% elsif specific_attribute_state.quantity_box_value.present?%>
-                              <%= specific_attribute_state.quantity_box_value %>
-                            <% else %>
-                            Not Checked
-                            <% end %>
-                          </td>
-                        </tr>
-                      <% end %>
-                      </tbody>
+                      <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>specific" autocomplete="off" data-bs-toggle="collapse" href="#spec-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="spec-answer-<%=(index + 1) %>">
+                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>specific">Specific Questions</label>
+
+                      <input type="checkbox" class="btn-check" name="btnradio" id="<%= (index + 1) %>resource" autocomplete="off" data-bs-toggle="collapse" href="#res-answer-<%=(index + 1) %>" aria-expanded="false" aria-controls="res-answer-<%=(index + 1) %>">
+                      <label class="btn btn-outline-primary" for="<%= (index + 1) %>resource">Resources</label>
+                    </div>
+                    <div class="collapse multi-collapse" id="ticket-list-<%=(index + 1) %>">
+                      <h3>Room Issues</h3>
+                      <table class="table text-center">
+                        <thead class="table-group-divider">
+                          <tr>
+                            <th>Sent To</th>
+                            <th>Description</th>
+                            <th>Submitted By</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <% room_tickets(@room, room_state.updated_at).each_with_index do |ticket, index| %>
+                          <tr class="rover_tbody_tr">
+                            <td class="rover_tbody_td">
+                              <%= ticket.tdx_email %>
+                            </td>
+                            <td class="rover_tbody_td">
+                              <%= ticket.description %>
+                            </td>
+                            <td class="rover_tbody_td">
+                              <%= ticket.submitted_by %>
+                            </td>
+                          </tr>
+                        <% end %>
+                        </tbody>
                       </table>
-                  </div>
+                    </div>
 
-                  <div class="collapse multi-collapse" id="res-answer-<%=(index + 1) %>">
-                    <h3>Resources</h3>
-                    <table class="table text-center">
-                      <thead class="table-group-divider">
-                        <tr>
-                          <th>Item Name</th>
-                          <th>Item Status</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                      <% @room.resources.each_with_index do |resource, index| %>
-                        <tr class="rover_tbody_tr">
-                          <td class="rover_tbody_td">
-                            <%= resource.name %> - <%= resource.resource_type %>
-                          </td>
-                          <td class="rover_tbody_td">
-                            <% if room_state.resource_states[index].present? %>
-                              <%= room_state.resource_states[index].is_checked ? 'Yes' : 'No' %>
-                            <% else %>
+                    <div class="collapse multi-collapse" id="common-answer-<%=(index + 1) %>">
+                      <h3>Common Questions</h3>
+                      <table class="table text-center">
+                        <thead class="table-group-divider">
+                          <tr>
+                            <th>Question</th>
+                            <th>Response</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <% room_state.common_attribute_states.each_with_index do |common_attribute_state, index| %>
+                          <tr class="rover_tbody_tr">
+                            <td class="rover_tbody_td">
+                              <%= common_attribute_state.common_attribute.description %>
+                            </td>
+                            <td class="rover_tbody_td">
+                              <% if common_attribute_state.checkbox_value.present? %>
+                                <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                              <% elsif common_attribute_state.quantity_box_value.present? %>
+                                <%= common_attribute_state.quantity_box_value %>
+                              <% else %>
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="collapse multi-collapse" id="spec-answer-<%=(index + 1) %>">
+                      <h3>Specific Questions</h3>
+                      <table class="table text-center">
+                        <thead class="table-group-divider">
+                          <tr>
+                            <th>Question</th>
+                            <th>Response</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <% room_state.specific_attribute_states.each_with_index do |specific_attribute_state, index| %>
+                          <tr class="rover_tbody_tr">
+                            <td class="rover_tbody_td">
+                              <%= specific_attribute_state.specific_attribute.description %>
+                            </td>
+                            <td class="rover_tbody_td">
+                              <% if specific_attribute_state.checkbox_value.present? %>
+                                <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                              <% elsif specific_attribute_state.quantity_box_value.present?%>
+                                <%= specific_attribute_state.quantity_box_value %>
+                              <% else %>
                               Not Checked
-                            <% end %>
-                          </td>
-                        </tr>
-                      <% end %>
-                      </tbody>
-                    </table>
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <div class="collapse multi-collapse" id="res-answer-<%=(index + 1) %>">
+                      <h3>Resources</h3>
+                      <table class="table text-center">
+                        <thead class="table-group-divider">
+                          <tr>
+                            <th>Item Name</th>
+                            <th>Item Status</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <% @room.resources.each_with_index do |resource, index| %>
+                          <tr class="rover_tbody_tr">
+                            <td class="rover_tbody_td">
+                              <%= resource.name %> - <%= resource.resource_type %>
+                            </td>
+                            <td class="rover_tbody_td">
+                              <% if room_state.resource_states[index].present? %>
+                                <%= room_state.resource_states[index].is_checked ? 'Yes' : 'No' %>
+                              <% else %>
+                                Not Checked
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </fieldset>
+                <% else %>
+                  <div class="alert alert-danger" role="alert">
+                    Room was not accessed because <%= room_state.no_access_reason %>
                   </div>
-                </fieldset>
-              <% else %>
-                <div class="alert alert-danger" role="alert">
-                  Room was not accessed because <%= room_state.no_access_reason %>
-                </div>
-              <% end %>
+                <% end %>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
-    <%= paginate @room_states %>
-  <% end %>
+        <% end %>
+      </div>
+      <%= paginate @room_states %>
+    <% end %>
+  </div>
 </div>
