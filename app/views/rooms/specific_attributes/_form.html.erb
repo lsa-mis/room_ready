@@ -19,12 +19,12 @@
   <% unless specific_attribute.specific_attribute_states.present? %>
     <div class="form-check mb-3">
       <%= form.check_box :need_checkbox, class: "form-check-input" %>
-      <%= form.label :need_checkbox, "Needs Checkbox?", class: "form-check-label" %>
+      <%= form.label :need_checkbox, "Include Yes/No Buttons", class: "form-check-label" %>
     </div>
 
     <div class="form-check mb-3">
       <%= form.check_box :need_quantity_box, class: "form-check-input" %>
-      <%= form.label :need_quantity_box, "Needs Quantity Box?", class: "form-check-label" %>
+      <%= form.label :need_quantity_box, "Include Quantity Box ", class: "form-check-label" %>
     </div>
   <% end %>
 
