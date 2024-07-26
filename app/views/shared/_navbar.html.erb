@@ -56,6 +56,9 @@
             <li>
               <%= link_to "Reports", reports_path, class: 'dropdown-item navbar_dropdown_item'if policy(:report).index? %>
             </li>
+            <li>
+              <%= link_to "Docs", "https://docs.google.com/document/u/2/d/e/2PACX-1vTMubvxusmTGWEiRYq9EkYuC_0B_ylkCxFwA9uXlMZSjPW5r4KX20fcDCkRmIVgB3Ma5wA1Nm9CxNYO/pub", target: "_blank", class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).configure_prefs? %>
+            </li>
           </ul>
         </div>
       <% end %>
@@ -110,6 +113,7 @@
           <%= link_to "Announcements", announcements_path, class: 'dropdown-item navbar_dropdown_item' if policy(Announcement).update? %>
           <%= link_to "Rovers", rovers_path, class: 'dropdown-item navbar_dropdown_item'if policy(Rover).index? %>
           <%= link_to "Reports", reports_path, class: 'dropdown-item navbar_dropdown_item'if policy(:report).index? %>
+          <%= link_to "Docs", "https://docs.google.com/document/u/2/d/e/2PACX-1vTMubvxusmTGWEiRYq9EkYuC_0B_ylkCxFwA9uXlMZSjPW5r4KX20fcDCkRmIVgB3Ma5wA1Nm9CxNYO/pub", target: "_blank", class: 'dropdown-item navbar_dropdown_item' if policy(AppPreference).configure_prefs? %>
         <% end %>
         <br>
         <% if is_rover? || is_admin? %>
