@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :common_attributes, except: [:show]
   post 'unarchive_common_attribute/:id', to: 'common_attributes#unarchive', as: :unarchive_common_attribute
-  resources :rovers, except: [:show, :show]
+  resources :rovers, except: [:show]
   
   resources :zones, :except => [:show]
   resources :zones do
