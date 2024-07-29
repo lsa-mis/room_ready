@@ -7,10 +7,10 @@
   </ol>
 </nav>
 <h1>Begin Room Check for Room <%= @room.room_number %> </h1>
-<h3>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h3>
+<h2>Location: <%= @room.floor.building.name %> (Floor <%= @room.floor.name %>) </h2>
 
 <div data-controller='hideelement'>
-  <a class="link_to mb-1 d-block d-md-none" data-hideelement-target="more_button" data-action="hideelement#showElement">
+  <a class="link_to m-4 p-4 d-block d-md-none" data-hideelement-target="more_button" data-action="hideelement#showElement">
     Show Announcement
     <i class="bi bi-caret-up-fill"></i>
   </a>
@@ -20,7 +20,7 @@
   </a>
   <div class="d-none d-md-block" data-hideelement-target="hide_section">
     <% if @rovers_form_announcement.content.present? %>
-      <div class="bg-accordion">
+      <div class="bg-accordion p-2 mb-3">
         <p><%= @rovers_form_announcement.content %></p>
       </div>
     <% end %>
@@ -28,8 +28,8 @@
 </div>
 
 <% if @notes.present? %>
-  <div class="bg-accordion">
-    <h4>Notes</h4>
+  <div>
+  <p class="bold-label">Room Notes</p>
     <% @notes.each do |note| %>
       <p>
         <%= note.content %>

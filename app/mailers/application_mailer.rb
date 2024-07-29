@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
   prepend_view_path "app/views/mailers"
-  default from: "from@example.com"
+  default from: "lsa-spaceready-issues@umich.edu"
   layout "mailer"
 end

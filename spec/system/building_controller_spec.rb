@@ -4,8 +4,8 @@ RSpec.describe Building, type: :system do
 
   before do
 		user = FactoryBot.create(:user)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-admins').and_return(true)
     mock_login(user)
   end
 
@@ -48,7 +48,7 @@ RSpec.describe Building, type: :system do
 	context 'edit a building' do
     it 'returns "bldrecnbr is invalid" message' do
       VCR.use_cassette "building" do
-        bldrecnbr = create(:building)
+        building = create(:building)
         visit buildings_path
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Editing Building")
@@ -129,4 +129,109 @@ RSpec.describe Building, type: :system do
     end
 
   end
+
+  context 'archive a building' do
+    it 'returns "The building was archived" message' do
+      VCR.use_cassette "building" do
+        room = create(:room)
+        building_id = room.floor.building.id
+        room_state = FactoryBot.create(:room_state, room: room)
+        visit "buildings/#{building_id}"
+        expect(page).to have_content("Archive Building")
+        accept_confirm do
+          click_link 'Archive Building'
+        end
+        expect(page).to have_content("The building was archived")
+        expect(Building.find(building_id).archived == true).to be_truthy
+        expect(Room.find(room.id).archived == true).to be_truthy
+      end
+    end
+  end
+
+  context 'cancel archiving a building' do
+    it 'builging is not changed' do
+      VCR.use_cassette "building" do
+        room = create(:room)
+        building_id = room.floor.building.id
+        room_state = FactoryBot.create(:room_state, room: room)
+        visit "buildings/#{building_id}"
+        expect(page).to have_content("Archive Building")
+        dismiss_confirm do
+          click_link 'Archive Building'
+        end
+        expect(page).to_not have_content("The building was archived")
+        expect(Building.find(building_id).archived == false).to be_truthy
+        expect(Room.find(room.id).archived == false).to be_truthy
+      end
+    end
+  end
+
+  context 'unarchive a building' do
+    it 'returns "The building was unarchived" message' do
+      VCR.use_cassette "building" do
+        room = create(:room, archived: true)
+        building = room.floor.building
+        building_id = room.floor.building.id
+        building.update(archived: true)
+        room_state = FactoryBot.create(:room_state, room: room)
+        visit "buildings/#{building_id}"
+        expect(page).to have_content("Unarchive Building")
+        accept_confirm do
+          click_link 'Unarchive Building'
+        end
+        expect(page).to have_content("The building was unarchived")
+        expect(Building.find(building_id).archived == false).to be_truthy
+        expect(Room.find(room.id).archived == false).to be_truthy
+      end
+    end
+  end
+
+  context 'unarchive a building on index page' do
+    it 'removed builging from the list of unarchived buildings' do
+      VCR.use_cassette "building" do
+        room = create(:room, archived: true)
+        building = room.floor.building
+        building_id = room.floor.building.id
+        building.update(archived: true)
+        room_state = FactoryBot.create(:room_state, room: room)
+        visit "buildings"
+        expect(page).to have_content("Show Archived Buildings")
+        check 'Show Archived Buildings'
+        expect(page).to have_content(building.name)
+        accept_confirm 'Are you sure you want to unarchive this building?' do
+          find(:css, 'i.bi.bi-archive.text-success').click
+        end
+        expect(page).to_not have_content(building.name)
+        uncheck 'Show Archived Buildings'
+        expect(page).to have_content(building.name)
+        expect(Building.find(building_id).archived).to be_falsy
+        expect(Room.find(room.id).archived == false).to be_truthy
+      end
+    end
+  end
+
+  context 'cancel unarchiving a building on index page' do
+    it 'the list is unchecnged' do
+      VCR.use_cassette "building" do
+        room = create(:room, archived: true)
+        building = room.floor.building
+        building_id = room.floor.building.id
+        building.update(archived: true)
+        room_state = FactoryBot.create(:room_state, room: room)
+        visit "buildings"
+        expect(page).to have_content("Show Archived Buildings")
+        check 'Show Archived Buildings'
+        expect(page).to have_content(building.name)
+        dismiss_confirm 'Are you sure you want to unarchive this building?' do
+          find(:css, 'i.bi.bi-archive.text-success').click
+        end
+        expect(page).to have_content(building.name)
+        uncheck 'Show Archived Buildings'
+        expect(page).to_not have_content(building.name)
+        expect(Building.find(building_id).archived).to be_truthy
+        expect(Room.find(room.id).archived == true).to be_truthy
+      end
+    end
+  end
+
 end

@@ -1,19 +1,21 @@
-<div class="mt-3"></div>
+<div class="container-fluid mt-3">
+  <h1>Zones Available</h1>
 
-<h1>Zones Available</h1>
-
-<% @zones.each do |zone| %>
-  <div class="card mt-3">
-    <h5 class="card-header">
-      <%= zone.name %>
-    </h5>
-    <div class="card-body">
-      <p class="card-text">
-        <%= truncate(
-              zone.buildings.order(:name).pluck(:name).join(', '),
-              length: 60, omission: '...') %>
-      </p>
-      <%= link_to "#{zone.name} Details", buildings_rover_navigation_path(zone_id: zone.id), class: "btn btn-primary" %>
+  <% @zones.each do |zone| %>
+    <div class="card mt-3">
+      <div class="card-header">
+        <p>
+          <%= zone.name %>
+        </p>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <%= truncate(
+                zone.buildings.order(:name).pluck(:name).join(', '),
+                length: 60, omission: '...') %>
+        </p>
+        <%= link_to "#{zone.name} Details", buildings_rover_navigation_path(zone_id: zone.id), class: "btn btn-primary" %>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+  before_action :auth_user
   before_action :set_note, only: %i[ show edit update destroy ]
 
   # GET /notes/1 or /notes/1.json
@@ -8,6 +9,7 @@ class NotesController < ApplicationController
   # GET /notes/new
   def new
     @new_note = Note.new
+    authorize @new_note
   end
 
   # GET /notes/1/edit

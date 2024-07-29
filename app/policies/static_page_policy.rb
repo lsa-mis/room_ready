@@ -9,7 +9,7 @@ class StaticPagePolicy < ApplicationPolicy
   end
 
   def welcome_rovers?
-    is_rover? || is_admin?
+    is_rover?
   end
 
 end

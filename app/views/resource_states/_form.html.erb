@@ -22,19 +22,25 @@
             </ul>
           </div>
         <% end %>
-        <div class="card w-100 mb-3">
-          <div class="card-body p-4">
-            <h5 class="card-title mb-3">
-              <%= resource_state.resource.display_name %>
-            </h5>
-            <div class="d-flex flex-row mb-1 gap-2">
-              <%= f.radio_button :is_checked, true, class: "btn-check", required: true %>
-              <%= f.label :is_checked_true, "Yes", class: "btn btn-outline-success w-50" %>
-              <%= f.radio_button :is_checked, false, class: "btn-check" %>
-              <%= f.label :is_checked_false, "No", class: "btn btn-outline-secondary w-50" %>
+        <fieldset>
+          <div class="card w-100 mb-3">
+            <div class="card-body p-4">
+              <legend>
+                <div class="card-title">
+                  <p>
+                    <%= resource_state.resource.display_name %>
+                  </p>
+                </div>
+              </legend>
+              <div class="d-flex flex-row mb-1 gap-2">
+                <%= f.radio_button :is_checked, true, class: "btn-check", required: true %>
+                <%= f.label :is_checked_true, "Yes", class: "btn btn-outline-secondary w-50" %>
+                <%= f.radio_button :is_checked, false, class: "btn-check" %>
+                <%= f.label :is_checked_false, "No", class: "btn btn-outline-secondary w-50" %>
+              </div>
             </div>
           </div>
-        </div>
+        </fieldset>
         <%=f.hidden_field :resource_id, value: resource_state.resource_id %> 
       </div>
     <% end %>

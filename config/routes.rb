@@ -8,19 +8,20 @@ Rails.application.routes.draw do
   end
   resources :announcements, only: [ :index, :show, :edit, :update ]
 
-  resources :resource_states
+  resources :resource_states, except: [:index, :show, :destroy]
   post '/resource_states/update_resource_states/:id', to: 'resource_states#update_resource_states', as: :update_resource_states
   
-  resources :specific_attribute_states
+  resources :specific_attribute_states, except: [:index, :show, :destroy]
   post '/specific_attribute_states/update_specific_attribute_states/:id', to: 'specific_attribute_states#update_specific_attribute_states', as: :update_specific_attribute_states
 
-  resources :common_attribute_states
+  resources :common_attribute_states, except: [:index, :show, :destroy]
   post '/common_attribute_states/update_common_attribute_states/:id', to: 'common_attribute_states#update_common_attribute_states', as: :update_common_attribute_states
 
   resources :common_attributes, except: [:show]
   post 'unarchive_common_attribute/:id', to: 'common_attributes#unarchive', as: :unarchive_common_attribute
-  resources :rovers
+  resources :rovers, except: [:show]
   
+  resources :zones, :except => [:show]
   resources :zones do
     resources :buildings, module: :zones
   end
@@ -41,13 +42,12 @@ Rails.application.routes.draw do
   end
 
   get 'dashboard', to: 'static_pages#dashboard', as: :dashboard
-  resources :resources
 
-  resources :rooms, :except => [:edit, :update]
+  resources :rooms, :except => [:index, :edit, :update]
   resources :rooms do
     resources :specific_attributes, module: :rooms, except: [:show]
-    resources :room_states, module: :rooms
-    resources :room_tickets, module: :rooms
+    resources :room_states, module: :rooms, except: [:destroy]
+    resources :room_tickets, module: :rooms, only: [:send_email_for_tdx_ticket]
   end
   post 'archive_room/:id', to: 'rooms#archive', as: :archive_room
   post 'unarchive_room/:id', to: 'rooms#unarchive', as: :unarchive_room

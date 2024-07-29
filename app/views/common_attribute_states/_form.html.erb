@@ -23,32 +23,36 @@
             </ul>
           </div>
         <% end %>
-
-        <div class="card w-100 mb-3">
-          <div class="card-body p-4">
-            <h5 class="card-title mb-3">
+        <fieldset>
+          <div class="card w-100 mb-3">
+            <div class="card-body p-4">
+              <legend>
+                <div class="card-title">
+                  <p>
+                    <% if common_attribute_state.common_attribute.need_checkbox %>
+                      <%= common_attribute_state.common_attribute.description %>
+                    <% else %>
+                      <%= f.label :quantity_box_value, common_attribute_state.common_attribute.description %>
+                    <% end %>
+                  </p>
+                </div>
+              </legend>   
               <% if common_attribute_state.common_attribute.need_checkbox %>
-                <%= common_attribute_state.common_attribute.description %>
-              <% else %>
-                <%= f.label :quantity_box_value, common_attribute_state.common_attribute.description %>
+                <div class="d-flex flex-row mb-1 gap-2">
+                  <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
+                  <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-secondary w-50" %>
+                  <%= f.radio_button :checkbox_value, false, class: "btn-check" %>
+                  <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
+                </div>
               <% end %>
-            </h5>
-            <% if common_attribute_state.common_attribute.need_checkbox %>
-              <div class="d-flex flex-row mb-1 gap-2">
-                <%= f.radio_button :checkbox_value, true, class: "btn-check", required: true %>
-                <%= f.label :checkbox_value_true, "Yes", class: "btn btn-outline-success w-50" %>
-                <%= f.radio_button :checkbox_value, false, class: "btn-check" %>
-                <%= f.label :checkbox_value_false, "No", class: "btn btn-outline-secondary w-50" %>
-              </div>
-            <% end %>
-            <% if common_attribute_state.common_attribute.need_quantity_box %>
-              <div>
-                <%= f.number_field :quantity_box_value, value: 0, class: "form-control form-control-sm" %>
-              </div>
-            <% end %>
+              <% if common_attribute_state.common_attribute.need_quantity_box %>
+                <div>
+                  <%= f.number_field :quantity_box_value, value: 0, class: "form-control form-control-sm" %>
+                </div>
+              <% end %>
+            </div>
           </div>
-        </div>
-
+        </fieldset>
         <%= f.hidden_field :common_attribute_id, value: common_attribute_state.common_attribute_id %>
       </div>
     <% end %>

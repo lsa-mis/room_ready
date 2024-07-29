@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-8 col-lg-6 w-100">
       <!-- Heading -->
@@ -14,13 +14,13 @@
     <div class="d-grid w-25 ms-6 mt-6 mb-8">
       <% if user_signed_in? %>
         <div>
-          <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign" do %>
+          <%= button_to destroy_user_session_path, method: :delete, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#E5E5E5;" do %>
             <span>Log Out</span>
           <% end %>
         </div>
       <% else %> 
         <div>
-          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign focus-ring", style: "--bs-focus-ring-color:#E5E5E5;" %>
         </div>
       <% end %>
   </div>

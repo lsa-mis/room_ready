@@ -31,8 +31,8 @@
   </a>
   <div class="d-none d-md-block" data-hideelement-target="hide_section">
     <% if @resource_form_announcement.content.present? %>
-      <div class="bg-accordion">
-        <p><%= @resource_form_announcement.content %></p>
+      <div class="bg-accordion p-2 mb-3">
+        <%= @resource_form_announcement.content %>
       </div>
     <% end %>
   </div>

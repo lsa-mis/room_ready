@@ -11,7 +11,7 @@
   <% end %>
   <div>
     <%= form.label :bldrecnbr, 'Building Record Number', class: "nowrap" %>
-    <%= form.text_field :bldrecnbr, required: true %>
+    <%= form.text_field :bldrecnbr, required: true, placeholder: "Building Record Number" %>
   </div>
 
   <% if @zone.present? %>

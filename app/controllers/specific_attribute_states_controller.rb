@@ -2,17 +2,6 @@ class SpecificAttributeStatesController < ApplicationController
   before_action :auth_user
   before_action :set_room, only: %i[ new create edit update_specific_attribute_states ]
 
-  # GET /specific_attribute_states or /specific_attribute_states.json
-  def index
-    # currently not used
-    @specific_attribute_states = SpecificAttributeState.all
-    authorize @specific_attribute_states
-  end
-
-  # GET /specific_attribute_states/1 or /specific_attribute_states/1.json
-  def show
-  end
-
   # GET /specific_attribute_states/new
   def new
     @specific_attribute_states = @room.active_specific_attributes.map do |specific_attribute|
@@ -71,16 +60,6 @@ class SpecificAttributeStatesController < ApplicationController
       redirect_to redirect_rover_to_correct_state(room: @room, room_state: @room_state, step: "specific_attributes", mode: "edit")
     else
       render :edit, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /specific_attribute_states/1 or /specific_attribute_states/1.json
-  def destroy
-    @specific_attribute_state.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to specific_attribute_states_url, notice: "Specific attribute state was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 

@@ -130,8 +130,12 @@ module ApplicationHelper
     if statuses.present?
       "Checked #{(statuses.sum(0.0) / rooms.size).round}%"
     else
-      "Not checked"
+      "Not checked today"
     end
+  end
+
+  def room_tickets(room, day)
+    RoomTicket.where('room_id = ? AND DATE(updated_at) = ?', room.id, day.to_date)
   end
   
 end

@@ -4,8 +4,8 @@ RSpec.describe CommonAttribute, type: :system do
 
   before do
 		user = FactoryBot.create(:user)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-developers').and_return(false)
-    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-roomready-admins').and_return(true)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-developers').and_return(false)
+    allow(LdapLookup).to receive(:is_member_of_group?).with(anything, 'lsa-spaceready-admins').and_return(true)
     mock_login(user)
 	end
 
@@ -14,7 +14,7 @@ RSpec.describe CommonAttribute, type: :system do
       VCR.use_cassette "common_attribute" do
         visit common_attributes_path
         fill_in "Description", with: "common attribute one"
-        check "Needs Checkbox?"
+        check "Include Yes/No Buttons"
         click_on "Create"
         expect(page).to have_content("Common attribute was successfully created.")
         expect(CommonAttribute.find_by(description: "common attribute one").present?).to be_truthy

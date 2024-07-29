@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  before_action :auth_user
   before_action :set_form_values, :collect_form_params
 
   def index
