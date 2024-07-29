@@ -130,15 +130,15 @@ class ReportsController < ApplicationController
                   .select('COUNT(room_states.id) AS room_check_count')
                   .order('room_check_count DESC')
 
-      rooms_no_room_state = Room.left_outer_joins(floor: { building: :zone })
-                                .joins(:room_states)
-                                .where(archived: archived)
-                                .where(buildings: { id: building_id, zone_id: zone_id })
-                                .where(room_states: { id: nil })
-                                .where.not(id: rooms.map(&:id))
-                                .select('rooms.*')
-                                .select('0 AS room_check_count')
-                                .order('rooms.room_number')
+      rooms_no_room_state = archived ? [] : Room.active
+                                                .left_outer_joins(:room_states)
+                                                .joins(floor: { building: :zone })
+                                                .where(buildings: { id: building_id, zone_id: zone_id })
+                                                .where(room_states: { id: nil })
+                                                .where.not(id: rooms.map(&:id))
+                                                .select('rooms.*')
+                                                .select('0 AS room_check_count')
+                                                .order('rooms.room_number')
 
       if rooms.any?
         days = (end_time.to_date - start_time.to_date).to_i + 1
@@ -161,6 +161,7 @@ class ReportsController < ApplicationController
             "#{(room.room_check_count.to_f / days * 100).round(2)}%"
           ]
         end
+        @data = @data.sort_by { |k| [k[4], k[2], k[0]] }.reverse!
       end
     end
 
