@@ -195,7 +195,8 @@ class ReportsController < ApplicationController
         days = (end_time.to_date - start_time.to_date).to_i + 1
         @title = 'No Access Report'
         @metrics = {
-          'Total No Access Count' => rooms.sum(&:na_states_count)
+          'Total No Access Count' => rooms.sum(&:na_states_count),
+          'Time Range' => "#{start_time.strftime('%m/%d/%y')} - #{end_time.strftime('%m/%d/%y')} (#{days} days)"
         }
         @headers = ['Room Number', 'Building', 'Zone', 'No Access Count', 'Dates and Reasons for No Access (Most Recent 5)']
         @room_link = true
@@ -213,6 +214,7 @@ class ReportsController < ApplicationController
                 .join(', ')
           ]
         end
+        @data = @data.sort_by { |k| [k[3], k[1], k[0]] }.reverse!
       end
     end
 
@@ -244,7 +246,7 @@ class ReportsController < ApplicationController
         end
         if result_rooms.present?
           @metrics = {
-            'Total Rooms' => result_rooms.count,
+            'Total Rooms' => result_rooms.count
           }
           @title = 'No Access for ' + number.to_s + ' Days Report'
           @headers = ['Room Number', 'Building', 'Zone']
@@ -256,6 +258,7 @@ class ReportsController < ApplicationController
               show_zone(room.floor.building)
             ]
           end
+          @data = @data.sort_by { |k| [k[1], k[0]] }
         end
       end
     end
@@ -279,7 +282,7 @@ class ReportsController < ApplicationController
                   .where('DATE(last_time_checked) < ?', number.days.ago.to_date)
       if rooms.any?
         @metrics = {
-          'Total Rooms' => rooms.count,
+          'Total Rooms' => rooms.count
         }
         @title = 'Not Checked for ' + number.to_s + ' Days Report'
 
@@ -292,6 +295,7 @@ class ReportsController < ApplicationController
             show_zone(room.floor.building),
           ]
         end
+        @data = @data.sort_by { |k| [k[1], k[0]] }
       end
     end
 
