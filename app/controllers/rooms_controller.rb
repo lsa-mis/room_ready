@@ -3,12 +3,6 @@ class RoomsController < ApplicationController
   before_action :set_room, only: %i[ show destroy archive unarchive ]
   include BuildingApi
 
-  # GET /rooms or /rooms.json
-  def index
-    @rooms = Room.active.order(:room_number)
-    authorize @rooms
-  end
-
   # GET /rooms/1 or /rooms/1.json
   def show
     @common_attributes = CommonAttribute.active

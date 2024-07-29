@@ -1,21 +1,17 @@
 class RoversController < ApplicationController
   before_action :auth_user
-  before_action :set_rover, only: %i[ show edit update destroy ]
+  before_action :set_rover, only: %i[ edit update destroy ]
 
   # GET /rovers or /rovers.json
   def index
     @rover = Rover.new
     if params[:search].present?
-      @rovers = Rover.where("uniqname ILIKE :search OR (first_name || ' ' || last_name) ILIKE :search", search: "%#{params[:search]}%")
+      @rovers = Rover.where("uniqname ILIKE :search OR (first_name || ' ' || last_name) ILIKE :search", search: "%#{params[:search]}%").order(:last_name)
       authorize @rovers
     else
-      @rovers = Rover.all
+      @rovers = Rover.all.order(:last_name)
       authorize @rovers
     end
-  end
-
-  # GET /rovers/1 or /rovers/1.json
-  def show
   end
 
   # GET /rovers/new
@@ -39,13 +35,13 @@ class RoversController < ApplicationController
       if @rover.save 
         flash.now[:notice] = "Rover was successfully created."
         @rover = Rover.new
-        @rovers = Rover.all
+        @rovers = Rover.all.order(:last_name)
       else
         render :new, status: :unprocessable_entity
       end
     else
       flash.now[:alert] = result['note']
-      @rovers = Rover.all
+      @rovers = Rover.all.order(:last_name)
     end
   end
 
@@ -65,11 +61,11 @@ class RoversController < ApplicationController
   # DELETE /rovers/1 or /rovers/1.json
   def destroy
     if @rover.destroy
-      @rovers = Rover.all
+      @rovers = Rover.all.order(:last_name)
       @rover = Rover.new
       flash.now[:notice] = "Rover was successfully deleted."
     else
-      @rovers = Rover.all
+      @rovers = Rover.all.order(:last_name)
       flash.now[:notice] = "Error deleting rover."
     end
   end

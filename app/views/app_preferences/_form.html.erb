@@ -27,10 +27,7 @@
     <%= form.select :pref_type,  @pref_types, { include_blank: "Select ...", required: true }, { class: "input_text_field" } %>
   </div>
 
-  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3 mb-2">
       <%= form.submit app_preference.persisted? ? 'Update' : 'Create', class: "btn btn-primary" %>
-      <% if app_preference.persisted? %>
-        <%= link_to "Cancel", app_preferences_path, class: "link_to" %>
-      <% end %>
   </div>
 <% end %>

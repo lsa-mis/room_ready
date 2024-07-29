@@ -1,15 +1,11 @@
 class ZonesController < ApplicationController
   before_action :auth_user
-  before_action :set_zone, only: %i[ show edit update destroy ]
+  before_action :set_zone, only: %i[ edit update destroy ]
 
   # GET /zones or /zones.json
   def index
     @zones = Zone.all.order(:name)
     authorize @zones
-  end
-
-  # GET /zones/1 or /zones/1.json
-  def show
   end
 
   # GET /zones/new
