@@ -19,8 +19,8 @@ class SpecificAttribute < ApplicationRecord
   validates :description, uniqueness: { scope: [:room_id], message: "has already been taken for this room" }
   validate :needs_either_checkbox_or_quantity_box
 
-  scope :active, -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false).order(:description) }
+  scope :archived, -> { where(archived: true).order(:description) }
 
   private
 

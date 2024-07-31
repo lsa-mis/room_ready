@@ -16,8 +16,8 @@ class CommonAttribute < ApplicationRecord
   validates :description, presence: true, uniqueness: true
   validate :needs_checkbox_or_quantity_box
 
-  scope :active, -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false).order(:description) }
+  scope :archived, -> { where(archived: true).order(:description) }
 
   def has_state?
     self.common_attribute_states.present?

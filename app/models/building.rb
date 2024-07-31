@@ -22,8 +22,8 @@ class Building < ApplicationRecord
   validates :bldrecnbr, uniqueness: true, presence: true
   validates :name, uniqueness: true
 
-  scope :active, -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false).order(:name) }
+  scope :archived, -> { where(archived: true).order(:name) }
 
   def full_address
     "#{address}, #{city}, #{state} #{zip}"

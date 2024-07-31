@@ -43,7 +43,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.active.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
+    Building.active.where(zone: nil).collect { |b| [b.name, b.id] }
   end
 
   def show_zone(building)
@@ -75,7 +75,7 @@ module ApplicationHelper
     else
       emails << "No LSA TS Help desk email in the App Preferences - report an issue"
     end
-    case building.nick_name.downcase
+    case building.nick_name&.downcase
     when "dana"
       if AppPreference.find_by(name: 'dana_building_facility_issues_email').value.present?
         value =  AppPreference.find_by(name: 'dana_building_facility_issues_email')&.value&.split(':').map(&:strip)

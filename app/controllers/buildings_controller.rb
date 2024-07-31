@@ -29,7 +29,7 @@ class BuildingsController < ApplicationController
       @buildings = @buildings.where('name ILIKE ? OR address ILIKE ? OR bldrecnbr ILIKE ? OR nick_name ILIKE ?', search_term, search_term, search_term, search_term)
     end
 
-    @buildings = @buildings.order(:name)
+    @buildings = @buildings
     authorize @buildings
   end
 
@@ -69,12 +69,12 @@ class BuildingsController < ApplicationController
   def destroy
     if @building.has_checked_rooms?
       flash.now['alert'] = "The buildings has checked rooms - archive this building instead"
-      @buildings = Building.active.order(:name)
+      @buildings = Building.active
     else
       if delete_building(@building)
         redirect_to buildings_path, notice: "The building was deleted."
       else
-        @buildings = Building.active.order(:name)
+        @buildings = Building.active
         flash.now["alert"] = "Error deleting building."
       end
     end
@@ -86,10 +86,10 @@ class BuildingsController < ApplicationController
       @building.update(zone_id: nil)
     end
     if change_building_archived_mode(building: @building, archived: true)
-      @buildings = Building.active.order(:name)
+      @buildings = Building.active
       redirect_back_or_default(notice: "The building was archived")
     else
-      @buildings = Building.active.order(:name)
+      @buildings = Building.active
     end
   end
 
@@ -97,10 +97,10 @@ class BuildingsController < ApplicationController
     session[:return_to] = request.referer
     @archived = true
     if change_building_archived_mode(building: @building, archived: false)
-      @buildings = Building.archived.order(:name)
+      @buildings = Building.archived
       redirect_back_or_default(notice: "The building was unarchived")
     else
-      @buildings = Building.archived.order(:name)
+      @buildings = Building.archived
     end
   end
 
@@ -109,12 +109,12 @@ class BuildingsController < ApplicationController
     authorize @building
     @archived = true
     if change_building_archived_mode(building: @building, archived: false)
-      @buildings = Building.archived.order(:name)
+      @buildings = Building.archived
       @zones = Zone.all.order(:name).map { |z| [z.name, z.id] }
       @zones << ["No Zone", 0]
       render :index, notice: "The building was unarchived"
     else
-      @buildings = Building.archived.order(:name)
+      @buildings = Building.archived
     end
   end
 

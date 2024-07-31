@@ -43,6 +43,7 @@ module DashboardHelper
     date = Date.parse(selected_date) if date.is_a? String 
     RoomState.joins(room: { floor: { building: :zone } } )
              .where(zones: { id: zone.id })
+             .where(rooms: { archived: false })
              .where(updated_at: date.beginning_of_day..date.end_of_day)
              .select { |room_state| true } # RoomStatus calculate_percentage
              .count
