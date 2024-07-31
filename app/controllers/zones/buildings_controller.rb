@@ -6,7 +6,7 @@ class Zones::BuildingsController < ApplicationController
 
   def index
     @building = Building.new
-    @buildings = Building.active.where(zone: @zone).order(:name)
+    @buildings = Building.active.where(zone: @zone)
     authorize @buildings
   end
 
@@ -20,7 +20,7 @@ class Zones::BuildingsController < ApplicationController
   def remove_building
     authorize([@zone, @building])
     if @zone.buildings.delete(@building)
-      @buildings = Building.active.where(zone: @zone).order(:name)
+      @buildings = Building.active.where(zone: @zone)
       flash.now[:notice] = "The building was removed from the zone."
     end
     @building = Building.new
@@ -47,7 +47,7 @@ class Zones::BuildingsController < ApplicationController
       authorize([@zone, @building]) 
       if @zone.buildings << @building
         @building = Building.new
-        @buildings = Building.active.where(zone: @zone).order(:name)
+        @buildings = Building.active.where(zone: @zone)
         flash.now[:notice] = "The building was added."
       end
     end

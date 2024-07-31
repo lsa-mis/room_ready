@@ -29,8 +29,8 @@ class Room < ApplicationRecord
 
   accepts_nested_attributes_for :specific_attributes
 
-  scope :active, -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false).order(:room_number) }
+  scope :archived, -> { where(archived: true).order(:room_number) }
 
   def full_name
     archived = self.archived ? " - archived" : ""

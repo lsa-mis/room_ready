@@ -50,7 +50,7 @@ class RoomsController < ApplicationController
   def destroy
     if @room.room_states.present?
       flash.now['alert'] = "The rooms has checked states - archive this room instead"
-      @rooms = Room.active.order(:name)
+      @rooms = Room.active
     else
       @building = @room.floor.building
       if delete_room(@room)
@@ -66,7 +66,7 @@ class RoomsController < ApplicationController
     if change_room_archived_mode(room: @room, archived: true)
       redirect_back_or_default(notice: "The room was archived")
     else
-      @rooms = Room.active.order(:name)
+      @rooms = Room.active
     end
   end
 
@@ -76,7 +76,7 @@ class RoomsController < ApplicationController
     if change_room_archived_mode(room: @room, archived: false)
       redirect_back_or_default(notice: "The room was unarchived")
     else
-      @rooms = Room.archived.order(:name)
+      @rooms = Room.archived
     end
   end
 

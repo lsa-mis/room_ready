@@ -43,7 +43,7 @@ module ApplicationHelper
   end
 
   def choose_buildings_for_zone
-    Building.active.where(zone: nil).order(:name).collect { |b| [b.name, b.id] }
+    Building.active.where(zone: nil).collect { |b| [b.name, b.id] }
   end
 
   def show_zone(building)
