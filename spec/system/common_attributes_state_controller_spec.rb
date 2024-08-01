@@ -19,7 +19,7 @@ RSpec.describe CommonAttributeState, type: :system do
       VCR.use_cassette "common_attribute_state" do
         visit "rooms/#{room.id}/room_states/new"
         find(:label, 'Yes').click
-        click_on "Create Room State"
+        click_on "Start Room Check"
         expect(page).to have_content("Common Room Questions")
         find('label[for=common_attribute_states_0_checkbox_value_true]').click
         find('label[for=common_attribute_states_1_checkbox_value_true]').click
