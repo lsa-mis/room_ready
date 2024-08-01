@@ -48,7 +48,7 @@ RSpec.describe Rover, type: :system do
         expect(page).to have_content("Begin Room Check for Room " + room.room_number)
         expect(page).to have_content("Can you access the room?")
         find(:label, 'Yes').click
-        click_on "Create Room State"
+        click_on "Start Room Check"
         expect(page).to have_content("Check Confirmation")
         expect(room.room_states.last.is_accessed).to be_truthy
       end
@@ -72,7 +72,7 @@ RSpec.describe Rover, type: :system do
         expect(page).to have_content("Can not access the room because:")
         select "Select Reason"
         select "reason one"
-        click_on "Create Room State"
+        click_on "Start Room Check"
         expect(page).to have_content("Check Confirmation")
         expect(room.room_states.last.is_accessed).to be_falsy
       end

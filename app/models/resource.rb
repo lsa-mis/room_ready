@@ -18,8 +18,8 @@ class Resource < ApplicationRecord
   validates :resource_type, presence: true
   validates :room_id, presence: true
 
-  scope :active, -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false).order(:resource_type) }
+  scope :archived, -> { where(archived: true).order(:resource_type) }
 
   def display_name
     "#{self.name} - #{self.resource_type}"
