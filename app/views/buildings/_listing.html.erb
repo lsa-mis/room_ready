@@ -2,10 +2,10 @@
   <table class="table text-center">
     <thead class="table-group-divider">
       <tr>
-        <th>Building Record Number</th>
         <th>Name</th>
         <th>Nickname</th>
         <th>Address</th>
+        <th>Building Record Number</th>
         <th>Zone</th>
         <th>View</th>
         <th>Edit</th>
@@ -18,9 +18,6 @@
       <% @buildings.each do |building| %>
         <tr class="building_tbody_tr">
           <td class="building_tbody_td">
-            <%= building.bldrecnbr %>
-          </td>
-          <td class="building_tbody_td">
             <%= link_to building_path(building), data: { turbo_frame: "_top" }, class: "link_to" do%>
               <%= building.name %>
             <% end %>
@@ -30,6 +27,9 @@
           </td>
           <td class="building_tbody_td">
             <%= building.full_address %>
+          </td>
+          <td class="building_tbody_td">
+            <%= building.bldrecnbr %>
           </td>
           </td>
           <td class="building_tbody_td">
