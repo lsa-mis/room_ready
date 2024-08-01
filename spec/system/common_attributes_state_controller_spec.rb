@@ -41,7 +41,7 @@ RSpec.describe CommonAttributeState, type: :system do
         common_attribute_state2 = FactoryBot.create(:common_attribute_state, room_state: room_state, common_attribute: common_attribute2)
 
         visit "rooms/#{room.id}/room_states/#{room_state.id}/edit"
-        click_on "Update Room State"
+        click_on "Update Room Check"
         expect(page).to have_content("Editing Common Room Questions")
         find('label[for=common_attribute_states_0_checkbox_value_true]').click
         find('label[for=common_attribute_states_1_checkbox_value_true]').click
