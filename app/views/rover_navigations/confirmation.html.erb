@@ -20,8 +20,6 @@
     font-size: 14px;
   }
 
-
-
   @media (max-width: 380px) {
     .horizontal-timeline .items .items-list p {
       font-size: 12px;
@@ -46,23 +44,23 @@
       <div class="col-lg-8 col-xl-6">
         <div class="card border-top border-bottom border-3 border-primary">
           <div class="card-body p-2">
-            <p class="lead fw-bold mb-5 text-primary">Room Information</p>
+            <p class="lead fw-bold mb-2 text-primary">Room Information</p>
             <div class="row">
-              <div class="col mb-3">
+              <div class="col">
                 <p class="small text-muted mb-1">Date</p>
                 <p><%= @room_state_today.updated_at.strftime('%m/%d/%Y') %></p>
               </div>
-              <div class="col mb-3">
+              <div class="col">
                 <p class="small text-muted mb-1">Building</p>
                 <p><%= @room.floor.building.name %></p>
               </div>
             </div>
             <div class="row">
-              <div class="col mb-3">
+              <div class="col">
                 <p class="small text-muted mb-1">Floor</p>
                 <p><%= @room.floor.name %></p>
               </div>
-              <div class="col mb-3">
+              <div class="col">
                 <p class="small text-muted mb-1">Room No.</p>
                 <p><%= @room.room_number %></p>
               </div>
