@@ -133,8 +133,8 @@ p {
 
 .btn-sign {
   color: #00274c !important; 
-  background-color: #FFCF01 !important; 
-  // box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.05); 
+  background-color: #FFCF01 !important;
+  --bs-btn-focus-shadow-rgb: 0, 39, 76 !important;
 }
 
 .btn-sign:hover {
@@ -350,4 +350,8 @@ svg.wh6 {
   font-family: roboto;
   margin-bottom: 1rem;
   color: var(--bs-heading-color);
+}
+
+.btn-primary {
+  --bs-btn-focus-shadow-rgb: 255, 203, 5;
 }
