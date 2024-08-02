@@ -110,6 +110,7 @@ p {
     letter-spacing: 0em;
     text-align: left;
     color: white;
+    margin-right: 20px;
   }
   
 }
@@ -302,9 +303,16 @@ svg.wh6 {
   display: block;
 }
 
-@media (max-width: 830px) {
-  .title-container {
-    display: none !important;
+@media (max-width: 770px) {
+  #LSAlogo {
+    padding-left: 10px;
+  }
+  .logo_image {
+    width: 100px;
+  }
+  .nav-title {
+    font-size: 30px !important;
+    margin-right: 0px !important;
   }
 }
 
@@ -312,10 +320,6 @@ svg.wh6 {
   .hide-on-mobile {
     display: none;
   }
-}
-
-.title-container {
-  margin-right: 20px;
 }
 
 .nowrap {
