@@ -110,6 +110,7 @@ p {
     letter-spacing: 0em;
     text-align: left;
     color: white;
+    margin-right: 20px;
   }
   
 }
@@ -133,8 +134,8 @@ p {
 
 .btn-sign {
   color: #00274c !important; 
-  background-color: #FFCF01 !important; 
-  // box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.05); 
+  background-color: #FFCF01 !important;
+  --bs-btn-focus-shadow-rgb: 0, 39, 76 !important;
 }
 
 .btn-sign:hover {
@@ -302,9 +303,16 @@ svg.wh6 {
   display: block;
 }
 
-@media (max-width: 830px) {
-  .title-container {
-    display: none !important;
+@media (max-width: 770px) {
+  #LSAlogo {
+    padding-left: 10px;
+  }
+  .logo_image {
+    width: 100px;
+  }
+  .nav-title {
+    font-size: 30px !important;
+    margin-right: 0px !important;
   }
 }
 
@@ -312,10 +320,6 @@ svg.wh6 {
   .hide-on-mobile {
     display: none;
   }
-}
-
-.title-container {
-  margin-right: 20px;
 }
 
 .nowrap {
@@ -350,4 +354,8 @@ svg.wh6 {
   font-family: roboto;
   margin-bottom: 1rem;
   color: var(--bs-heading-color);
+}
+
+.btn-primary {
+  --bs-btn-focus-shadow-rgb: 255, 203, 5;
 }
