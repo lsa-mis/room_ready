@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
+    session[:role] = "admin"
     if session[:role] == "rover"
       welcome_rovers_path
     elsif session[:role] == "developer" || session[:role] == "admin"

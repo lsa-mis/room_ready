@@ -65,9 +65,7 @@ Rails.application.routes.draw do
   post 'unarchive_building/:id', to: 'buildings#unarchive', as: :unarchive_building
   post 'unarchive_building_index/:id/:show_archived', to: 'buildings#unarchive_index', as: :unarchive_building_index
 
-  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
-    delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
-  end
+  devise_for :users
 
   resource :rover_navigation, only: [] do
     member do

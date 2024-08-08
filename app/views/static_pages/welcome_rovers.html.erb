@@ -20,7 +20,7 @@
         </div>
       <% else %> 
         <div>
-          <%= button_to "Sign In", user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+          <%= button_to "Sign In", new_user_session_path, data: {turbo: "false"}, class: "btn btn-sign" %>
         </div>
       <% end %>
   </div>

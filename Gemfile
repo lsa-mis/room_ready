@@ -49,8 +49,8 @@ gem "bootsnap", require: false
 
 gem "devise", "~> 4.9"
 gem "skylight"
-gem "omniauth-saml", "~> 2.1"
-gem "omniauth-rails_csrf_protection", "~> 1.0"
+# gem "omniauth-saml", "~> 2.1"
+# gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem 'repost'
 
 gem "ldap_lookup" # will use for admin interface, add rovers

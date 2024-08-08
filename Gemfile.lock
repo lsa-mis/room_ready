@@ -136,7 +136,6 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
-    hashie (5.0.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -215,16 +214,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
-    omniauth (2.1.2)
-      hashie (>= 3.4.6)
-      rack (>= 2.2.3)
-      rack-protection
-    omniauth-rails_csrf_protection (1.0.2)
-      actionpack (>= 4.2)
-      omniauth (~> 2.0)
-    omniauth-saml (2.1.0)
-      omniauth (~> 2.0)
-      ruby-saml (~> 1.12)
     orm_adapter (0.5.0)
     pg (1.5.6)
     pry (0.14.2)
@@ -244,9 +233,6 @@ GEM
       rspec-support (~> 3.12)
     racc (1.8.0)
     rack (3.1.7)
-    rack-protection (4.0.0)
-      base64 (>= 0.1.0)
-      rack (>= 3.0.0, < 4)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -316,9 +302,6 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
-    ruby-saml (1.16.0)
-      nokogiri (>= 1.13.10)
-      rexml
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
@@ -397,8 +380,6 @@ DEPENDENCIES
   kaminari
   ldap_lookup
   letter_opener_web
-  omniauth-rails_csrf_protection (~> 1.0)
-  omniauth-saml (~> 2.1)
   pg (~> 1.1)
   pry
   puma (>= 5.0)
