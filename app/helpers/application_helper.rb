@@ -56,7 +56,7 @@ module ApplicationHelper
 
   def google_map_navigation_path(address)
     formatted_address = address.gsub(/\s/,'+')
-    "https://www.google.com/maps/dir//" + formatted_address
+    "https://www.google.com/maps/search/?api=1&query=" + formatted_address
   end
 
   def show_room_percentage(room)
