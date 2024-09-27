@@ -18,6 +18,8 @@ class ReportsController < ApplicationController
     ]
   end
 
+  @show_archived = true
+
   # Design - For each new report:
   # 1) run the logic / activerecord query based on params
   # 2) if there is no record returned, do none of the below
@@ -38,6 +40,7 @@ class ReportsController < ApplicationController
 
   def number_of_room_issues_report
     authorize :report, :number_of_room_issues_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -79,6 +82,7 @@ class ReportsController < ApplicationController
 
   def room_issues_report
     authorize :report, :room_issues_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -307,6 +311,7 @@ class ReportsController < ApplicationController
 
   def common_attribute_states_report
     authorize :report, :common_attribute_states_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -321,7 +326,6 @@ class ReportsController < ApplicationController
                   .select('common_attributes.need_checkbox as need_checkbox')
                   .select('common_attribute_states.checkbox_value as checkbox_value')
                   .select('common_attribute_states.quantity_box_value as quantity_box_value')
-                  .where('common_attributes.archived = ?', archived)
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
 
       if rooms.any?
@@ -356,6 +360,7 @@ class ReportsController < ApplicationController
 
   def specific_attribute_states_report
     authorize :report, :specific_attribute_states_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -370,7 +375,6 @@ class ReportsController < ApplicationController
                   .select('specific_attributes.need_checkbox as need_checkbox')
                   .select('specific_attribute_states.checkbox_value as checkbox_value')
                   .select('specific_attribute_states.quantity_box_value as quantity_box_value')
-                  .where('specific_attributes.archived = ?', archived)
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, specific_attributes.description ASC')
 
       if rooms.any?
@@ -405,6 +409,7 @@ class ReportsController < ApplicationController
 
   def resource_states_report
     authorize :report, :resource_states_report?
+    @show_archived = false
 
     @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
 
@@ -421,7 +426,6 @@ class ReportsController < ApplicationController
                   .select("resources.resource_type as resource_type")
                   .select('room_states.updated_at')
                   .select('resource_states.is_checked as check_value')
-                  .where('resources.archived = ?', archived)
                   .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
 
