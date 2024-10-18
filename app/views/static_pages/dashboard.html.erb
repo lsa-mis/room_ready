@@ -70,6 +70,18 @@
   </div>
 
   <hr>
+  <h2>Last Checked Rooms</h2>
+  <div class="row m-4">
+    <ul>
+      <% @last_checked_rooms.each do |room| %>
+        <li>
+          <%= link_to room.room_number, room_path(room), class: "link_to" %> - <%= room.floor.building.name.titleize %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <hr>
   <h2>Recent Room Issues</h2>
   <div class="row m-2">
     <% latest_room_tickets.each do |ticket| %>

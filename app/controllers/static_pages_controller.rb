@@ -19,7 +19,7 @@ class StaticPagesController < ApplicationController
 
     @selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
 
-    @latest_tickets = latest_room_tickets
+    @last_checked_rooms = Room.where(id: RoomState.all.order(updated_at: :desc).limit(5).pluck(:room_id))
 
     @zones = Zone.all.order(:name)
 
