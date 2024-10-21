@@ -11,31 +11,54 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div data-controller="room-tickets" class="modal-body">
-        <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room), data: {room_tickets_target: "form", action: "room-tickets#check"}) do |form| %>
-          <% if room_ticket.errors.any? %>
-            <div class="text-danger">
-            <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
-            <ul>
-              <% room_ticket.errors.each do |error| %>
-                <li><%= error.full_message %></li>
+      <div class="modal-body">
+        <% if room_recent_tickets(@room).count > 0 %>
+          <div class="mb-4">
+            <h2 class="fs-6">Recent Issues in the room</h2>
+            <table class="text-small">
+              <% room_recent_tickets(@room).each do |ticket| %>
+                <tr class="mobile_tr">
+                  <th scope="col">Date:</th>
+                  <td>
+                    <%= show_date_with_time(ticket.updated_at) %>
+                  </td>
+                </tr>
+                <tr class="mobile_tr_divider">
+                  <th scope="col">Message:</th>
+                  <td class>
+                    <%= ticket.description %>
+                  </td>
+                </tr>
               <% end %>
-            </ul>
-            </div>
-          <% end %>
-          <div>
-            <%= form.label :tdx_email, "Select the Email Address *" %>
-            <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building))) %>
-          </div>
-          <div>
-            <div>Email Message *</div>
-            <%= form.rich_text_area :description, data: { room_tickets_target: "description"} %>
-          </div>
-          <div class="mt-1 gap-1 d-flex flex-row justify-content-start align-items-center">
-            <%= form.submit 'Submit', id: "submit_button", data: { action: "room-tickets#check", bs_dismiss: "modal" } %>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </table>
           </div>
         <% end %>
+        <div data-controller="room-tickets">
+          <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room), data: {room_tickets_target: "form", action: "room-tickets#check"}) do |form| %>
+            <% if room_ticket.errors.any? %>
+              <div class="text-danger">
+              <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
+              <ul>
+                <% room_ticket.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+              </div>
+            <% end %>
+            <div>
+              <%= form.label :tdx_email, "Select the Email Address *" %>
+              <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building))) %>
+            </div>
+            <div>
+              <div>Email Message *</div>
+              <%= form.rich_text_area :description, data: { room_tickets_target: "description"} %>
+            </div>
+            <div class="mt-1 gap-1 d-flex flex-row justify-content-start align-items-center">
+              <%= form.submit 'Submit', id: "submit_button", data: { action: "room-tickets#check", bs_dismiss: "modal" } %>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
