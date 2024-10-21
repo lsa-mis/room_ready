@@ -71,15 +71,30 @@
 
   <hr>
   <h2>Last Checked Rooms</h2>
-  <div class="row m-4">
-    <ul>
-      <% @last_checked_rooms.each do |room| %>
-        <li>
-          <%= link_to room.room_number, room_path(room), class: "link_to" %> - <%= room.floor.building.name.titleize %>
-        </li>
+  <table class="table text-center m-4">
+    <thead class="table-group-divider">
+      <tr>
+        <th scope="col" class="text-start">Room Number</th>
+        <th scope="col">Building</th>
+        <th scope="col">Date and Time</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider" id="common_attributes">
+      <% @last_checked_rooms.each do |room, update_at| %>
+        <tr>
+          <td class="text-start">
+            <%= link_to room.room_number, room_path(room), class: "link_to" %>
+          </td>
+          <td>
+            <%= room.floor.building.name.titleize %>
+          </td>
+          <td>
+            <%= show_date_with_time(update_at) %>
+          </td>
+        </tr>
       <% end %>
-    </ul>
-  </div>
+    </tbody>
+  </table>
 
   <hr>
   <h2>Recent Room Issues</h2>
