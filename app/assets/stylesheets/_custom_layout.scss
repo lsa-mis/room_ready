@@ -363,3 +363,22 @@ svg.wh6 {
   height: 10px !important;
   background-color: #00AEEF;
 }
+
+.mobile_tr_divider {
+  position: relative; 
+  border-width: 1px; 
+  border-top-width: 0; 
+  border-right-width: 0; 
+  border-bottom-width: 2px; 
+  border-left-width: 0; 
+  border-color: #7F7F7F; 
+}
+
+.mobile_tr {
+  position: relative; 
+  border-width: 1px; 
+  border-top-width: 0; 
+  border-right-width: 0; 
+  border-left-width: 0; 
+  border-color: #CCCCCC; 
+}
