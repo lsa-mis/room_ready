@@ -43,7 +43,7 @@
       </div>
     <% end %>
   </div>
-  <hr>  
+    
   <h2>Reports for Last Checks</h2>
   <div class="row m-2">
     <div class="col-md-6 col-lg-4">
@@ -69,7 +69,6 @@
     </div>
   </div>
 
-  <hr>
   <h2>Last Checked Rooms</h2>
   <table class="table text-center m-4">
     <thead class="table-group-divider">
@@ -79,7 +78,7 @@
         <th scope="col">Date and Time</th>
       </tr>
     </thead>
-    <tbody class="table-group-divider" id="common_attributes">
+    <tbody>
       <% @last_checked_rooms.each do |room, update_at| %>
         <tr>
           <td class="text-start">
@@ -96,7 +95,6 @@
     </tbody>
   </table>
 
-  <hr>
   <h2>Recent Room Issues</h2>
   <div class="row m-2">
     <% latest_room_tickets.each do |ticket| %>
@@ -116,7 +114,7 @@
       </div>
     <% end %>
   </div>
-  <hr>
+
   <h2>Daily Resource Update Script</h2>
   <div class="m-2">
     <% if @room_update_log %>
