@@ -13,19 +13,21 @@
       </div>
       <div class="modal-body">
         <% if room_recent_tickets(@room).count > 0 %>
+          
+          <h2 class="fs-6">Recent Room Issues Reported</h2>
+          <p>Please do not submit a new ticket if issue is listed below</p>
           <div class="mb-4">
-            <h2 class="fs-6">Recent Issues in the room</h2>
-            <table class="text-small">
+            <table class="table table-sm table-dark">
               <% room_recent_tickets(@room).each do |ticket| %>
-                <tr class="mobile_tr">
-                  <th scope="col">Date:</th>
+                <tr>
+                  <th scope="col" class="ml-2">Date:</th>
                   <td>
                     <%= show_date_with_time(ticket.updated_at) %>
                   </td>
                 </tr>
-                <tr class="mobile_tr_divider">
-                  <th scope="col">Message:</th>
-                  <td class>
+                <tr>
+                  <th scope="col" class="ml-2">Message: </th>
+                  <td>
                     <%= ticket.description %>
                   </td>
                 </tr>
