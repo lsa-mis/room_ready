@@ -70,7 +70,7 @@
   </div>
 
   <h2>Last Checked Rooms</h2>
-  <table class="table text-center m-4">
+  <table class="table table-striped text-center m-4">
     <thead class="table-group-divider">
       <tr>
         <th scope="col" class="text-start">Room Number</th>
@@ -78,7 +78,7 @@
         <th scope="col">Date and Time</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       <% @last_checked_rooms.each do |room, update_at| %>
         <tr>
           <td class="text-start">
