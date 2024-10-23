@@ -137,5 +137,9 @@ module ApplicationHelper
   def room_tickets(room, day)
     RoomTicket.where('room_id = ? AND DATE(updated_at) = ?', room.id, day.to_date)
   end
+
+  def room_recent_tickets(room)
+    RoomTicket.where('room_id = ? AND DATE(updated_at) > ?', room.id, Date.today - 5.day)
+  end
   
 end

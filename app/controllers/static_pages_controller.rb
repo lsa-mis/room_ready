@@ -19,8 +19,10 @@ class StaticPagesController < ApplicationController
 
     @selected_date = params[:dashboard_date].present? ? Date.parse(params[:dashboard_date]) : Date.today
 
-    @latest_tickets = latest_room_tickets
-
+    last_room_states = RoomState.all.order(updated_at: :desc).limit(5)
+    @last_checked_rooms  = []
+    @last_checked_rooms = last_room_states.map { |room_state| [Room.find(room_state.room_id), room_state.updated_at] }
+    
     @zones = Zone.all.order(:name)
 
     @room_access_data = {

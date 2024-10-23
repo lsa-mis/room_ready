@@ -43,7 +43,7 @@
       </div>
     <% end %>
   </div>
-  <hr>  
+    
   <h2>Reports for Last Checks</h2>
   <div class="row m-2">
     <div class="col-md-6 col-lg-4">
@@ -69,7 +69,32 @@
     </div>
   </div>
 
-  <hr>
+  <h2>Last Checked Rooms</h2>
+  <table class="table table-striped text-center m-4">
+    <thead class="table-group-divider">
+      <tr>
+        <th scope="col" class="text-start">Room Number</th>
+        <th scope="col">Building</th>
+        <th scope="col">Date and Time</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <% @last_checked_rooms.each do |room, update_at| %>
+        <tr>
+          <td class="text-start">
+            <%= link_to room.room_number, room_path(room), class: "link_to" %>
+          </td>
+          <td>
+            <%= room.floor.building.name.titleize %>
+          </td>
+          <td>
+            <%= show_date_with_time(update_at) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
   <h2>Recent Room Issues</h2>
   <div class="row m-2">
     <% latest_room_tickets.each do |ticket| %>
@@ -89,7 +114,7 @@
       </div>
     <% end %>
   </div>
-  <hr>
+
   <h2>Daily Resource Update Script</h2>
   <div class="m-2">
     <% if @room_update_log %>
