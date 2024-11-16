@@ -336,7 +336,7 @@ class ReportsController < ApplicationController
         @title = 'Common Attribute States Report'
 
         @date_headers = (start_time.to_date..end_time.to_date).to_a
-        @headers = [ 'Room', 'Building'] + @date_headers
+        @headers = [ 'Room', 'Building', 'zone'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
         @data = grouped_rooms.transform_values do |room_group|
