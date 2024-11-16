@@ -432,7 +432,7 @@ class ReportsController < ApplicationController
         @date_headers = (start_time.to_date..end_time.to_date).to_a
         @headers = ['Resource'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| ["#{room.zone} | #{room.floor.building.name} |", room] }
+        grouped_rooms = rooms.group_by { |room| ["#{room.zone} | #{room.building} |", room] }
         @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
