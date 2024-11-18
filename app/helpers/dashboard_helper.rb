@@ -40,7 +40,7 @@ module DashboardHelper
   end
 
   def rooms_checked_for_date(zone, date)
-    date = Date.parse(selected_date) if date.is_a? String 
+    date = Date.parse(date) if date.is_a? String 
     RoomState.joins(room: { floor: { building: :zone } } )
              .where(zones: { id: zone.id })
              .where(rooms: { archived: false })

@@ -26,16 +26,19 @@
           </div>
           <div class="card-body">
             <div class="progress mb-3">
-              <div class="progress-bar <%= room_check_progress_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %> text-white" role="progressbar" 
-              style="width: <%= completion_percentage(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>%" 
-              aria-valuenow="<%= completion_percentage(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>" 
+              <% total = total_rooms(zone) %>
+              <% checked_for_date = rooms_checked_for_date(zone, @selected_date) %>
+              <% percentage = completion_percentage(checked_for_date, total) %>
+              <div class="progress-bar <%= room_check_progress_class(checked_for_date, total) %> text-white" role="progressbar" 
+              style="width: <%= percentage %>%" 
+              aria-valuenow="<%= percentage %>" 
               aria-valuemin="0" aria-valuemax="100">
-              <%= completion_percentage(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>%
+              <%= percentage %>%
               </div>
             </div>
 
-            <span class="card-text nowrap-card mb-4 <%= room_check_status_class(rooms_checked_for_date(zone, @selected_date), total_rooms(zone)) %>">
-              <%= rooms_checked_for_date(zone, @selected_date) %>/<%= total_rooms(zone) %> 
+            <span class="card-text nowrap-card mb-4 <%= room_check_status_class(checked_for_date, total) %>">
+              <%= checked_for_date %>/<%= total %> 
               Classrooms Complete
             </span>
           </div>
