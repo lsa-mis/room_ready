@@ -16,7 +16,7 @@ RSpec.describe CommonAttributeState, type: :system do
     let!(:common_attribute2) { FactoryBot.create(:common_attribute) }
 
     it 'fills out the form and submits it' do
-      VCR.use_cassette "common_attribute_state" do
+      # VCR.use_cassette "common_attribute_state" do
         visit "rooms/#{room.id}/room_states/new"
         find(:label, 'Yes').click
         click_on "Start Room Check"
@@ -25,14 +25,14 @@ RSpec.describe CommonAttributeState, type: :system do
         find('label[for=common_attribute_states_1_checkbox_value_true]').click
         click_on "Save Response"
         expect(page).to have_content("Check Confirmation")
-      end
+      # end
     end
   end
   
   context 'edit a common attribute state' do
 
     it 'fills out the form and submits it' do
-      VCR.use_cassette "common_attribute_state" do
+      # VCR.use_cassette "common_attribute_state" do
         room = FactoryBot.create(:room)
         common_attribute1 = FactoryBot.create(:common_attribute)
         common_attribute2 = FactoryBot.create(:common_attribute)
@@ -47,7 +47,7 @@ RSpec.describe CommonAttributeState, type: :system do
         find('label[for=common_attribute_states_1_checkbox_value_true]').click
         click_on "Update Response"
         expect(page).to have_content("Check Confirmation")
-      end
+      # end
     end
   end
 

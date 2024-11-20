@@ -12,11 +12,11 @@ RSpec.describe CommonAttribute, type: :system do
 
 	context 'create a new zone' do
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit zones_path
         visit zones_path
         expect(page).to have_content("You are not authorized to perform this action.")
-      end
+      # end
     end
   end
 
@@ -24,11 +24,11 @@ RSpec.describe CommonAttribute, type: :system do
     let!(:zone) { FactoryBot.create(:zone) }
 
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit edit_zone_path(zone)
         visit edit_zone_path(zone)
         expect(page).to have_content("You are not authorized to perform this action.")
-      end
+      # end
     end
   end
   

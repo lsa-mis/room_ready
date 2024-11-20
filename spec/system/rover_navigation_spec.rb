@@ -16,7 +16,7 @@ RSpec.describe Rover, type: :system do
     let!(:room) { FactoryBot.create(:room) }
 
     it 'see the Begin Room Check form' do
-      VCR.use_cassette "rover_navigation" do
+      # VCR.use_cassette "rover_navigation" do
         floor_name  = "Floor " + room.floor.name
         building = room.floor.building
         zone = building.zone
@@ -30,7 +30,7 @@ RSpec.describe Rover, type: :system do
         expect(page).to have_content("Rooms for " + building.name)
         click_on "Start Checking " + room.room_number
         expect(page).to have_content("Begin Room Check for Room " + room.room_number)
-      end
+      # end
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe Rover, type: :system do
     let!(:room) { FactoryBot.create(:room) }
 
     it 'see the Begin Room Check form' do
-      VCR.use_cassette "rover_navigation" do
+      # VCR.use_cassette "rover_navigation" do
         floor_name  = "Floor " + room.floor.name
         building = room.floor.building
         zone = building.zone
@@ -51,7 +51,7 @@ RSpec.describe Rover, type: :system do
         click_on "Start Room Check"
         expect(page).to have_content("Check Confirmation")
         expect(room.room_states.last.is_accessed).to be_truthy
-      end
+      # end
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe Rover, type: :system do
     let!(:room) { FactoryBot.create(:room) }
 
     it 'see the Begin Room Check form' do
-      VCR.use_cassette "rover_navigation" do
+      # VCR.use_cassette "rover_navigation" do
         floor_name  = "Floor " + room.floor.name
         building = room.floor.building
         zone = building.zone
@@ -75,7 +75,7 @@ RSpec.describe Rover, type: :system do
         click_on "Start Room Check"
         expect(page).to have_content("Check Confirmation")
         expect(room.room_states.last.is_accessed).to be_falsy
-      end
+      # end
     end
   end
 end

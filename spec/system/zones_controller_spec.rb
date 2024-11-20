@@ -11,14 +11,14 @@ RSpec.describe Zone, type: :system do
 
 	context 'create a new zone' do
     it 'fills out the form and submits it' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit zones_path
         click_on "Add New Zone"
         fill_in "Name", with: "Zone A"
         click_on "Create Zone"
         expect(page).to have_content("Zone was successfully created.")
         expect(Zone.find_by(name: "Zone A").present?).to be_truthy
-      end
+      # end
     end
   end
 
@@ -26,36 +26,36 @@ RSpec.describe Zone, type: :system do
     let!(:zone) { FactoryBot.create(:zone) }
 
     it 'click on edit icon and go to edit page' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit zones_path
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Editing Zone")
-      end
+      # end
     end
 
     it 'click on edit icon and cancel editing' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit zones_path
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Editing Zone")
         click_on "Cancel"
         expect(page).to have_content(zone.name)
-      end
+      # end
     end
 
     it 'click on edit icon and update name' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         visit zones_path
         find(:css, 'i.bi.bi-pencil-square.text-primary').click
         expect(page).to have_content("Editing Zone")
         fill_in "Name", with: zone.name + "edited"
         click_on "Update"
         expect(page).to have_content(zone.name + "edited")
-      end
+      # end
     end
 
     it 'click on delete icon and cancel the alert message' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         zone_id = zone.id
         visit zones_path
         # dismiss_browser_dialog
@@ -63,11 +63,11 @@ RSpec.describe Zone, type: :system do
           find(:css, 'i.bi.bi-trash-fill.text-danger').click
         end
         expect(Zone.find(zone_id).present?).to be_truthy
-      end
+      # end
     end
 
     it 'click on cancel icon and accept the alert message' do
-      VCR.use_cassette "zone" do
+      # VCR.use_cassette "zone" do
         zone_id = zone.id
         visit zones_path
         # accept_browser_dialog
@@ -76,7 +76,7 @@ RSpec.describe Zone, type: :system do
         end
         expect(page).to have_content("Zone was successfully deleted.")
         expect { Zone.find(zone_id) }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+      # end
     end
   end
   
