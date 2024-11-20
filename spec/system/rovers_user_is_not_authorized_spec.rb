@@ -12,22 +12,18 @@ RSpec.describe Rover, type: :system do
 
   context 'create a new rover' do
     it 'returns a "You are not authorized to perform this action." message' do
-      # VCR.use_cassette "rover" do
-        visit rovers_path
-        visit rovers_path
-        expect(page).to have_content("You are not authorized to perform this action.")
-      # end
+      visit rovers_path
+      visit rovers_path
+      expect(page).to have_content("You are not authorized to perform this action.")
     end
   end
 
   context 'edit a rover' do
     let!(:rover) { FactoryBot.create(:rover) }
     it 'returns a "You are not authorized to perform this action." message' do
-      # VCR.use_cassette "rover" do
-        visit edit_rover_path(rover)
-        visit edit_rover_path(rover)
-        expect(page).to have_content("You are not authorized to perform this action.")
-      # end
+      visit edit_rover_path(rover)
+      visit edit_rover_path(rover)
+      expect(page).to have_content("You are not authorized to perform this action.")
     end
   end
   
