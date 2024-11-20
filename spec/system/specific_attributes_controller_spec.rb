@@ -12,26 +12,22 @@ RSpec.describe SpecificAttribute, type: :system do
 	context 'create a new specific attribute' do
     let!(:room) { FactoryBot.create(:room) }
     it 'fills out the form and submits it' do
-      VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room.id}/specific_attributes"
-        fill_in "Description", with: "specific attribute one"
-        check "Include Yes/No Buttons"
-        click_on "Create"
-        expect(page).to have_content("Specific attribute was successfully created.")
-        expect(SpecificAttribute.find_by(description: "specific attribute one").present?).to be_truthy
-      end
+      visit "rooms/#{room.id}/specific_attributes"
+      fill_in "Description", with: "specific attribute one"
+      check "Include Yes/No Buttons"
+      click_on "Create"
+      expect(page).to have_content("Specific attribute was successfully created.")
+      expect(SpecificAttribute.find_by(description: "specific attribute one").present?).to be_truthy
     end
   end
 
   context 'validate a new specific attribute' do
     let!(:room) { FactoryBot.create(:room) }
     it 'fills out the form and submits it' do
-      VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room.id}/specific_attributes"
-        fill_in "Description", with: "specific attribute one"
-        click_on "Create"
-        expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
-      end
+      visit "rooms/#{room.id}/specific_attributes"
+      fill_in "Description", with: "specific attribute one"
+      click_on "Create"
+      expect(page).to have_content("Needs to have either a checkbox or a quantity box, but not both.")
     end
   end
 
@@ -39,44 +35,36 @@ RSpec.describe SpecificAttribute, type: :system do
     let!(:specific_attribute) { FactoryBot.create(:specific_attribute) }
     let!(:room_id) { specific_attribute.room.id }
     it 'click on edit icon and go to edit page' do
-      VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room_id}/specific_attributes"
-        find(:css, 'i.bi.bi-pencil-square.text-primary').click
-        expect(page).to have_content("Edit Specific Attribute")
-      end
+      visit "rooms/#{room_id}/specific_attributes"
+      find(:css, 'i.bi.bi-pencil-square.text-primary').click
+      expect(page).to have_content("Edit Specific Attribute")
     end
 
     it 'click on edit icon and cancel editing' do
-      VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room_id}/specific_attributes"
-        find(:css, 'i.bi.bi-pencil-square.text-primary').click
-        expect(page).to have_content("Edit Specific Attribute")
-        click_on "Cancel"
-        expect(page).to have_content(specific_attribute.description)
-      end
+      visit "rooms/#{room_id}/specific_attributes"
+      find(:css, 'i.bi.bi-pencil-square.text-primary').click
+      expect(page).to have_content("Edit Specific Attribute")
+      click_on "Cancel"
+      expect(page).to have_content(specific_attribute.description)
     end
 
     it 'click on edit icon and update description' do
-      VCR.use_cassette "specific_attribute" do
-        visit "rooms/#{room_id}/specific_attributes"
-        find(:css, 'i.bi.bi-pencil-square.text-primary').click
-        expect(page).to have_content("Edit Specific Attribute")
-        fill_in "Description", with: specific_attribute.description + "edited"
-        click_on "Update"
-        expect(page).to have_content(specific_attribute.description + "edited")
-      end
+      visit "rooms/#{room_id}/specific_attributes"
+      find(:css, 'i.bi.bi-pencil-square.text-primary').click
+      expect(page).to have_content("Edit Specific Attribute")
+      fill_in "Description", with: specific_attribute.description + "edited"
+      click_on "Update"
+      expect(page).to have_content(specific_attribute.description + "edited")
     end
 
     it 'click on delete icon and cancel the alert messege' do
-      VCR.use_cassette "specific_attribute" do
-        specific_attribute_id = specific_attribute.id
-        visit "rooms/#{room_id}/specific_attributes"
-        dismiss_confirm 'Are you sure you want to delete this specific attribute?' do
-          find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        end
-        expect(page).to_not have_content("Specific attribute was successfully deleted.")
-        expect(SpecificAttribute.find(specific_attribute_id).present?).to be_truthy
+      specific_attribute_id = specific_attribute.id
+      visit "rooms/#{room_id}/specific_attributes"
+      dismiss_confirm 'Are you sure you want to delete this specific attribute?' do
+        find(:css, 'i.bi.bi-trash-fill.text-danger').click
       end
+      expect(page).to_not have_content("Specific attribute was successfully deleted.")
+      expect(SpecificAttribute.find(specific_attribute_id).present?).to be_truthy
     end
   end
 
@@ -84,15 +72,13 @@ RSpec.describe SpecificAttribute, type: :system do
     let!(:specific_attribute) { FactoryBot.create(:specific_attribute) }
     let!(:room_id) { specific_attribute.room.id }
     it 'click on delete icon and accept the alert message' do
-      VCR.use_cassette "specific_attribute" do
-        specific_attribute_id = specific_attribute.id
-        visit "rooms/#{room_id}/specific_attributes"
-        accept_confirm 'Are you sure you want to delete this specific attribute?' do
-          find(:css, 'i.bi.bi-trash-fill.text-danger').click
-        end
-        expect(page).to have_content("Specific attribute was deleted.")
-        expect { SpecificAttribute.find(specific_attribute_id) }.to raise_error(ActiveRecord::RecordNotFound)
+      specific_attribute_id = specific_attribute.id
+      visit "rooms/#{room_id}/specific_attributes"
+      accept_confirm 'Are you sure you want to delete this specific attribute?' do
+        find(:css, 'i.bi.bi-trash-fill.text-danger').click
       end
+      expect(page).to have_content("Specific attribute was deleted.")
+      expect { SpecificAttribute.find(specific_attribute_id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
   

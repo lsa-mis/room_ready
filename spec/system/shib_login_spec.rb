@@ -9,22 +9,18 @@ RSpec.describe "Controllers", type: :request do
 
   describe 'login success' do
     it 'displays welcome message on programs page' do
-      VCR.use_cassette "login" do
-        user = FactoryBot.create(:user)
-        mock_login(user)
-        follow_redirect!
-        expect(response.body).to include("Signed in successfully.")
-      end
+      user = FactoryBot.create(:user)
+      mock_login(user)
+      follow_redirect!
+      expect(response.body).to include("Signed in successfully.")
     end
   end
 
   describe 'login failure' do
     it 'displays welcome message on programs page' do
-      VCR.use_cassette "login" do
-        user = FactoryBot.build(:user, email: "wrongemial")
-        mock_login(user)
-        expect(response.body).not_to include("Welcome")
-      end
+      user = FactoryBot.build(:user, email: "wrongemial")
+      mock_login(user)
+      expect(response.body).not_to include("Welcome")
     end
   end
 

@@ -12,11 +12,9 @@ RSpec.describe CommonAttribute, type: :system do
 
 	context 'create a new common attribute' do
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit common_attributes_path
-        visit common_attributes_path
-        expect(page).to have_content("You are not authorized to perform this action.")
-      end
+      visit common_attributes_path
+      visit common_attributes_path
+      expect(page).to have_content("You are not authorized to perform this action.")
     end
   end
 
@@ -24,11 +22,9 @@ RSpec.describe CommonAttribute, type: :system do
     let!(:common_attribute) { FactoryBot.create(:common_attribute) }
 
     it 'returns a "You are not authorized to perform this action." message' do
-      VCR.use_cassette "common_attribute" do
-        visit edit_common_attribute_path(common_attribute)
-        visit edit_common_attribute_path(common_attribute)
-        expect(page).to have_content("You are not authorized to perform this action.")
-      end
+      visit edit_common_attribute_path(common_attribute)
+      visit edit_common_attribute_path(common_attribute)
+      expect(page).to have_content("You are not authorized to perform this action.")
     end
   end
   
