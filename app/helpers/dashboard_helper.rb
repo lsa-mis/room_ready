@@ -26,19 +26,6 @@ module DashboardHelper
     ((checked.to_f / total) * 100).round
   end
 
-  # getter for the number of latest tickets to be displayed on the dashboard, or makes it 5 by default
-  def recent_tickets_quantity
-    value = AppPreference.find_by(name: "tdx_tickets_quantity_on_dashboard")&.value
-    value.presence&.to_i || 5
-  end
-
-
-  def latest_room_tickets
-    RoomTicket.includes(room: { floor: :building })
-              .order(created_at: :desc)
-              .limit(recent_tickets_quantity)
-  end
-
   def rooms_checked_for_date(zone, date)
     date = Date.parse(date) if date.is_a? String 
     RoomState.joins(room: { floor: { building: :zone } } )
@@ -48,15 +35,5 @@ module DashboardHelper
              .select { |room_state| true } # RoomStatus calculate_percentage
              .count
 
-  end
-
-  def total_rooms(zone)
-    Room.active.joins(floor: { building: :zone })
-        .where(zones: { id: zone.id })
-        .count
-  end
-
-  def room_update_log_status(log_note)
-    log_note.split("|").first.strip
   end
 end
