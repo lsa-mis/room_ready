@@ -44,7 +44,7 @@ class StaticPagesController < ApplicationController
     @latest_room_tickets = RoomTicket.latest
 
     @room_update_log = RoomUpdateLog.last
-    @room_update_log_status = @room_update_log.status
+    @room_update_log_status = @room_update_log&.status
     
   end
 
