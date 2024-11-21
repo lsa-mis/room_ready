@@ -15,4 +15,8 @@ class RoomTicket < ApplicationRecord
   has_rich_text :description
 
   validates :description, :submitted_by, :tdx_email, presence: true
+
+  scope :latest, -> { all.order(created_at: :desc)
+    .limit(AppPreference.find_by(name: "tdx_tickets_quantity_on_dashboard")&.value.presence&.to_i || 5) }
+
 end

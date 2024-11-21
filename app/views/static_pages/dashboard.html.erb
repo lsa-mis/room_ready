@@ -26,7 +26,7 @@
           </div>
           <div class="card-body">
             <div class="progress mb-3">
-              <% total = total_rooms(zone) %>
+              <% total = zone.total_rooms %>
               <% checked_for_date = rooms_checked_for_date(zone, @selected_date) %>
               <% percentage = completion_percentage(checked_for_date, total) %>
               <div class="progress-bar <%= room_check_progress_class(checked_for_date, total) %> text-white" role="progressbar" 
@@ -100,7 +100,7 @@
 
   <h2>Recent Room Issues</h2>
   <div class="row m-2">
-    <% latest_room_tickets.each do |ticket| %>
+    <% @latest_room_tickets.each do |ticket| %>
       <div class="mb-2">
         <div class="card">
           <div class="card-header">
