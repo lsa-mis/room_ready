@@ -30,6 +30,7 @@ class Room < ApplicationRecord
   accepts_nested_attributes_for :specific_attributes
 
   scope :active, -> { where(archived: false).order(:room_number) }
+  scope :active_in_zones, -> { active.joins(floor: :building).where.not(buildings: { zone_id: nil }) }
   scope :archived, -> { where(archived: true).order(:room_number) }
 
   def full_name
