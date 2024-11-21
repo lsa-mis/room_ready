@@ -19,7 +19,7 @@ class Recommendation
   end
 
   def all_rooms_on_same_floor
-    same_floor_rooms = @room.floor.rooms.order(:room_number)
+    same_floor_rooms = @room.floor.active_rooms.order(:room_number)
     same_floor_rooms.exists? ? same_floor_rooms : nil
   end
 
@@ -47,7 +47,7 @@ class Recommendation
   end
 
   def floor_has_unchecked_rooms?(floor)
-    floor.rooms.each do |room|
+    floor.active_rooms.each do |room|
       unless RoomStatus.new(room).room_state_today.present?
         return true
       end
@@ -57,13 +57,13 @@ class Recommendation
 
   def unchecked_rooms_on_floor(floor)
     unchecked_rooms = []
-    rooms_with_no_check_time = floor.rooms.where(last_time_checked: nil)
+    rooms_with_no_check_time = floor.active_rooms.where(last_time_checked: nil)
 
     if rooms_with_no_check_time.exists?
       unchecked_rooms += rooms_with_no_check_time
     end
 
-    rooms_not_checked = floor.rooms.where.not(last_time_checked: @start_of_day..@end_of_day)
+    rooms_not_checked = floor.active_rooms.where.not(last_time_checked: @start_of_day..@end_of_day)
 
     if rooms_not_checked.exists?
       unchecked_rooms += rooms_not_checked

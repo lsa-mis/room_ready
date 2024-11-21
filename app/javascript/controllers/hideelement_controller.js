@@ -6,7 +6,6 @@ export default class extends Controller {
     console.log("Hiding Element controller connected")
   }
   showElement() {
-    console.log("Hit showElement")
     this.hide_sectionTarget.classList.remove("d-none")
     this.hide_sectionTarget.classList.add("d-block")
     this.more_buttonTarget.classList.add("d-none")

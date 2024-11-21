@@ -104,8 +104,10 @@
                               <%= common_attribute_state.common_attribute.description %>
                             </td>
                             <td class="rover_tbody_td">
-                              <% if common_attribute_state.checkbox_value.present? %>
-                                <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                              <% if common_attribute_state.checkbox_value.to_s.present? %>
+                                <span class="text-center <%= common_attribute_state.checkbox_value ? 'text-success' : (!common_attribute_state.checkbox_value ? 'text-danger' : '' ) %>">
+                                  <%= common_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                                </span>
                               <% elsif common_attribute_state.quantity_box_value.present? %>
                                 <%= common_attribute_state.quantity_box_value %>
                               <% else %>
@@ -133,8 +135,10 @@
                               <%= specific_attribute_state.specific_attribute.description %>
                             </td>
                             <td class="rover_tbody_td">
-                              <% if specific_attribute_state.checkbox_value.present? %>
-                                <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                              <% if specific_attribute_state.checkbox_value.to_s.present? %>
+                                <span class="text-center <%= specific_attribute_state.checkbox_value ? 'text-success' : (!specific_attribute_state.checkbox_value ? 'text-danger' : '' ) %>">
+                                  <%= specific_attribute_state.checkbox_value ? 'Yes' : 'No' %>
+                                </span>
                               <% elsif specific_attribute_state.quantity_box_value.present?%>
                                 <%= specific_attribute_state.quantity_box_value %>
                               <% else %>
@@ -157,17 +161,15 @@
                           </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                        <% @room.resources.each_with_index do |resource, index| %>
+                        <% room_state.resource_states.each_with_index do |resource_state, index| %>
                           <tr class="rover_tbody_tr">
                             <td class="rover_tbody_td">
-                              <%= resource.name %> - <%= resource.resource_type %>
+                              <%= resource_state.resource.name %> - <%= resource_state.resource.resource_type %>
                             </td>
                             <td class="rover_tbody_td">
-                              <% if room_state.resource_states[index].present? %>
-                                <%= room_state.resource_states[index].is_checked ? 'Yes' : 'No' %>
-                              <% else %>
-                                Not Checked
-                              <% end %>
+                              <span class="text-center <%= resource_state.is_checked ? 'text-success' : (!resource_state.is_checked ? 'text-danger' : '' ) %>">
+                                <%= resource_state.is_checked ? 'Yes' : 'No' %>
+                              </span>
                             </td>
                           </tr>
                         <% end %>

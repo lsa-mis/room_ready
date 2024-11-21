@@ -56,7 +56,7 @@ module ApplicationHelper
 
   def google_map_navigation_path(address)
     formatted_address = address.gsub(/\s/,'+')
-    "https://www.google.com/maps/dir//" + formatted_address
+    "https://www.google.com/maps/search/?api=1&query=" + formatted_address
   end
 
   def show_room_percentage(room)
@@ -136,6 +136,10 @@ module ApplicationHelper
 
   def room_tickets(room, day)
     RoomTicket.where('room_id = ? AND DATE(updated_at) = ?', room.id, day.to_date)
+  end
+
+  def room_recent_tickets(room)
+    RoomTicket.where('room_id = ? AND DATE(updated_at) > ?', room.id, Date.today - 5.day)
   end
   
 end

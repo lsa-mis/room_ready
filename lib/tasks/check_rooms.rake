@@ -12,7 +12,7 @@ def get_all_unchecked_rooms
   zones.each do |zone|
     zone.buildings.each do |building|
       building.floors.each do |floor|
-        floor.rooms.each do |room|
+        floor.active_rooms.each do |room|
           room_status = RoomStatus.new(room)
           unless room_status.room_checked_once?
             all_unchecked_rooms << room

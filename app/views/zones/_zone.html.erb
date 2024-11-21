@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <p><%= zone.buildings.count %> buildings</p>
-    <p><%= total_rooms(zone) %> rooms</p>
+    <p><%= zone.total_rooms %> rooms</p>
   </div>
   <div class="d-flex flex-row justify-content-between align-items-center mb-2 m-2">
     <%= link_to "Zone Details", zone_buildings_path(zone), class: "link_to" %>

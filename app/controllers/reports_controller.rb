@@ -18,6 +18,8 @@ class ReportsController < ApplicationController
     ]
   end
 
+  @show_archived = true
+
   # Design - For each new report:
   # 1) run the logic / activerecord query based on params
   # 2) if there is no record returned, do none of the below
@@ -38,6 +40,7 @@ class ReportsController < ApplicationController
 
   def number_of_room_issues_report
     authorize :report, :number_of_room_issues_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -79,6 +82,7 @@ class ReportsController < ApplicationController
 
   def room_issues_report
     authorize :report, :room_issues_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -307,6 +311,7 @@ class ReportsController < ApplicationController
 
   def common_attribute_states_report
     authorize :report, :common_attribute_states_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -316,12 +321,13 @@ class ReportsController < ApplicationController
                   .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
+                  .select('buildings.name AS building')
+                  .select('zones.name AS zone')
                   .select('room_states.updated_at')
                   .select('common_attributes.description AS common_attribute_description')
                   .select('common_attributes.need_checkbox as need_checkbox')
                   .select('common_attribute_states.checkbox_value as checkbox_value')
                   .select('common_attribute_states.quantity_box_value as quantity_box_value')
-                  .where('common_attributes.archived = ?', archived)
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC')
 
       if rooms.any?
@@ -329,18 +335,13 @@ class ReportsController < ApplicationController
         @room_link = true
         @title = 'Common Attribute States Report'
 
-        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
-        header_start = start_time == Date.new(0) ? earliest_date : start_time
-        header_end = end_time == Date::Infinity.new ? latest_date : end_time
-
-        @date_headers = (header_start.to_date..header_end.to_date).to_a
-        @headers = [ 'Room', 'Building', 'Zone'] + @date_headers
+        @date_headers = (start_time.to_date..end_time.to_date).to_a
+        @headers = [ 'Room', 'Building', 'zone'] + @date_headers
 
         grouped_rooms = rooms.group_by { |room| room.common_attribute_description }
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
-            key = [[room.room_number, room.id], room.floor.building.name, show_zone(room.floor.building)]
+            key = [[room.room_number, room.id], room.building, room.zone]
             value = room.need_checkbox ? (room.checkbox_value ? 'Yes' : 'No') : room.quantity_box_value
             pivot_table[key][room.updated_at.to_date] = value
           end
@@ -356,6 +357,7 @@ class ReportsController < ApplicationController
 
   def specific_attribute_states_report
     authorize :report, :specific_attribute_states_report?
+    @show_archived = false
 
     if params[:commit]
       zone_id, building_id, start_time, end_time, archived = collect_form_params
@@ -365,27 +367,23 @@ class ReportsController < ApplicationController
                   .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
+                  .select('buildings.name AS building')
+                  .select('zones.name AS zone')
                   .select('specific_attributes.description AS specific_attribute_description')
                   .select('room_states.updated_at')
                   .select('specific_attributes.need_checkbox as need_checkbox')
                   .select('specific_attribute_states.checkbox_value as checkbox_value')
                   .select('specific_attribute_states.quantity_box_value as quantity_box_value')
-                  .where('specific_attributes.archived = ?', archived)
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, specific_attributes.description ASC')
 
       if rooms.any?
         @grouped = true
         @title = 'Specific Attribute States Report'
 
-        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
-        header_start = start_time == Date.new(0) ? earliest_date : start_time
-        header_end = end_time == Date::Infinity.new ? latest_date : end_time
-
-        @date_headers = (header_start.to_date..header_end.to_date).to_a
+        @date_headers = (start_time.to_date..end_time.to_date).to_a
         @headers = ['Specific Attribute'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |",  room] }
+        grouped_rooms = rooms.group_by { |room| ["#{room.zone} | #{room.building} |",  room] }
         @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|
@@ -405,6 +403,7 @@ class ReportsController < ApplicationController
 
   def resource_states_report
     authorize :report, :resource_states_report?
+    @show_archived = false
 
     @resource_types = AppPreference.find_by(name: "resource_types").value.split(",").each(&:strip!)
 
@@ -417,11 +416,12 @@ class ReportsController < ApplicationController
                   .where(buildings: { id: building_id, zone_id: zone_id })
                   .where(room_states: { updated_at: start_time..end_time })
                   .select('rooms.*')
+                  .select('buildings.name AS building')
+                  .select('zones.name AS zone')
                   .select('resources.name AS resource_name')
                   .select("resources.resource_type as resource_type")
                   .select('room_states.updated_at')
                   .select('resource_states.is_checked as check_value')
-                  .where('resources.archived = ?', archived)
                   .where("resources.resource_type ILIKE ?", "%#{resource_type}%") # need to do a manual query for this because of circular definition of resources
                   .order('zones.name ASC, buildings.name ASC, rooms.room_number ASC, resources.name ASC')
 
@@ -429,15 +429,10 @@ class ReportsController < ApplicationController
         @grouped = true
         @title = 'Resource States Report'
 
-        earliest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.min
-        latest_date = rooms.flat_map { |room| room.room_states.pluck(:updated_at) }.max
-        header_start = start_time == Date.new(0) ? earliest_date : start_time
-        header_end = end_time == Date::Infinity.new ? latest_date : end_time
-
-        @date_headers = (header_start.to_date..header_end.to_date).to_a
+        @date_headers = (start_time.to_date..end_time.to_date).to_a
         @headers = ['Resource'] + @date_headers
 
-        grouped_rooms = rooms.group_by { |room| ["#{show_zone(room.floor.building)} | #{room.floor.building.name} |", room] }
+        grouped_rooms = rooms.group_by { |room| ["#{room.zone} | #{room.building} |", room] }
         @group_link = true
         @data = grouped_rooms.transform_values do |room_group|
           room_group.each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |room, pivot_table|

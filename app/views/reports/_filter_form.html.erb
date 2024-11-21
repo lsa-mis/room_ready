@@ -22,10 +22,12 @@
         <%= form.date_field :to, value: params[:to] || Date.today, max: Date.today, class: "form-control" %>
       </div>
     <% end %>
-    <div class="d-flex flex-row justify-content-start gap-3 mt-3" >
-      <%= form.label :archived, "Show Archived Records? ", class: 'form-label'%>
-      <%= form.check_box :archived, checked: params[:archived].to_s == "1", class: "form-check-input" %>
-    </div>
+    <% if @show_archived %>
+      <div class="d-flex flex-row justify-content-start gap-3 mt-3" >
+        <%= form.label :archived, "Show Archived Records? ", class: 'form-label'%>
+        <%= form.check_box :archived, checked: params[:archived].to_s == "1", class: "form-check-input" %>
+      </div>
+    <% end %>
 
     <!-- define additional specific fields inside a block when using render -->
     <%= yield form %>
