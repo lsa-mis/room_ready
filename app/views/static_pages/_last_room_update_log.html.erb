@@ -8,16 +8,16 @@
       <div class="card-text mb-4">
         Status:
         <span
-          class="<%= @room_update_log.status == 'error' ? 'text-danger' : 'text-success' %>">
+          class="<%= @room_update_log_status == 'error' ? 'text-danger' : 'text-success' %>">
           <%= last_room_update_log.note.include?('success') ? 'SUCCESS' : 'ERROR' %>
         </span>
       </div>
 
       <div class="card-text mb-4">
         Note:
-        <% if @room_update_log.status == 'success' %>
+        <% if @room_update_log_status == 'success' %>
           Resources updated successfully for rooms.
-        <% elsif @room_update_log.status == 'success-partial' %>
+        <% elsif @room_update_log_status == 'success-partial' %>
           Resources updated successfully for rooms.
           <a class="text-primary" data-bs-toggle="collapse" href="#nonExistingRooms" role="button" aria-expanded="false" aria-controls="nonExistingRooms">
             These rooms
@@ -28,7 +28,7 @@
               <%= last_room_update_log.note.split(':').last.strip %>
             </div>
           </div>
-        <% elsif @room_update_log.status == 'error' %>
+        <% elsif @room_update_log_status == 'error' %>
           An error occurred while updating resources for rooms. Please report an issue.
         <% end %>
       </div>
