@@ -1,52 +1,9 @@
 <div class="container-fluid">
-  <h1>Admin Dashboard - <%= show_date_with_month_name(@selected_date) %></h1>
+  <h1>Admin Dashboard - <%= show_date_with_month_name(Date.today) %></h1>
 
-  <div class="d-flex flex-row justify-content-start align-items-center gap-4">
-    <h2>Zone Overview for</h2>
-    <%= form_with url: dashboard_path, method: :get,
-        data: { 
-          controller: "autosubmit", 
-          autosubmit_target: "form"
-        }  do |form| %>
-        <div class="mt-2">
-          <div>
-            <label for="dashboard_date" aria-label="dashboard_date">
-            <%= form.date_field :dashboard_date, value: @selected_date, max: Date.today.to_s, :"data-action" => "change->autosubmit#submitForm" %>
-          </div>
-        </div>
-    <% end %>
-  </div>
-  <div class="row row-cols-1 row-cols-lg-4 row-cols-md-1 rows-sm-1 m-2">
-  
-    <% @zones.each do |zone| %>
-      <div class="col mb-2">
-        <div class="card" style="max-width: 260px;">
-          <div class="card-header">
-            <p><%= zone.name %></p>
-          </div>
-          <div class="card-body">
-            <div class="progress mb-3">
-              <% total = zone.total_rooms %>
-              <% checked_for_date = rooms_checked_for_date(zone, @selected_date) %>
-              <% percentage = completion_percentage(checked_for_date, total) %>
-              <div class="progress-bar <%= room_check_progress_class(checked_for_date, total) %> text-white" role="progressbar" 
-              style="width: <%= percentage %>%" 
-              aria-valuenow="<%= percentage %>" 
-              aria-valuemin="0" aria-valuemax="100">
-              <%= percentage %>%
-              </div>
-            </div>
-
-            <span class="card-text nowrap-card mb-4 <%= room_check_status_class(checked_for_date, total) %>">
-              <%= checked_for_date %>/<%= total %> 
-              Classrooms Complete
-            </span>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
-    
+  <%= turbo_frame_tag 'zones_overview' do %>
+    <%= render 'zones_overview' %>
+  <% end %>
   <h2>Reports for Last Checks</h2>
   <div class="row m-2">
     <div class="col-md-6 col-lg-4">
