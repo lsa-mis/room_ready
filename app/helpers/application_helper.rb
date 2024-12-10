@@ -118,8 +118,9 @@ module ApplicationHelper
   end
 
   def show_building_status(building)
-    return "Never checked" unless building.has_checked_rooms?
-    rooms = Room.active.where(floor_id: building.floors.ids)
+    rooms = building.active_rooms
+    return "Never checked" unless building.has_checked_active_rooms?
+
     statuses = []
     rooms.each do |r|
       room_status = RoomStatus.new(r)
