@@ -29,8 +29,16 @@ class Building < ApplicationRecord
     "#{address}, #{city}, #{state} #{zip}"
   end
 
+  def active_rooms
+    Room.active.joins(floor: [:building]).where(building: {id: self.id})
+  end
+
   def rooms
     Room.joins(floor: [:building]).where(building: {id: self.id})
+  end
+
+  def has_checked_active_rooms?
+    active_rooms.detect(&:room_state?).present?
   end
 
   def has_checked_rooms?
