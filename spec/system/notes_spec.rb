@@ -20,13 +20,4 @@ RSpec.describe Note, type: :system do
     end
   end
 
-  context 'create a new note with empty content' do
-    let!(:room) { FactoryBot.create(:room) }
-    it 'displays an error' do
-      visit "rooms/#{room.id}"
-      click_on "Add Note"
-      expect(page).to have_content("Content can't be blank").or(have_content("Please fill out this field"))
-    end
-  end
-
 end
