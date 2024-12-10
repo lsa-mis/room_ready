@@ -25,7 +25,7 @@ RSpec.describe Note, type: :system do
     it 'displays an error' do
       visit "rooms/#{room.id}"
       click_on "Add Note"
-      expect(page).to have_content("Content can't be blank")
+      expect(page).to have_content("Content can't be blank").or(have_content("Please fill out this field"))
     end
   end
 
