@@ -71,6 +71,7 @@ group :development, :test do
   gem 'faker'
   gem 'pry'
   gem 'pundit-matchers', '~> 3.1', '>= 3.1.2'
+  gem 'brakeman', require: false
 end
 
 group :development, :staging do
