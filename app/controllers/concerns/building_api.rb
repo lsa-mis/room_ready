@@ -10,7 +10,7 @@ module BuildingApi
         url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfoById/#{bldrecnbr}")
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
         request = Net::HTTP::Get.new(url)
         request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
@@ -32,7 +32,6 @@ module BuildingApi
         else 
           result['errorcode'] = "Unknown error "
         end
-      else
       end
       rescue StandardError => e
         result['errorcode'] = "Exception "
@@ -55,7 +54,7 @@ module BuildingApi
           url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{bldrecnbr}?$start_index=#{start_index}&$count=#{count}")
           http = Net::HTTP.new(url.host, url.port)
           http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
           request = Net::HTTP::Get.new(url)
           request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
@@ -83,7 +82,6 @@ module BuildingApi
             result['errorcode'] = "Unknown error"
           end
         end
-      else
       end
       result['data'] = rooms
     rescue StandardError => e
@@ -106,7 +104,7 @@ module BuildingApi
           url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{bldrecnbr}?$start_index=#{start_index}&$count=#{count}")
           http = Net::HTTP.new(url.host, url.port)
           http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
           request = Net::HTTP::Get.new(url)
           request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
@@ -138,7 +136,6 @@ module BuildingApi
             result['errorcode'] = "Unknown error"
           end
         end
-      else
       end
     rescue StandardError => e
       result['errorcode'] = "Exception"
@@ -156,7 +153,7 @@ module BuildingApi
     url = URI("https://gw.api.it.umich.edu/um/oauth2/token")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
     request = Net::HTTP::Post.new(url)
     request["content-type"] = 'application/x-www-form-urlencoded'
