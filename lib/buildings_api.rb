@@ -55,7 +55,7 @@ class BuildingsApi
         url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfo?$start_index=#{start_index}&$count=#{count}")
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
         request = Net::HTTP::Get.new(url)
         request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
@@ -160,7 +160,7 @@ class BuildingsApi
         url = URI("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{bldrecnbr}?$start_index=#{start_index}&$count=#{count}")
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
         request = Net::HTTP::Get.new(url)
         request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
