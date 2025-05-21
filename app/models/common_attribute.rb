@@ -20,7 +20,7 @@ class CommonAttribute < ApplicationRecord
   scope :archived, -> { where(archived: true).order(:description) }
 
   def has_state?
-    self.common_attribute_states.present?
+    CommonAttributeState.find_by(common_attribute_id: self).present?
   end
   
   private
