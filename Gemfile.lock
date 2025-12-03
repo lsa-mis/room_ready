@@ -111,6 +111,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
+    csv (3.3.5)
     date (3.4.1)
     debug (1.9.2)
       irb (~> 1.10)
@@ -140,6 +141,10 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashie (5.0.0)
+    httparty (0.23.2)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     image_processing (1.13.0)
@@ -182,6 +187,10 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    lsa_tdx_feedback (1.0.2)
+      httparty (~> 0.22)
+      rails (>= 6.0)
+      redis (>= 4.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -195,6 +204,8 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.25.5)
     msgpack (1.7.5)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
     mutex_m (0.3.0)
     net-imap (0.5.7)
       date
@@ -396,6 +407,7 @@ DEPENDENCIES
   kaminari
   ldap_lookup
   letter_opener_web
+  lsa_tdx_feedback (~> 1.0, >= 1.0.2)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth-saml (~> 2.2)
   pg (~> 1.1)

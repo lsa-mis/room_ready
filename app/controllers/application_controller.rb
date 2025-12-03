@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # rescue_from Exception, with: :render_500
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  after_action :verify_authorized, unless: :devise_controller?
+  after_action :verify_authorized, unless: -> { devise_controller? || is_feedback_controller? }
   include ApplicationHelper
 
   def user_not_authorized
@@ -136,6 +136,12 @@ class ApplicationController < ActionController::Base
       end
     end
     state_to_redirect_to
+  end
+
+  private
+
+  def is_feedback_controller?
+    self.class.name.split("::").first == "LsaTdxFeedback"
   end
 
 end

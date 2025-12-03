@@ -97,6 +97,9 @@ Rails.application.routes.draw do
 
   post '/send_email_for_tdx_ticket/:room_id', to: 'rooms/room_tickets#send_email_for_tdx_ticket', as: :send_email_for_tdx_ticket
 
+  # LSA TDX Feedback routes
+  mount LsaTdxFeedback::Engine => '/lsa_tdx_feedback', as: 'lsa_tdx_feedback'
+
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
   # Place this at the very end of the file to catch all undefined routes
