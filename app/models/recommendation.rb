@@ -46,6 +46,10 @@ class Recommendation
     sorted_floor_names = sort_floors(floors.pluck(:name))
   end
 
+  def building_floors
+    @room.floor.building.floors
+  end
+
   def floor_has_unchecked_rooms?(floor)
     floor.active_rooms.each do |room|
       unless RoomStatus.new(room).room_state_today.present?
