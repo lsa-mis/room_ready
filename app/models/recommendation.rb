@@ -51,7 +51,7 @@ class Recommendation
   # end
 
   def all_rooms_in_building
-    floors = @building.floors.includes(:rooms)
+    floors = @building.floors
     sorted_floor_names = sort_floors(floors.pluck(:name))
     
     sorted_floor_names.flat_map do |floor_name|
@@ -61,32 +61,52 @@ class Recommendation
   end
 
   def unchecked_rooms_in_building
-    floors = @building.floors.includes(:rooms)
+    floors = @building.floors
     sorted_floor_names = sort_floors(floors.pluck(:name))
-    
-    sorted_floor_names.flat_map do |floor_name|
+    unchecked_rooms = []
+
+    sorted_floor_names.each do |floor_name|
       floor = floors.find { |f| f.name == floor_name }
-      unchecked_rooms_on_floor(floor).sort_by(&:room_number)
-      # floor.rooms.sort_by(&:room_number)
+      unchecked_rooms += unchecked_rooms_on_floor(floor)
     end
+
+    unchecked_rooms
   end
 
   def next_room
+    # unchecked_rooms = unchecked_rooms_in_building
+    return nil if unchecked_rooms_in_building.empty?
+    
+    # all_rooms = all_rooms_in_building
     current_index = all_rooms_in_building.index(@room)
     
-    return nil if current_index.nil?
+    return unchecked_rooms_in_building.first if current_index.nil?
     
-    next_index = (current_index + 1) % all_rooms_in_building.length
-    all_rooms_in_building[next_index]
+    # Find the first unchecked room that comes after the current room's position
+    next_unchecked = unchecked_rooms_in_building.find do |room|
+      all_rooms_in_building.index(room) > current_index
+    end
+    
+    # If no unchecked room found after current position, wrap to first unchecked room
+    next_unchecked || unchecked_rooms_in_building.first
   end
 
   def previous_room
-    current_index = all_rooms_in_building.index(@room)
+    unchecked_rooms = unchecked_rooms_in_building
+    return nil if unchecked_rooms.empty?
     
-    return nil if current_index.nil?
+    all_rooms = all_rooms_in_building
+    current_index = all_rooms.index(@room)
     
-    previous_index = (current_index - 1) % all_rooms_in_building.length
-    all_rooms_in_building[previous_index]
+    return unchecked_rooms.last if current_index.nil?
+    
+    # Find the last unchecked room that comes before the current room's position
+    previous_unchecked = unchecked_rooms.select do |room|
+      all_rooms.index(room) < current_index
+    end.last
+    
+    # If no unchecked room found before current position, wrap to last unchecked room
+    previous_unchecked || unchecked_rooms.last
   end
 
   def building_floors

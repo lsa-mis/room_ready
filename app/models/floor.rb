@@ -15,4 +15,14 @@ class Floor < ApplicationRecord
   has_many :archived_rooms, -> { archived }, class_name: 'Room'
 
   validates :name, presence: true
+
+  def floor_has_unchecked_rooms?
+    self.active_rooms.each do |room|
+      unless RoomStatus.new(room).room_state_today.present?
+        return true
+      end
+    end
+    false
+  end
+
 end
