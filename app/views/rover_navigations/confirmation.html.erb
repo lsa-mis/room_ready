@@ -89,18 +89,24 @@
               </div>
             </div>
             <hr />
-            <% if @recommended_room %>
-              <p class="lead fw-bold text-primary">Next Room</p>
-              <div class="card border-success border-3 mb-4">
-                <div class="card-body">
-                  <h5 class="card-title">Room <%= @recommended_room.room_number %></h5>
-                  <h6 class="card-subtitle mb-2 text-muted"><%= @recommended_room.floor.building.name %>,</h6>
-                  <h6 class="card-subtitle mb-2 text-muted">Floor <%= @recommended_room.floor.name %></h6>
-                  <%= link_to "Start Checking", new_room_room_state_path(room_id: @recommended_room.id), class: "btn btn-success w-100"%>
-                </div>
+            <% if @next_room && @previous_room %>
+              <p class="lead fw-bold text-primary">Start Checking Another Room</p>
+              <div class="d-flex justify-content-between gap-2 mt-3 nowrap">
+                <%= link_to new_room_room_state_path(room_id: @previous_room.id), class: "btn btn-success" do %>
+                  <i class="bi bi-arrow-left"></i>
+                  <span>
+                    <%= "#{@previous_room.room_number}, Floor #{@previous_room.floor.name}" %>
+                  </span>
+                <% end %>
+                <%= link_to new_room_room_state_path(room_id: @next_room.id), class: "btn btn-success" do %>
+                  <span>
+                    <%= "#{@next_room.room_number}, Floor #{@next_room.floor.name}" %>
+                    <i class="bi bi-arrow-right"></i>
+                  </span>
+                <% end %>
               </div>
-              <%= link_to "Back to Rooms", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
-              <div class="dropdown border-0 mt-3">
+
+              <div class="dropdown border-0 mt-3 mb-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="floorDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                   Select Floor
                 </button>
@@ -112,6 +118,7 @@
                   <% end %>
                 </ul>
               </div>
+              <%= link_to "Back to #{@room.floor.building.name}", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
             <% else %>
               <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
               <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>

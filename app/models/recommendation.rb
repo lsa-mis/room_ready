@@ -46,6 +46,49 @@ class Recommendation
     sorted_floor_names = sort_floors(floors.pluck(:name))
   end
 
+  # def all_rooms_in_building
+  #   @building.floors.includes(:rooms).map(&:rooms).flatten
+  # end
+
+  def all_rooms_in_building
+    floors = @building.floors.includes(:rooms)
+    sorted_floor_names = sort_floors(floors.pluck(:name))
+    
+    sorted_floor_names.flat_map do |floor_name|
+      floor = floors.find { |f| f.name == floor_name }
+      floor.active_rooms.sort_by(&:room_number)
+    end
+  end
+
+  def unchecked_rooms_in_building
+    floors = @building.floors.includes(:rooms)
+    sorted_floor_names = sort_floors(floors.pluck(:name))
+    
+    sorted_floor_names.flat_map do |floor_name|
+      floor = floors.find { |f| f.name == floor_name }
+      unchecked_rooms_on_floor(floor).sort_by(&:room_number)
+      # floor.rooms.sort_by(&:room_number)
+    end
+  end
+
+  def next_room
+    current_index = all_rooms_in_building.index(@room)
+    
+    return nil if current_index.nil?
+    
+    next_index = (current_index + 1) % all_rooms_in_building.length
+    all_rooms_in_building[next_index]
+  end
+
+  def previous_room
+    current_index = all_rooms_in_building.index(@room)
+    
+    return nil if current_index.nil?
+    
+    previous_index = (current_index - 1) % all_rooms_in_building.length
+    all_rooms_in_building[previous_index]
+  end
+
   def building_floors
     @room.floor.building.floors
   end

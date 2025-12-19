@@ -61,5 +61,7 @@ class RoverNavigationsController < ApplicationController
     r = Recommendation.new(@room)
     @recommended_room = r.recommend_room
     @building_floors = r.building_floors
+    @next_room = r.next_room
+    @previous_room = r.previous_room
   end
 end
