@@ -142,5 +142,17 @@ module ApplicationHelper
   def room_recent_tickets(room)
     RoomTicket.where('room_id = ? AND DATE(updated_at) > ?', room.id, Date.today - 5.day)
   end
+
+  def sort_floors_by_name(floors)
+    sorted = floors.sort_by do |obj|
+      name = obj.name
+      if name =~ /^\d+$/
+        [2, $&.to_i]
+      else
+        [1, name]
+      end
+    end
+    return sorted
+  end
   
 end

@@ -59,8 +59,7 @@ class RoverNavigationsController < ApplicationController
       redirect_to zones_rover_navigation_path, notice: 'Room not checked or Invalid!'
     end
     r = Recommendation.new(@room)
-    @recommended_room = r.recommend_room
-    @building_floors = r.building_floors
+    @building_floors = r.all_floors
     @next_room = r.next_room
     @previous_room = r.previous_room
   end

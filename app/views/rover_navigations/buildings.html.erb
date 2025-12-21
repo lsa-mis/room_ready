@@ -36,7 +36,7 @@
             Select Floor
           </button>
           <ul class="dropdown-menu" aria-labelledby="floorDropdownButton<%= i %>">
-            <% building.floors.order(:name).each do |floor| %>
+            <% sort_floors_by_name(building.floors).each do |floor| %>
               <% if floor.active_rooms.any? %>
                 <li><%= link_to "Floor #{floor.name}", rooms_rover_navigation_path(floor_id: floor.id), class: "dropdown-item btn-primary" %></li>
               <% end %>
