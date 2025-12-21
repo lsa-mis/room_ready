@@ -92,11 +92,13 @@
             <% if @next_room && @previous_room %>
               <p class="lead fw-bold text-primary">Start Checking Another Room</p>
               <div class="d-flex justify-content-between gap-2 mt-3 nowrap">
-                <%= link_to new_room_room_state_path(room_id: @previous_room.id), class: "btn btn-success" do %>
-                  <i class="bi bi-arrow-left"></i>
-                  <span>
-                    <%= "#{@previous_room.room_number}, Floor #{@previous_room.floor.name}" %>
-                  </span>
+                <% unless @previous_room == @next_room %>
+                  <%= link_to new_room_room_state_path(room_id: @previous_room.id), class: "btn btn-success" do %>
+                    <i class="bi bi-arrow-left"></i>
+                    <span>
+                      <%= "#{@previous_room.room_number}, Floor #{@previous_room.floor.name}" %>
+                    </span>
+                  <% end %>
                 <% end %>
                 <%= link_to new_room_room_state_path(room_id: @next_room.id), class: "btn btn-success" do %>
                   <span>
@@ -111,14 +113,13 @@
                   Select Floor
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="floorDropdownButton">
-                  <% @building_floors.order(:name).each do |floor| %>
+                  <% @building_floors.each do |floor| %>
                     <% if floor.active_rooms.any? %>
                       <li><%= link_to "Floor #{floor.name}", rooms_rover_navigation_path(floor_id: floor.id), class: "dropdown-item btn-primary" if floor.floor_has_unchecked_rooms? %></li>
                     <% end %>
                   <% end %>
                 </ul>
               </div>
-              <%= link_to "Back to #{@room.floor.building.name}", rooms_rover_navigation_path(floor_id: @room.floor.id), class: "btn btn-primary"%>
             <% else %>
               <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
               <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>
