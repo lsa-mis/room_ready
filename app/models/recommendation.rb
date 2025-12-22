@@ -1,5 +1,4 @@
 class Recommendation
-  include ApplicationHelper
   
   def initialize(room)
     @room = room
@@ -7,6 +6,17 @@ class Recommendation
     @room_status = RoomStatus.new(@room)
     @start_of_day = Time.now.beginning_of_day
     @end_of_day = Time.now.end_of_day
+  end
+
+  def sort_floor_objects_by_name(floors)
+    sorted = floors.sort_by do |obj|
+      name = obj.name
+      if name =~ /^\d+$/
+        [2, $&.to_i]
+      else
+        [1, name]
+      end
+    end
   end
 
   def sort_floor_names(floors_names_array)
@@ -17,12 +27,11 @@ class Recommendation
         [1, s]
       end
     end
-    return sorted
   end
 
   def all_floors
     floors = @room.floor.building.floors
-    sort_floors_by_name(floors)
+    sort_floor_objects_by_name(floors)
   end
 
   def all_rooms_in_building
@@ -51,7 +60,7 @@ class Recommendation
 
   def unchecked_rooms_and_current_room
     rooms = unchecked_rooms_in_building
-    unless unchecked_rooms_in_building.include?(@room)
+    unless rooms.include?(@room)
       all_rooms = all_rooms_in_building
       current_room_index = all_rooms.index(@room)
       
