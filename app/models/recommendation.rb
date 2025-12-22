@@ -1,4 +1,5 @@
 class Recommendation
+  include FloorSortable
   
   def initialize(room)
     @room = room
@@ -9,24 +10,11 @@ class Recommendation
   end
 
   def sort_floor_objects_by_name(floors)
-    sorted = floors.sort_by do |obj|
-      name = obj.name
-      if name =~ /^\d+$/
-        [2, $&.to_i]
-      else
-        [1, name]
-      end
-    end
+    sort_floors(floors)
   end
 
   def sort_floor_names(floors_names_array)
-    sorted = floors_names_array.sort_by do |s|
-      if s =~ /^\d+$/
-        [2, $&.to_i]
-      else
-        [1, s]
-      end
-    end
+    sort_floors(floors_names_array)
   end
 
   def all_floors

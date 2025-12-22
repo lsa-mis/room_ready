@@ -120,6 +120,7 @@
                   <% end %>
                 </ul>
               </div>
+              <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>
             <% else %>
               <p class="lead fw-bold mb-5 text-success">All Rooms in Building are checked!</p>
               <%= link_to "Back to Buildings", buildings_rover_navigation_path(zone_id: @room.floor.building.zone.id), class: "btn btn-primary"%>

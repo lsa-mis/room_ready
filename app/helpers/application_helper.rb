@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include FloorSortable
 
   def root_path
     if user_signed_in?
@@ -144,14 +145,7 @@ module ApplicationHelper
   end
 
   def sort_floors_by_name(floors)
-    sorted = floors.sort_by do |obj|
-      name = obj.name
-      if name =~ /^\d+$/
-        [2, $&.to_i]
-      else
-        [1, name]
-      end
-    end
+    sort_floors(floors)
   end
   
 end
