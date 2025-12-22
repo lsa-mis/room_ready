@@ -152,7 +152,6 @@ module ApplicationHelper
         [1, name]
       end
     end
-    return sorted
   end
   
 end
