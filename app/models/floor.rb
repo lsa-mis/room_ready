@@ -23,7 +23,7 @@ class Floor < ApplicationRecord
     self.active_rooms.where(
       'last_time_checked IS NULL OR last_time_checked NOT BETWEEN ? AND ?',
       start_of_day, end_of_day
-    ).any?
+    ).exists?
   end
 
 end
