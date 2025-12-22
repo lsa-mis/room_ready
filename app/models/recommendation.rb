@@ -1,6 +1,14 @@
 class Recommendation
   include ApplicationHelper
   
+  def initialize(room)
+    @room = room
+    @building = @room.floor.building
+    @room_status = RoomStatus.new(@room)
+    @start_of_day = Time.now.beginning_of_day
+    @end_of_day = Time.now.end_of_day
+  end
+
   def sort_floors(floors_names_array)
     sorted = floors_names_array.sort_by do |s|
       if s =~ /^\d+$/
@@ -10,14 +18,6 @@ class Recommendation
       end
     end
     return sorted
-  end
-  
-  def initialize(room)
-    @room = room
-    @building = @room.floor.building
-    @room_status = RoomStatus.new(@room)
-    @start_of_day = Time.now.beginning_of_day
-    @end_of_day = Time.now.end_of_day
   end
 
   def all_floors
