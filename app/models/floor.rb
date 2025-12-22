@@ -17,12 +17,13 @@ class Floor < ApplicationRecord
   validates :name, presence: true
 
   def floor_has_unchecked_rooms?
-    self.active_rooms.each do |room|
-      unless RoomStatus.new(room).room_state_today.present?
-        return true
-      end
-    end
-    false
+    start_of_day = Time.current.beginning_of_day
+    end_of_day = Time.current.end_of_day
+    
+    self.active_rooms.where(
+      'last_time_checked IS NULL OR last_time_checked NOT BETWEEN ? AND ?',
+      start_of_day, end_of_day
+    ).any?
   end
 
 end
