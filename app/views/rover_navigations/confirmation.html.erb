@@ -91,7 +91,7 @@
             <hr />
             <% if @next_room && @previous_room %>
               <p class="lead fw-bold text-primary">Start Checking Another Room</p>
-              <div class="d-flex justify-content-between gap-2 mt-3 nowrap">
+              <div class="d-flex justify-content-between gap-2 mt-3 text-nowrap">
                 <% unless @previous_room == @next_room %>
                   <%= link_to new_room_room_state_path(room_id: @previous_room.id), class: "btn btn-success" do %>
                     <i class="bi bi-arrow-left"></i>
