@@ -9,7 +9,7 @@ class Recommendation
     @end_of_day = Time.now.end_of_day
   end
 
-  def sort_floors(floors_names_array)
+  def sort_floor_names(floors_names_array)
     sorted = floors_names_array.sort_by do |s|
       if s =~ /^\d+$/
         [2, $&.to_i]
@@ -28,7 +28,7 @@ class Recommendation
   def all_rooms_in_building
     floors = @building.floors
     floors_by_name = floors.index_by(&:name)
-    sorted_floor_names = sort_floors(floors_by_name.keys)
+    sorted_floor_names = sort_floor_names(floors_by_name.keys)
     
     sorted_floor_names.flat_map do |floor_name|
       floor = floors_by_name[floor_name]
@@ -39,7 +39,7 @@ class Recommendation
   def unchecked_rooms_in_building
     floors = @building.floors
     floors_by_name = floors.index_by(&:name)
-    sorted_floor_names = sort_floors(floors_by_name.keys)
+    sorted_floor_names = sort_floor_names(floors_by_name.keys)
     unchecked_rooms = []
     sorted_floor_names.each do |floor_name|
       floor = floors_by_name[floor_name]
