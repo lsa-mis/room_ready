@@ -22,7 +22,7 @@ class Recommendation
 
   def all_floors
     floors = @room.floor.building.floors
-    sorted_floor_names = sort_floors_by_name(floors)
+    sort_floors_by_name(floors)
   end
 
   def all_rooms_in_building
