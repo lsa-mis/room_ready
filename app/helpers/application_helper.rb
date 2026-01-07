@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include FloorSortable
 
   def root_path
     if user_signed_in?
