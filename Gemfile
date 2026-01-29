@@ -53,7 +53,7 @@ gem "omniauth-saml", "~> 2.2"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem 'repost'
 
-gem "ldap_lookup", "2.0.1"
+gem 'ldap_lookup', '~> 2.1.0'
 gem "pundit"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
