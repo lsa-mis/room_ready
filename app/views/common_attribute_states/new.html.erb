@@ -10,9 +10,9 @@
 
 <h1>Common Room Questions</h1>
 
-<h2><%= @room.floor.building.zone ? "#{@room.floor.building.zone.name}" : ''  %></h2>
-<h2><%= @room.floor.building.name %> (Floor <%= @room.floor.name %>)</h2>
-<h2><%= "Room: #{@room.room_number}" %></h2>
+<p class="h2-title"><%= @room.floor.building.zone ? "#{@room.floor.building.zone.name}" : ''  %></p>
+<p class="h2-title"><%= @room.floor.building.name %> (Floor <%= @room.floor.name %>)</p>
+<p class="h2-title"><%= "Room: #{@room.room_number}" %></p>
 
 <div data-controller='hideelement'>
   <a class="link_to mb-1 d-none d-md-none" data-hideelement-target="more_button" data-action="hideelement#showElement">

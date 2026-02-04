@@ -1,12 +1,22 @@
-<div class="container d-flex flex-column mt-7" style="width: 100%; max-width: 600px;">
-    <h1>Oops!</h1>
-    <%= image_tag 'error_robot.svg', alt: 'Error Page', class: "img-fluid", width: 235, height: 144 %>
-    <p>Lorem ipsum dolor sit amet, vince adipiscing elit, sed do eiusmod 
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip 
-      ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
-      voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-  <div style="color: #6C757D; text-align: center; padding-bottom: 120px;">
-    Go back to the <a href="/" style="color: #00274C;">homepage</a> or <a href="contact-link" class="um-blue ps-1">contact XX"</a>
-  </div>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The page you were looking for doesn't exist (404)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+
+  <body class="rails-default-error-page">
+    <!-- This file lives in app/views/errors/not_found.html.erb -->
+    <div class="dialog">
+      <div>
+        <h1>The page you were looking for doesn't exist.</h1>
+        <p>You may have mistyped the address or the page may have moved.</p>
+      </div>
+      <p>Try using navigation to get back on track<br>
+      
+      or go to the <a href="/" class="link_to">homepage</a>
+      
+      or <button id="myCustomTrigger" class="hover:underline px-1 footer-text footer-link border-0 bg-transparent p-0" data-email="<%= session[:user_email]%>">Report an Issue</button></p>
+    </div>
+  </body>
+</html>

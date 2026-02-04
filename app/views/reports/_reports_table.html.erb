@@ -7,9 +7,9 @@
 <% elsif @grouped %>
   <% @data.each do |group, pivot_table| %>
     <% if @group_link %>
-      <h4><%= group[0] %> <%= link_to group[1].room_number, room_path(group[1]), class: "link_to" %></h4>
+      <h3><%= group[0] %> <%= link_to group[1].room_number, room_path(group[1]), class: "link_to" %></h3>
     <% else %>
-       <h4><%= group %></h4>
+       <h3><%= group %></h3>
     <% end %>
     <table class="table text-center table-striped mt-4">
       <thead class="table-group-divider">

@@ -1,8 +1,7 @@
 <%= form_with(model: zone) do |form| %>
   <% if zone.errors.any? %>
     <div class="text-danger">
-      <h2><%= pluralize(zone.errors.count, "error") %></h2>
-
+      <p class="h3-title"><%= pluralize(zone.errors.count, "error") %></p>
       <ul>
         <% zone.errors.each do |error| %>
           <li><%= error.full_message %></li>
