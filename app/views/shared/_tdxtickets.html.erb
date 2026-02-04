@@ -8,13 +8,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h1>
+        <h2 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <% if room_recent_tickets(@room).count > 0 %>
           
-          <h2 class="fs-6">Recent Room Issues Reported</h2>
+          <h3 class="fs-6">Recent Room Issues Reported</h3>
           <p>Please do not submit a new ticket if issue is listed below</p>
           <div class="mb-4">
             <table class="table table-sm table-dark">
@@ -39,7 +39,7 @@
           <%= form_with(model: [@room, room_ticket = @room.room_tickets.new], url: send_email_for_tdx_ticket_path(@room), data: {room_tickets_target: "form", action: "room-tickets#check"}) do |form| %>
             <% if room_ticket.errors.any? %>
               <div class="text-danger">
-              <h2><%= pluralize(room_ticket.errors.count, "error") %></h2>
+              <p class="h3-title"><%= pluralize(room_ticket.errors.count, "error") %></p>
               <ul>
                 <% room_ticket.errors.each do |error| %>
                   <li><%= error.full_message %></li>
