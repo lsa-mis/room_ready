@@ -1,9 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  if Rails.env.production? || Rails.env.staging?
-    rescue_from StandardError, with: :render_500
-    rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  end
+  rescue_from StandardError, with: :render_500
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   after_action :verify_authorized, unless: :devise_controller?
   include ApplicationHelper
