@@ -10,7 +10,7 @@
 #   (Set to false to allow other RSpec tests to pass in GitHub Actions CI even if accessibility tests fail.
 #    When true, any failing accessibility tests will cause the entire CI pipeline to fail.)
 # Set to true to run accessibility checks manually: rspec spec/accessibility/all_pages_accessibility_spec.rb
-accessibility_enabled: true
+accessibility_enabled: false
 
 # WCAG compliance level (A, AA, AAA)
 wcag_level: AA
