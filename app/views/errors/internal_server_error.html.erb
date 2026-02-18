@@ -1,8 +1,12 @@
-<div class="container d-flex flex-column mt-7" style="width: 100%; max-width: 600px;">
-    <h5>Oops!</h5>
-    <%= image_tag 'error_robot.svg', alt: 'Error Page', class: "img-fluid" %>
-    <p>Error: 500</p>
-  <div style="color: #6C757D; text-align: center; padding-bottom: 120px;">
-    Go back to the <a href="/" style="color: #00274C;">homepage</a> or <a href="contact-link" class="um-blue ps-1">contact XX"</a>
+<!-- This file lives in app/views/errors/internal_server_error.html.erb -->
+<div class="dialog">
+  <div>
+    <h1>We're sorry, but something went wrong.</h1>
   </div>
+  <p>Try using navigation to get back on track<br>
+    
+    or go to the <a href="/" class="link_to">homepage</a>
+    
+    or <button id="myCustomTrigger" class="hover:underline px-1 footer-text footer-link border-0 bg-transparent p-0" data-email="<%= session&.[](:user_email) %>">Report an Issue</button>
+    </p>
 </div>

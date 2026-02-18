@@ -3,7 +3,7 @@
     data: { controller: "autosubmit", autosubmit_target: "form" } do |form| %>
     <% if building.errors.any? %>
       <div id="error_explanation" class="text-red-umred px-3 py-2 font-medium rounded-lg mt-3">
-        <h2><%= pluralize(building.errors.count, "error") %> prohibited this building from being saved:</h2>
+        <p class="h3-title"><%= pluralize(building.errors.count, "error") %> prohibited this building from being saved:</p>
         <ul>
           <% building.errors.each do |error| %>
             <li><%= error.full_message %></li>
