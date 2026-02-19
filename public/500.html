@@ -60,7 +60,27 @@
     <div>
       <h1>We're sorry, but something went wrong.</h1>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
+    <p>Try using navigation to get back on track<br>
+    
+    or go to the <a href="/" class="link_to">homepage</a>
+    
+    or <button id="myCustomTrigger" class="hover:underline px-1 footer-text footer-link border-0 bg-transparent p-0" data-email="">Report an Issue</button>
+    </p>  
   </div>
+  <script type="text/javascript" src="https://umlsait.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/1kwsvv/b/8/c95134bc67d3a521bb3f4331beb9b804/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=54564fa1"></script>
+  <script type="text/javascript">
+    window.ATL_JQ_PAGE_PROPS = {
+      "triggerFunction": function (showCollectorDialog) {
+        document.getElementById("myCustomTrigger").addEventListener("click", function (e) {
+          e.preventDefault();
+          showCollectorDialog();
+        });
+      },
+      "fieldValues": {
+        components: ['15384'],
+        email: document.getElementById("myCustomTrigger").getAttribute('data-email')
+      }
+    };
+  </script>
 </body>
 </html>
