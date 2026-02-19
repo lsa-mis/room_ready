@@ -11,7 +11,7 @@
     <div>
       <p class="text-center mb-0 small">
         <a href="https://umich.edu/about/privacy/" class="footer-text footer-link" >Privacy Notice</a> |
-        <a id="myCustomTrigger" class="hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a> |
+        <button id="myCustomTrigger" class="hover:underline px-1 footer-text footer-link border-0 bg-transparent p-0" data-email="<%= session&.[](:user_email) %>">Report an Issue</button> |
         <span class="footer-text">734.615.0100</span>
       </p>
     </div>

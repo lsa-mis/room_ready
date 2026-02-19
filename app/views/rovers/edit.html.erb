@@ -4,7 +4,7 @@
 <%= form_with(model: rover=@rover) do |form| %>
   <% if rover.errors.any? %>
     <div class="text-danger">
-      <h2><%= pluralize(rover.errors.count, "error") %></h2>
+      <p class="h3-title"><%= pluralize(rover.errors.count, "error") %></p>
       <ul>
         <% rover.errors.each do |error| %>
           <li><%= error.full_message %></li>

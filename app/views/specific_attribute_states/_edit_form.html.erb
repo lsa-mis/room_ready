@@ -15,8 +15,7 @@
       <div>
         <% if specific_attribute_state.errors.any? %>
           <div class="text-danger">
-            <h2><%= pluralize(specific_attribute_state.errors.count, "error") %></h2>
-
+            <p class="h3-title"><%= pluralize(specific_attribute_state.errors.count, "error") %></p>
             <ul>
               <% specific_attribute_state.errors.each do |error| %>
                 <li><%= error.full_message %></li>
