@@ -72,7 +72,7 @@ module ApplicationHelper
       value = facilities_pref.value.split(':').map(&:strip)
       facility_email = [value[0], value[1]]
     else
-      facility_email = "No LSA Facilities Help desk email in the App Preferences - call supervisor"
+      facility_email = ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
     end
 
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
@@ -80,7 +80,7 @@ module ApplicationHelper
       value = lsa_ts_pref.value.split(':').map(&:strip)
       emails << [value[0], value[1]]
     else
-      emails << "No LSA TS Help desk email in the App Preferences - call supervisor"
+      emails << ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
     end
     case building.nick_name&.downcase
     when "dana"
