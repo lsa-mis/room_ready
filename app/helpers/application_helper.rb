@@ -98,6 +98,7 @@ module ApplicationHelper
       else
         emails << facility_email
       end
+    else
       emails << facility_email
     end
     return emails
