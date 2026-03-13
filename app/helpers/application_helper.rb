@@ -71,6 +71,11 @@ module ApplicationHelper
     if facilities_pref&.value.present?
       value = facilities_pref.value.split(':').map(&:strip)
       facility_email = [value[0], value[1]]
+      if value.length >= 2 && value[1].present?
+         facility_email = [value[0], value[1]]
+       else
+         facility_email = ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
+       end
     else
       facility_email = ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
     end
@@ -78,7 +83,11 @@ module ApplicationHelper
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
     if lsa_ts_pref&.value.present?
       value = lsa_ts_pref.value.split(':').map(&:strip)
-      emails << [value[0], value[1]]
+      if value.length >= 2 && value[1].present?
+        emails << [value[0], value[1]]
+      else
+        emails << ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
+      end
     else
       emails << ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
     end
@@ -87,7 +96,11 @@ module ApplicationHelper
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
       if dana_pref&.value.present?
         value = dana_pref.value.split(':').map(&:strip)
-        emails << [value[0], value[1]]
+        if value.length >= 2 && value[1].present?
+          emails << [value[0], value[1]]
+        else
+          emails << ["No Dana Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+        end
       else
         emails << facility_email
       end
@@ -95,7 +108,11 @@ module ApplicationHelper
       skb_pref = AppPreference.find_by(name: 'skb_facility_issues_email')
       if skb_pref&.value.present?
         value = skb_pref.value.split(':').map(&:strip)
-        emails << [value[0], value[1]]
+        if value.length >= 2 && value[1].present?
+          emails << [value[0], value[1]]
+        else
+          emails << ["No SKB Facilities Help desk email in the App Preferences - call supervisor", nil]
+        end
       else
         emails << facility_email
       end
@@ -103,7 +120,11 @@ module ApplicationHelper
       pharmacy_pref = AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')
       if pharmacy_pref&.value.present?
         value = pharmacy_pref.value.split(':').map(&:strip)
-        emails << [value[0], value[1]]
+        if value.length >= 2 && value[1].present?
+          emails << [value[0], value[1]]
+        else
+          emails << ["No Pharmacy Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+        end
       else
         emails << facility_email
       end
