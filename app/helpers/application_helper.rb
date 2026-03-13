@@ -91,7 +91,13 @@ module ApplicationHelper
       else
         emails << facility_email
       end
-    else
+    when "pharm"
+      if AppPreference.find_by(name: 'pharmacy_building_facility_issues_email').value.present?
+        value =  AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')&.value&.split(':').map(&:strip)
+        emails << [value[0], value[1]]
+      else
+        emails << facility_email
+      end
       emails << facility_email
     end
     return emails
