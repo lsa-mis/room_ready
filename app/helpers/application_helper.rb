@@ -114,7 +114,6 @@ module ApplicationHelper
     elsif building_email.is_a?(Array) && building_email.length == 2
       emails << building_email
     end
-    fail
     return emails, errors
   end
 
