@@ -117,6 +117,8 @@ module ApplicationHelper
     return emails, errors
   end
 
+  private
+
   def tdx_pref_to_email(pref, type: "", error_message: nil)
     if pref&.value.present?
       value = pref.value.split(':').map(&:strip)
@@ -135,24 +137,8 @@ module ApplicationHelper
     end
   end
 
-  private
-
   def valid_email?(email)
     email.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
-  end
-
-  def tdx_pref_to_email(pref, default_pair)
-    if pref&.value.present?
-      value = pref.value.split(':').map(&:strip)
-      [value[0], value[1]]
-      if value.length >= 2 && value[1].present?
-        [value[0], value[1]]
-      else
-        default_pair
-      end
-    else
-      default_pair
-    end
   end
 
   def show_supervisor_phone
