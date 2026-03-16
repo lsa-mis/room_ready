@@ -66,51 +66,66 @@ module ApplicationHelper
 
   def tdx_emails(building)
     emails = []
-    facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
-    facility_email = tdx_pref_to_email(
-       facilities_pref,
-       ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
-     )
+    errors = []
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
-    emails << tdx_pref_to_email(
+    lsa_ts_email, error = tdx_pref_to_email(
       lsa_ts_pref,
-      ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
-     )
+      error_message: "No LSA TS Help desk email in the App Preferences - inform supervisor"
+    )
+    if error.present?
+      errors << error
+    else
+      emails << lsa_ts_email
+    end
+
+    facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
+    facility_email, error = tdx_pref_to_email(
+       facilities_pref,
+       error_message: "No LSA Facilities Help desk email in the App Preferences - inform supervisor"
+    )
+    if error.present?
+      errors << error
+    end
     case building.nick_name&.downcase
     when "dana"
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
-      emails << tdx_pref_to_email(
+      building_email, error = tdx_pref_to_email(
         dana_pref,
-        ["No Dana Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+        error_message: "No Dana Building Facilities Help desk email in the App Preferences - inform supervisor"
       )
     when "skb"
       skb_pref = AppPreference.find_by(name: 'skb_facility_issues_email')
-      emails << tdx_pref_to_email(
+      building_email, error = tdx_pref_to_email(
         skb_pref,
-        ["No SKB Facilities Help desk email in the App Preferences - call supervisor", nil]
+        error_message: "No SKB Facilities Help desk email in the App Preferences - inform supervisor"
       )
     when "pharm"
       pharmacy_pref = AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')
-      emails << tdx_pref_to_email(
+      building_email, error = tdx_pref_to_email(
         pharmacy_pref,
-        ["No Pharmacy Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+        error_message: "No Pharmacy Building Facilities Help desk email in the App Preferences - inform supervisor"
       )
     else
-      emails << facility_email
+      building_email = facility_email
     end
-    return emails
+    if error.present?
+      errors << error
+    else
+      emails << building_email
+    end
+    return emails, errors
   end
 
-  def tdx_pref_to_email(pref, default_pair)
+  def tdx_pref_to_email(pref, error_message: nil)
     if pref&.value.present?
       value = pref.value.split(':').map(&:strip)
       if value.length >= 2 && value[1].present?
-        [value[0], value[1]]
+        [[value[0], value[1]], nil]
       else
-        default_pair
+        [[], error_message.presence || "Invalid email format in App Preferences - inform supervisor"]
       end
     else
-      default_pair
+      [[], error_message.presence || "No email in App Preferences - inform supervisor"]
     end
   end
 
