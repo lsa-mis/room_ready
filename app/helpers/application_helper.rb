@@ -111,7 +111,7 @@ module ApplicationHelper
     end
     if error.present?
       errors << error
-    else
+    elsif building_email.is_a?(Array) && building_email.length == 2
       emails << building_email
     end
     return emails, errors
