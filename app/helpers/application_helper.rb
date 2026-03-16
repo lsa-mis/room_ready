@@ -66,31 +66,16 @@ module ApplicationHelper
 
   def tdx_emails(building)
     emails = []
-
     facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
-    if facilities_pref&.value.present?
-      value = facilities_pref.value.split(':').map(&:strip)
-      facility_email = [value[0], value[1]]
-      if value.length >= 2 && value[1].present?
-         facility_email = [value[0], value[1]]
-       else
-         facility_email = ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
-       end
-    else
-      facility_email = ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
-    end
-
+    facility_email = tdx_pref_to_email(
+       facilities_pref,
+       ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
+     )
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
-    if lsa_ts_pref&.value.present?
-      value = lsa_ts_pref.value.split(':').map(&:strip)
-      if value.length >= 2 && value[1].present?
-        emails << [value[0], value[1]]
-      else
-        emails << ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
-      end
-    else
-      emails << ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
-    end
+    emails << tdx_pref_to_email(
+      lsa_ts_pref,
+      ["No LSA TS Help desk email in the App Preferences - call supervisor", nil]
+     )
     case building.nick_name&.downcase
     when "dana"
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
@@ -132,6 +117,20 @@ module ApplicationHelper
       emails << facility_email
     end
     return emails
+  end
+
+  def tdx_pref_to_email(pref, default_pair)
+    if pref&.value.present?
+      value = pref.value.split(':').map(&:strip)
+      [value[0], value[1]]
+      if value.length >= 2 && value[1].present?
+        [value[0], value[1]]
+      else
+        default_pair
+      end
+    else
+      default_pair
+    end
   end
 
   def show_supervisor_phone
