@@ -11,7 +11,7 @@
         <h2 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <% tdx_emails, errors = tdx_emails(@room.floor.building) %>
+      <% email_options, errors = tdx_emails(@room.floor.building) %>
       <div class="error-container">
         <% if errors.present? %>
           <div class="text-danger">
@@ -62,7 +62,7 @@
             <% end %>
             <div>
               <%= form.label :tdx_email, "Select the Email Address *" %>
-              <%= form.select(:tdx_email, options_for_select(tdx_emails)) %>
+              <%= form.select(:tdx_email, options_for_select(email_options)) %>
             </div>
             <div>
               <div>Email Message *</div>

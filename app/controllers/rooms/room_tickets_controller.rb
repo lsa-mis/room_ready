@@ -5,8 +5,8 @@ class Rooms::RoomTicketsController < ApplicationController
   def send_email_for_tdx_ticket
     message = room_ticket_params[:description]
     tdx_email = room_ticket_params[:tdx_email]
-    tdx_emails, errors = tdx_emails(@room.floor.building)
-    if tdx_emails.none? { |_, email| email == tdx_email }
+    email_options, errors = tdx_emails(@room.floor.building)
+    if email_options.none? { |_, email| email == tdx_email }
       render json: { errors: errors }, status: :unprocessable_entity and return
     end
 
