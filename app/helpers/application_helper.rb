@@ -141,6 +141,20 @@ module ApplicationHelper
     email.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
   end
 
+  def tdx_pref_to_email(pref, default_pair)
+    if pref&.value.present?
+      value = pref.value.split(':').map(&:strip)
+      [value[0], value[1]]
+      if value.length >= 2 && value[1].present?
+        [value[0], value[1]]
+      else
+        default_pair
+      end
+    else
+      default_pair
+    end
+  end
+
   def show_supervisor_phone
     supervisor_pref = AppPreference.find_by(name: 'supervisor_phone_number')
     if supervisor_pref&.value.present?
