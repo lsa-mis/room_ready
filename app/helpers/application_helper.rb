@@ -104,7 +104,6 @@ module ApplicationHelper
   def tdx_pref_to_email(pref, default_pair)
     if pref&.value.present?
       value = pref.value.split(':').map(&:strip)
-      [value[0], value[1]]
       if value.length >= 2 && value[1].present?
         [value[0], value[1]]
       else
