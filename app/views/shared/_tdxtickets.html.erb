@@ -11,6 +11,19 @@
         <h2 class="modal-title fs-5" id="exampleModalLabel">Send an Issue Email</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <% email_options, errors = tdx_emails(@room.floor.building) %>
+      <div class="error-container">
+        <% if errors.present? %>
+          <div class="text-danger">
+            <ul>
+              <% errors.each do |error| %>
+                <li><%= error %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+
       <div class="modal-body">
         <% if room_recent_tickets(@room).count > 0 %>
           
@@ -49,7 +62,7 @@
             <% end %>
             <div>
               <%= form.label :tdx_email, "Select the Email Address *" %>
-              <%= form.select(:tdx_email, options_for_select(tdx_emails(@room.floor.building))) %>
+              <%= form.select(:tdx_email, options_for_select(email_options)) %>
             </div>
             <div>
               <div>Email Message *</div>
@@ -65,4 +78,3 @@
     </div>
   </div>
 </div>
-

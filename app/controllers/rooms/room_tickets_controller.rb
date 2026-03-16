@@ -5,9 +5,9 @@ class Rooms::RoomTicketsController < ApplicationController
   def send_email_for_tdx_ticket
     message = room_ticket_params[:description]
     tdx_email = room_ticket_params[:tdx_email]
-
-    if tdx_emails(@room.floor.building).none? { |_, email| email == tdx_email }
-      render json: { errors: ['Invalid email address.'] }, status: :unprocessable_entity and return
+    email_options, errors = tdx_emails(@room.floor.building)
+    if email_options.none? { |_, email| email == tdx_email }
+      render json: { errors: errors }, status: :unprocessable_entity and return
     end
 
     @room_ticket = RoomTicket.new(description: message, room_id: @room.id, submitted_by: current_user.uniqname, tdx_email: tdx_email )
