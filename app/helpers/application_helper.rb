@@ -66,13 +66,11 @@ module ApplicationHelper
 
   def tdx_emails(building)
     emails = []
-
     facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
     facility_email = tdx_pref_to_email(
        facilities_pref,
        ["No LSA Facilities Help desk email in the App Preferences - call supervisor", nil]
      )
-
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
     emails << tdx_pref_to_email(
       lsa_ts_pref,
