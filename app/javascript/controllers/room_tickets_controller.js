@@ -35,7 +35,7 @@ export default class extends Controller {
     } 
     catch (error) {
       console.error("Error submitting form", error);
-      alert("An error occurred while submitting the form. - " + (error.errors ? error.errors.join(", ") : error.message));
+      alert("An error occurred while submitting the form.");
     }
   }
 }
