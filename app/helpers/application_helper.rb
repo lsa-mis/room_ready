@@ -69,7 +69,7 @@ module ApplicationHelper
     errors = []
     lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
     lsa_ts_email, error = tdx_pref_to_email(
-      lsa_ts_pref,
+      lsa_ts_pref, type: "LSA TS",
       error_message: "No LSA TS Help desk email in the App Preferences - inform supervisor"
     )
     if error.present?
@@ -80,7 +80,7 @@ module ApplicationHelper
 
     facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
     facility_email, error = tdx_pref_to_email(
-       facilities_pref,
+       facilities_pref, type: "LSA Facilities",
        error_message: "No LSA Facilities Help desk email in the App Preferences - inform supervisor"
     )
     if error.present?
@@ -90,19 +90,19 @@ module ApplicationHelper
     when "dana"
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
       building_email, error = tdx_pref_to_email(
-        dana_pref,
+        dana_pref, type: "Dana Building Facilities",
         error_message: "No Dana Building Facilities Help desk email in the App Preferences - inform supervisor"
       )
     when "skb"
       skb_pref = AppPreference.find_by(name: 'skb_facility_issues_email')
       building_email, error = tdx_pref_to_email(
-        skb_pref,
+        skb_pref, type: "SKB Facilities",
         error_message: "No SKB Facilities Help desk email in the App Preferences - inform supervisor"
       )
     when "pharm"
       pharmacy_pref = AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')
       building_email, error = tdx_pref_to_email(
-        pharmacy_pref,
+        pharmacy_pref, type: "Pharmacy Building Facilities",
         error_message: "No Pharmacy Building Facilities Help desk email in the App Preferences - inform supervisor"
       )
     else
@@ -116,17 +116,28 @@ module ApplicationHelper
     return emails, errors
   end
 
-  def tdx_pref_to_email(pref, error_message: nil)
+  def tdx_pref_to_email(pref, type: "", error_message: nil)
     if pref&.value.present?
       value = pref.value.split(':').map(&:strip)
+      
       if value.length >= 2 && value[1].present?
-        [[value[0], value[1]], nil]
+        if valid_email?(value[1])
+          [[value[0], value[1]], nil]
+        else
+          [[], type + ": Invalid email format in App Preferences - inform supervisor"]
+        end
       else
         [[], error_message.presence || "Invalid email format in App Preferences - inform supervisor"]
       end
     else
       [[], error_message.presence || "No email in App Preferences - inform supervisor"]
     end
+  end
+
+  private
+
+  def valid_email?(email)
+    email.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
   end
 
   def show_supervisor_phone
