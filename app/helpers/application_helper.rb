@@ -79,40 +79,22 @@ module ApplicationHelper
     case building.nick_name&.downcase
     when "dana"
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
-      if dana_pref&.value.present?
-        value = dana_pref.value.split(':').map(&:strip)
-        if value.length >= 2 && value[1].present?
-          emails << [value[0], value[1]]
-        else
-          emails << ["No Dana Building Facilities Help desk email in the App Preferences - call supervisor", nil]
-        end
-      else
-        emails << facility_email
-      end
+      emails << tdx_pref_to_email(
+        dana_pref,
+        ["No Dana Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+      )
     when "skb"
       skb_pref = AppPreference.find_by(name: 'skb_facility_issues_email')
-      if skb_pref&.value.present?
-        value = skb_pref.value.split(':').map(&:strip)
-        if value.length >= 2 && value[1].present?
-          emails << [value[0], value[1]]
-        else
-          emails << ["No SKB Facilities Help desk email in the App Preferences - call supervisor", nil]
-        end
-      else
-        emails << facility_email
-      end
+      emails << tdx_pref_to_email(
+        skb_pref,
+        ["No SKB Facilities Help desk email in the App Preferences - call supervisor", nil]
+      )
     when "pharm"
       pharmacy_pref = AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')
-      if pharmacy_pref&.value.present?
-        value = pharmacy_pref.value.split(':').map(&:strip)
-        if value.length >= 2 && value[1].present?
-          emails << [value[0], value[1]]
-        else
-          emails << ["No Pharmacy Building Facilities Help desk email in the App Preferences - call supervisor", nil]
-        end
-      else
-        emails << facility_email
-      end
+      emails << tdx_pref_to_email(
+        pharmacy_pref,
+        ["No Pharmacy Building Facilities Help desk email in the App Preferences - call supervisor", nil]
+      )
     else
       emails << facility_email
     end
