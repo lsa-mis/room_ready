@@ -66,40 +66,85 @@ module ApplicationHelper
 
   def tdx_emails(building)
     emails = []
-    if AppPreference.find_by(name: 'tdx_facilities_email').value.present?
-      value =  AppPreference.find_by(name: 'tdx_facilities_email')&.value&.split(':').map(&:strip)
-      facility_email = [value[0], value[1]]
-    end
-    if AppPreference.find_by(name: 'tdx_lsa_ts_email').value.present?
-      value = AppPreference.find_by(name: 'tdx_lsa_ts_email')&.value&.split(':').map(&:strip)
-      emails << [value[0], value[1]]
+    errors = []
+    lsa_ts_pref = AppPreference.find_by(name: 'tdx_lsa_ts_email')
+    lsa_ts_email, error = tdx_pref_to_email(
+      lsa_ts_pref, type: "LSA TS",
+      error_message: "No LSA TS Help desk email in the App Preferences - inform supervisor"
+    )
+    if error.present?
+      errors << error
     else
-      emails << "No LSA TS Help desk email in the App Preferences - report an issue"
+      emails << lsa_ts_email
     end
+
+    facilities_pref = AppPreference.find_by(name: 'tdx_facilities_email')
+    facility_email, error = tdx_pref_to_email(
+       facilities_pref, type: "LSA Facilities",
+       error_message: "No LSA Facilities Help desk email in the App Preferences - inform supervisor"
+    )
+    if error.present?
+      errors << error
+    end
+    error = nil
     case building.nick_name&.downcase
     when "dana"
-      if AppPreference.find_by(name: 'dana_building_facility_issues_email').value.present?
-        value =  AppPreference.find_by(name: 'dana_building_facility_issues_email')&.value&.split(':').map(&:strip)
-        emails << [value[0], value[1]]
-      else
-        emails << facility_email
-      end
+      dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
+      building_email, error = tdx_pref_to_email(
+        dana_pref, type: "Dana Building Facilities",
+        error_message: "No Dana Building Facilities Help desk email in the App Preferences - inform supervisor"
+      )
     when "skb"
-      if AppPreference.find_by(name: 'skb_facility_issues_email').value.present?
-        value =  AppPreference.find_by(name: 'skb_facility_issues_email')&.value&.split(':').map(&:strip)
-        emails << [value[0], value[1]]
+      skb_pref = AppPreference.find_by(name: 'skb_facility_issues_email')
+      building_email, error = tdx_pref_to_email(
+        skb_pref, type: "SKB Facilities",
+        error_message: "No SKB Facilities Help desk email in the App Preferences - inform supervisor"
+      )
+    when "pharm"
+      pharmacy_pref = AppPreference.find_by(name: 'pharmacy_building_facility_issues_email')
+      building_email, error = tdx_pref_to_email(
+        pharmacy_pref, type: "Pharmacy Building Facilities",
+        error_message: "No Pharmacy Building Facilities Help desk email in the App Preferences - inform supervisor"
+      )
+    else
+      building_email = facility_email
+    end
+    if error.present?
+      errors << error
+    elsif building_email.is_a?(Array) && building_email.length == 2
+      emails << building_email
+    end
+    return emails, errors
+  end
+
+  private
+
+  def tdx_pref_to_email(pref, type: "", error_message: nil)
+    if pref&.value.present?
+      value = pref.value.split(':').map(&:strip)
+      
+      if value.length >= 2 && value[1].present?
+        if valid_email?(value[1])
+          [[value[0], value[1]], nil]
+        else
+          [[], type + ": Invalid email format in App Preferences - inform supervisor"]
+        end
       else
-        emails << facility_email
+        [[], error_message.presence || "Invalid email format in App Preferences - inform supervisor"]
       end
     else
-      emails << facility_email
+      [[], error_message.presence || "No email in App Preferences - inform supervisor"]
     end
-    return emails
+  end
+
+  def valid_email?(email)
+    email.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
   end
 
   def show_supervisor_phone
-    if AppPreference.find_by(name: 'supervisor_phone_number').present? && AppPreference.find_by(name: 'supervisor_phone_number').value.present?
-      "at " + AppPreference.find_by(name: 'supervisor_phone_number').value
+    supervisor_pref = AppPreference.find_by(name: 'supervisor_phone_number')
+    if supervisor_pref&.value.present?
+      "at " + supervisor_pref.value
     else 
       ""
     end
