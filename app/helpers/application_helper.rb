@@ -86,6 +86,7 @@ module ApplicationHelper
     if error.present?
       errors << error
     end
+    error = nil
     case building.nick_name&.downcase
     when "dana"
       dana_pref = AppPreference.find_by(name: 'dana_building_facility_issues_email')
