@@ -216,7 +216,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.27.0)
     msgpack (1.7.5)
-    net-imap (0.5.14)
+    net-imap (0.5.15)
       date
       net-protocol
     net-ldap (0.18.0)
