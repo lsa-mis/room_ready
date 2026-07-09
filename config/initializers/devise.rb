@@ -45,7 +45,7 @@ Devise.setup do |config|
   saml_options = {
     assertion_consumer_service_url: consumer_service_url,
     issuer: entity_id,
-    idp_entity_id: Rails.application.credentials.dig(:okta, :idp_entity_id),
+    idp_entity_id: "http://www.okta.com/exk24uqws0k5Brhj71d8",
     idp_sso_service_url: Rails.application.credentials.dig(:okta, :idp_sso_service_url) ||
       "https://okta.umich.edu/app/umich_lsatslsaspacereadystaging_1/exk24uqws0k5Brhj71d8/sso/saml",
     idp_cert: Rails.application.credentials.dig(:okta, :idp_cert),
