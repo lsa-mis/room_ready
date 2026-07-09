@@ -49,7 +49,6 @@ Devise.setup do |config|
     idp_sso_service_url: Rails.application.credentials.dig(:okta, :idp_sso_service_url) ||
       "https://okta.umich.edu/app/umich_lsatslsaspacereadystaging_1/exk24uqws0k5Brhj71d8/sso/saml",
     idp_cert: Rails.application.credentials.dig(:okta, :idp_cert),
-    idp_cert_fingerprint: Rails.application.credentials.dig(:okta, :idp_cert_fingerprint),
     name_identifier_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
     attribute_statements: {
       email: ['email', 'mail', 'User.Email'],
