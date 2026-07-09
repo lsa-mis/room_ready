@@ -49,8 +49,9 @@ gem "bootsnap", require: false
 
 gem "devise", "~> 5.0"
 gem "skylight"
-gem "omniauth-saml", "~> 2.2"
-gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem 'omniauth'
+gem 'omniauth-saml'
+gem 'omniauth-rails_csrf_protection'
 gem 'repost'
 
 gem 'ldap_lookup', '~> 2.1.0'
