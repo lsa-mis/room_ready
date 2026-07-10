@@ -12,15 +12,24 @@ Devise.setup do |config|
 
   consumer_service_url = Rails.application.credentials.dev_assertion_consumer_service_url
   entity_id = Rails.application.credentials.dev_entity_id
+  idp_sso_service_url = Rails.application.credentials.dev_idp_sso_service_url
+  idp_entity_id = Rails.application.credentials.dev_idp_entity_id
+  idp_cert = Rails.application.credentials.dig(:okta, :dev_idp_cert)
 
   if Rails.env.staging?
     consumer_service_url = Rails.application.credentials.staging_assertion_consumer_service_url
     entity_id = Rails.application.credentials.staging_entity_id
+    idp_sso_service_url = Rails.application.credentials.staging_idp_sso_service_url
+    idp_entity_id = Rails.application.credentials.staging_idp_entity_id
+    idp_cert = Rails.application.credentials.dig(:okta, :staging_idp_cert)
   end
 
   if Rails.env.production?
     consumer_service_url = Rails.application.credentials.production_assertion_consumer_service_url
     entity_id = Rails.application.credentials.production_entity_id
+    idp_sso_service_url = Rails.application.credentials.production_idp_sso_service_url
+    idp_entity_id = Rails.application.credentials.production_idp_entity_id
+    idp_cert = Rails.application.credentials.dig(:okta, :production_idp_cert)
   end
 
   # config.omniauth :saml,
@@ -45,10 +54,9 @@ Devise.setup do |config|
   saml_options = {
     assertion_consumer_service_url: consumer_service_url,
     issuer: entity_id,
-    idp_entity_id: "http://www.okta.com/exk24uqws0k5Brhj71d8",
-    idp_sso_service_url: Rails.application.credentials.dig(:okta, :idp_sso_service_url) ||
-      "https://okta.umich.edu/app/umich_lsatslsaspacereadystaging_1/exk24uqws0k5Brhj71d8/sso/saml",
-    idp_cert: Rails.application.credentials.dig(:okta, :idp_cert),
+    idp_entity_id: idp_entity_id,
+    idp_sso_service_url: idp_sso_service_url,
+    idp_cert: idp_cert,
     name_identifier_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
     attribute_statements: {
       email: ['email', 'mail', 'User.Email'],
