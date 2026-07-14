@@ -13,6 +13,7 @@ Devise.setup do |config|
   consumer_service_url = Rails.application.credentials.dev_assertion_consumer_service_url
   entity_id = Rails.application.credentials.dev_entity_id
   idp_sso_service_url = Rails.application.credentials.dev_idp_sso_service_url
+  idp_logout_url = Rails.application.credentials.dev_idp_slo_target_url
   idp_entity_id = Rails.application.credentials.dev_idp_entity_id
   idp_cert = Rails.application.credentials.dig(:okta, :dev_idp_cert)
 
@@ -20,6 +21,7 @@ Devise.setup do |config|
     consumer_service_url = Rails.application.credentials.staging_assertion_consumer_service_url
     entity_id = Rails.application.credentials.staging_entity_id
     idp_sso_service_url = Rails.application.credentials.staging_idp_sso_service_url
+    idp_logout_url = Rails.application.credentials.staging_idp_slo_target_url
     idp_entity_id = Rails.application.credentials.staging_idp_entity_id
     idp_cert = Rails.application.credentials.dig(:okta, :staging_idp_cert)
   end
@@ -28,9 +30,13 @@ Devise.setup do |config|
     consumer_service_url = Rails.application.credentials.production_assertion_consumer_service_url
     entity_id = Rails.application.credentials.production_entity_id
     idp_sso_service_url = Rails.application.credentials.production_idp_sso_service_url
+    idp_logout_url = Rails.application.credentials.production_idp_slo_target_url
     idp_entity_id = Rails.application.credentials.production_idp_entity_id
     idp_cert = Rails.application.credentials.dig(:okta, :production_idp_cert)
   end
+
+  service_provider_private_key = Rails.application.credentials.service_provider_private_key
+  service_provider_certificate = Rails.application.credentials.service_provider_certificate
 
   # config.omniauth :saml,
   #   :assertion_consumer_service_url     => consumer_service_url,
@@ -56,8 +62,12 @@ Devise.setup do |config|
     issuer: entity_id,
     idp_entity_id: idp_entity_id,
     idp_sso_service_url: idp_sso_service_url,
+    idp_slo_service_url: idp_logout_url,
     idp_cert: idp_cert,
     name_identifier_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+    private_key: service_provider_private_key,
+    certificate: service_provider_certificate,
+    security: {want_assertions_signed: true, want_assertions_encrypted: true},
     attribute_statements: {
       email: ['email', 'mail', 'User.Email'],
       first_name: ['first_name', 'User.FirstName'],
