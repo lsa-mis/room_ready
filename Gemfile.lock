@@ -241,7 +241,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth-saml (2.2.3)
+    omniauth-saml (2.2.5)
       omniauth (~> 2.1)
       ruby-saml (~> 1.18)
     orm_adapter (0.5.0)
@@ -431,8 +431,9 @@ DEPENDENCIES
   kaminari
   ldap_lookup (~> 2.1.0)
   letter_opener_web
-  omniauth-rails_csrf_protection (~> 1.0)
-  omniauth-saml (~> 2.2)
+  omniauth
+  omniauth-rails_csrf_protection
+  omniauth-saml
   ostruct (~> 0.6.3)
   pg (~> 1.1)
   pry
