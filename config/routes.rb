@@ -98,6 +98,9 @@ Rails.application.routes.draw do
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development? || Rails.env.staging?
 
+  # Mount the feedback gem engine
+  mount LsaTdxFeedback::Engine, at: "/lsa_tdx_feedback", as: :lsa_tdx_feedback
+
   # Place this at the very end of the file to catch all undefined routes
   # get '*path', to: 'application#render_404', via: :all
 

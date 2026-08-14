@@ -3,6 +3,8 @@
   <head>
     <title>LSA SpaceReady</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= lsa_tdx_feedback_css %>
+    <%= lsa_tdx_feedback_js %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -27,5 +29,6 @@
       </div>
     </main>
     <%= render partial: "shared/footer" %>
+    <%= lsa_tdx_feedback_modal %>
   </body>
 </html>
