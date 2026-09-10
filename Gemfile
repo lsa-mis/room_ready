@@ -73,7 +73,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'capybara', '~> 3.40'
-  gem 'webdrivers', '= 5.3.0'
+  gem 'selenium-webdriver'
   gem 'faker'
   gem 'pry'
   gem 'pundit-matchers', '~> 3.1', '>= 3.1.2'
